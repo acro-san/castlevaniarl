@@ -1,5 +1,6 @@
 package crl.data;
 
+import crl.Main;
 import crl.ai.ActionSelector;
 import crl.ai.monster.BasicMonsterAI;
 import crl.ai.monster.MonsterAI;
@@ -17,33 +18,28 @@ import crl.game.CRLException;
 import crl.monster.*;
 import crl.ui.AppearanceFactory;
 
-import java.text.ParseException;
+import nox.NoX;
+import nox.XMLTag;
+import nox.Att;
+
 import java.util.*;
 import java.io.*;
 
-import org.xml.sax.AttributeList;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.DocumentHandler;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
-
-import sz.util.*;
 import sz.crypt.*;
-import uk.co.wilson.xml.MinML;
-
 
 public class MonsterLoader {
-	public static MonsterDefinition[] getBaseMonsters(String monsterFile) throws CRLException{
+	
+	public static MonsterDefinition[] getBaseMonsters(String monsterFile) throws CRLException {
 		BufferedReader br = null;
 		try {
-			Vector vecMonsters = new Vector(10);
+			Vector<MonsterDefinition> vecMonsters = new Vector<>(10);
 			DESEncrypter encrypter = new DESEncrypter("65csvlk3489585f9rjh");
-			br = new BufferedReader(new InputStreamReader(encrypter.decrypt(new FileInputStream(monsterFile))));
+			br = new BufferedReader(
+				new InputStreamReader(
+					encrypter.decrypt(new FileInputStream(monsterFile))));
 			String line = br.readLine();
 			line = br.readLine();
-			while (line != null){
+			while (line != null) {
 				String[] data = line.split(";");
 				MonsterDefinition def = new MonsterDefinition(data[0]);
 				def.setAppearance(AppearanceFactory.getAppearanceFactory().getAppearance(data[1]));
@@ -80,174 +76,178 @@ public class MonsterLoader {
 		}
 	}
 	
-	public static MonsterDefinition[] getMonsterDefinitions(String monsterDefFile, String monsterXMLAIFile) throws CRLException{
-		try{
+	public static MonsterDefinition[] getMonsterDefinitions(
+			String monsterDefFile, String monsterAI_XMLFile) throws CRLException {
+		try {
+			// from ecsv:
 			MonsterDefinition[] monsters = getBaseMonsters(monsterDefFile);
-			Hashtable hashMonsters = new Hashtable();
-			for (int i = 0; i < monsters.length; i++){
-				hashMonsters.put(monsters[i].getID(), monsters[i]);
+			HashMap<String, MonsterDefinition> monsterTable = new HashMap<>();
+			for (int i = 0; i < monsters.length; i++) {
+				monsterTable.put(monsters[i].getID(), monsters[i]);
 			}
 			
-	        MonsterDocumentHandler handler = new MonsterDocumentHandler(hashMonsters);
-	        MinML parser = new MinML();
-	        DESEncrypter encrypter = new DESEncrypter("65csvlk3489585f9rjh");
-	        //parser.setContentHandler(handler);
-	        parser.setDocumentHandler(handler);
-	        parser.parse(new InputSource(encrypter.decrypt(new FileInputStream(monsterXMLAIFile))));
-	        return monsters;
-	        
-	        /* Print Some data to a CSV File, yeah I am evil
-	        BufferedWriter write = FileUtil.getWriter("monsterStats.csv");
-	        for (int i = 0; i < ret.length; i++){
-	        	write.write(ret[i].getID()+","+ret[i].getAppearance().getID()+","+ret[i].getDescription()+",,"+
-	        			ret[i].getWavOnHit()+","+ret[i].getBloodContent()+","+
-	        			ret[i].isUndead()+","+ret[i].isEthereal()+","+
-	        			ret[i].isCanSwim()+",false,"+ret[i].getScore()+","+
-	        			ret[i].getSightRange()+","+ret[i].getMaxHits()+","+
-	        			ret[i].getAttack()+","+ret[i].getWalkCost()+","+ret[i].getAttackCost()+","+
-	        			ret[i].getEvadeChance()+","+ret[i].getEvadeMessage()+","+ret[i].getAutorespawnCount()
-	        			);
-	        	write.write("\n");
-	        }
-	        write.close();*/
-	        // End Print Some data to a CSV File, yeah I am evil
-	        
-		} catch (IOException ioe){
-			throw new CRLException("Error while loading data from monster file");
-		} catch (SAXException sax){
-			sax.printStackTrace();
-			throw new CRLException("Error while loading data from monster file");
-		}
-    }
-
-}
-
-
-
-class MonsterDocumentHandler implements DocumentHandler{
-    private Hashtable hashMonsters;
-    
-    MonsterDocumentHandler (Hashtable hashMonsters){
-    	this.hashMonsters = hashMonsters;
-    }
-   
-    private MonsterDefinition currentMD;
-    private ActionSelector currentSelector;
-    private Vector currentRangedAttacks;
-    
-    public void startDocument() throws org.xml.sax.SAXException {}
-    
-    public void startElement(String localName, AttributeList at) throws org.xml.sax.SAXException {
-        if (localName.equals("monster")){
-        	currentMD = (MonsterDefinition) hashMonsters.get(at.getValue("id"));
-        } else
-        if (localName.equals("sel_wander")){
-        	currentSelector = new WanderToPlayerAI();
-        } else
-        if (localName.equals("sel_underwater")){
-        	currentSelector = new UnderwaterAI();
-        }else
-    	if (localName.equals("sel_sickle")){
-        	currentSelector = new crl.action.monster.boss.SickleAI();
-        }else
-    	if (localName.equals("sel_death")){
-        	currentSelector = new DeathAI();
-        }else
-    	if (localName.equals("sel_dracula")){
-        	currentSelector = new DraculaAI();
-        }else
-    	if (localName.equals("sel_demondracula")){
-        	currentSelector = new DemonDraculaAI();
-        }else
-    	if (localName.equals("sel_medusa")){
-        	currentSelector = new MedusaAI();
-        }else
-    	if (localName.equals("sel_frank")){
-        	currentSelector = new FrankAI();
-        }else
-    	if (localName.equals("sel_stationary")){
-        	currentSelector = new StationaryAI();
-        }else
-    	if (localName.equals("sel_basic")){
-        	currentSelector = new BasicMonsterAI();
-        	if (at.getValue("stationary") != null)
-        		((BasicMonsterAI)currentSelector).setStationary(at.getValue("stationary").equals("true"));
-        	if (at.getValue("approachLimit") != null)
-        		((BasicMonsterAI)currentSelector).setApproachLimit(inte(at.getValue("approachLimit")));
-        	if (at.getValue("waitPlayerRange") != null)
-        		((BasicMonsterAI)currentSelector).setWaitPlayerRange(inte(at.getValue("waitPlayerRange")));
-        	if (at.getValue("patrolRange") != null)
-        		((BasicMonsterAI)currentSelector).setPatrolRange(inte(at.getValue("patrolRange")));
-        }else
-        if (localName.equals("sel_ranged")){
-        	currentSelector = new RangedAI();
-        	((RangedAI)currentSelector).setApproachLimit(inte(at.getValue("approachLimit")));
-        }else
-    	if (localName.equals("rangedAttacks")){
-    		currentRangedAttacks = new Vector(10);
-    	} else 
-		if (localName.equals("rangedAttack")){
-			int damage = 0;
-			try {
-				damage = Integer.parseInt(at.getValue("damage")); 
-			} catch (NumberFormatException nfe){
-				
-			}
-				
-			RangedAttack ra = new RangedAttack(
-					at.getValue("id"),
-					at.getValue("type"),
-					at.getValue("status_effect"),
-					Integer.parseInt(at.getValue("range")), 
-					Integer.parseInt(at.getValue("frequency")),
-					at.getValue("message"),
-					at.getValue("effectType"),
-					at.getValue("effectID"),
-					damage
-					
-					//color
-					);
-			if (at.getValue("effectWav") != null)
-				ra.setEffectWav(at.getValue("effectWav"));
-			if (at.getValue("summonMonsterId") != null)
-				ra.setSummonMonsterId(at.getValue("summonMonsterId"));
-			if (at.getValue("charge") != null)
-				ra.setChargeCounter(inte(at.getValue("charge")));
+			DESEncrypter encrypter = new DESEncrypter("65csvlk3489585f9rjh");
+			InputStream decryptStream = encrypter.decrypt(new FileInputStream(monsterAI_XMLFile));
+			XMLTag xml = NoX.xmlFromStream(decryptStream);
+			// 'parse' (convert xml struct into game's internal data)
+			readMonsterAIFromXML(xml, monsterTable);
+			// That populates the 'monsters' def objects with their
+			// range-attack/movement AI settings objects by reading the XML.
 			
-			currentRangedAttacks.add(ra);
+			return monsters;
+			
+			/* Print Some data to a CSV File, yeah I am evil
+			BufferedWriter write = FileUtil.getWriter("monsterStats.csv");
+			for (int i = 0; i < ret.length; i++){
+				write.write(ret[i].getID()+","+ret[i].getAppearance().getID()+","+ret[i].getDescription()+",,"+
+						ret[i].getWavOnHit()+","+ret[i].getBloodContent()+","+
+						ret[i].isUndead()+","+ret[i].isEthereal()+","+
+						ret[i].isCanSwim()+",false,"+ret[i].getScore()+","+
+						ret[i].getSightRange()+","+ret[i].getMaxHits()+","+
+						ret[i].getAttack()+","+ret[i].getWalkCost()+","+ret[i].getAttackCost()+","+
+						ret[i].getEvadeChance()+","+ret[i].getEvadeMessage()+","+ret[i].getAutorespawnCount()
+						);
+				write.write("\n");
+			}
+			write.close();*/
+			// End Print Some data to a CSV File, yeah I am evil
+			
+		} catch (IOException ioe) {
+			throw new CRLException("Error while loading data from monster file");
 		}
-    }
-    
-    public void endElement(String localName) throws org.xml.sax.SAXException {
-        if (localName.equals("rangedAttacks")){
-        	((MonsterAI)currentSelector).setRangedAttacks(currentRangedAttacks);
-        }
-        else
-        if (localName.equals("selector")){
-        	
-            currentMD.setDefaultSelector(currentSelector);
-        }
-        
-    }
-    
-    public void characters(char[] values, int param, int param2) throws org.xml.sax.SAXException {}
+	}
 
-    public void endDocument() throws org.xml.sax.SAXException {}
 
-    public void endPrefixMapping(String str) throws org.xml.sax.SAXException {}
-
-    public void ignorableWhitespace(char[] values, int param, int param2) throws org.xml.sax.SAXException {}
-
-    public void processingInstruction(String str, String str1) throws org.xml.sax.SAXException {}
-
-    public void setDocumentLocator(org.xml.sax.Locator locator) {}
-
-    public void skippedEntity(String str) throws org.xml.sax.SAXException {}
-
-    public void startPrefixMapping(String str, String str1) throws org.xml.sax.SAXException {}
-    
-    private int inte(String s){
-    	return Integer.parseInt(s);
-    }
-}
+	private static void readMonsterAIFromXML(XMLTag xmlRoot, HashMap<String, MonsterDefinition> monsterDefs) {
+		// returns a list of monster defs in program's format. probably. xml.
+		// flesh out/augment a MonsterDefinition object with its AI patterns.
+		XMLTag monsters = xmlRoot.children[0];
+		assert("monsters".equals(monsters.name));
+		XMLTag[] monTags = monsters.children;
+		
+		for (XMLTag monTag: monTags) {
+			if (monTag.tagtype == XMLTag.COMMENT) {
+				continue;
+			}
+			
+			String mid = monTag.getStrAttr("id");
+			MonsterDefinition md = (MonsterDefinition)monsterDefs.get(mid);
+			
+			XMLTag selectorTag = monTag.children[0];
+			assert("selector".equals(selectorTag.name));
+			
+			assert(selectorTag.children.length == 1);
+			XMLTag sel = selectorTag.children[0];
+			
+			MonsterAI sai = null;
+			switch (sel.name) {
+			case "sel_wander":
+				sai = new WanderToPlayerAI();
+				//TODO add it to the md!
+				break;
+			case "sel_underwater":
+				sai = new UnderwaterAI();
+				break;
+			case "sel_sickle":
+				sai = new crl.action.monster.boss.SickleAI();
+				break;
+			case "sel_death":
+				sai = new DeathAI();
+				break;
+			case "sel_dracula":
+				sai = new DraculaAI();
+				break;
+			case "sel_demondracula":
+				sai = new DemonDraculaAI();
+				break;
+			case "sel_medusa":
+				sai = new MedusaAI();
+				break;
+			case "sel_frank":
+				sai = new FrankAI();
+				break;
+			case "sel_stationary":
+				sai = new StationaryAI();
+				break;
+			case "sel_basic":
+				sai = new BasicMonsterAI();	// The most complex one!?
+				
+				if (sel.atts.length > 0) {
+					for (Att at: sel.atts) {
+					//	System.err.format("BasicMonsterAI for %s has attr: %s (%s)\n",
+					//		mid, at.name, at.value);
+						switch (at.name) {
+						case "waitPlayerRange":
+							int range = sel.getIntAttr("waitPlayerRange");
+							((BasicMonsterAI)sai).setWaitPlayerRange(range);
+							break;
+						case "stationary":
+							((BasicMonsterAI)sai).setStationary("true".equalsIgnoreCase(at.value));
+							break;
+						case "approachLimit":
+							int lim = sel.getIntAttr("approachLimit");
+							((BasicMonsterAI)sai).setApproachLimit(lim);
+							break;
+						case "patrolRange":
+							int prange = sel.getIntAttr("patrolRange");
+							((BasicMonsterAI)sai).setPatrolRange(prange);
+							break;
+						default:
+							System.err.format("Attribute error for %s: %s\n", mid, at.name);
+						}
+					}
+				}
+				break;
+			case "sel_ranged":
+				sai = new RangedAI();
+				int apprLimit = sel.getIntAttr("approachLimit");
+				((RangedAI)sai).setApproachLimit(apprLimit);
+				break;
+			}
+			
+			if (sel.children != null && sel.children.length > 0) {
+				assert(sel.children.length == 1);
+				XMLTag ratks = sel.children[0];
+				assert(ratks.name.equals("rangedAttacks"));
+				parseRangeAttacks(sai, ratks);
+			}
+			
+			md.setDefaultSelector(sai);
+		}
+	}
 	
+	
+	private static void parseRangeAttacks(MonsterAI sai, XMLTag ratks) {
+		Vector<RangedAttack> rangedAttacks = new Vector<>(3);
+		XMLTag[] raDefs = ratks.children;
+		for (XMLTag raTag: raDefs) {
+			int damage = raTag.getIntAttr("damage");	// yields 0 if no attr.
+			RangedAttack ra = new RangedAttack(
+				raTag.getStrAttr("id"),
+				raTag.getStrAttr("type"),
+				raTag.getStrAttr("status_effect"),
+				raTag.getIntAttr("range"),
+				raTag.getIntAttr("frequency"),
+				raTag.getStrAttr("message"),
+				raTag.getStrAttr("effectType"),
+				raTag.getStrAttr("effectID"),
+				damage
+				// color
+			);
+			String fxWav = raTag.getStrAttrOrDefault("effectWav", null);
+			ra.setEffectWav(fxWav);
+
+			String sumID = raTag.getStrAttrOrDefault("summonMonsterId", null);
+			ra.setSummonMonsterId(sumID);
+			
+			String charge = raTag.getStrAttrOrDefault("charge", null);
+			if (charge != null) {
+				int chvalue = Integer.parseInt(charge);
+				ra.setChargeCounter(chvalue);
+			}
+			rangedAttacks.add(ra);
+		}
+		sai.setRangedAttacks(rangedAttacks);
+	}
+
+}
