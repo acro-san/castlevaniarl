@@ -23,7 +23,7 @@ public class Prelude3 extends Unleasher{
         level.addEffect(EffectFactory.getSingleton().createLocatedEffect(level.getPlayer().getPosition(), "SFX_KILL_CHRIS"));
         
 		Player p = level.getPlayer();
-		game.setPlayer(PlayerGenerator.thus.createSpecialPlayer("SOLIEYU"));
+		game.setPlayer(PlayerGenerator.thus.createSpecialPlayer("SOLEIYU"));
 		level.removeActor(p);
 		p.die();
 		level.getPlayer().setPosition(level.getExitFor("_START"));

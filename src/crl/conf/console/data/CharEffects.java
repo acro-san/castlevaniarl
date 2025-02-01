@@ -63,7 +63,7 @@ public class CharEffects {
 		new CharSplashEffect("SFX_SHADOW_APOCALYPSE","Oo*'.",ConsoleSystemInterface.CYAN,60),
 		new CharSplashEffect("SFX_SHADOW_EXTINCTION","o*'.",ConsoleSystemInterface.RED,60),
 		new CharSplashEffect("SFX_KILL_CHRIS","Oo*'.",ConsoleSystemInterface.MAGENTA,180),
-		new CharSplashEffect("SFX_MORPH_SOLIEYU","Oo*'.",ConsoleSystemInterface.GRAY,180),
+		new CharSplashEffect("SFX_MORPH_SOLEIYU","Oo*'.",ConsoleSystemInterface.GRAY,180),
 		new CharSplashEffect("SFX_VANISH",".oO",ConsoleSystemInterface.WHITE,50),
 		new CharSplashEffect("SFX_HOLY_FLAME","*~,",ConsoleSystemInterface.YELLOW,20),
 		new CharSplashEffect("SFX_MANDRAGORA_SCREAM","............",ConsoleSystemInterface.YELLOW,20),
@@ -80,7 +80,7 @@ public class CharEffects {
 		//En Attack.java : 116 "SFX_"+weaponDef.getID()
 		
 		//Sequential Effects
-		new CharSequentialEffect("SFX_BIBLE", SFX_BIBLE_STEPS, "?¿", ConsoleSystemInterface.CYAN, 10),
+		new CharSequentialEffect("SFX_BIBLE", SFX_BIBLE_STEPS, "?ï¿½", ConsoleSystemInterface.CYAN, 10),
 		
 		//Tile Effects
 		new CharIconMissileEffect("SFX_CAT",'c', ConsoleSystemInterface.GRAY, 55),

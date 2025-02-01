@@ -46,7 +46,7 @@ TOWER_STAIRS, '=', BROWN (Midstairs)
  
 (Characters)
 ICEY: Small variation to the townsguy with a snake on his hand (this is the guy that beat the medusa challenge :P)
-Solieyu Belmont Kid, this one is for the tutorial
+Soleiyu Belmont Kid, this one is for the tutorial
 Christopher Belmont unarmed (this is optional) for the tutorial
 
 (Bosses)

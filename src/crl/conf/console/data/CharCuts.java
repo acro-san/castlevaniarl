@@ -122,7 +122,7 @@ public class CharCuts {
 		temp.add("Count Dracula", "This cannot be! NOOOOOOOOOOOOOOOOOOOO!!!!!!");
 		hashCuts.put("DRACULA3", temp);
 		
-		// Solieyu Belmont Fight Sequence
+		// Soleiyu Belmont Fight Sequence
 		temp = new CharChat();
 		temp.add("Soleiyu Belmont", "Begone... Your quest ends here");
 		temp.add("%NAME", "It is not time yet... I won't give up... YOU can't give up!");
@@ -130,26 +130,26 @@ public class CharCuts {
 		temp.add("Soleiyu Belmont", "Your fight is a pitiful struggle against the natural evolution of universe. A blindfolded battle against something you don't event know about. The time has come for a new ordeal.");
 		temp.add("%NAME", "Our fight is something far more important than ourselves. Our fate is to protect all that is good in the world. You must never forget that... everything is important!");
 		temp.add("Soleiyu Belmont", "Shut up! And DIE!");
-		hashCuts.put("BADSOLIEYU1", temp);
+		hashCuts.put("BADSOLEIYU1", temp);
 
-		// Solieyu Belmont Death Sequence
+		// Soleiyu Belmont Death Sequence
 		temp = new CharChat();
 		temp.add("Soleiyu Belmont", "I am done for... I deserve this death...");
-		temp.add("%NAME", "Solieyu! don't give up!");
+		temp.add("%NAME", "Soleiyu! don't give up!");
 		temp.add("Soleiyu Belmont", "It is all over... my father, the only vampire killer... he is dead, because of me! I carry the burden of the destruction of this world... I DO!");
 		temp.add("%NAME", "What?");
 		temp.add("Soleiyu Belmont", "Shut up! Let me go... ARGH!!");
-		hashCuts.put("BADSOLIEYU2", temp);
+		hashCuts.put("BADSOLEIYU2", temp);
 		temp = new CharChat();
 
-		// Solieyu Belmont Saved Sequence
+		// Soleiyu Belmont Saved Sequence
 		temp.add("Soleiyu Belmont", "What is... that sound!");
 		temp.add("%NAME", "This jukebox... is it yours?");
 		temp.add("Soleiyu Belmont", "That melody... father! I promised to never let you down, but I was not born to be a Vampire Killer!");
 		temp.add("Soleiyu Belmont", "No! that's wrong... empty promises, all of them worthless, I must destroy you at all costs!");
 		temp.add("%NAME", "I don't want to fight you!");
 		temp.add("Soleiyu Belmont", "My head! it hurts... it hurts! LET ME GO!");
-		hashCuts.put("SAVESOLIEYU", temp);
+		hashCuts.put("SAVESOLEIYU", temp);
 		
 		// Girls Sequence 1
 		temp = new CharChat();

@@ -54,7 +54,7 @@ public class GFXAppearances {
 		
 		createAppearance("CHRISTOPHER_B", imgConfig.getCharactersImage(), 1,5),
 		
-		createAppearance("SOLIEYU_B", imgConfig.getCharactersImage(), 2,5),
+		createAppearance("SOLEIYU_B", imgConfig.getCharactersImage(), 2,5),
 		createAppearance("BADBELMONT", imgConfig.getCharactersImage(), 2,6),
 		createBAppearance("PRELUDE_DRACULA", imgConfig.getBigMonstersImage(), 4, 5),
 		
@@ -594,7 +594,7 @@ public class GFXAppearances {
         createAppearance("MORPHED_LUPINE", imgConfig.getCharactersImage(), 5, 2), 
         
         
-        createAppearance("SOLIEYU_B_KID", imgConfig.getCharactersImage(), 6, 6),
+        createAppearance("SOLEIYU_B_KID", imgConfig.getCharactersImage(), 6, 6),
    		createAppearance("MAN", imgConfig.getCharactersImage(), 3, 3),
         createAppearance("WOMAN", imgConfig.getCharactersImage(), 4, 3),
         createAppearance("OLDMAN", imgConfig.getCharactersImage(), 5, 3),

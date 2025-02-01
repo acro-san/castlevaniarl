@@ -12,7 +12,8 @@ import crl.ui.graphicsUI.GFXChat;
 public class GFXCuts {
 	public static GFXCuts thus;
 	private BufferedImage
-		PRT_DRACULA, PRT_CHRIS, PRT_SOLIEYU, PRT_SOLIEYU_D, PRT_MELDUCK, PRT_CLARA,PRT_MAIDEN, PRT_DEATH,PRT_VINDELITH,PRT_CLAW;
+		PRT_DRACULA, PRT_CHRIS, PRT_SOLEIYU, PRT_SOLEIYU_D, PRT_MELDUCK,
+		PRT_CLARA,PRT_MAIDEN, PRT_DEATH,PRT_VINDELITH,PRT_CLAW;
 	public BufferedImage
 		PRT_M1, PRT_M2, PRT_M3, PRT_M4, PRT_M5, PRT_M6,
 		PRT_F1, PRT_F2, PRT_F3, PRT_F4, PRT_F5, PRT_F6;
@@ -21,8 +22,8 @@ public class GFXCuts {
 			BufferedImage PRT = ImageUtils.createImage("gfx/crl_portraits2x.gif");
 			PRT_DRACULA = ImageUtils.crearImagen(PRT, 8, 205, 84, 86);
 			PRT_DEATH = ImageUtils.crearImagen(PRT, 98, 205, 84, 86);
-			PRT_SOLIEYU = ImageUtils.crearImagen(PRT, 188, 205, 84, 86);
-			PRT_SOLIEYU_D = ImageUtils.crearImagen(PRT, 278, 204, 84, 86);
+			PRT_SOLEIYU = ImageUtils.crearImagen(PRT, 188, 205, 84, 86);
+			PRT_SOLEIYU_D = ImageUtils.crearImagen(PRT, 278, 204, 84, 86);
 			PRT_CHRIS = ImageUtils.crearImagen(PRT, 368, 205, 84, 86);
 			PRT_VINDELITH = ImageUtils.crearImagen(PRT, 458, 204, 84, 86);
 			
@@ -62,18 +63,18 @@ public class GFXCuts {
 		temp.add("Count Dracula", "HAHAHAHA! Don't make me laugh, pitiful excuse for a warrior, you shall regret your words!", PRT_DRACULA);
 		hashCuts.put("PRELUDE_DRACULA1", temp);
 		temp = new GFXChat();
-		temp.add("Soleiyu Belmont", "Father! I finally understand, I am here to confront my destiny, the destiny marked by my legacy!", PRT_SOLIEYU);
-		temp.add("Soleiyu Belmont", "... Father? FATHER!", PRT_SOLIEYU);
+		temp.add("Soleiyu Belmont", "Father! I finally understand, I am here to confront my destiny, the destiny marked by my legacy!", PRT_SOLEIYU);
+		temp.add("Soleiyu Belmont", "... Father? FATHER!", PRT_SOLEIYU);
 		temp.add("Count Dracula", "Your father belongs to me now, you are late, son of a Belmont", PRT_DRACULA);
-		temp.add("Soleiyu Belmont", "No! NO! this.. this cannot be! You miserable monster! Die!", PRT_SOLIEYU);
+		temp.add("Soleiyu Belmont", "No! NO! this.. this cannot be! You miserable monster! Die!", PRT_SOLEIYU);
 		temp.add("Count Dracula", "HAHAHAHA!", PRT_DRACULA);
 		hashCuts.put("PRELUDE_DRACULA2", temp);
 		temp = new GFXChat();
 		temp.add("Count Dracula", "Don't be such a fool! Your soul has always been my possession! ", PRT_DRACULA);
-		temp.add("Soleiyu Belmont", "What! What is this! What happens to my body! ARGH!", PRT_SOLIEYU);
+		temp.add("Soleiyu Belmont", "What! What is this! What happens to my body! ARGH!", PRT_SOLEIYU);
 		hashCuts.put("PRELUDE_DRACULA3", temp);
 		temp = new GFXChat();
-		temp.add("Soleiyu Belmont", "WARGH!!! WARRRGH!", PRT_SOLIEYU_D);
+		temp.add("Soleiyu Belmont", "WARGH!!! WARRRGH!", PRT_SOLEIYU_D);
 		temp.add("Count Dracula", "HAHAHAHA! Now, get out of my sight shameful creature! I have important things to do", PRT_DRACULA);
 		hashCuts.put("PRELUDE_DRACULA4", temp);
 		temp = new GFXChat();
@@ -133,28 +134,28 @@ public class GFXCuts {
 		temp.add("Death", "I would stop you here if I wanted to, but that would be much of a swift death for one that dares to challenge this castle! You will die as your brothers, and your soul will haunt this place for eternity!", PRT_DEATH); 
 		hashCuts.put("DEATH_HALL", temp);
 		temp = new GFXChat();
-		temp.add("Soleiyu Belmont", "Begone... Your quest ends here", PRT_SOLIEYU_D);
+		temp.add("Soleiyu Belmont", "Begone... Your quest ends here", PRT_SOLEIYU_D);
 		temp.add("%NAME", "It is not time yet... I won't give up... YOU can't give up!");
-		temp.add("Soleiyu Belmont", "It is all worthless, all our efforts... A world of light is a dream built up by dreamers, for dreamers.", PRT_SOLIEYU_D);
-		temp.add("Soleiyu Belmont", "Your fight is a pitiful struggle against the natural evolution of universe. A blindfolded battle against something you don't event know about. The time has come for a new ordeal", PRT_SOLIEYU_D);
+		temp.add("Soleiyu Belmont", "It is all worthless, all our efforts... A world of light is a dream built up by dreamers, for dreamers.", PRT_SOLEIYU_D);
+		temp.add("Soleiyu Belmont", "Your fight is a pitiful struggle against the natural evolution of universe. A blindfolded battle against something you don't event know about. The time has come for a new ordeal", PRT_SOLEIYU_D);
 		temp.add("%NAME", "Our fight is something far more important than ourselves. Our fate is to protect all that is good in the world. You must never forget that... everything is important!");
-		temp.add("Soleiyu Belmont", "Shut up! And DIE!", PRT_SOLIEYU_D);
-		hashCuts.put("BADSOLIEYU1", temp);
+		temp.add("Soleiyu Belmont", "Shut up! And DIE!", PRT_SOLEIYU_D);
+		hashCuts.put("BADSOLEIYU1", temp);
 		temp = new GFXChat();
-		temp.add("Soleiyu Belmont", "I am done for... I deserve this death...", PRT_SOLIEYU_D);
-		temp.add("%NAME", "Solieyu! don't give up!");
-		temp.add("Soleiyu Belmont", "It is all over... my father, the only vampire killer... he is dead, because of me! I carry the burden of the destruction of this world... I DO!", PRT_SOLIEYU_D);
+		temp.add("Soleiyu Belmont", "I am done for... I deserve this death...", PRT_SOLEIYU_D);
+		temp.add("%NAME", "Soleiyu! don't give up!");
+		temp.add("Soleiyu Belmont", "It is all over... my father, the only vampire killer... he is dead, because of me! I carry the burden of the destruction of this world... I DO!", PRT_SOLEIYU_D);
 		temp.add("%NAME", "What?");
-		temp.add("Soleiyu Belmont", "Shut up! Let me go... ARGH!!", PRT_SOLIEYU_D);
-		hashCuts.put("BADSOLIEYU2", temp);
+		temp.add("Soleiyu Belmont", "Shut up! Let me go... ARGH!!", PRT_SOLEIYU_D);
+		hashCuts.put("BADSOLEIYU2", temp);
 		temp = new GFXChat();
-		temp.add("Soleiyu Belmont", "What is... that sound!", PRT_SOLIEYU_D);
+		temp.add("Soleiyu Belmont", "What is... that sound!", PRT_SOLEIYU_D);
 		temp.add("%NAME", "This jukebox... is it yours?");
-		temp.add("Soleiyu Belmont", "That melody... father! I promised to never let you down, but I was not born to be a Vampire Killer!", PRT_SOLIEYU_D);
-		temp.add("Soleiyu Belmont", "No! that's wrong... empty promises, all of them worthless, I must destroy you at all costs!", PRT_SOLIEYU_D);
+		temp.add("Soleiyu Belmont", "That melody... father! I promised to never let you down, but I was not born to be a Vampire Killer!", PRT_SOLEIYU_D);
+		temp.add("Soleiyu Belmont", "No! that's wrong... empty promises, all of them worthless, I must destroy you at all costs!", PRT_SOLEIYU_D);
 		temp.add("%NAME", "I don't want to fight you!");
-		temp.add("Soleiyu Belmont", "My head! it hurts... it hurts! LET ME GO!", PRT_SOLIEYU_D);
-		hashCuts.put("SAVESOLIEYU", temp);
+		temp.add("Soleiyu Belmont", "My head! it hurts... it hurts! LET ME GO!", PRT_SOLEIYU_D);
+		hashCuts.put("SAVESOLEIYU", temp);
 		temp = new GFXChat();
 		temp.add("Mysterious Girl", "ARGH!!", PRT_CLAW);
 		temp.add("Sorceress?", "Give up now foolish girl! There is no place for your games in this place. Leave now, we do not need you!", PRT_VINDELITH);

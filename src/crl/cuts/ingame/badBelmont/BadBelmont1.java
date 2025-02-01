@@ -9,14 +9,14 @@ import crl.ui.Display;
 public class BadBelmont1 extends Unleasher {
 
 	public void unleash(Level level, Game game) {
-		Display.thus.showChat("BADSOLIEYU1", game);
+		Display.thus.showChat("BADSOLEIYU1", game);
 		if (level.getPlayer().hasItemByID("JUKEBOX")){
 			level.addMessage("The jukebox plays a mellow melody");
-			Display.thus.showChat("SAVESOLIEYU", game);
+			Display.thus.showChat("SAVESOLEIYU", game);
 			level.removeMonster(level.getMonsterByID("BADBELMONT"));
-			level.getPlayer().setFlag("SAVED_SOLIEYU", true);
+			level.getPlayer().setFlag("SAVED_SOLEIYU", true);
 			level.removeBoss();
-			level.getPlayer().addHistoricEvent("saved Solieyu Belmont from certain doom");
+			level.getPlayer().addHistoricEvent("saved Soleiyu Belmont from certain doom");
 			level.getPlayer().addKeys(1);
 		} else {
 			level.setMusicKeyMorning("BADBELMONT");

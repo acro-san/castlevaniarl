@@ -15,14 +15,14 @@ import crl.ui.Display;
 public class BadBelmont2 extends Unleasher{
 
 	public void unleash(Level level, Game game) {
-		if (level.getPlayer().getFlag("SAVED_SOLIEYU")){
+		if (level.getPlayer().getFlag("SAVED_SOLEIYU")){
 			enabled = false;
 			return;
 		}
 		Monster belmont = level.getMonsterByID("BADBELMONT");
 		if (belmont != null)
 			return;
-		Display.thus.showChat("BADSOLIEYU2", game);
+		Display.thus.showChat("BADSOLEIYU2", game);
 		enabled = false;
 	}
 }

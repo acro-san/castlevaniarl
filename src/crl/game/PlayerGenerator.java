@@ -95,13 +95,13 @@ public abstract class PlayerGenerator {
 		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_STAVES);
 		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_SWORDS);
 		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_RINGS);
-		christopher.setAppearance(aps.get("SOLIEYU_B"));
+		christopher.setAppearance(aps.get("SOLEIYU_B"));
 		christopher.setPlot("Finally deciding to face his own fate, he travels to the cursed Castlevania", "");
 		christopher.setDescription("The son of Christopher Belmont");
 		christopher.setWeapon(itf.createWeapon("HARPER",""));
 		christopher.setArmor(itf.createArmor("PLATE", "STEEL"));
 		christopher.setAdvancementLevels(ADVANCEMENT_LEVELS_HARDER);
-		SPECIAL_PLAYERS.put("SOLIEYU", christopher);
+		SPECIAL_PLAYERS.put("SOLEIYU", christopher);
 		christopher = new Player();
 		christopher.setSex(Player.MALE);
 		christopher.setName("Child Soleiyu");
@@ -119,11 +119,11 @@ public abstract class PlayerGenerator {
 		christopher.setCarryMax(5);
 		christopher.setSoulPower(0);
 		
-		christopher.setAppearance(aps.get("SOLIEYU_B_KID"));
+		christopher.setAppearance(aps.get("SOLEIYU_B_KID"));
 		christopher.setPlot("Trains to become the next vampire killer", "");
 		christopher.setDescription("The son of Christopher Belmont");
 		christopher.setAdvancementLevels(ADVANCEMENT_LEVELS_HARDER);
-		SPECIAL_PLAYERS.put("SOLIEYU_KID", christopher);
+		SPECIAL_PLAYERS.put("SOLEIYU_KID", christopher);
 		
 		christopher = new Player();
 		christopher.setSex(Player.FEMALE);

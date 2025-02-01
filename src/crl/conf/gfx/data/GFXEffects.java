@@ -468,7 +468,7 @@ public class GFXEffects {
 			new GFXCircleBlastEffect("SFX_BOSS_DEATH",Color.YELLOW,10, configuration), /*pending*/
 			new GFXCircleBlastEffect("SFX_ROSARY_BLAST",Color.WHITE,10, configuration), /*pending*/
 			new GFXCircleBlastEffect("SFX_KILL_CHRIS",Color.MAGENTA,20, configuration), /*pending*/
-			new GFXCircleBlastEffect("SFX_MORPH_SOLIEYU",Color.BLACK,20, configuration), /*pending*/
+			new GFXCircleBlastEffect("SFX_MORPH_SOLEIYU",Color.BLACK,20, configuration), /*pending*/
 			
 			new GFXCircleBlastEffect("SFX_SOUL_FLAME",Color.RED,20, configuration), /*pending*/
 			new GFXCircleBlastEffect("SFX_SOUL_BLAST",Color.WHITE,20, configuration), /*pending*/

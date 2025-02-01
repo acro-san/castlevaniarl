@@ -206,7 +206,7 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 	}
 	
 	public void training(){
-		player = PlayerGenerator.thus.createSpecialPlayer("SOLIEYU_KID");
+		player = PlayerGenerator.thus.createSpecialPlayer("SOLEIYU_KID");
 		player.setGame(this);
 		player.setGameSessionInfo(new GameSessionInfo());
 		player.setSelector(uiSelector);

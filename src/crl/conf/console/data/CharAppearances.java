@@ -1,6 +1,5 @@
 package crl.conf.console.data;
 import sz.csi.ConsoleSystemInterface;
-import crl.level.Cell;
 import crl.ui.*;
 import crl.ui.consoleUI.CharAppearance;
 
@@ -9,10 +8,10 @@ public class CharAppearances {
 		new CharAppearance("NOTHING", ' ', ConsoleSystemInterface.BLACK),
 		new CharAppearance("VOID", ' ', ConsoleSystemInterface.BLACK),
 		new CharAppearance("CHRISTOPHER_B", '@', ConsoleSystemInterface.WHITE),
-		new CharAppearance("SOLIEYU_B", '@', ConsoleSystemInterface.RED),
+		new CharAppearance("SOLEIYU_B", '@', ConsoleSystemInterface.RED),
 		new CharAppearance("BADBELMONT", '@', ConsoleSystemInterface.GRAY),
 		new CharAppearance("PRELUDE_DRACULA", '@', ConsoleSystemInterface.RED),
-		new CharAppearance("SOLIEYU_B_KID", '@', ConsoleSystemInterface.TEAL),
+		new CharAppearance("SOLEIYU_B_KID", '@', ConsoleSystemInterface.TEAL),
 		new CharAppearance("SONIA_B", '@', ConsoleSystemInterface.PURPLE),
 		new CharAppearance("VKILLER", '@', ConsoleSystemInterface.BROWN),
 		new CharAppearance("VKILLER_W", '@', ConsoleSystemInterface.PURPLE),

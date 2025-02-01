@@ -106,7 +106,7 @@ If you want to use 9 different tiles, we can change it
 
 (New People)
 CHRISTOPHER_B, '@', WHITE (Christopher Belmont)
-SOLIEYU_B, '@', RED (Solieyu Belmont)
+SOLEIYU_B, '@', RED (Soleiyu Belmont)
 MELDUCK, '@', TEAL (A charriotman who brings you to the castle, long brown hair, thin? big nose :P whatever you want)
 BLACKSMITH_MAIDEN A girl that lives inside the castle villa
 PLOT_BEASTMORPHER Needs one for woman and other for a feline beast,
