@@ -1317,7 +1317,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		}*/
 
 		
-		si.print(1,13, "Weapon Profficiences", ConsoleSystemInterface.RED);
+		si.print(1,13, "Weapon Proficiencies", ConsoleSystemInterface.RED);
 		si.print(1,14, "Hand to hand             Whips                    Projectiles", ConsoleSystemInterface.RED);
 		si.print(1,15, "Daggers                  Maces                    Bows/Xbows", ConsoleSystemInterface.RED);
 		si.print(1,16, "Swords                   Pole                     Machinery", ConsoleSystemInterface.RED);

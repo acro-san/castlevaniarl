@@ -1744,7 +1744,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 			si.print((cont-1) * 25 + 1, 3 + i - ((cont-1) * 10), ((Skill)skills.elementAt(i)).getMenuDescription());
 		}*/
 
-		si.print(1,14, "Weapon Profficiences", GFXDisplay.COLOR_BOLD);
+		si.print(1,14, "Weapon Proficiencies", GFXDisplay.COLOR_BOLD);
 		si.print(1,15,  "Hand to hand", GFXDisplay.COLOR_BOLD);
 		si.print(1,16, "Daggers", GFXDisplay.COLOR_BOLD);
 		si.print(1,17, "Swords", GFXDisplay.COLOR_BOLD);

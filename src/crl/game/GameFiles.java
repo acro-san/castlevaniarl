@@ -330,7 +330,7 @@ public class GameFiles {
 			}
 			
 			fileWriter.newLine();
-			fileWriter.write(heshe+" had the following proficiences:");fileWriter.newLine();
+			fileWriter.write(heshe+" had the following proficiencies:");fileWriter.newLine();
 			fileWriter.write("Hand to hand combat "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_UNARMED)]);fileWriter.newLine();
 			fileWriter.write("Daggers             "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_DAGGERS)]);fileWriter.newLine();
 			fileWriter.write("Swords              "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_SWORDS)]);fileWriter.newLine();
@@ -362,12 +362,15 @@ public class GameFiles {
 				i++;
 			}
 			fileWriter.newLine();
-			fileWriter.write("-- Final Stats --");fileWriter.newLine();fileWriter.newLine();
+			fileWriter.write("-- Final Stats --");fileWriter.newLine();
+			fileWriter.newLine();
 			fileWriter.write(player.getName()+" the level "+ player.getPlayerLevel()+" "+player.getClassString() + " "+player.getStatusString());fileWriter.newLine();
-			fileWriter.write("Sex: "+ (player.getSex() == Player.MALE ? "M" : "F"));fileWriter.newLine();
+			fileWriter.write("Sex: "+ (player.getSex() == Player.MALE ? "M" : "F"));
+			fileWriter.newLine();
 			fileWriter.write("Hits: "+player.getHits()+ "/"+player.getHitsMax()+" Hearts: " + player.getHearts() +"/"+player.getHeartsMax()+
 				  " Gold: "+player.getGold()+ " Keys: "+player.getKeys());fileWriter.newLine();
-			fileWriter.write("Carrying: "+player.getItemCount()+"/"+player.getCarryMax());fileWriter.newLine();
+			fileWriter.write("Carrying: "+player.getItemCount()+"/"+player.getCarryMax());
+			fileWriter.newLine();
 			fileWriter.write("Attack: +"+player.getAttack());fileWriter.newLine();
 			fileWriter.write("Soul Power: +"+player.getSoulPower());fileWriter.newLine();
 			fileWriter.write("Evade: "+player.getEvadeChance()+"%");fileWriter.newLine();
@@ -375,8 +378,10 @@ public class GameFiles {
 			fileWriter.write("Invokation: "+(50-player.getCastCost()));fileWriter.newLine();
 			fileWriter.write("Movement: "+(50-player.getWalkCost()));fileWriter.newLine();
 			
-			fileWriter.write("Experience: "+player.getXp()+"/"+player.getNextXP());fileWriter.newLine();fileWriter.newLine();
-						    
+			fileWriter.write("Experience: "+player.getXp()+"/"+player.getNextXP());
+			fileWriter.newLine();
+			fileWriter.newLine();
+			
 			Vector inventory = player.getInventory();
 			fileWriter.newLine();
 			fileWriter.write("-- Inventory --");fileWriter.newLine();
@@ -486,7 +491,8 @@ public class GameFiles {
 			}
 			
 			fileWriter.newLine();
-			fileWriter.write(heshe+" has the following profficiences:");fileWriter.newLine();
+			fileWriter.write(heshe+" has the following proficiencies:");
+			fileWriter.newLine();
 			fileWriter.write("Hand to hand combat "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_UNARMED)]);fileWriter.newLine();
 			fileWriter.write("Daggers             "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_DAGGERS)]);fileWriter.newLine();
 			fileWriter.write("Swords              "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_SWORDS)]);fileWriter.newLine();
