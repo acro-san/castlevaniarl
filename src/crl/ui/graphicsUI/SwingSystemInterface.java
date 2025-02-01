@@ -11,7 +11,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
-import java.awt.GridLayout;
+//import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -25,7 +25,7 @@ import java.util.Hashtable;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.border.LineBorder;
+//import javax.swing.border.LineBorder;
 
 import crl.conf.gfx.data.GFXConfiguration;
 import crl.game.Game;
@@ -34,11 +34,14 @@ import sz.csi.CharKey;
 import sz.util.ImageUtils;
 import sz.util.Position;
 
-public class SwingSystemInterface implements Runnable{ 
+public class SwingSystemInterface implements Runnable {
+	
 	protected GFXConfiguration configuration;
 
-	public void run(){
+	public void run() {
+		
 	}
+	
 	private SwingInterfacePanel sip;
 	private StrokeNClickInformer aStrokeInformer;
 	private Position caretPosition = new Position(0,0);
@@ -79,7 +82,7 @@ public class SwingSystemInterface implements Runnable{
 		JOptionPane.showMessageDialog(frameMain, message, "Alert", JOptionPane.ERROR_MESSAGE);
 	}
 	
-	public SwingSystemInterface (GFXConfiguration configuration){
+	public SwingSystemInterface(GFXConfiguration configuration) {
 		this.configuration = configuration;
 		frameMain = new JFrame();
 		
@@ -88,13 +91,16 @@ public class SwingSystemInterface implements Runnable{
 				            (size.height-configuration.getScreenHeight())/2,
 				            configuration.getScreenWidth(),
 				            configuration.getScreenHeight());
-		frameMain.getContentPane().setLayout(new GridLayout(1,1));
+		//frameMain.getContentPane().setLayout(new GridLayout(1,1));
 		frameMain.setUndecorated(true);
 		
-		sip = new SwingInterfacePanel(this.configuration);
-		frameMain.getContentPane().add(sip);
+		sip = new SwingInterfacePanel(configuration);
+		frameMain.setContentPane(sip);
+		//frameMain.getContentPane().add(sip);
+
 		frameMain.setVisible(true);
 		frameMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//FIXME: Do Game-close / file-save-check funcs!!
 		frameMain.setBackground(Color.BLACK);
 		//SZ030507 aStrokeInformer = new StrokeInformer();
 		aStrokeInformer = new StrokeNClickInformer();
@@ -112,13 +118,15 @@ public class SwingSystemInterface implements Runnable{
 		
 		frameMain.addMouseMotionListener(new MouseMotionListener(){
 			public void mouseDragged(MouseEvent e) {
-		        frameMain.setLocation(e.getX()-posClic.x+frameMain.getLocation().x, e.getY()-posClic.y+frameMain.getLocation().y);
+				frameMain.setLocation(
+					e.getX()-posClic.x+frameMain.getLocation().x,
+					e.getY()-posClic.y+frameMain.getLocation().y);
 			}
-
+			
 			public void mouseMoved(MouseEvent e) {}
-        	
-        });
-		frameMain.addMouseListener(new MouseListener(){
+		});
+		
+		frameMain.addMouseListener(new MouseListener() {
 
 			public void mouseClicked(MouseEvent e) {}
 
@@ -131,8 +139,10 @@ public class SwingSystemInterface implements Runnable{
 			}
 
 			public void mouseReleased(MouseEvent e) {}
-        });
-		int n = JOptionPane.showConfirmDialog(frameMain, "Activate Full Screen Mode?", "Welcome to CastlevaniaRL", JOptionPane.YES_NO_OPTION);
+		});
+		// NB: TOGGLE FULLSCREEN keybind. no prompt.
+		int n = JOptionPane.showConfirmDialog(frameMain,
+			"Activate Full Screen Mode?", "Welcome to CastlevaniaRL", JOptionPane.YES_NO_OPTION);
 		if (n == 0) {
 			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 			GraphicsDevice gs = ge.getDefaultScreenDevice();
@@ -156,63 +166,6 @@ public class SwingSystemInterface implements Runnable{
 		}
 	}
 	
-	
-	
-	/*public SwingSystemInterface(){
-		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		GraphicsDevice  gs = ge.getDefaultScreenDevice();
-		// Determine if the display mode can be changed
-		/*boolean canChg = gs.isDisplayChangeSupported();
-		if (canChg) {
-			System.out.println("Can change screen size");
-	        // Change the screen size and number of colors
-	        DisplayMode displayMode = gs.getDisplayMode();
-	        int screenWidth = 800;
-	        int screenHeight = 600;
-	        int bitDepth = 8;
-	        displayMode = new DisplayMode(
-	            screenWidth, screenHeight, bitDepth, displayMode.getRefreshRate());
-	        try {
-	            gs.setDisplayMode(displayMode);
-	        } catch (Throwable e) {
-	        	System.out.println("Desired display mode is not supported; leave full-screen mode");
-	            gs.setFullScreenWindow(null);
-	        }
-	    //} 
-		if (gs.isFullScreenSupported()){
-			System.out.println("Fullscreen supported");
-    		Frame frame = new Frame(gs.getDefaultConfiguration());
-    		Window win = new Window(frame);
-    		frame.setLayout(new GridLayout(1,1));
-    		sip = new SwingInterfacePanel();
-    		frame.add(sip);
-    		frame.setVisible(true);
-    		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    		aStrokeInformer = new StrokeInformer();
-    		frame.addKeyListener(aStrokeInformer);
-    		sip.init();
-    		gs.setFullScreenWindow(win);
-    		win.validate();
-    	} else {
-    		JFrame frame = new JFrame();
-    		frame.setBounds(0,0,800,600);
-    		frame.getContentPane().setLayout(new GridLayout(1,1));
-    		sip = new SwingInterfacePanel();
-    		frame.getContentPane().add(sip);
-    		frame.setVisible(true);
-    		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    		aStrokeInformer = new StrokeInformer();
-    		frame.addKeyListener(aStrokeInformer);
-    		sip.init();
-    	}
-		
-		//frame.setBounds(0,0,800,600);
-		
-		invTextArea = new JTextArea();
-		invTextArea.setVisible(false);
-		add(invTextArea);
-		
-	}*/
 	
 	public void cls(){
 		sip.cls();
@@ -449,25 +402,26 @@ class SwingInterfacePanel extends JPanel{
 	public SwingInterfacePanel(GFXConfiguration configuration){
 		this.configuration = configuration;
 		setLayout(null);
-		setBorder(new LineBorder(Color.GRAY));
+		//setBorder(new LineBorder(Color.GRAY));
 	}
 	
-	public void init(){
-		bufferImage = createImage(configuration.getScreenWidth(), 
-								  configuration.getScreenHeight());
-        bufferGraphics = bufferImage.getGraphics();
-        bufferGraphics.setColor(Color.WHITE);
-        backImage = createImage(configuration.getScreenWidth(), 
-        						configuration.getScreenHeight());
-        backGraphics = backImage.getGraphics();
-        backImageBuffers = new Image[5];
-        backGraphicsBuffers = new Graphics[5];
-        for (int i = 0 ; i < 5; i++){
-        	backImageBuffers[i] = createImage(configuration.getScreenWidth(), 
-        									  configuration.getScreenHeight());
-        	backGraphicsBuffers[i] = backImageBuffers[i].getGraphics();
-        }
-        
+	private static final int
+		NUM_BACKBUFFERS = 5;
+	
+	public void init() {
+		int w = configuration.getScreenWidth(),
+			h = configuration.getScreenHeight();
+		bufferImage = createImage(w, h);
+		bufferGraphics = bufferImage.getGraphics();
+		bufferGraphics.setColor(Color.WHITE);
+		backImage = createImage(w, h);
+		backGraphics = backImage.getGraphics();
+		backImageBuffers = new Image[NUM_BACKBUFFERS];
+		backGraphicsBuffers = new Graphics[NUM_BACKBUFFERS];
+		for (int i = 0 ; i < NUM_BACKBUFFERS; i++) {
+			backImageBuffers[i] = createImage(w, h);
+			backGraphicsBuffers[i] = backImageBuffers[i].getGraphics();
+		}
 	}
 	
 	public void drawImage(Image img){
@@ -484,14 +438,14 @@ class SwingInterfacePanel extends JPanel{
 	}
 	
 	public void print(int x, int y, String text, Color c, boolean centered) {
-		if (centered == true) {
+		if (centered) {
 			int width = fontMetrics.stringWidth(text);
 			x = x - (width / 2);
-		}		
-		Color old = bufferGraphics.getColor(); 
+		}
+		Color old = bufferGraphics.getColor();
 		bufferGraphics.setColor(c);
 		bufferGraphics.drawString(text, x, y);
-		bufferGraphics.setColor(old);		
+		bufferGraphics.setColor(old);
 	}
 	
 	public void print(int x, int y, String text, Color c){
@@ -522,15 +476,13 @@ class SwingInterfacePanel extends JPanel{
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		if (bufferImage != null){
-			g.drawImage(bufferImage, 0,0,this);
+			g.drawImage(bufferImage, 0, 0, null);
 		}
 	}
 
 	public Component add(Component comp) {
 		return super.add(comp);
 	}
-	
-	
 	
 }
 
