@@ -4,6 +4,7 @@ import sz.util.Debug;
 import sz.util.Position;
 import sz.util.Util;
 import crl.level.*;
+import crl.Main;
 import crl.feature.Feature;
 import crl.item.*;
 import crl.feature.FeatureFactory;
@@ -74,7 +75,7 @@ public abstract class LevelGenerator {
 			tempPosition.y = cluey;
 			tempPosition.z = cluez;
 			if (ret.isWalkable(tempPosition)){
-				Item clue = ItemFactory.getItemFactory().createItem("CLUE_PAGE"+clueLevel);
+				Item clue = Main.itemData.createItem("CLUE_PAGE"+clueLevel);
 				ret.addItem(tempPosition, clue);
 				break;
 			}

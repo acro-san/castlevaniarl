@@ -61,7 +61,7 @@ import crl.game.MonsterRecord;
 import crl.game.PlayerGenerator;
 import crl.game.SFXManager;
 import crl.game.STMusicManagerNew;
-import crl.item.ItemFactory;
+import crl.item.ItemDataTable;
 import crl.level.MapCellFactory;
 import crl.monster.MonsterFactory;
 import crl.npc.NPCDefinition;
@@ -103,6 +103,8 @@ public class Main {
 	// (AI)Selectors by ID: could EASILY be a fixed len, indexed array, using short IDs.
 	public static HashMap<String, ActionSelector>
 		selectors = new HashMap<>();
+	
+	public static ItemDataTable itemData;// = new ItemFactory();
 	
 	private static Game currentGame;
 	private static boolean createNew = true;
@@ -687,8 +689,10 @@ public class Main {
 		}
 	}
 
-	private static void initializeItems(){
-		ItemFactory.getItemFactory().init(Items.getItemDefinitions());
+	private static void initializeItems() {
+		// if loaded from asset/data file, could 'user-override' location
+		itemData = new ItemDataTable();
+		itemData.init(Items.defs);
 	}
 
 	private static void initializeSmartFeatures (){

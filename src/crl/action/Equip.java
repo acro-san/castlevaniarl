@@ -35,21 +35,24 @@ public class Equip extends Action{
 			return;
 		}
 		
-		switch (def.getEquipCategory()){
-			case 1:
-				for (int i = 0 ; i < player.getBannedArmors().length; i++)
+		switch (def.equipType) {
+			case ItemDefinition.EQUIPTYPE_ARMOR:
+				for (int i = 0 ; i < player.getBannedArmors().length; i++) {
 					if (player.getBannedArmors()[i].equals(def.getID())) {
 						performer.getLevel().addMessage("You can't wear that kind of armor!");
 						return;
 					}
+				}
 				Item currentArmor = player.getArmor();
 				player.reduceQuantityOf(targetItem);
-				if (currentArmor != null)
+				if (currentArmor != null) {
 					player.addItem(currentArmor);
+				}
 				performer.getLevel().addMessage("You wear the "+def.getDescription());
 				player.setArmor(targetItem);
 				break;
-			case 2:
+				
+			case ItemDefinition.EQUIPTYPE_WEAPON:
 				if (player.getPlayerClass() == Player.CLASS_VAMPIREKILLER && player.getFlag("ONLY_VK")){
 					performer.getLevel().addMessage("You can't abandon the mystic whip");
 					return;
@@ -91,7 +94,8 @@ public class Equip extends Action{
 				player.reduceQuantityOf(targetItem);
 				
 				break;
-			case 3: // SHIELDS
+				
+			case ItemDefinition.EQUIPTYPE_SHIELD:
 				Item currentShield = player.getShield();
 				currentWeapon = player.getWeapon();
 				
@@ -115,7 +119,7 @@ public class Equip extends Action{
 						player.addItem(currentShield);
 					}
 				}
-					
+				
 				player.setShield(targetItem);
 				player.reduceQuantityOf(targetItem);
 				performer.getLevel().addMessage("You wear the "+def.getDescription());

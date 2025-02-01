@@ -12,7 +12,7 @@ import crl.monster.Monster;
 import crl.npc.*;
 import crl.game.Game;
 import crl.item.ItemDefinition;
-import crl.item.ItemFactory;
+import crl.item.ItemDataTable;
 import sz.csi.CharKey;
 import sz.csi.ConsoleSystemInterface;
 import sz.csi.textcomponents.TextBox;

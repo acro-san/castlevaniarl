@@ -5,13 +5,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Vector;
 
-import sz.csi.textcomponents.BasicListItem;
-import sz.csi.textcomponents.ListItem;
 import sz.csi.textcomponents.MenuItem;
 import sz.gadgets.GFXMenuItem;
-
+import crl.Main;
 import crl.player.Consts;
 import crl.player.Player;
 import crl.ui.*;
@@ -19,16 +16,16 @@ import crl.ui.consoleUI.CharAppearance;
 import crl.ui.graphicsUI.GFXAppearance;
 
 
-public class Item implements Serializable, MenuItem, GFXMenuItem{
+public class Item implements Serializable, MenuItem, GFXMenuItem {
 	private transient ItemDefinition definition;
 	private String defID;
 	//Status
 	private int remainingTurnsToReload;
-	private ArrayList /*Modifier*/ premodifiers = new ArrayList(10);
-	private ArrayList /*Modifier*/ postmodifiers = new ArrayList(10);
+	private ArrayList<Modifier> premodifiers = new ArrayList<>(10);
+	private ArrayList<Modifier> postmodifiers = new ArrayList<>(10);
 	public static boolean shopMode = false;
 	
-	public Item (ItemDefinition itemDef){
+	public Item(ItemDefinition itemDef) {
 		definition = itemDef;
 		defID = definition.getID();
 		reload();
@@ -36,7 +33,7 @@ public class Item implements Serializable, MenuItem, GFXMenuItem{
 	
 	public ItemDefinition getDefinition() {
 		if (definition == null){
-			definition = ItemFactory.getItemFactory().getDefinition(defID);
+			definition = Main.itemData.get(defID);
 		}
 		return definition;
 	}
@@ -52,12 +49,6 @@ public class Item implements Serializable, MenuItem, GFXMenuItem{
 	public void reload(){
 		setRemainingTurnsToReload(getDefinition().getReloadTurns());
 	}
-
-	
-	/*public ListItem getSightListItem() {
-		((BasicListItem)getDefinition().getSightListItem()).setRow(getDescription());
-		return getDefinition().getSightListItem();
-	}*/
 
 	public boolean isVisible(){
 		return !getDefinition().getAppearance().getID().equals("VOID");

@@ -6,6 +6,7 @@ import java.util.*;
 
 import sz.util.*;
 import crl.player.*;
+import crl.Main;
 import crl.data.*;
 
 public class Merchant extends NPC {
@@ -80,16 +81,18 @@ public class Merchant extends NPC {
 		}
 	}*/
 	
-	public void refreshMerchandise(Player player){
+	public void refreshMerchandise(Player player) {
 		if (player.getPlayerClass() == Player.CLASS_VAMPIREKILLER && (
-					merchandiseType == ItemDefinition.SHOP_WEAPONS ||
-					merchandiseType == ItemDefinition.SHOP_ARMOR)
-					) 
+				merchandiseType == ItemDefinition.SHOP_WEAPONS ||
+				merchandiseType == ItemDefinition.SHOP_ARMOR)
+			)
+		{
 			return;
+		}
 		
 		inventory = new Vector();
 		Vector vectorIDs = new Vector();
-		ItemDefinition[] defs = Items.getItemDefinitions();
+		ItemDefinition[] defs = Items.defs;
 		int itemNumber = Util.rand(6,12);
 		int items = 0;
 		int tries = 0;
@@ -110,16 +113,20 @@ public class Merchant extends NPC {
 			if (def.isUnique())
 				inventory.add(item);
 			else if (def.getAttack() > 0) {
-				if (!def.isFixedMaterial()) 
-					ItemFactory.getItemFactory().setMaterial(item, level.getLevelNumber(),ItemFactory.MOD_MATERIAL);
-				if (Util.chance(20))
-					ItemFactory.getItemFactory().setWeaponModifiers(item, level.getLevelNumber());
+				if (!def.isFixedMaterial()) {
+					Main.itemData.setMaterial(item, level.getLevelNumber(), ItemDataTable.MOD_MATERIAL);
+				}
+				if (Util.chance(20)) {
+					Main.itemData.setWeaponModifiers(item, level.getLevelNumber());
+				}
 				inventory.add(item);
 			} else if (def.getDefense() > 0) {
-				if (!def.isFixedMaterial()) 
-					ItemFactory.getItemFactory().setMaterial(item, level.getLevelNumber(),ItemFactory.MOD_ARMOR_MATERIAL);
-				if (Util.chance(10))
-					ItemFactory.getItemFactory().setArmorModifiers(item, level.getLevelNumber());
+				if (!def.isFixedMaterial()) {
+					Main.itemData.setMaterial(item, level.getLevelNumber(),ItemDataTable.MOD_ARMOR_MATERIAL);
+				}
+				if (Util.chance(10)) {
+					Main.itemData.setArmorModifiers(item, level.getLevelNumber());
+				}
 				inventory.add(item);
 			} else {
 				inventory.add(item);
@@ -127,7 +134,7 @@ public class Merchant extends NPC {
 		}
 	}
 
-	private final static String[] merchantNames = new String []{
+	private final static String[] merchantNames = {
 		"Kaleth",
 		"Adam",
 		"Invenior",

@@ -4,55 +4,58 @@ import java.util.*;
 
 import crl.game.Game;
 import crl.level.Level;
-import crl.monster.Monster;
-import crl.monster.MonsterDefinition;
 import crl.player.Player;
 import sz.util.*;
 
-public class ItemFactory {
-	private static ItemFactory singleton = new ItemFactory();
+public class ItemDataTable {
+	
+	// itemdefs by id
+	private Hashtable<String, ItemDefinition> definitions = new Hashtable<>();
 
-	private Hashtable definitions = new Hashtable();
+	// used for...? Just for looping contents of hashtable? ARRAY, then?
+///	private Vector<ItemDefinition> vDefinitions;
 
-	private Vector vDefinitions;
+	private Vector<ItemDefinition>
+		generalItemDefinitions = new Vector<>(),
+		weaponDefinitions = new Vector<>(),
+		armorDefinitions = new Vector<>();
 
-	private Vector weaponDefinitions = new Vector();
+	
 
-	private Vector armorDefinitions = new Vector();
 
-	private Vector generalItemsDefinitions = new Vector();
-
-	public static ItemFactory getItemFactory() {
-		return singleton;
-	}
-
-	public void init(ItemDefinition[] defs) {
-		vDefinitions = new Vector();
-		for (int i = 0; i < defs.length; i++) {
-			definitions.put(defs[i].getID(), defs[i]);
-			vDefinitions.add(defs[i]);
-			switch (defs[i].getEquipCategory()) {
-			case 0:
-				generalItemsDefinitions.add(defs[i]);
+	public void init(ItemDefinition[] itemDefs) {
+///		vDefinitions = new Vector<>();
+		for (ItemDefinition def: itemDefs) {//int i = 0; i < defs.length; i++) {
+			definitions.put(def.getID(), def);
+///			vDefinitions.add(def);	// just a list to iterate ALL the defs? in order...???
+			switch (def.equipType) {	// should be a BYTE defined in ItemDef statically.
+			case ItemDefinition.EQUIPTYPE_NONEQUIP:
+				generalItemDefinitions.add(def);
 				break;
-			case 1:
-				armorDefinitions.add(defs[i]);
+			case ItemDefinition.EQUIPTYPE_ARMOR:// 1:
+				armorDefinitions.add(def);
 				break;
-			case 2:
-				weaponDefinitions.add(defs[i]);
+			case ItemDefinition.EQUIPTYPE_WEAPON://2:
+				weaponDefinitions.add(def);
 				break;
-			case 4:
-				armorDefinitions.add(defs[i]);
+			case ItemDefinition.EQUIPTYPE_SHIELD://3!! BUG solved. 4:	// *WHY* was this 4?
+				armorDefinitions.add(def);
 				break;
+			//default:
+				//if (DEBUG_MODE) {
+				//System.err.println("Incorrect equip-type flag in Item Definition: "+def);
+				//
 			}
 		}
-
 	}
 
-	public ItemDefinition getDefinition(String ID) {
-		ItemDefinition def = (ItemDefinition) definitions.get(ID);
-		if (def == null)
-			Debug.doAssert(false, "Invalid Item ID " + ID);
+
+	public ItemDefinition get(String id) {
+		ItemDefinition def = (ItemDefinition)definitions.get(id);
+		assert(def != null);
+		if (def == null) {
+			Debug.doAssert(false, "Invalid Item ID " + id);
+		}
 		return def;
 	}
 
@@ -62,7 +65,7 @@ public class ItemFactory {
 			if (MOD_MATERIAL[i].getID().equals(material))
 				modMaterial = MOD_MATERIAL[i];
 		}
-		ItemDefinition def = getDefinition(ID);
+		ItemDefinition def = get(ID);
 		Item item = new Item(def);
 		if (!def.isFixedMaterial()) {
 			Debug.doAssert(modMaterial != null, "Material " + material
@@ -79,7 +82,7 @@ public class ItemFactory {
 				modMaterial = MOD_ARMOR_MATERIAL[i];
 		}
 
-		ItemDefinition def = getDefinition(ID);
+		ItemDefinition def = get(ID);
 		Item item = new Item(def);
 		if (!def.isFixedMaterial()) {
 			Debug.doAssert(modMaterial != null, "Material " + material
@@ -96,7 +99,7 @@ public class ItemFactory {
 				modMaterial = MOD_ARMOR_MATERIAL[i];
 		}
 
-		ItemDefinition def = getDefinition(ID);
+		ItemDefinition def = get(ID);
 		Item item = new Item(def);
 		if (!def.isFixedMaterial()) {
 			item.addPreModifier(modMaterial);
@@ -104,33 +107,34 @@ public class ItemFactory {
 		return item;
 	}
 
-	public Item createItem(String ID) {
-		ItemDefinition def = (ItemDefinition) definitions.get(ID);
-		if (def == null)
-			Debug.doAssert(false, "Invalid Item ID " + ID);
+	public Item createItem(String itemDefID) {
+		ItemDefinition def = (ItemDefinition)definitions.get(itemDefID);
+		assert(def != null);
+		if (def == null) {
+			Debug.doAssert(false, "Invalid Item ID " + itemDefID);
+		}
 		return new Item(def);
 	}
 
 	public Item createItemForLevel(Level level, Player player) {
-		/*
+		/* 
 		 * String[] itemIDs = level.getSpawnItemsIDs(); String itemID =
 		 * Util.randomElementOf(itemIDs); ItemDefinition def =
 		 * getDefinition(itemID);
 		 */
 		if (level.getLevelNumber() == -1)
 			return null;
-		int tries = 150;
+		int tries = 150;	// FIXME ...?
 		int i = 0;
 		ItemDefinition def = null;
 		out: while (i < tries) {
 			int pin = Util.rand(0, 100);
 			if (pin > 15)
-				def = (ItemDefinition) Util
-						.randomElementOf(generalItemsDefinitions);
+				def = (ItemDefinition)Util.randomPick(generalItemDefinitions);
 			else if (pin > 5)
-				def = (ItemDefinition) Util.randomElementOf(weaponDefinitions);
+				def = (ItemDefinition)Util.randomPick(weaponDefinitions);
 			else
-				def = (ItemDefinition) Util.randomElementOf(armorDefinitions);
+				def = (ItemDefinition)Util.randomPick(armorDefinitions);
 			int pinLevel = def.getPinLevel();
 			if (pinLevel == 0)
 				continue;
@@ -169,25 +173,27 @@ public class ItemFactory {
 			i++;
 		}
 
-		if (def == null)
+		if (def == null) {
 			return null;
+		}
 		Item item = new Item(def);
 		player.reduceCoolness(def.getCoolness());
-		if (def.isUnique())
+		if (def.isUnique()) {
 			return item;
-		if (def.getEquipCategory() == ItemDefinition.EQUIP_WEAPON) {
+		}
+		if (def.equipType == ItemDefinition.EQUIPTYPE_WEAPON) {
 			if (!def.isFixedMaterial())
 				setMaterial(item, level.getLevelNumber(), MOD_MATERIAL);
 			if (Util.chance(20))
 				setWeaponModifiers(item, level.getLevelNumber());
 			return item;
-		} else if (def.getEquipCategory() == ItemDefinition.EQUIP_ARMOR) {
+		} else if (def.equipType == ItemDefinition.EQUIPTYPE_ARMOR) {
 			if (!def.isFixedMaterial())
 				setMaterial(item, level.getLevelNumber(), MOD_ARMOR_MATERIAL);
 			if (Util.chance(10))
 				setArmorModifiers(item, level.getLevelNumber());
 			return item;
-		} else if (def.getEquipCategory() == ItemDefinition.EQUIP_SHIELD) {
+		} else if (def.equipType == ItemDefinition.EQUIPTYPE_SHIELD) {
 			if (!def.isFixedMaterial())
 				setMaterial(item, level.getLevelNumber(), MOD_MATERIAL);
 			if (Util.chance(20))

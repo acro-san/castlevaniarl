@@ -2,9 +2,6 @@ package crl.item;
 
 import java.util.Hashtable;
 
-import sz.csi.textcomponents.BasicListItem;
-import sz.csi.textcomponents.ListItem;
-import sz.csi.textcomponents.MenuItem;
 import crl.Main;
 import crl.ui.*;
 
@@ -25,7 +22,7 @@ public class ItemDefinition {
 		CAT_PISTOLS = "MISSILE_CRAFT",
 		CAT_SHIELD = "SHIELD";
 	
-	public final static String[] CATS = new String[]{
+	public final static String[] CATS = {
 		ItemDefinition.CAT_UNARMED,
 		ItemDefinition.CAT_DAGGERS,
 		ItemDefinition.CAT_SWORDS,
@@ -40,25 +37,20 @@ public class ItemDefinition {
 		ItemDefinition.CAT_SHIELD
 	};
 	
-	public static int EQUIP_ARMOR = 1, EQUIP_WEAPON = 2, EQUIP_SHIELD = 3; 
+	//public
 	
-	public int getShopChance() {
-		return shopChance;
-	}
-
-	public int getCoolness() {
-		return coolness;
-	}
-
-	public String getAttackSound() {
-		return attackSound;
-	}
+	public static final byte
+		EQUIPTYPE_NONEQUIP = 0,
+		EQUIPTYPE_ARMOR = 1,
+		EQUIPTYPE_WEAPON = 2,
+		EQUIPTYPE_SHIELD = 3;
+	
 
 	public static String getCategoryDescription(String catID){
-		return (String) HASH_DESCRIPTIONS.get(catID);
+		return HASH_DESCRIPTIONS.get(catID);
 	}
 	
-	public final static Hashtable HASH_DESCRIPTIONS = new Hashtable();
+	public static final Hashtable<String, String> HASH_DESCRIPTIONS = new Hashtable<>();
 	static {
 		HASH_DESCRIPTIONS.put(CAT_UNARMED,"hand to hand combat");
 		HASH_DESCRIPTIONS.put(CAT_DAGGERS,"daggers");
@@ -75,13 +67,12 @@ public class ItemDefinition {
 	};
 
 	//Shop Categories
-	public final static int
+	public static final int
 		SHOP_CRAFTS = 1,
 		SHOP_MAGIC = 2,
 		SHOP_WEAPONS = 3,
 		SHOP_ARMOR = 4;
 
-	//Attributes
 	private String ID;
 	private String description;
 	private int goldPrice;
@@ -97,19 +88,19 @@ public class ItemDefinition {
 	//private String throwMessage;
 	private int featureTurns;
 	private String placedSmartFeature;
-   	private int attack;
-   	private String attackSound;
+	private int attack;
+	private String attackSound;
 	private int range;
 	private int reloadTurns;
 	private boolean harmsUndead;
 	private boolean slicesThrough;
-	//private MenuItem shopMenuItem;
+
 	private String shopDescription;
 	private int rarity;
 	private int shopChance;
 	private int defense;
 	private int coverage;
-	private int equipCategory;
+	public byte equipType;
 	private String attackSFX;
 	private String weaponCategory;
 	private int shopCategory;
@@ -122,11 +113,23 @@ public class ItemDefinition {
 	
 	private int verticalRange;
 	private int attackCost;
-	
 	private int reloadCostGold;
-	
 	private boolean unique;
 
+
+	
+	
+	public int getShopChance() {
+		return shopChance;
+	}
+
+	public int getCoolness() {
+		return coolness;
+	}
+
+	public String getAttackSound() {
+		return attackSound;
+	}
 	
 	public boolean isUnique() {
 		return unique;
@@ -137,19 +140,19 @@ public class ItemDefinition {
 	}
 
 
-	public ItemDefinition (String pID, String pDescription, String pAppearance, int pEquipCategory, 
+	public ItemDefinition(String pID, String pDescription, String pAppearance, int pEquipCategory, 
 			String pMenuDescription, int pinLevel,
 			int pShopChance, String pShopDescription, int pGoldPrice, int pShopCategory,  
 			int pAttack, int pRange, int pReloadTurns, String pWeaponCategory, boolean pHarmsUndead, boolean pSlicesThrough,
 			int pDefense,  int pCoverage, int pVerticalRange, int attackCost, int pReloadGoldCost, boolean pTwoHanded,
 			String pEffectOnUse, String pEffectOnAcquire, int pThrowRange, String pPlacedSmartFeature, boolean pSingleUse,
 			int pFeatureTurns, String pUseMessage, boolean pUnique, boolean fixedMaterial, String pAttackSFX, String pAttackSound, int pCoolness, int pRarity 
-		 ){
+		) {
 		ID = pID;
 		rarity = pRarity;
 		coolness = pCoolness;
 		description = pDescription;
-		appearance = Main.appearances.get(pAppearance);
+		appearance = Main.appearances.get(pAppearance);	// obj ref, when could get by ID any time...?
 		goldPrice = pGoldPrice;
 		effectOnUse = pEffectOnUse;
 		effectOnAcquire = pEffectOnAcquire;
@@ -169,25 +172,19 @@ public class ItemDefinition {
 		shopChance = pShopChance;
 		shopDescription = pShopDescription;
 		defense=pDefense;
-		equipCategory = pEquipCategory;
+		equipType = (byte)pEquipCategory;
 		attackSFX = pAttackSFX;
 		weaponCategory = pWeaponCategory;
 		shopCategory = pShopCategory;
 		verticalRange = pVerticalRange;
 		this.attackCost = attackCost;
 		menuDescription = pMenuDescription;
-		//shopMenuItem = new ShopMenuItem(this);
 		setReloadCostGold(pReloadGoldCost);
 		unique = pUnique;
 		this.fixedMaterial = fixedMaterial;
 		this.pinLevel = pinLevel;
-		//sightListItem = new BasicListItem(appearance.getChar(), appearance.getColor(), description);
 	}
 
-
-	/*public MenuItem getShopMenuItem(){
-		return shopMenuItem;
-    }*/
 
 	public String getID() {
 		return ID;
@@ -225,10 +222,6 @@ public class ItemDefinition {
 		return useMessage;
 	}
 
-	/*public String getThrowMessage() {
-		return throwMessage;
-	}*/
-
 	public int getFeatureTurns() {
 		return featureTurns;
 	}
@@ -257,21 +250,13 @@ public class ItemDefinition {
 		return slicesThrough;
 	}
 
-	/*public String getMenuDescription(){
-		return getAttributesDescription();
-	}
-	
-	public Appearance getMenuAppearance(){
-	 	return getAppearance();
-	}*/
-
 	public int getRarity() {
 		return rarity;
 	}
 
-	public int getEquipCategory() {
-		return equipCategory;
-	}
+/*	public byte getEquipCategory() {
+		return equipType;
+	}*/
 
 	public String getAttackSFX() {
 		return attackSFX;
@@ -301,14 +286,7 @@ public class ItemDefinition {
 		this.weaponCategory = weaponCategory;
 	}
 
-	/*public ListItem getSightListItem(){
-		return sightListItem;
-	}
-	
-	public void setSightListItem(ListItem sightListItem) {
-		this.sightListItem = sightListItem;
-	}
-	*/
+
 	public String getShopDescription(){
 		return shopDescription;
 	}

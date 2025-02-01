@@ -2,12 +2,10 @@ package crl.action;
 
 import sz.util.Position;
 import sz.util.Util;
+import crl.Main;
 import crl.actor.Actor;
 import crl.game.SFXManager;
 import crl.item.ItemDefinition;
-import crl.item.ItemFactory;
-import crl.monster.Monster;
-import crl.npc.Hostage;
 import crl.player.Consts;
 import crl.player.Damage;
 import crl.player.Player;
@@ -70,11 +68,12 @@ public class Use extends Action{
 				aPlayer.getLevel().addMessage("You insert the card into the machine!");
 				aPlayer.setFlag("HAS_"+def.getID(), true);
 				if (aPlayer.getFlag("HAS_ART_CARD_SOL") &&
-						aPlayer.getFlag("HAS_ART_CARD_MOONS") &&
-						aPlayer.getFlag("HAS_ART_CARD_DEATH") &&
-						aPlayer.getFlag("HAS_ART_CARD_LOVE")){
+					aPlayer.getFlag("HAS_ART_CARD_MOONS") &&
+					aPlayer.getFlag("HAS_ART_CARD_DEATH") &&
+					aPlayer.getFlag("HAS_ART_CARD_LOVE"))
+				{
 					aPlayer.getLevel().addMessage("The machine opens. A wooden music box plays a mellow melody. You take the jukebox");
-					aPlayer.addItem(ItemFactory.getItemFactory().createItem("JUKEBOX"));
+					aPlayer.addItem(Main.itemData.createItem("JUKEBOX"));
 				}
 				aPlayer.reduceQuantityOf(targetItem);
 				return;

@@ -6,6 +6,7 @@ import crl.level.*;
 import crl.player.*;
 import crl.monster.*;
 import crl.game.*;
+import crl.Main;
 import crl.feature.*;
 import crl.item.*;
 import crl.npc.*;
@@ -59,7 +60,7 @@ public class StaticGenerator {
 						}
 					}else
 					if (cmds[1].equals("ITEM")){
-						Item vItem = ItemFactory.getItemFactory().createItem(cmds[2]);
+						Item vItem = Main.itemData.createItem(cmds[2]);
 						if (vItem != null)
 							l.addItem(new Position(where.x+x,where.y+y,where.z), vItem);
 					}else
@@ -150,11 +151,11 @@ public class StaticGenerator {
 							}
 						}else
 						if (cmds[1].equals("ITEM")){
-							Item vItem = ItemFactory.getItemFactory().createItem(cmds[2]);
+							Item vItem = Main.itemData.createItem(cmds[2]);
 							ret.addItem(new Position(x,y,z), vItem);
 						}else
 						if (cmds[1].equals("WEAPON")){
-							Item vItem = ItemFactory.getItemFactory().createWeapon(cmds[2],cmds[3]);
+							Item vItem = Main.itemData.createWeapon(cmds[2],cmds[3]);
 							ret.addItem(new Position(x,y,z), vItem);
 						}else
 						if (cmds[1].equals("MONSTER")){

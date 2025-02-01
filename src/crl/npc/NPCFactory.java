@@ -3,9 +3,8 @@ package crl.npc;
 import java.util.*;
 import crl.ui.*;
 import crl.player.*;
-import crl.game.Game;
+import crl.Main;
 import crl.item.*;
-import crl.monster.*;
 import sz.util.*;
 
 public class NPCFactory {
@@ -26,10 +25,10 @@ public class NPCFactory {
 	}
 	
 	public Hostage buildHostage(){
-		Hostage ret = new Hostage((NPCDefinition) definitions.get((String)Util.randomElementOf(hostages)));
+		Hostage ret = new Hostage((NPCDefinition) definitions.get((String)Util.randomPick(hostages)));
 		if (UserInterface.getUI().getPlayer().getPlayerClass() != Player.CLASS_VAMPIREKILLER) {
 			int artifactCategory = ((int) (UserInterface.getUI().getPlayer().getPlayerLevel() / 6.0d));
-			ret.setItemReward(ItemFactory.getItemFactory().createWeapon(Util.randPick(hostageArtifacts[artifactCategory]),""));
+			ret.setItemReward(Main.itemData.createWeapon(Util.randPick(hostageArtifacts[artifactCategory]),""));
 		}
 		return ret;
 	}

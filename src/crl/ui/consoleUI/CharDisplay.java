@@ -25,7 +25,7 @@ import crl.game.GameFiles;
 import crl.game.MonsterRecord;
 import crl.game.STMusicManagerNew;
 import crl.item.ItemDefinition;
-import crl.item.ItemFactory;
+import crl.item.ItemDataTable;
 import sz.csi.CharKey;
 import sz.csi.ConsoleSystemInterface;
 import sz.csi.textcomponents.TextBox;

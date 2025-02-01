@@ -8,7 +8,7 @@ import crl.Main;
 import sz.util.TxtTpl;
 import sz.util.Util;
 import crl.item.ItemDefinition;
-import crl.item.ItemFactory;
+import crl.item.ItemDataTable;
 import crl.player.Consts;
 import crl.player.Player;
 import crl.ui.Appearance;
@@ -20,7 +20,7 @@ public abstract class PlayerGenerator {
 	private Hashtable SPECIAL_PLAYERS = new Hashtable();
 	private void initSpecialPlayers(){
 		SPECIAL_PLAYERS.clear();
-		ItemFactory itf = ItemFactory.getItemFactory();
+		ItemDataTable it = Main.itemData;
 		HashMap<String, Appearance> aps = Main.appearances;
 		
 		Player christopher = new Player();
@@ -56,8 +56,8 @@ public abstract class PlayerGenerator {
 		christopher.setAppearance(aps.get("CHRISTOPHER_B"));
 		christopher.setPlot("After defeating Dracula two times, he returns to the castle to fulfill his fate for a last time", "");
 		christopher.setDescription("The famous Vampire Killer, heir of the Belmont fate");
-		christopher.setWeapon(itf.createWeapon("LEATHER_WHIP",""));
-		christopher.setArmor(itf.createArmor("VARMOR",""));
+		christopher.setWeapon(it.createWeapon("LEATHER_WHIP",""));
+		christopher.setArmor(it.createArmor("VARMOR",""));
 		christopher.setAdvancementLevels(ADVANCEMENT_LEVELS_HARDER);
 		SPECIAL_PLAYERS.put("CHRIS", christopher);
 		christopher = new Player();
@@ -98,8 +98,8 @@ public abstract class PlayerGenerator {
 		christopher.setAppearance(aps.get("SOLEIYU_B"));
 		christopher.setPlot("Finally deciding to face his own fate, he travels to the cursed Castlevania", "");
 		christopher.setDescription("The son of Christopher Belmont");
-		christopher.setWeapon(itf.createWeapon("HARPER",""));
-		christopher.setArmor(itf.createArmor("PLATE", "STEEL"));
+		christopher.setWeapon(it.createWeapon("HARPER",""));
+		christopher.setArmor(it.createArmor("PLATE", "STEEL"));
 		christopher.setAdvancementLevels(ADVANCEMENT_LEVELS_HARDER);
 		SPECIAL_PLAYERS.put("SOLEIYU", christopher);
 		christopher = new Player();
@@ -146,13 +146,13 @@ public abstract class PlayerGenerator {
 		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_PROJECTILES);
 		int items = Util.rand(10,15);
 		for (int i = 0; i < items; i++){
-			christopher.addItem(itf.createItem(Util.randPick(SONIA_ITEMS)));
+			christopher.addItem(it.createItem(Util.randPick(SONIA_ITEMS)));
 		}
 		christopher.setAppearance(aps.get("SONIA_B"));
 		christopher.setPlot("Came to the castle as the first Belmont ever", "");
 		christopher.setDescription("Sonia Belmont, a mysterious girl");
-		christopher.setWeapon(itf.createWeapon("LEATHER_WHIP",""));
-		christopher.setArmor(itf.createArmor("VARMOR",""));
+		christopher.setWeapon(it.createWeapon("LEATHER_WHIP",""));
+		christopher.setArmor(it.createArmor("VARMOR",""));
 		christopher.setAdvancementLevels(ADVANCEMENT_LEVELS_NORMAL);
 		SPECIAL_PLAYERS.put("SONIA", christopher);
 
@@ -273,8 +273,9 @@ public abstract class PlayerGenerator {
 				player.setBannedArmors(RENEGADE_BANNED_ARMOR);
 				player.setAdvancementLevels(ADVANCEMENT_LEVELS_NORMAL);
 				
-				player.setShield(ItemFactory.getItemFactory().createShield(Util.randPick(RENEGADE_SHIELDS), Util.randPick(ARMOR_MATERIALS)));
-				player.setSecondaryWeapon(ItemFactory.getItemFactory().createWeapon("BASELARD", Util.randPick(WEAPON_MATERIALS)));
+				
+				player.setShield(Main.itemData.createShield(Util.randPick(RENEGADE_SHIELDS), Util.randPick(ARMOR_MATERIALS)));
+				player.setSecondaryWeapon(Main.itemData.createWeapon("BASELARD", Util.randPick(WEAPON_MATERIALS)));
 				
 				player.putCustomMessage("INTRO_1", "I can almost breathe the chaos that invades every tree and animal in this forest. It is time to return to the castle.");
 				player.putCustomMessage("CLARA1", "Commonner? . . . Ignorant human... get out of my way.");
@@ -329,7 +330,7 @@ public abstract class PlayerGenerator {
 				player.increaseWeaponSkillLevel(ItemDefinition.CAT_PROJECTILES);
 				player.setBannedArmors(MANBEAST_BANNED_ARMOR);
 				player.setAdvancementLevels(ADVANCEMENT_LEVELS_HARDER);
-				player.addItem(ItemFactory.getItemFactory().createItem("THROWING_KNIFE"));
+				player.addItem(Main.itemData.createItem("THROWING_KNIFE"));
 				player.putCustomMessage("INTRO_1", "I can hear, I can smell, I can sense the damned creatures that almost anihilated my brothers... tell me, where is the castle?");
 				player.putCustomMessage("CLARA1", "Don't let appearances fool you... the blood of my brothers and sisters fills my veins, anger will get me through this damned place and to the heart of the count");
 			break;
@@ -374,13 +375,13 @@ public abstract class PlayerGenerator {
 				player.increaseWeaponSkillLevel(ItemDefinition.CAT_SHIELD);
 				player.setBannedArmors(KNIGHT_BANNED_ARMOR);
 				player.setAdvancementLevels(ADVANCEMENT_LEVELS_NORMAL);
-				player.setShield(ItemFactory.getItemFactory().createShield(Util.randPick(KNIGHT_SHIELDS), Util.randPick(ARMOR_MATERIALS)));
+				player.setShield(Main.itemData.createShield(Util.randPick(KNIGHT_SHIELDS), Util.randPick(ARMOR_MATERIALS)));
 				player.putCustomMessage("INTRO_1", "Indeed, those seem to be Wargs: demonic wolf-like creatures summoned by the Count of Darkness to protect his castle. We better get to the castle quickly.");
 				player.putCustomMessage("CLARA1", "Can you not see the mark of heavens? I am a Knight of the Sacred Order, and I came to cleanse this place from darkness.");
 			break;
 		}
 		
-		ItemFactory itf = ItemFactory.getItemFactory();
+		ItemDataTable itf = Main.itemData;
 		HashMap<String, Appearance> aps = Main.appearances;
 		if (player.getSex()==Player.MALE)
 			player.setAppearance(aps.get(classID));

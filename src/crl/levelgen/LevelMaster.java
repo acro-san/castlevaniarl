@@ -16,6 +16,7 @@ import crl.monster.Monster;
 import crl.monster.MonsterFactory;
 import crl.npc.*;
 import crl.player.Player;
+import crl.Main;
 import crl.cuts.CaveEntranceSeal;
 import crl.cuts.Unleasher;
 import crl.feature.Feature;
@@ -740,7 +741,7 @@ public class LevelMaster {
 		int items = Util.rand(8,12);
 		//int items = 300;
 		for (int i = 0; i < items; i++){
-			Item item = ItemFactory.getItemFactory().createItemForLevel(ret, player);
+			Item item = Main.itemData.createItemForLevel(ret, player);
 			if (item == null)
 				break;
 			int xrand = 0;

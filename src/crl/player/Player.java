@@ -51,7 +51,7 @@ public class Player extends Actor {
 		ADV_NEPTUNE = new AdvNeptune(),
 		ADV_PLUTO = new AdvPluto();
 	
-	public static final Advancement[] ALL_ADVANCEMENTS = new Advancement [] {
+	public static final Advancement[] ALL_ADVANCEMENTS = {
 		ADV_MERCURY,
 		ADV_VENUS,
 		ADV_TERRA,
@@ -62,8 +62,8 @@ public class Player extends Actor {
 		ADV_NEPTUNE,
 		ADV_PLUTO
 	};
-	                                 
-		
+	
+	
 	// Attributes
 	private String name;
 	private int sex;
@@ -301,7 +301,7 @@ public class Player extends Actor {
 		return score;
 	}
 
-	public Player (){
+	public Player () {
 		hitsMax = 20;
 		hits = hitsMax;
 		heartMax = 20;
@@ -319,14 +319,15 @@ public class Player extends Actor {
 			String vampireKiller, 
 			String thornWhip,
 			String flameWhip,
-			String litWhip){
-		ItemFactory itf = ItemFactory.getItemFactory();
-		LEATHER_WHIP = itf.createWeapon(leatherWhip,"");
-		CHAIN_WHIP = itf.createWeapon(chainWhip,"");
-		VAMPIRE_WHIP = itf.createWeapon(vampireKiller,"");
-		THORN_WHIP = itf.createWeapon(thornWhip,"");
-		FLAME_WHIP = itf.createWeapon(flameWhip,"");
-		LIT_WHIP = itf.createWeapon(litWhip,"");
+			String litWhip)
+	{
+		ItemDataTable it = Main.itemData;
+		LEATHER_WHIP = it.createWeapon(leatherWhip,"");
+		CHAIN_WHIP = it.createWeapon(chainWhip,"");
+		VAMPIRE_WHIP = it.createWeapon(vampireKiller,"");
+		THORN_WHIP = it.createWeapon(thornWhip,"");
+		FLAME_WHIP = it.createWeapon(flameWhip,"");
+		LIT_WHIP = it.createWeapon(litWhip,"");
 	}
 	
 	public static Item LEATHER_WHIP, CHAIN_WHIP, VAMPIRE_WHIP, THORN_WHIP, FLAME_WHIP, LIT_WHIP;
