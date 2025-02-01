@@ -6,6 +6,7 @@ import crl.ui.effects.*;
 import java.util.*;
 
 import crl.item.*;
+import crl.Main;
 import crl.action.*;
 import crl.action.renegade.*;
 import crl.action.renegade.Teleport;
@@ -1616,34 +1617,34 @@ public class Player extends Actor {
 
     public Appearance getAppearance(){
     	if (hasCounter(Consts.C_BATMORPH))
-			return AppearanceFactory.getAppearanceFactory().getAppearance("MORPHED_BAT");
+			return Main.appearances.get("MORPHED_BAT");
     	else if (hasCounter(Consts.C_BATMORPH2))
-    		return AppearanceFactory.getAppearanceFactory().getAppearance("MORPHED_BAT2");
+    		return Main.appearances.get("MORPHED_BAT2");
 		else if (hasCounter(Consts.C_LUPINEMORPH))
-			return AppearanceFactory.getAppearanceFactory().getAppearance("MORPHED_LUPINE");
+			return Main.appearances.get("MORPHED_LUPINE");
 		else if (hasCounter(Consts.C_BEARMORPH))
-			return AppearanceFactory.getAppearanceFactory().getAppearance("MORPHED_WEREBEAR");
+			return Main.appearances.get("MORPHED_WEREBEAR");
 		else if (hasCounter(Consts.C_BEASTMORPH))
-			return AppearanceFactory.getAppearanceFactory().getAppearance("MORPHED_WEREBEAST");
+			return Main.appearances.get("MORPHED_WEREBEAST");
 		else if (hasCounter(Consts.C_DEMONMORPH))
-			return AppearanceFactory.getAppearanceFactory().getAppearance("MORPHED_WEREDEMON");
+			return Main.appearances.get("MORPHED_WEREDEMON");
 		else if (hasCounter(Consts.C_WEREWOLFMORPH))
-			return AppearanceFactory.getAppearanceFactory().getAppearance("MORPHED_WEREWOLF");
+			return Main.appearances.get("MORPHED_WEREWOLF");
 		else if (hasCounter(Consts.C_WOLFMORPH))
-			return AppearanceFactory.getAppearanceFactory().getAppearance("MORPHED_WOLF");
+			return Main.appearances.get("MORPHED_WOLF");
 		else if (hasCounter(Consts.C_WOLFMORPH2))
-			return AppearanceFactory.getAppearanceFactory().getAppearance("MORPHED_WOLF2");
+			return Main.appearances.get("MORPHED_WOLF2");
 		else if (hasCounter(Consts.C_MYSTMORPH))
-			return AppearanceFactory.getAppearanceFactory().getAppearance("MORPHED_MYST");
+			return Main.appearances.get("MORPHED_MYST");
 		else if (hasCounter(Consts.C_MYSTMORPH2))
-			return AppearanceFactory.getAppearanceFactory().getAppearance("MORPHED_MYST2");
+			return Main.appearances.get("MORPHED_MYST2");
 		else {
 			Appearance ret = super.getAppearance();
 			if (ret == null){
 				if (getSex()==Player.MALE)
-					setAppearance(AppearanceFactory.getAppearanceFactory().getAppearance(PlayerGenerator.getClassID(getPlayerClass())));
+					setAppearance(Main.appearances.get(PlayerGenerator.getClassID(getPlayerClass())));
 				else
-					setAppearance(AppearanceFactory.getAppearanceFactory().getAppearance(PlayerGenerator.getClassID(getPlayerClass())+"_W"));
+					setAppearance(Main.appearances.get(PlayerGenerator.getClassID(getPlayerClass())+"_W"));
 				ret = super.getAppearance();
 			}
 			return ret; 

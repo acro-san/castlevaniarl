@@ -1,6 +1,7 @@
 package crl.npc;
 
 import sz.csi.textcomponents.ListItem;
+import crl.Main;
 import crl.actor.*;
 import crl.ai.*;
 import crl.ai.npc.VillagerAI;
@@ -18,7 +19,7 @@ public class NPC extends Monster {
 	public final static MonsterDefinition NPC_MONSTER_DEFINITION = new MonsterDefinition("NPC");
 	static {
 		NPC_MONSTER_DEFINITION.setDescription("Innocent Being");
-		NPC_MONSTER_DEFINITION.setAppearance(AppearanceFactory.getAppearanceFactory().getAppearance("VOID"));
+		NPC_MONSTER_DEFINITION.setAppearance(Main.appearances.get("VOID"));
 		NPC_MONSTER_DEFINITION.setDefaultSelector(SelectorFactory.getSelectorFactory().getSelector("NULL_SELECTOR"));
 		NPC_MONSTER_DEFINITION.setScore(-100);
 		NPC_MONSTER_DEFINITION.setMaxHits(2);

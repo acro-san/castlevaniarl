@@ -1,15 +1,17 @@
 
 package crl.game;
 
+import java.util.HashMap;
 import java.util.Hashtable;
 
+import crl.Main;
 import sz.util.ScriptUtil;
 import sz.util.Util;
 import crl.item.ItemDefinition;
 import crl.item.ItemFactory;
 import crl.player.Consts;
 import crl.player.Player;
-import crl.ui.AppearanceFactory;
+import crl.ui.Appearance;
 
 public abstract class PlayerGenerator {
 	public static PlayerGenerator thus;
@@ -19,7 +21,7 @@ public abstract class PlayerGenerator {
 	private void initSpecialPlayers(){
 		SPECIAL_PLAYERS.clear();
 		ItemFactory itf = ItemFactory.getItemFactory();
-		AppearanceFactory apf = AppearanceFactory.getAppearanceFactory();
+		HashMap<String, Appearance> aps = Main.appearances;
 		
 		Player christopher = new Player();
 		christopher.setSex(Player.MALE);
@@ -51,7 +53,7 @@ public abstract class PlayerGenerator {
 		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_WHIPS);
 		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_UNARMED);
 		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_UNARMED);
-		christopher.setAppearance(apf.getAppearance("CHRISTOPHER_B"));
+		christopher.setAppearance(aps.get("CHRISTOPHER_B"));
 		christopher.setPlot("After defeating Dracula two times, he returns to the castle to fulfill his fate for a last time", "");
 		christopher.setDescription("The famous Vampire Killer, heir of the Belmont fate");
 		christopher.setWeapon(itf.createWeapon("LEATHER_WHIP",""));
@@ -93,7 +95,7 @@ public abstract class PlayerGenerator {
 		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_STAVES);
 		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_SWORDS);
 		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_RINGS);
-		christopher.setAppearance(apf.getAppearance("SOLIEYU_B"));
+		christopher.setAppearance(aps.get("SOLIEYU_B"));
 		christopher.setPlot("Finally deciding to face his own fate, he travels to the cursed Castlevania", "");
 		christopher.setDescription("The son of Christopher Belmont");
 		christopher.setWeapon(itf.createWeapon("HARPER",""));
@@ -117,7 +119,7 @@ public abstract class PlayerGenerator {
 		christopher.setCarryMax(5);
 		christopher.setSoulPower(0);
 		
-		christopher.setAppearance(apf.getAppearance("SOLIEYU_B_KID"));
+		christopher.setAppearance(aps.get("SOLIEYU_B_KID"));
 		christopher.setPlot("Trains to become the next vampire killer", "");
 		christopher.setDescription("The son of Christopher Belmont");
 		christopher.setAdvancementLevels(ADVANCEMENT_LEVELS_HARDER);
@@ -146,7 +148,7 @@ public abstract class PlayerGenerator {
 		for (int i = 0; i < items; i++){
 			christopher.addItem(itf.createItem(Util.randomElementOf(SONIA_ITEMS)));
 		}
-		christopher.setAppearance(apf.getAppearance("SONIA_B"));
+		christopher.setAppearance(aps.get("SONIA_B"));
 		christopher.setPlot("Came to the castle as the first Belmont ever", "");
 		christopher.setDescription("Sonia Belmont, a mysterious girl");
 		christopher.setWeapon(itf.createWeapon("LEATHER_WHIP",""));
@@ -384,11 +386,11 @@ public abstract class PlayerGenerator {
 		}
 		
 		ItemFactory itf = ItemFactory.getItemFactory();
-		AppearanceFactory apf = AppearanceFactory.getAppearanceFactory();
+		HashMap<String, Appearance> aps = Main.appearances;
 		if (player.getSex()==Player.MALE)
-			player.setAppearance(apf.getAppearance(classID));
+			player.setAppearance(aps.get(classID));
 		else
-			player.setAppearance(apf.getAppearance(classID+"_W"));
+			player.setAppearance(aps.get(classID+"_W"));
 		String[] marks = new String[] {"%%SEX", "%%NAME"};
 		String[] replacements = new String[] {hisher, player.getName()};
 		player.setPlot(

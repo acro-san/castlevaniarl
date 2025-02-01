@@ -3,6 +3,7 @@ package crl.feature;
 import sz.util.*;
 
 import crl.ui.*;
+import crl.Main;
 import crl.game.SFXManager;
 import crl.monster.Monster;
 import crl.player.*;
@@ -151,10 +152,11 @@ public class Feature implements Cloneable, java.io.Serializable {
 		position = new Position (x,y, z);
 	}
 
-	public Appearance getAppearance(){
-		if (appearance == null){
-			if (appearanceID != null)
-				appearance = AppearanceFactory.getAppearanceFactory().getAppearance(appearanceID);
+	public Appearance getAppearance() {
+		if (appearance == null) {
+			if (appearanceID != null) {
+				appearance = Main.appearances.get(appearanceID);
+			}
 		}
 		return appearance;
 	}

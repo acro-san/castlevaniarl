@@ -3,6 +3,7 @@ package crl.npc;
 import sz.csi.textcomponents.BasicListItem;
 import sz.csi.textcomponents.ListItem;
 import crl.ui.*;
+import crl.Main;
 import crl.ai.*;
 
 public class NPCDefinition {
@@ -23,7 +24,7 @@ public class NPCDefinition {
 	String pDefaultSelector, String pTalkMessage, int pAttack, int pHits, String pAngryMessage, String pDangerMessage, boolean pHostage, boolean pPriest){
 		ID = pID;
 		description = pDescription;
-		appearance = AppearanceFactory.getAppearanceFactory().getAppearance(pAppearance);
+		appearance = Main.appearances.get(pAppearance);
 		defaultSelector = SelectorFactory.getSelectorFactory().createSelector(pDefaultSelector);
 		//sightListItem = new BasicListItem(appearance.getChar(), appearance.getColor(), description);
 		talkMessage = pTalkMessage;

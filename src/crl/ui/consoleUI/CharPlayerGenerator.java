@@ -3,9 +3,9 @@ package crl.ui.consoleUI;
 import sz.csi.CharKey;
 import sz.csi.ConsoleSystemInterface;
 import sz.csi.textcomponents.TextBox;
+import crl.Main;
 import crl.game.PlayerGenerator;
 import crl.player.Player;
-import crl.ui.AppearanceFactory;
 import crl.ui.Display;
 
 public class CharPlayerGenerator extends PlayerGenerator{
@@ -38,7 +38,7 @@ public class CharPlayerGenerator extends PlayerGenerator{
 		
 		CharAppearance[] apps = new CharAppearance[CLASS_APPEARANCES.length];
 		for (int i = 0; i < CLASS_APPEARANCES.length; i++){
-			apps[i] = (CharAppearance) AppearanceFactory.getAppearanceFactory().getAppearance(CLASS_APPEARANCES[i]);
+			apps[i] = (CharAppearance)Main.appearances.get(CLASS_APPEARANCES[i]);
 		}
 
         si.print(2,5, "Choose your destiny:");

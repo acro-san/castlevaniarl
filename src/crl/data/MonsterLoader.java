@@ -16,7 +16,6 @@ import crl.ai.monster.boss.FrankAI;
 import crl.ai.monster.boss.MedusaAI;
 import crl.game.CRLException;
 import crl.monster.*;
-import crl.ui.AppearanceFactory;
 
 import nox.NoX;
 import nox.XMLTag;
@@ -42,7 +41,7 @@ public class MonsterLoader {
 			while (line != null) {
 				String[] data = line.split(";");
 				MonsterDefinition def = new MonsterDefinition(data[0]);
-				def.setAppearance(AppearanceFactory.getAppearanceFactory().getAppearance(data[1]));
+				def.setAppearance(Main.appearances.get(data[1]));
 				def.setDescription(data[2]);
 				def.setLongDescription(data[3]);
 				def.setWavOnHit(data[4]);

@@ -1,6 +1,7 @@
 package crl.cuts.prelude;
 
 import sz.util.Position;
+import crl.Main;
 import crl.cuts.Unleasher;
 import crl.game.CRLException;
 import crl.game.Game;
@@ -8,7 +9,6 @@ import crl.game.PlayerGenerator;
 import crl.level.Level;
 import crl.levelgen.LevelMaster;
 import crl.monster.Monster;
-import crl.ui.AppearanceFactory;
 import crl.ui.Display;
 
 public class Prelude1 extends Unleasher {
@@ -20,7 +20,7 @@ public class Prelude1 extends Unleasher {
 		Monster dracula = level.getMonsterByID("PRELUDE_DRACULA");
 		dracula.setPosition(new Position(level.getExitFor("#DRACPOS")));
 		dracula.setVisible(false);
-		level.getMapCell(level.getExitFor("#DRACPOS")).setAppearance(AppearanceFactory.getAppearanceFactory().getAppearance("DRACULA_THRONE2"));
+		level.getMapCell(level.getExitFor("#DRACPOS")).setAppearance(Main.appearances.get("DRACULA_THRONE2"));
 		//level.removeExit("_START");
 		enabled = false;
 	}

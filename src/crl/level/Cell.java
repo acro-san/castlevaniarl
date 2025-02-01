@@ -1,6 +1,7 @@
 package crl.level;
 
 import sz.util.*;
+import crl.Main;
 import crl.ui.*;
 
 public class Cell implements Cloneable, java.io.Serializable{
@@ -50,7 +51,7 @@ public class Cell implements Cloneable, java.io.Serializable{
 	public Appearance getAppearance(){
 		if (appearance == null){
 			if (appearanceID != null)
-				appearance = AppearanceFactory.getAppearanceFactory().getAppearance(appearanceID);
+				appearance = Main.appearances.get(appearanceID);
 		}
 		return appearance;
 	}

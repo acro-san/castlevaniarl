@@ -1,6 +1,7 @@
 package crl.feature;
 
 import sz.util.*;
+import crl.Main;
 import crl.actor.*;
 import crl.ui.*;
 
@@ -56,9 +57,10 @@ public class SmartFeature extends Actor implements Cloneable{
 	}
 
 	public Appearance getAppearance() {
-		if (appearance == null){
-			if (appearanceID != null)
-				appearance = AppearanceFactory.getAppearanceFactory().getAppearance(appearanceID);
+		if (appearance == null) {
+			if (appearanceID != null) {
+				appearance = Main.appearances.get(appearanceID);
+			}
 		}
 		return appearance;
 	}

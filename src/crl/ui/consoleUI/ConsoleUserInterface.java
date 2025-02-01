@@ -11,7 +11,7 @@ import sz.csi.textcomponents.SimpleMenuItem;
 import sz.csi.textcomponents.TextBox;
 import sz.csi.textcomponents.TextInformBox;
 import sz.util.*;
-
+import crl.Main;
 import crl.action.*;
 import crl.ui.consoleUI.effects.CharEffect;
 import crl.ui.effects.*;
@@ -413,7 +413,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 						si.print(PC_POS.x,PC_POS.y, ((CharAppearance)player.getAppearance()).getChar(), ((CharAppearance)player.getAppearance()).getColor());
 					} else {
 						
-						si.print(PC_POS.x,PC_POS.y, ((CharAppearance)AppearanceFactory.getAppearanceFactory().getAppearance("SHADOW")).getChar(), ((CharAppearance)AppearanceFactory.getAppearanceFactory().getAppearance("SHADOW")).getColor());
+						si.print(PC_POS.x,PC_POS.y, ((CharAppearance)Main.appearances.get("SHADOW")).getChar(), ((CharAppearance)Main.appearances.get("SHADOW")).getColor());
 					}
 
 					

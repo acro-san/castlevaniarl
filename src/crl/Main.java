@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.reflect.Field;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Properties;
 
@@ -69,7 +70,6 @@ import crl.npc.NPCDefinition;
 import crl.npc.NPCFactory;
 import crl.player.Player;
 import crl.ui.Appearance;
-import crl.ui.AppearanceFactory;
 import crl.ui.CommandListener;
 import crl.ui.Display;
 import crl.ui.UISelector;
@@ -91,12 +91,17 @@ import crl.ui.graphicsUI.effects.GFXEffectFactory;
 
 public class Main {
 	private final static int JCURSES_CONSOLE = 0, SWING_GFX = 1, SWING_CONSOLE = 2;
-	//private static SystemInterface si;
+	
 	private static UserInterface ui;
 	private static UISelector uiSelector;
 	
 	private static final boolean
 		CHECK_WEB_FOR_NEW_VERSION = false;
+	
+	// Appearances by ID: could EASILY be a fixed len, indexed array, using short IDs.
+	public static HashMap<String, Appearance>
+		appearances = new HashMap<>();
+
 	
 	private static Game currentGame;
 	private static boolean createNew = true;
@@ -606,17 +611,17 @@ public class Main {
 		}
 	}
 
-	private static void initializeGAppearances(GFXConfiguration gfx_configuration){
+	private static void initializeGAppearances(GFXConfiguration gfx_configuration) {
 		Appearance[] definitions = new GFXAppearances(gfx_configuration).getAppearances();
-		for (int i=0; i<definitions.length; i++){
-			AppearanceFactory.getAppearanceFactory().addDefinition(definitions[i]);
+		for (Appearance a: definitions) {
+			appearances.put(a.getID(), a);
 		}
 	}
 	
-	private static void initializeCAppearances(){
+	private static void initializeCAppearances() {
 		Appearance[] definitions = new CharAppearances().getAppearances();
-		for (int i=0; i<definitions.length; i++){
-			AppearanceFactory.getAppearanceFactory().addDefinition(definitions[i]);
+		for (Appearance a: definitions) {
+			appearances.put(a.getID(), a);
 		}
 	}
 	
@@ -638,12 +643,12 @@ public class Main {
 			af.addDefinition(definitions[i]);
 	}
 	
-	private static void initializeCells(){
-		MapCellFactory.getMapCellFactory().init(Cells.getCellDefinitions(AppearanceFactory.getAppearanceFactory()));
+	private static void initializeCells() {
+		MapCellFactory.getMapCellFactory().init(Cells.getCellDefinitions(appearances));
 	}
 
-	private static void initializeFeatures(){
-		FeatureFactory.getFactory().init(Features.getFeatureDefinitions(AppearanceFactory.getAppearanceFactory()));
+	private static void initializeFeatures() {
+		FeatureFactory.getFactory().init(Features.getFeatureDefinitions(appearances));
 	}
 
 	private static void initializeSelectors(){

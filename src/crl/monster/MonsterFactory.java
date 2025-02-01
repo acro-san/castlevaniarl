@@ -2,9 +2,9 @@ package crl.monster;
 
 import java.util.*;
 
+import crl.Main;
 import crl.level.Level;
 import crl.levelgen.MonsterSpawnInfo;
-import crl.ui.AppearanceFactory;
 
 import sz.util.*;
 
@@ -36,7 +36,7 @@ public class MonsterFactory {
 	
 	public void init(MonsterDefinition[] defs) {
 		for (int i = 0; i < defs.length; i++){
-			defs[i].setAppearance(AppearanceFactory.getAppearanceFactory().getAppearance(defs[i].getID()));
+			defs[i].setAppearance(Main.appearances.get(defs[i].getID()));
 			definitions.put(defs[i].getID(), defs[i]);
 			vDefinitions.add(defs[i]);
 			

@@ -27,6 +27,7 @@ import javax.swing.border.EmptyBorder;
 import sz.csi.CharKey;
 import sz.gadgets.*;
 import sz.util.*;
+import crl.Main;
 import crl.action.*;
 import crl.action.Action;
 import crl.ui.effects.*;
@@ -653,7 +654,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 							drawImageVP(
 								PC_POS.x * 32,
 								PC_POS.y * 32 - 4 * cellHeight,
-								((GFXAppearance)AppearanceFactory.getAppearanceFactory().getAppearance("SHADOW")).getImage()
+								((GFXAppearance)Main.appearances.get("SHADOW")).getImage()
 							);
 						}else{
 							GFXAppearance playerAppearance = (GFXAppearance)player.getAppearance();
@@ -994,8 +995,8 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 			/*COLOR_BORDER_IN = new Color(187,161,80);
 			COLOR_BORDER_OUT = new Color(92,78,36);*/
 			
-			BLOOD1 = (BufferedImage)((GFXAppearance)AppearanceFactory.getAppearanceFactory().getAppearance("BLOOD1")).getImage();
-			BLOOD2 = (BufferedImage)((GFXAppearance)AppearanceFactory.getAppearanceFactory().getAppearance("BLOOD2")).getImage();
+			BLOOD1 = (BufferedImage)((GFXAppearance)Main.appearances.get("BLOOD1")).getImage();
+			BLOOD2 = (BufferedImage)((GFXAppearance)Main.appearances.get("BLOOD2")).getImage();
 			
 			IMG_EXIT_BTN = ImageUtils.crearImagen(userInterfaceTileset, 65,81,60,26);
 			IMG_OK_BTN = ImageUtils.crearImagen(userInterfaceTileset, 2,81,60,26);

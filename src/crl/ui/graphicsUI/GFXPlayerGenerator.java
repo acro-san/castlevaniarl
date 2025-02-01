@@ -5,10 +5,11 @@ import java.awt.Color;
 import javax.swing.JTextArea;
 
 import sz.csi.CharKey;
+import crl.Main;
 import crl.conf.gfx.data.GFXConfiguration;
 import crl.game.PlayerGenerator;
 import crl.player.Player;
-import crl.ui.AppearanceFactory;
+
 
 public class GFXPlayerGenerator extends PlayerGenerator{
 	public GFXPlayerGenerator(SwingSystemInterface si, GFXConfiguration configuration){
@@ -58,9 +59,9 @@ public class GFXPlayerGenerator extends PlayerGenerator{
 		GFXAppearance[] apps = new GFXAppearance[CLASS_APPEARANCES.length];
 		for (int i = 0; i < CLASS_APPEARANCES.length; i++){
 			if (sex == Player.MALE)
-				apps[i] = (GFXAppearance) AppearanceFactory.getAppearanceFactory().getAppearance(CLASS_APPEARANCES[i]);
+				apps[i] = (GFXAppearance)Main.appearances.get(CLASS_APPEARANCES[i]);
 			else
-				apps[i] = (GFXAppearance) AppearanceFactory.getAppearanceFactory().getAppearance(CLASS_APPEARANCES[i]+"_W");
+				apps[i] = (GFXAppearance)Main.appearances.get(CLASS_APPEARANCES[i]+"_W");
 		}
 
         si.printAtPixel(80,173, CLASS_NAMES[0], Color.WHITE);

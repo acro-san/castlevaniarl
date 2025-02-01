@@ -1,19 +1,22 @@
 package crl.data;
 
+import java.util.HashMap;
+
+import crl.Main;
 import crl.ai.SelectorFactory;
 import crl.feature.SmartFeature;
-import crl.ui.AppearanceFactory;
+import crl.ui.Appearance;
 
 public class SmartFeatures {
 	public static SmartFeature[] getSmartFeatures(SelectorFactory sf){
-		AppearanceFactory apf = AppearanceFactory.getAppearanceFactory();
+		HashMap<String, Appearance> aps = Main.appearances;
 		SmartFeature [] ret = new SmartFeature [6];
-		ret[0] = new SmartFeature("CROSS", "Holy cross", apf.getAppearance("CROSS"));
-		ret[1] = new SmartFeature("BURNING_FLAME", "Burning Flame", apf.getAppearance("FLAME"));
-		ret[2] = new SmartFeature("GARLIC", "Garlic", apf.getAppearance("GARLIC"));
-		ret[3] = new SmartFeature("BIBUTI", "Bibuti Powder", apf.getAppearance("BIBUTI"));
-		ret[4] = new SmartFeature("FLAME", "Magic Flame", apf.getAppearance("FLAME"));
-		ret[5] = new SmartFeature("BLAST_CRYSTAL", "Blast Crystal", apf.getAppearance("BLAST_CRYSTAL"));
+		ret[0] = new SmartFeature("CROSS", "Holy cross", aps.get("CROSS"));
+		ret[1] = new SmartFeature("BURNING_FLAME", "Burning Flame", aps.get("FLAME"));
+		ret[2] = new SmartFeature("GARLIC", "Garlic", aps.get("GARLIC"));
+		ret[3] = new SmartFeature("BIBUTI", "Bibuti Powder", aps.get("BIBUTI"));
+		ret[4] = new SmartFeature("FLAME", "Magic Flame", aps.get("FLAME"));
+		ret[5] = new SmartFeature("BLAST_CRYSTAL", "Blast Crystal", aps.get("BLAST_CRYSTAL"));
 		
 		ret[0].setSelector(sf.getSelector("CROSS_SELECTOR"));
 		ret[1].setSelector(sf.getSelector("FLAME_SELECTOR"));

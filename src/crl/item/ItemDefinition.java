@@ -5,6 +5,7 @@ import java.util.Hashtable;
 import sz.csi.textcomponents.BasicListItem;
 import sz.csi.textcomponents.ListItem;
 import sz.csi.textcomponents.MenuItem;
+import crl.Main;
 import crl.ui.*;
 
 public class ItemDefinition {
@@ -148,7 +149,7 @@ public class ItemDefinition {
 		rarity = pRarity;
 		coolness = pCoolness;
 		description = pDescription;
-		appearance = AppearanceFactory.getAppearanceFactory().getAppearance(pAppearance);
+		appearance = Main.appearances.get(pAppearance);
 		goldPrice = pGoldPrice;
 		effectOnUse = pEffectOnUse;
 		effectOnAcquire = pEffectOnAcquire;
