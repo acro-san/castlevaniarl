@@ -96,7 +96,7 @@ public class Feature implements Cloneable, java.io.Serializable {
     	}
         //return FeatureFactory.getFactory().buildFeature("ROSARY");
         if (prizeList != null)
-        	return FeatureFactory.getFactory().buildFeature(Util.randomElementOf(prizeList));
+        	return FeatureFactory.getFactory().buildFeature(Util.randPick(prizeList));
         else
         	return null;
 	}

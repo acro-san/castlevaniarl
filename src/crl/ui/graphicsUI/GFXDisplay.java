@@ -17,7 +17,7 @@ import sz.csi.CharKey;
 import sz.util.ImageUtils;
 import sz.util.Position;
 import sz.util.PropertyFilters;
-import sz.util.ScriptUtil;
+import sz.util.TxtTpl;
 
 import crl.Main;
 import crl.player.GameSessionInfo;
@@ -487,7 +487,7 @@ public class GFXDisplay extends Display{
 				image = chat.getPortrait(i);
 			else
 				image = getPortraitForPlayer(game.getPlayer());
-			gfxChatBox.set(image, ScriptUtil.replace(marks, replacements, chat.getName(i)), ScriptUtil.replace(marks, replacements, chat.getConversation(i)));
+			gfxChatBox.set(image, TxtTpl.replace(marks, replacements, chat.getName(i)), TxtTpl.replace(marks, replacements, chat.getConversation(i)));
 			gfxChatBox.setVisible(true);
 			si.waitKey(CharKey.SPACE);
 		}

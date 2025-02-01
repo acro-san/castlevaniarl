@@ -5,11 +5,11 @@ import java.awt.Color;
 import javax.swing.JTextArea;
 
 import sz.csi.CharKey;
+import sz.util.TxtTpl;
 import crl.Main;
 import crl.conf.gfx.data.GFXConfiguration;
 import crl.game.PlayerGenerator;
 import crl.player.Player;
-
 
 public class GFXPlayerGenerator extends PlayerGenerator{
 	public GFXPlayerGenerator(SwingSystemInterface si, GFXConfiguration configuration){
@@ -33,13 +33,13 @@ public class GFXPlayerGenerator extends PlayerGenerator{
 	protected GFXConfiguration configuration;
 	private String IMG_FLAME = "gfx/barrett-picker.gif";
 	
-	public Player generatePlayer(){
+	public Player generatePlayer() {
 		si.drawImage(configuration.getUserInterfaceBackgroundImage());
 		si.printAtPixel(69,86,"CHOOSE YOUR DESTINY", GFXDisplay.COLOR_BOLD);
 		si.getGraphics2D().setColor(Color.DARK_GRAY);
 		si.getGraphics2D().fillRect(70,94,661,3);
 		si.refresh();
-		si.printAtPixel(69,118,"Hero Name:", Color.WHITE); 
+		si.printAtPixel(69,118,"Hero Name:", Color.WHITE);
 		String name = si.input(143,118,GFXDisplay.COLOR_BOLD, 10);
 		si.printAtPixel(69,133, "Sex: [m/f]", Color.WHITE);
 		si.refresh();
@@ -87,7 +87,7 @@ public class GFXPlayerGenerator extends PlayerGenerator{
     	si.saveBuffer();
     	while (true){
     		si.restore();
-    		txtClassDescription.setText(CLASS_DESCRIPTIONS[choice]);
+    		txtClassDescription.setText(TxtTpl.t(name,sex,CLASS_DESCRIPTIONS[choice]));
     		si.drawImage(70,158+18*choice,IMG_FLAME);
     		si.printAtPixel(80,173+18*choice, CLASS_NAMES[choice], Color.WHITE);
     		si.printAtPixel(353 + 64 + 16,142, CLASS_NAMES[choice], Color.WHITE);
@@ -103,10 +103,14 @@ public class GFXPlayerGenerator extends PlayerGenerator{
     		si.printAtPixel(440,400,CLASS_STATS[choice][7], Color.WHITE);
     		si.printAtPixel(440,420,CLASS_STATS[choice][8], Color.WHITE);
     		si.printAtPixel(440,440,CLASS_STATS[choice][9], Color.WHITE);
-	        si.refresh();
-    		while ( x.code != CharKey.UARROW && x.code != CharKey.DARROW && x.code != CharKey.SPACE && x.code != CharKey.ENTER)
+    		si.refresh();
+    		while ( x.code != CharKey.UARROW &&
+    				x.code != CharKey.DARROW &&
+    				x.code != CharKey.SPACE &&
+    				x.code != CharKey.ENTER) {
 				x = si.inkey();
-			if (x.code == CharKey.UARROW){
+			}
+			if (x.code == CharKey.UARROW) {
 				if (choice > 0) {
 					choice--;
 				}
@@ -114,10 +118,10 @@ public class GFXPlayerGenerator extends PlayerGenerator{
 				if (choice < 5) {
 					choice++;
 				}
-			} else 
+			} else {
 				break;
-			
-	        x.code = CharKey.NONE;
+			}
+			x.code = CharKey.NONE;
     	}
     	//si.remove(txtClassDescription);
     	txtClassDescription.setVisible(false);

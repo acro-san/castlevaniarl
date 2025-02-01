@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 
 import crl.Main;
-import sz.util.ScriptUtil;
+import sz.util.TxtTpl;
 import sz.util.Util;
 import crl.item.ItemDefinition;
 import crl.item.ItemFactory;
@@ -146,7 +146,7 @@ public abstract class PlayerGenerator {
 		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_PROJECTILES);
 		int items = Util.rand(10,15);
 		for (int i = 0; i < items; i++){
-			christopher.addItem(itf.createItem(Util.randomElementOf(SONIA_ITEMS)));
+			christopher.addItem(itf.createItem(Util.randPick(SONIA_ITEMS)));
 		}
 		christopher.setAppearance(aps.get("SONIA_B"));
 		christopher.setPlot("Came to the castle as the first Belmont ever", "");
@@ -167,9 +167,9 @@ public abstract class PlayerGenerator {
 		player.setSex(sex);
 		if (name.trim().equals("")){
 			if (sex == Player.MALE)
-				player.setName(Util.randomElementOf(MALE_NAMES));
+				player.setName(Util.randPick(MALE_NAMES));
 			else
-				player.setName(Util.randomElementOf(FEMALE_NAMES));
+				player.setName(Util.randPick(FEMALE_NAMES));
 		} else {
 			player.setName(name);
 		}
@@ -194,11 +194,6 @@ public abstract class PlayerGenerator {
 			break;
 		}
 		
-		//String heshe = (sex == Player.MALE ? "he" : "she");
-		String hisher = (sex == Player.MALE ? "his" : "her");
-		
-		
-
 		String classID = null;
 		String[] plots = null;
 		String[] descriptions = null;
@@ -278,8 +273,8 @@ public abstract class PlayerGenerator {
 				player.setBannedArmors(RENEGADE_BANNED_ARMOR);
 				player.setAdvancementLevels(ADVANCEMENT_LEVELS_NORMAL);
 				
-				player.setShield(ItemFactory.getItemFactory().createShield(Util.randomElementOf(RENEGADE_SHIELDS), Util.randomElementOf(ARMOR_MATERIALS)));
-				player.setSecondaryWeapon(ItemFactory.getItemFactory().createWeapon("BASELARD", Util.randomElementOf(WEAPON_MATERIALS)));
+				player.setShield(ItemFactory.getItemFactory().createShield(Util.randPick(RENEGADE_SHIELDS), Util.randPick(ARMOR_MATERIALS)));
+				player.setSecondaryWeapon(ItemFactory.getItemFactory().createWeapon("BASELARD", Util.randPick(WEAPON_MATERIALS)));
 				
 				player.putCustomMessage("INTRO_1", "I can almost breathe the chaos that invades every tree and animal in this forest. It is time to return to the castle.");
 				player.putCustomMessage("CLARA1", "Commonner? . . . Ignorant human... get out of my way.");
@@ -346,22 +341,22 @@ public abstract class PlayerGenerator {
 				player.setBreathing(15);
 				player.heal();
 				int skilleds = Util.rand(4,5);
-				String[] randoms = new String[]{
-						ItemDefinition.CAT_UNARMED,
-						ItemDefinition.CAT_DAGGERS,
-						ItemDefinition.CAT_SWORDS,
-						ItemDefinition.CAT_SPEARS,
-						ItemDefinition.CAT_WHIPS,
-						ItemDefinition.CAT_MACES,
-						ItemDefinition.CAT_STAVES,
-						ItemDefinition.CAT_RINGS,
-						ItemDefinition.CAT_PROJECTILES,
-						ItemDefinition.CAT_BOWS,
-						ItemDefinition.CAT_PISTOLS,
-						ItemDefinition.CAT_SHIELD
+				String[] randoms = {
+					ItemDefinition.CAT_UNARMED,
+					ItemDefinition.CAT_DAGGERS,
+					ItemDefinition.CAT_SWORDS,
+					ItemDefinition.CAT_SPEARS,
+					ItemDefinition.CAT_WHIPS,
+					ItemDefinition.CAT_MACES,
+					ItemDefinition.CAT_STAVES,
+					ItemDefinition.CAT_RINGS,
+					ItemDefinition.CAT_PROJECTILES,
+					ItemDefinition.CAT_BOWS,
+					ItemDefinition.CAT_PISTOLS,
+					ItemDefinition.CAT_SHIELD
 				};
 				for (int i = 0; i < skilleds; i++){
-					player.increaseWeaponSkillLevel(Util.randomElementOf(randoms));
+					player.increaseWeaponSkillLevel(Util.randPick(randoms));
 				}
 				plots = KNIGHT_PLOTS;
 				descriptions = KNIGHT_DESCRIPTIONS;
@@ -379,7 +374,7 @@ public abstract class PlayerGenerator {
 				player.increaseWeaponSkillLevel(ItemDefinition.CAT_SHIELD);
 				player.setBannedArmors(KNIGHT_BANNED_ARMOR);
 				player.setAdvancementLevels(ADVANCEMENT_LEVELS_NORMAL);
-				player.setShield(ItemFactory.getItemFactory().createShield(Util.randomElementOf(KNIGHT_SHIELDS), Util.randomElementOf(ARMOR_MATERIALS)));
+				player.setShield(ItemFactory.getItemFactory().createShield(Util.randPick(KNIGHT_SHIELDS), Util.randPick(ARMOR_MATERIALS)));
 				player.putCustomMessage("INTRO_1", "Indeed, those seem to be Wargs: demonic wolf-like creatures summoned by the Count of Darkness to protect his castle. We better get to the castle quickly.");
 				player.putCustomMessage("CLARA1", "Can you not see the mark of heavens? I am a Knight of the Sacred Order, and I came to cleanse this place from darkness.");
 			break;
@@ -391,24 +386,24 @@ public abstract class PlayerGenerator {
 			player.setAppearance(aps.get(classID));
 		else
 			player.setAppearance(aps.get(classID+"_W"));
-		String[] marks = new String[] {"%%SEX", "%%NAME"};
-		String[] replacements = new String[] {hisher, player.getName()};
+
 		player.setPlot(
-				ScriptUtil.replace(marks, replacements, Util.randomElementOf(plots)), 
-				ScriptUtil.replace(marks, replacements, getClassStartEquipmentDescription(player.getPlayerClass())));
+			TxtTpl.t(player, Util.randPick(plots)),
+			TxtTpl.t(player, getClassStartEquipmentDescription(player.getPlayerClass())));
 		player.setDescription(
-				ScriptUtil.replace(marks, replacements, Util.randomElementOf(descriptions)));
-		if (initWeapons != null)
-			player.setWeapon(itf.createWeapon(Util.randomElementOf(initWeapons), Util.randomElementOf(WEAPON_MATERIALS)));
-		player.setArmor(itf.createArmor(Util.randomElementOf(initArmors), Util.randomElementOf(ARMOR_MATERIALS)));
+			TxtTpl.t(player, Util.randPick(descriptions)));
+		if (initWeapons != null) {
+			player.setWeapon(itf.createWeapon(Util.randPick(initWeapons), Util.randPick(WEAPON_MATERIALS)));
+		}
+		player.setArmor(itf.createArmor(Util.randPick(initArmors), Util.randPick(ARMOR_MATERIALS)));
 		int items = Util.rand(5,7);
 		for (int i = 0; i < items; i++){
-			player.addItem(itf.createItem(Util.randomElementOf(initItems)));
+			player.addItem(itf.createItem(Util.randPick(initItems)));
 		}
 		player.increaseCoolness(10);
 		return player;
-
 	}
+	
 	
 	private String getClassStartEquipmentDescription(int classID){
 		switch (classID){
@@ -428,93 +423,95 @@ public abstract class PlayerGenerator {
 		return null;
 	}
 	
-	private String [] VANQUISHER_PLOTS = new String [] {
-			/**/ "After being taken to the castle by a group of skeletons, ",
-			"After discovering %%SEX powers when %%SEX friends were killed by the armies of the count",
-			"Interpreting the latest events as a call of destiny for a need to be fulfilled with %%SEX powers",
-			"After being brought to the castle door by a mysterious cartman",
-			"After being chased as a witch on %%SEX home town"
-		};
+	private static final String[]
+	VANQUISHER_PLOTS = {
+		"After being taken to the castle by a group of skeletons, ",
+		"After discovering %%SEX powers when %%SEX friends were killed by the armies of the count",
+		"Interpreting the latest events as a call of destiny for a need to be fulfilled with %%SEX powers",
+		"After being brought to the castle door by a mysterious cartman",
+		"After being chased as a witch on %%SEX home town"
+	},
 	
-	private String[] VKILLER_PLOTS = new String[] {
+	VKILLER_PLOTS = {
 		"On a last attempt to rescue %%SEX loved one, which was taken by an evil daemon last night",
 		"Seeking to bring an end to the problem as %%SEX grandfather did, about 100 years ago",
 		"After seeing %%SEX home town leveled, and all of %%SEX friends slain by the dark armies of the count",
 		"Finally seeing an opportunity to drop some vampire blood",
 		"After a long trip around all transylvannia, becoming stronger"
+	},
+	
+	RENEGADE_PLOTS = {
+		"Coming back to the castle which once was %%SEX home",
+		"Looking for a way to redeem the evil brought by the vampire race to the mankind",
+		"After being mysteriously awaken from %%SEX self imposed eternal slumber",
+		"Looking forward to give this 'Dark Count' a lesson about true power",
+		"After being told about a powerful vampire breaking the sacred pact of peace made with mankind",
+		"After rebelling against %%SEX father and being shunned by the vampire race"
+	},
+	
+	INVOKER_PLOTS = {
+		"Feeling the call of destiny to make use of %%SEX powers",
+		"After taking monsters out of %%SEX village, using %%SEX supernatural powers",
+		"Finally seeing an oportunity to show off %%SEX powers to battle evil",
+		"Going after a secret tome, told to be hidden inside the castle",
+		"After years of study and preparation, reading ancient tomes and discovering %%SEX true powers"
+	},
+	
+	MANBEAST_PLOTS = {
+		"After seeing %%SEX village burned by Dracula's minions, and looking forward to avenge the death of %%SEX loved ones",
+		"As one of the few survivors from the raids of the legion of the undead, and looking forward to avenge the death of %%SEX loved ones",
+		"After being taken captive by a group of careless skeletons, smashed when %%SEX power awoke",
+		"After having learned of the destruction of the manbeast race, and abandoning %%SEX secret hideout in the caverns"
+	},
+	
+	KNIGHT_PLOTS = {
+		"After seeing %%SEX village burned by Dracula's minions, and looking forward to avenge the death of %%SEX father",
+		"As the sole survivor of the company sent to battle the count Dracula on his castle",
+		"On a last effort to rid the world from the influence of the darkness that rose again",
+		"After years of preparation on %%SEX order, anticipating the return of the Dark Count"
 	};
 	
-	private String[] RENEGADE_PLOTS = new String[] {
-			"Coming back to the castle which once was %%SEX home",
-			"Looking for a way to redeem the evil brought by the vampire race to the mankind",
-			"After being mysteriously awaken from %%SEX self imposed eternal slumber",
-			"Looking forward to give this 'Dark Count' a lesson about true power",
-			"After being told about a powerful vampire breaking the sacred pact of peace made with mankind",
-			"After rebelling against %%SEX father and being shunned by the vampire race"
-	};
+	private static final String[]
+	VKILLER_DESCRIPTIONS = {
+		"%%NAME, last member on the lineage of vampire hunters, the Belmonts",
+		"%%NAME, the wielder of the vampire hunter fate",
+		"%%NAME",
+		"%%NAME the Vampire Hunter"
+	},
 	
-	private String[] INVOKER_PLOTS = new String[] {
-			"Feeling the call of destiny to make use of %%SEX powers",
-			"After taking monsters out of %%SEX village, using %%SEX supernatural powers",
-			"Finally seeing an oportunity to show off %%SEX powers to battle evil",
-			"Going after a secret tome, told to be hidden inside the castle",
-			"After years of study and preparation, reading ancient tomes and discovering %%SEX true powers"
-	};
-		
-	private String [] MANBEAST_PLOTS = new String [] {
-			"After seeing %%SEX village burned by Dracula's minions, and looking forward to avenge the death of %%SEX loved ones",
-			"As one of the few survivors from the raids of the legion of the undead, and looking forward to avenge the death of %%SEX loved ones",
-			/**/ "After being taken captive by a group of careless skeletons, smashed when %%SEX power awoke",
-			"After having learned of the destruction of the manbeast race, and abandoning %%SEX secret hideout in the caverns"
-	};
+	VANQUISHER_DESCRIPTIONS = {
+		"%%NAME, heir of the powers of Sypha",
+		"%%NAME, a witch for some, the last hope for anothers,",
+		"%%NAME",
+		"%%NAME the slayer"
+	},
 	
-	private String [] KNIGHT_PLOTS = new String[] {
-			"After seeing %%SEX village burned by Dracula's minions, and looking forward to avenge the death of %%SEX father",
-			/**/ "As the sole survivor of the company sent to battle the count Dracula on his castle",
-			"On a last effort to rid the world from the influence of the darkness that rose again",
-			"After years of preparation on %%SEX order, anticipating the return of the Dark Count"
-	};
+	RENEGADE_DESCRIPTIONS = {
+		"%%NAME, heir to the throne of darkness",
+		"%%NAME, a vampire turned to the light side",
+		"%%NAME",
+		"%%NAME the renegade"
+	},
 	
-	private String [] VKILLER_DESCRIPTIONS = new String [] {
-			"%%NAME, last member on the lineage of vampire hunters, the Belmonts",
-			"%%NAME, the wielder of the vampire hunter fate",
-			"%%NAME",
-			"%%NAME the Vampire Hunter"
-	};
+	INVOKER_DESCRIPTIONS = {
+		"%%NAME, a mysterious resident of the woods of Transylvannia",
+		"%%NAME, the human who discovered %%SEX fate was to battle evil using %%SEX powers",
+		"%%NAME",
+		"%%NAME the monster summoner"
+	},
 	
-	private String [] VANQUISHER_DESCRIPTIONS = new String [] {
-			"%%NAME, heir of the powers of Sypha",
-			"%%NAME, a witch for some, the last hope for anothers,",
-			"%%NAME",
-			"%%NAME the slayer"
-	};
+	MANBEAST_DESCRIPTIONS = {
+		"%%NAME, the powerful beast morpher from the mountains",
+		"%%NAME, the only survivor of the manbeast race",
+		"%%NAME",
+		"%%NAME the half-beast"
+	},
 	
-	private String [] RENEGADE_DESCRIPTIONS = new String [] {
-			"%%NAME, heir to the throne of darkness",
-			"%%NAME, a vampire turned to the light side",
-			"%%NAME",
-			"%%NAME the renegade"
-	};
-	
-	private String [] INVOKER_DESCRIPTIONS = new String [] {
-			"%%NAME, a mysterious resident of the woods of Transylvannia",
-			"%%NAME, the human who discovered %%SEX fate was to battle evil using %%SEX powers",
-			"%%NAME",
-			"%%NAME the monster summoner"
-	};
-	
-	private String[] MANBEAST_DESCRIPTIONS = new String[] {
-			"%%NAME, the powerful beast morpher from the mountains",
-			"%%NAME, the only survivor of the manbeast race",
-			"%%NAME",
-			"%%NAME the half-beast"
-	};
-	
-	private String [] KNIGHT_DESCRIPTIONS = new String [] {
-			"%%NAME, knight of the Order of Light",
-			"%%NAME, the knight of light",
-			"%%NAME",
-			"%%NAME the sacred knight"
+	KNIGHT_DESCRIPTIONS = {
+		"%%NAME, knight of the Order of Light",
+		"%%NAME, the knight of light",
+		"%%NAME",
+		"%%NAME the sacred knight"
 	};
 	
 	private String[] VKILLER_BANNED_ARMOR = new String[] {"DIAMOND_PLATE", "LEATHER_ARMOR", "CLOTH_TUNIC", "VEST", "CUIRASS", "SUIT", "PLATE"};
@@ -556,38 +553,44 @@ public abstract class PlayerGenerator {
 	protected String [] MALE_NAMES = new String [] {"Slash", "Simon", "Trevor", "Alan", "Reinhart", "Juste", "Alucard", "Daniel"};
 	protected String [] FEMALE_NAMES = new String [] {"Eliann","Sonia", "Valentina", "Carrie", "Sypha", "Mina"};
 
-	protected String [] CLASS_DESCRIPTIONS  = new String []{
-        	"Heir of the Belmont fate, destined to confront the dark count or die "+"" +
-        			"trying. Master in the use of the mystic vampire killer whip and the "+
-        			"only able to use mystic weapons",
-        	"A Vampire turned to the side of light, his will is to clean the world "+
-        		"from the dark influence of the count. Able with weapons and wielder of "+
-        		"vampiric skills.",
-        	"An human envowed with mystical powers since childhood to fight darkness, they are able "+
-        		"to learn spells from the dark tomes hidden within the castle and enchant weapons",
-        	"Able to manipulate spirits and bring them in a physical form to bring havoc down to "+
-        		"its enemies.",
-        	"Fights using an ancient martial style, his racial powers allow him to transform "+
-        		"into a powerful bestial creature. Can stand much more damage than common humans.",
-        	"An agent from the church, trained to defend the world from chaos and armed with the "+
-        		"most advanced human weaponry"
-        };
-	
-	protected String[][] CLASS_STATS = new String[][]{
-			{"5","1","Normal","5","Quick","Normal","Deadly","Normal","Normal","Poor"},
-			{"5","2","Normal","5","Quick","Deadly","Normal","Normal","Long","Normal"},
-			{"3","3","Weak","0","Slow","Poor","Deadly","Weak","Normal","Wealthy"},
-			{"3","3","Weak","0","Slow","Normal","Normal","Weak","Normal","Normal"},
-			{"7","1","Very Hardy","20","Quick","Deadly","Poor","Strong","Very Long","Very poor"},
-			{"7","0","Hardy","0","Normal","Deadly","Poor","Strong","Normal","Wealthy"}
+	protected String[] CLASS_DESCRIPTIONS = {
+		"Heir of the Belmont fate, destined to confront the dark Count or die "+
+		"trying. Master in the use of the mystic Vampire Killer whip and the "+
+		"only human able to use mystic weapons",
+		
+		"A Vampire turned to the side of light, %%his will is to cleanse the world "+
+		"of the Count's dark influence. Adept with weapons and wielder of "+
+		"vampiric skills.",
+		
+		"A human envowed since childhood with mystical powers to fight darkness, %%he is able "+
+		"to enchant weapons, and learn spells from the dark tomes hidden within the castle",
+		
+		"Able to manipulate spirits and bestow them a physical form, to bring "+
+		"havoc upon its enemies.",	// could be clearer/better. 'its'? the spirit?
+		
+		"Fighting with an ancient martial style, %%his racial powers allow %%him"+
+		" to transform into a powerful bestial creature. Can withstand more "+
+		"damage than common humans.",
+		
+		"An agent from the church, trained to defend the world from chaos and "+
+		"armed with the most advanced human weaponry"
 	};
 	
-	protected String[] CLASS_APPEARANCES = new String[]{
-			"VKILLER","RENEGADE","VANQUISHER","INVOKER","MANBEAST","KNIGHT"
+	protected String[][] CLASS_STATS = {
+		{"5","1","Normal","5","Quick","Normal","Deadly","Normal","Normal","Poor"},
+		{"5","2","Normal","5","Quick","Deadly","Normal","Normal","Long","Normal"},
+		{"3","3","Weak","0","Slow","Poor","Deadly","Weak","Normal","Wealthy"},
+		{"3","3","Weak","0","Slow","Normal","Normal","Weak","Normal","Normal"},
+		{"7","1","Very Hardy","20","Quick","Deadly","Poor","Strong","Very Long","Very poor"},
+		{"7","0","Hardy","0","Normal","Deadly","Poor","Strong","Normal","Wealthy"}
 	};
 	
-	protected String[] CLASS_NAMES = new String[]{
-			"Vampire Killer", "Darkness Renegade","Vanquisher Wizard","Souls' Master","Manbeast","Knight of the Order"
+	protected String[] CLASS_APPEARANCES = {
+		"VKILLER","RENEGADE","VANQUISHER","INVOKER","MANBEAST","KNIGHT"
+	};
+	
+	protected String[] CLASS_NAMES = {
+		"Vampire Killer", "Darkness Renegade","Vanquisher Wizard","Souls' Master","Manbeast","Knight of the Order"
 	};
 	
 	public static String getClassID(int classId){
@@ -668,6 +671,6 @@ public abstract class PlayerGenerator {
 
 	};
 
-	private String[] SONIA_ITEMS = new String[] {"HEAL_HERB", "GARLIC", "BIBUTI"};
+	private String[] SONIA_ITEMS = {"HEAL_HERB", "GARLIC", "BIBUTI"};
 
 }

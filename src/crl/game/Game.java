@@ -455,7 +455,7 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 		switch (code){
 			case Player.DEATH:
 				ui.refresh();
-				ui.showSystemMessage(Util.randomElementOf(DEATHMESSAGES) +  " [Press Space to continue]");
+				ui.showSystemMessage(Util.randPick(DEATHMESSAGES) +  " [Press Space to continue]");
 				finishGame();
 				break;
 			case Player.DROWNED:

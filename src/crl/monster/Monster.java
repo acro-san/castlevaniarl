@@ -367,7 +367,7 @@ public class Monster extends Actor implements Cloneable{
     	}
 
 		if (prizeList != null)
-			setFeaturePrize(Util.randomElementOf(prizeList));
+			setFeaturePrize(Util.randPick(prizeList));
 	}
 	
 	public void die(){

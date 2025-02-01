@@ -29,7 +29,7 @@ public class NPCFactory {
 		Hostage ret = new Hostage((NPCDefinition) definitions.get((String)Util.randomElementOf(hostages)));
 		if (UserInterface.getUI().getPlayer().getPlayerClass() != Player.CLASS_VAMPIREKILLER) {
 			int artifactCategory = ((int) (UserInterface.getUI().getPlayer().getPlayerLevel() / 6.0d));
-			ret.setItemReward(ItemFactory.getItemFactory().createWeapon(Util.randomElementOf(hostageArtifacts[artifactCategory]),""));
+			ret.setItemReward(ItemFactory.getItemFactory().createWeapon(Util.randPick(hostageArtifacts[artifactCategory]),""));
 		}
 		return ret;
 	}

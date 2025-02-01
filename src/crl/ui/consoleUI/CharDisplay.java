@@ -30,7 +30,7 @@ import sz.csi.CharKey;
 import sz.csi.ConsoleSystemInterface;
 import sz.csi.textcomponents.TextBox;
 import sz.util.Position;
-import sz.util.ScriptUtil;
+import sz.util.TxtTpl;
 import sz.util.Util;
 
 public class CharDisplay extends Display{
@@ -489,8 +489,8 @@ public class CharDisplay extends Display{
 		String[] replacements = new String[] {game.getPlayer().getName(), game.getPlayer().getCustomMessage("INTRO_1"), game.getPlayer().getCustomMessage("CLARA1")};
 		for (int i = 0; i < chat.getConversations(); i++){
 			tb.clear();
-			tb.setText(ScriptUtil.replace(marks, replacements, chat.getConversation(i)));
-			tb.setTitle(ScriptUtil.replace(marks, replacements, chat.getName(i)));
+			tb.setText(TxtTpl.replace(marks, replacements, chat.getConversation(i)));
+			tb.setTitle(TxtTpl.replace(marks, replacements, chat.getName(i)));
 			tb.draw();
 			si.refresh();
 			si.waitKey(CharKey.SPACE);

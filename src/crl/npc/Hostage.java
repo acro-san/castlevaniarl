@@ -16,7 +16,7 @@ public class Hostage extends NPC {
 
 	public void setRescued(boolean rescued) {
 		this.rescued = rescued;
-		rescuedMessage = Util.randomElementOf(HOSTAGE_TIPS);
+		rescuedMessage = Util.randPick(HOSTAGE_TIPS);
 	}
 	
 	public String getTalkMessage(){

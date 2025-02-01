@@ -39,7 +39,7 @@ public class Util {
 			return new Vector(source.subList(pageNumber*elementsOnPage, (pageNumber+1) * elementsOnPage));
 	}
 
-	public static String randomElementOf(String [] array){
+	public static String randPick(String [] array){
 		return array[rand(0, array.length -1)];
 	}
 	
