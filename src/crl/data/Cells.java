@@ -16,49 +16,64 @@ public class Cells {
 		
 		ret [153] = new Cell("DINING_CHAIR", "chair", "Dining chair", aps.get("DINING_CHAIR"), true, false);
 		ret [154] = new Cell("DINING_TABLE", "table", "Dining table", aps.get("DINING_TABLE"), true, false);
-		ret [155] = new Cell("MARBLE_STAIRSUP", "stairs", "Stairs", aps.get("MARBLE_STAIRSUP")); ret [155].setHeightMod(-1);
-		ret [156] = new Cell("MARBLE_STAIRSDOWN", "stairs", "Stairs", aps.get("MARBLE_STAIRSDOWN")); ret [156].setHeightMod(1);
-		ret [161] = new Cell("MARBLE_STAIRSUP_FAKE", "stairs", "Stairs", aps.get("MARBLE_STAIRSUP")); 
-		ret [162] = new Cell("MARBLE_STAIRSDOWN_FAKE", "stairs", "Stairs", aps.get("MARBLE_STAIRSDOWN")); 
+		ret [155] = new Cell("MARBLE_STAIRSUP", "stairs", "Stairs", aps.get("MARBLE_STAIRSUP"));
+		ret [155].setHeightMod(-1);
+		ret [156] = new Cell("MARBLE_STAIRSDOWN", "stairs", "Stairs", aps.get("MARBLE_STAIRSDOWN"));
+		ret [156].setHeightMod(1);
+		ret [161] = new Cell("MARBLE_STAIRSUP_FAKE", "stairs", "Stairs", aps.get("MARBLE_STAIRSUP"));
+		ret [162] = new Cell("MARBLE_STAIRSDOWN_FAKE", "stairs", "Stairs", aps.get("MARBLE_STAIRSDOWN"));
 		
 		/*Town*/
 		ret [1] = new Cell("DIRT", "dirt", "A patch of dirt", aps.get("TOWN_GRASS"));
 		ret [8] = new Cell("DARK_FOREST", "moss tree", "A moss tree", aps.get("TOWN_GRASS"), true, true);
-		ret [16] = new Cell("STREAM", "stream of water", "A stream of water", aps.get("TOWN_GRASS")); ret[16].setWater(true);
+		ret [16] = new Cell("STREAM", "stream of water", "A stream of water", aps.get("TOWN_GRASS"));
+		ret [16].setWater(true);
 		ret [30] = new Cell("VOID", "", "", aps.get("VOID"), true, true);
 		ret [165] = new Cell("STATIC_VOID", "", "", aps.get("VOID"));
 
-		ret [133] = new Cell("SIGNPOST_T1", "signpost", "Exercise 1: Items \n \n " +
-				" Pick up the herbs moving over them and pressing 'g', move to the house and drop them using 'D'.\n \n" +
-				" During your journeys, you will find items laying in the ground, you must pick them up before using " +
-				"or wearing them.", aps.get("SIGN_POST"), true, false);
-		ret [177] = new Cell("SIGNPOST_T2", "signpost", "Exercise 2: Jumping \n \n " +
-				"Jump the water moving next to it and pressing the jump key 'j' and the direction. \n \n " +
-				"Jumping is useful in combat to gain tactical advantage, and you can also use it to pass over gaps in the terrain.", aps.get("SIGN_POST"), true, false);
-		ret [132] = new Cell("SIGNPOST_T3", "signpost", "Exercise 3: Attacking \n \n " +
-				"Move next to a tree and press [PERIOD], then the direction to attack the tree. \n \n " +
-				"The world is full of monsters eager to kill you. This is the main way of attacking. Depending on your " +
-				"current weapon, you may hit enemies which are not adjacent to you.", aps.get("SIGN_POST"), true, false);
-		ret [135] = new Cell("SIGNPOST_T4", "signpost", "Exercise 4: Ranged Weapons \n \n " +
-				"Pick up this bow and press 'e' and then the item letter to equip it. \n \n Press 'f' and aim at a tree using the directional keys and press 'f' again to shoot an arrow. \n \n " +
-				"Ranged weapons allow you to attack at a distance, but must be reloaded consuming hearts and gold.", aps.get("SIGN_POST"), true, false);
-		ret [134] = new Cell("SIGNPOST_T5", "signpost", "Exercise 5: Swimming \n \n " +
-				"Walk over the water and use 'P' to plunge into the lake, swim north into the other side and use 'j' to go back to the surface. \n \n " +
-				"Diving is a dangerous.. you will die as soon as you run " +
-				"out of oxygen (02 indicator).\n \n Be sure to resurface to replenish your oxygen.", aps.get("SIGN_POST"), true, false);
-		ret [136] = new Cell("SIGNPOST_T6", "signpost", "Exercise 6: Throwing \n \n " +
-				"Pick up the herbs and throw them to the dirt. Press 't', select the herb, picking a landing spot and then press space. \n \n "+
-				"Some items explode or have special effects when thrown", aps.get("SIGN_POST"), true, false);
-		ret [137] = new Cell("SIGNPOST_T7", "signpost", "Exercise 7: Mystic Weapons \n \n " +
-				"This is a mystic weapon, only vampire killers can use it. Step on it and use space bar to aim it as if it was a ranged weapon. Press Space again to shoot \n \n " +
-				"Mystic weapons consume hearts on each shoot.", aps.get("SIGN_POST"), true, false);
-		ret [178] = new Cell("SIGNPOST_T8", "signpost", "Exercise 8: Monsters! \n \n " +
-				"You are now ready to fight! with your mystic weapon you should have no problem dispatching these weak foes.\n \n " +
-				"You can evade the skeleton bones by moving out of their firing range, they always target your previous location!", aps.get("SIGN_POST"), true, false);
-		ret [139] = new Cell("SIGNPOST_T9", "signpost", "You can access your skills using 'p' " +
-				"and check your inventory using 'i'. Press '?' for complete reference. \n \n You can access most of the item manipulation commands from the Inventory screen!\n \n Walk through here to leave this area and end your training \n \n CastleVania awaits!", aps.get("SIGN_POST"), true, false);
+		ret [133] = new Cell("SIGNPOST_T1", "signpost", "Lesson 1: Items\n\n"+
+			"Pick up herbs by moving onto them and pressing 'g'. Move to the house and drop them using 'D'.\n\n"+
+			"During your journeys, you will find items lying on the ground. You must pick them up before using "+
+			"or wearing them.", aps.get("SIGN_POST"), true, false);
+		ret [177] = new Cell("SIGNPOST_T2", "signpost", "Lesson 2: Jumping\n\n"+
+			"Jump the water by pressing 'j' then a direction.\n\n"+
+			"Jumping is useful in combat to gain tactical advantage, and to pass over gaps in the terrain.", aps.get("SIGN_POST"), true, false);
+
+		ret [132] = new Cell("SIGNPOST_T3", "signpost", "Lesson 3: Attacking\n\n"+
+			"Move next to a tree and press [PERIOD], then the direction to attack the tree.\n\n"+
+			"The world is full of monsters eager to kill you. This is the main way of attacking. Depending on your " +
+			"current weapon, you may hit enemies which are not adjacent to you.", aps.get("SIGN_POST"), true, false);
 		
-				
+		ret [135] = new Cell("SIGNPOST_T4", "signpost", "Lesson 4: Ranged Weapons\n\n"+
+			"Pick up this bow, and equip it (with 'E').\n\n"+
+			"Press 'f' to begin firing: use the arrow keys to aim at a tree, and press 'f' again to fire.\n\n"+
+			"Ranged weapons let you attack from a distance, but must be reloaded (costing hearts and gold).", aps.get("SIGN_POST"), true, false);
+
+		ret [134] = new Cell("SIGNPOST_T5", "signpost", "Lesson 5: Swimming\n\n"+
+			"In the nearby lake, use 'P' to plunge underwater. "+
+			"Swim north to the far side, and use 'j' to re-surface.\n\n"+
+			"Diving is a dangerous! You'll die as soon as your oxygen runs out."+
+			"\n\nBe sure to resurface to replenish your oxygen.", aps.get("SIGN_POST"), true, false);
+		// Why throw herbs onto dirt tiles? Does it do anything?
+		// if it doesn't do anything, why 'tutorial' it?
+		ret [136] = new Cell("SIGNPOST_T6", "signpost", "Lesson 6: Throwing\n\n"+
+			"Pick up the herbs and throw them onto the dirt. Press 't', select"+
+			" the herb, aim at a landing spot and then press 'space'.\n\n"+
+			"Some items explode or have special effects when thrown", aps.get("SIGN_POST"), true, false);
+		
+		ret [137] = new Cell("SIGNPOST_T7", "signpost", "Lesson 7: Mystic Weapons\n\n"+
+			"This is a mystic weapon. Only Vampire Killers can use it. "+
+			"Step on it and use 'space' to aim it like a ranged weapon. Press "+
+			"'space' again to shoot.\n\nMystic weapons cost hearts for "+
+			"each shot.", aps.get("SIGN_POST"), true, false);
+		
+		ret [178] = new Cell("SIGNPOST_T8", "signpost", "Lesson 8: Monsters!\n\n"+
+			"You're now ready to fight! With your mystic weapon you should have no problem dispatching these weak foes.\n\n"+
+			"You can evade the skeleton bones by moving out of their firing range. They always target your previous location!", aps.get("SIGN_POST"), true, false);
+
+		ret [139] = new Cell("SIGNPOST_T9", "signpost", "You can access your skills using 'p' " +
+			"and check your inventory using 'i'. Press '?' for complete reference. \n \n You can access most of the item manipulation commands from the Inventory screen!\n \n Walk through here to leave this area and end your training \n \n CastleVania awaits!", aps.get("SIGN_POST"), true, false);
+		
 		
 		/*Town*/
 		ret [31] = new Cell("TOWN_GRASS", "grass", "Darkened grass", aps.get("TOWN_GRASS"));
