@@ -1,6 +1,5 @@
 package crl.npc;
 
-import sz.csi.textcomponents.BasicListItem;
 import sz.csi.textcomponents.ListItem;
 import crl.ui.*;
 import crl.Main;
@@ -21,11 +20,15 @@ public class NPCDefinition {
 	private boolean isPriest;
 
 	public NPCDefinition (String pID, String pDescription, String pAppearance,
-	String pDefaultSelector, String pTalkMessage, int pAttack, int pHits, String pAngryMessage, String pDangerMessage, boolean pHostage, boolean pPriest){
+	String pDefaultSelectorID, String pTalkMessage, int pAttack, int pHits, String pAngryMessage, String pDangerMessage, boolean pHostage, boolean pPriest){
 		ID = pID;
 		description = pDescription;
 		appearance = Main.appearances.get(pAppearance);
-		defaultSelector = SelectorFactory.getSelectorFactory().createSelector(pDefaultSelector);
+		
+		// derive a new action selector from existing by fetching existing by ID
+		ActionSelector baseAI = Main.selectors.get(pDefaultSelectorID);
+		defaultSelector = baseAI.derive();
+		
 		//sightListItem = new BasicListItem(appearance.getChar(), appearance.getColor(), description);
 		talkMessage = pTalkMessage;
 		

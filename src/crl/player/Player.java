@@ -18,7 +18,6 @@ import crl.action.manbeast.*;
 import crl.action.vkiller.*;
 import crl.actor.*;
 import crl.ai.ActionSelector;
-import crl.ai.SelectorFactory;
 import crl.monster.*;
 import crl.ui.*;
 import crl.level.*;
@@ -2664,7 +2663,7 @@ public class Player extends Actor {
 			setFlag("KEEPMESSAGES", true);
 			originalSelector = getSelector();
 			setCounter("REGAIN_SHAPE", count);
-			setSelector(SelectorFactory.getSelectorFactory().getSelector("WILD_MORPH_AI"));
+			setSelector(Main.selectors.get("WILD_MORPH_AI"));
 		}
 
 		

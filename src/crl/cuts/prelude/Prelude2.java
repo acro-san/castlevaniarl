@@ -2,14 +2,11 @@ package crl.cuts.prelude;
 
 import sz.util.Position;
 import crl.Main;
-import crl.ai.SelectorFactory;
 import crl.ai.monster.boss.DraculaAI;
-import crl.conf.console.data.CharCuts;
 import crl.cuts.Unleasher;
 import crl.game.Game;
 import crl.level.Level;
 import crl.monster.Monster;
-import crl.ui.Appearance;
 import crl.ui.Display;
 
 public class Prelude2 extends Unleasher {

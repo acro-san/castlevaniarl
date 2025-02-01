@@ -3,7 +3,6 @@ package crl;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.reflect.Field;
@@ -27,7 +26,6 @@ import crl.action.*;
 import crl.action.monster.*;
 import crl.action.monster.boss.*;
 import crl.ai.ActionSelector;
-import crl.ai.SelectorFactory;
 import crl.ai.monster.BasicMonsterAI;
 import crl.ai.monster.RangedAI;
 import crl.ai.monster.UnderwaterAI;
@@ -102,6 +100,9 @@ public class Main {
 	public static HashMap<String, Appearance>
 		appearances = new HashMap<>();
 
+	// (AI)Selectors by ID: could EASILY be a fixed len, indexed array, using short IDs.
+	public static HashMap<String, ActionSelector>
+		selectors = new HashMap<>();
 	
 	private static Game currentGame;
 	private static boolean createNew = true;
@@ -111,7 +112,7 @@ public class Main {
 		return configuration.getProperty(key);
 	}
 
-	private static void init(){
+	private static void init() {
 		if (createNew){		
 			System.out.println("CastlevaniaRL "+Game.getVersion());
 			System.out.println("by slashie ~ 2005-2007, 2010, 2024");
@@ -132,7 +133,7 @@ public class Main {
 					System.out.println("Initializing Char Appearances");
 					initializeCAppearances();
 					break;
-    			}
+				}
 				System.out.println("Initializing Action Objects");
 				initializeActions();
 				initializeSelectors();
@@ -651,10 +652,25 @@ public class Main {
 		FeatureFactory.getFactory().init(Features.getFeatureDefinitions(appearances));
 	}
 
-	private static void initializeSelectors(){
-		ActionSelector [] definitions = getSelectorDefinitions();
-		for (int i=0; i<definitions.length; i++){
-        	SelectorFactory.getSelectorFactory().addDefinition(definitions[i]);
+	private static void initializeSelectors() {
+		ActionSelector[] definitions = new ActionSelector[] {
+			new WanderToPlayerAI(),	// defines ID of: "WANDER"... via METHOD 'getID' .. Data as Function. VERY P-OOP.
+			new UnderwaterAI(),
+			new RangedAI(),
+			new FlameAI(),
+			new CrossAI(),
+			new BlastCrystalAI(),
+			new CountDown(),
+			new VillagerAI(),
+			new PriestAI(),
+			new NullSelector(),
+			new BasicMonsterAI(),
+			new WildMorphAI()
+		};
+		selectors.clear();	// init only once.
+		for (int i=0; i<definitions.length; i++) {
+			ActionSelector as = definitions[i];
+			selectors.put(as.getID(), as);
 		}
 	}
 
@@ -676,26 +692,9 @@ public class Main {
 	}
 
 	private static void initializeSmartFeatures (){
-		SmartFeatureFactory.getFactory().init(SmartFeatures.getSmartFeatures(SelectorFactory.getSelectorFactory()));
+		SmartFeatureFactory.getFactory().init(SmartFeatures.getSmartFeatures(selectors));
 	}
 
-	private static ActionSelector [] getSelectorDefinitions(){
-		ActionSelector [] ret = new ActionSelector[]{
-				new WanderToPlayerAI(),
-				new UnderwaterAI(),
-				new RangedAI(),
-				new FlameAI(),
-				new CrossAI(),
-				new BlastCrystalAI(),
-				new CountDown(),
-				new VillagerAI(),
-				new PriestAI(),
-				new NullSelector(),
-				new BasicMonsterAI(),
-				new WildMorphAI()
-		};
-		return ret;
-	}
 
     public static void crash(String message, Throwable exception){
     	System.out.println("CastlevaniaRL "+Game.getVersion()+": Error");
