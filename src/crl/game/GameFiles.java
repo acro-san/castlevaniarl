@@ -101,14 +101,20 @@ public class GameFiles {
 	
 	// guarantees (except in exceptional disk conditions/permissions) that 
 	// folder path of requested file exists.
-	public static File getUserFile(String uFilepath) {
+	public static File getUserFile(String userFilePath) {
 		File pf = getProfileFolder();
-		File uf = new File(pf, uFilepath);
+		File uf = new File(pf, userFilePath);
 		File parentfolder = uf.getParentFile();
 		ensureFolderExists(parentfolder);
 		return uf;
 	}
 
+	private static File getUserFolder(String userFolderPath) {
+		File pf = getProfileFolder();
+		File uf = new File(pf, userFolderPath);
+		ensureFolderExists(uf);
+		return uf;
+	}
 
 	public static boolean writeToFile(String text, File f) {
 		String filepath = f.getAbsolutePath();
@@ -215,7 +221,7 @@ public class GameFiles {
 	}
 	
 	public static File[] listSaves() {
-		File saveDir = GameFiles.getUserFile(GameFiles.SAVES_PATH);
+		File saveDir = GameFiles.getUserFolder(GameFiles.SAVES_PATH);
 		File[] files = saveDir.listFiles(new SaveGameFilenameFilter());
 		if (files == null) {
 			return new File[0];
@@ -302,9 +308,7 @@ public class GameFiles {
 		// seems insufficient, if I immediately do another run and choose Sonia
 		// as charname, on same day!?
 		try {
-			File bonesDir = getUserFile(BONES_PATH);
-			String bonesName = getMemorialFileName(player, false); // game over
-			File bonesFile = new File(bonesDir, bonesName);
+			File bonesFile = makeBonesFile(player, false);
 			BufferedWriter fileWriter = new BufferedWriter(new FileWriter(bonesFile));
 			
 			GameSessionInfo gsi = player.getGameSessionInfo();
@@ -460,9 +464,7 @@ public class GameFiles {
 	
 	public static void saveChardump(Player player) {
 		try {
-			File bonesDir = getUserFile(BONES_PATH);
-			String bonesName = getMemorialFileName(player, true);
-			File bonesFile = new File(bonesDir, bonesName);
+			File bonesFile = makeBonesFile(player, true);
 			BufferedWriter fileWriter = new BufferedWriter(new FileWriter(bonesFile));
 			
 			GameSessionInfo gsi = player.getGameSessionInfo();
@@ -563,6 +565,19 @@ public class GameFiles {
 		String live = succeeded ? " {Alive}": "";
 		String bonesName = player.getName()+live+"("+now+").life";
 		return bonesName;
+	}
+	
+	
+	private static File makeBonesFile(Player player, boolean playerWon) {
+		File bonesDir = getUserFolder(BONES_PATH);
+		String bonesName = getMemorialFileName(player, playerWon);
+		File bonesFile = new File(bonesDir, bonesName);
+		try {
+			boolean createdOK = bonesFile.createNewFile();
+		} catch (IOException e) {
+			return null;
+		}
+		return bonesFile;
 	}
 
 
