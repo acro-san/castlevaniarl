@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -16,7 +18,6 @@ import java.util.Vector;
 
 import sz.util.Debug;
 import sz.util.FileUtil;
-import sz.util.SerializableChecker;
 import crl.item.ItemDefinition;
 import crl.monster.MonsterDefinition;
 import crl.player.Equipment;
@@ -29,36 +30,219 @@ import crl.ui.Appearance;
 import crl.ui.UserInterface;
 
 public class GameFiles {
-	public static HiScore[] loadScores(String hiscorefile){
-		Debug.enterStaticMethod("GameFiles", "loadScores");
-		HiScore[] ret = new HiScore[10];
-        try{
-            BufferedReader lectorArchivo = FileUtil.getReader(hiscorefile);
-            for (int i = 0; i < 10; i++) {
-            	String line = lectorArchivo.readLine();
-            	String [] regs = line.split(";");
-            	if (regs == null){
-            		Game.crash("Invalid or corrupt hiscore table");
-            	}
-            	HiScore x = new HiScore();
-            	x.setName(regs[0]);
-            	x.setPlayerClass(regs[1]);
-            	x.setScore(Integer.parseInt(regs[2]));
-            	x.setDate(regs[3]);
-            	x.setTurns(regs[4]);
-            	x.setDeathString(regs[5]);
-            	x.setDeathLevel(Integer.parseInt(regs[6]));
-            	ret[i] = x;
-            }
-            Debug.exitMethod(ret);
-            return ret;
-        }catch(IOException ioe){
-        	Game.crash("Invalid or corrupt hiscore table", ioe);
-    	}
-    	return null;
+	
+	private static final String
+		APP_NAME = "castlevaniarl",
+		OSV = System.getProperty("os.name").toLowerCase();
+	public static final boolean
+		OS_IS_WINDOWS = OSV.contains("win"),
+		OS_IS_MACOSX  = OSV.startsWith("mac os x"),
+		OS_IS_LINUX   = OSV.contains("linux") || OSV.contains("unix");
+	
+	// User Profile/Folder items:
+	// High Scores; [DONE]
+	// Arena Scores; [DONE]
+	// Graveyard(KillCounts/HuntRecord);
+	// 'Mods' Folder; (ensure exists on startup. check for override names!?)
+	// Memorials.
+	// SaveGames (runs in progress). Should be encrypted?
+	// also: cvrl.cfg, keys.cfg, and slash-barret.ui equivalents. (move to profile dir)
+	
+	// The deployed game has its asserts/defs bundled in the jar. But other
+	// (user) files should go in user's 'application data'. Changeable format
+	// things should probably be labelled with the version they're made by.
+	
+	// Anything users are not meant to meddle with could be DES encrypted.
+	// Users could have a 'mod' folder, with naming conventions allowing for
+	// game resource loaders to override internal assets...
+	public static File getProfileFolder() {
+		String userhome = System.getProperty("user.home");
+		File profileFolder = null;
+		if (OS_IS_WINDOWS) {
+			String appDataFolder = System.getenv("APPDATA");
+			if (appDataFolder == null) {
+				// can this clause even happen though? (win permissions issue?)
+				profileFolder = new File(userhome, "."+APP_NAME+"/");
+			} else {
+				profileFolder = new File(appDataFolder, APP_NAME+"/");
+			}
+		} else if (OS_IS_MACOSX) {
+			// ~/Library/Application Support/ is 'just for this user'.
+			// And ROOT /Library/Application Support/ is for ALL USERS.
+			// Root one is visible by default in Finder, but personal one is NOT
+			// but OSX doesn't give us write access for the global Library.
+			// BUT: as a user, after making userhome/Library visible in Finder,
+			// that seems workably fine.
+			//editorDataFolder = new File("/Library/Application Support/arcworks/realmseditor/");
+			//we do not have write access for global Library, though! DAMN IT!
+			//editorDataFolder = new File(userhome, "/realmseditor/");	//copout!
+			profileFolder = new File(userhome,
+				"Library/Application Support/" + APP_NAME + "/");
+		} else if (OS_IS_LINUX) {
+			profileFolder = new File(userhome, "."+APP_NAME + "/");
+		} else {
+			System.err.println("Unknown OS.");
+			profileFolder = new File(userhome, "."+APP_NAME + "/");
+		}
+		ensureFolderExists(profileFolder);
+		return profileFolder;
 	}
 	
-	public static void saveHiScore (Player player, String hiscoreFile){
+	
+	public static void ensureFolderExists(File folder) {
+		if (!folder.exists() || !folder.isDirectory()) {
+			if (folder.mkdirs()) {
+				// All ok!
+			} else {
+				Game.crash("Unable to create folder: "+folder.getAbsolutePath());
+			}
+		}
+	}
+	
+	// guarantees (except in exceptional disk conditions/permissions) that 
+	// folder path of requested file exists.
+	public static File getUserFile(String uFilepath) {
+		File pf = getProfileFolder();
+		File uf = new File(pf, uFilepath);
+		File parentfolder = uf.getParentFile();
+		ensureFolderExists(parentfolder);
+		return uf;
+	}
+
+
+	public static boolean writeToFile(String text, File f) {
+		String filepath = f.getAbsolutePath();
+		File parentfolder = f.getParentFile();
+		if (parentfolder != null) {
+			ensureFolderExists(parentfolder);
+		}
+		
+		if (f.exists() && !f.canWrite()) {
+			// Attempt deletion (or save as .old?). Failing that, return false.
+			boolean deleted = f.delete();
+			if (!deleted) {
+				System.err.println("File ["+filepath+"] already exists, and could not be edited or deleted.");
+				//logger / critical event/errlog somewhere in a txtfile, for user-submittable sendbacks?
+				return false;
+			}
+		}
+		
+		try {
+			f.createNewFile();	// Must ensure it's there! Filewriter crashes otherwise!
+			BufferedWriter bw = new BufferedWriter(new FileWriter(f));
+			bw.write(text);
+			bw.close();
+		} catch (IOException ioe) {
+			System.err.println("Error while writing text data to file: ["+filepath+"]");
+			ioe.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
+
+	public static HiScore[] loadHighScores() {
+		File scorefile = getUserFile(HIGH_SCORE_FILE);
+		if (!scorefile.exists()) {
+			// Create default high score table.
+			StringBuilder sb = new StringBuilder();
+			for (int i=0; i<10; i++) {
+				sb.append("Simon;VKL;0;29/04/2007;0;-;0\r\n");
+			}
+			writeToFile(sb.toString(), scorefile);
+			// 1. Arikado, whatever, 0, 2, xyz, whatnot.
+			// 2. PowPow, ???, ...?
+			// all should be easily beatable things though, yes?
+			// +How about writing 10x: Simon;VKL;(score?);TODAY's Date or install date, minus a few days?
+		}
+		return _loadScores(scorefile);
+	}
+	
+	
+	public static HiScore[] loadArenaScores() {
+		File scorefile = getUserFile(ARENA_SCORE_FILE);
+		if (!scorefile.exists()) {
+			// Create default arena high score table.
+			StringBuilder sb = new StringBuilder();
+			for (int i=0; i<10; i++) {
+				sb.append("Arena;VKL;0;29/04/2007;0;-;0\r\n");
+			}
+			writeToFile(sb.toString(), scorefile);
+		}
+		return _loadScores(scorefile);
+	}
+	
+	
+	private static HiScore[] _loadScores(File scoreTableFile) {
+		Debug.enterStaticMethod("GameFiles", "loadScores");
+		HiScore[] ret = new HiScore[10];
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(scoreTableFile));
+			
+			for (int i = 0; i < 10; i++) {
+				String line = br.readLine();
+				String [] regs = line.split(";");
+				if (regs == null) {
+					Game.crash("Invalid or corrupt hiscore table");
+					// TODO Resilience!: Recover/keep going by creating a new
+					// hiscore file after archiving (rename) the corrupt one.
+				}
+				HiScore x = new HiScore();
+				x.setName(regs[0]);
+				x.setPlayerClass(regs[1]);
+				x.setScore(Integer.parseInt(regs[2]));
+				x.setDate(regs[3]);
+				x.setTurns(regs[4]);
+				x.setDeathString(regs[5]);
+				x.setDeathLevel(Integer.parseInt(regs[6]));
+				ret[i] = x;
+			}
+			Debug.exitMethod(ret);
+			return ret;
+		} catch (IOException ioe) {
+			Game.crash("Invalid or corrupt hiscore table", ioe);
+			// TODO Resilience/recover. create default highscores file...?
+		}
+		return null;
+	}
+	
+	
+	static class SaveGameFilenameFilter implements FilenameFilter {
+		public boolean accept(File arg0, String arg1) {
+			// if (arg0.getName().endsWith(".sav"))
+			return (arg1.endsWith(".sav"));
+		}
+	}
+	
+	public static File[] listSaves() {
+		File saveDir = GameFiles.getUserFile(GameFiles.SAVES_PATH);
+		File[] files = saveDir.listFiles(new SaveGameFilenameFilter());
+		if (files == null) {
+			return new File[0];
+		}
+		return files;
+	}
+	
+	private static final String
+		SAVES_PATH = "savegames",
+		BONES_PATH = "memorials";
+	
+	private static final String
+		HIGH_SCORE_FILE  = "tables/hiscore.tbl",
+		ARENA_SCORE_FILE = "tables/arena.tbl",	// "scores/" rather than tables?
+		HUNTRECORD_FILE  = "tables/graveyard";
+	
+	public static void saveHighScore(Player player) {
+		File scorefile = getUserFile(HIGH_SCORE_FILE);
+		_saveHiScore(player, scorefile);
+	}
+	
+	public static void saveArenaHighScore(Player player) {
+		File scorefile = getUserFile(ARENA_SCORE_FILE);
+		_saveHiScore(player, scorefile);
+	}
+	
+	private static void _saveHiScore(Player player, File scoreFile) {
 		Debug.enterStaticMethod("GameFiles", "saveHiscore");
 		int score = player.getScore();
 		String name = player.getName();
@@ -86,34 +270,43 @@ public class GameFiles {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		String now = sdf.format(new Date());
 
-		HiScore [] scores = loadScores(hiscoreFile);
+		// read existing hi scores
+		HiScore[] scores = _loadScores(scoreFile);
 
-		try{
-			BufferedWriter fileWriter = FileUtil.getWriter(hiscoreFile);
-			for (int i = 0; i < 10; i++){
-				if (score > scores[i].getScore()){
-           			fileWriter.write(name+";"+playerClass+";"+score+";"+now+";"+player.getGameSessionInfo().getTurns()+";"+player.getGameSessionInfo().getShortDeathString()+";"+player.getGameSessionInfo().getDeathLevel());
-           			fileWriter.newLine();
-            		score = -1;
-            		if (i == 9)
-	            		break;
-            	}
-            	fileWriter.write(scores[i].getName()+";"+scores[i].getPlayerClass()+";"+scores[i].getScore()+";"+scores[i].getDate()+";"+scores[i].getTurns()+";"+scores[i].getDeathString()+";"+scores[i].getDeathLevel());
-            	fileWriter.newLine();
-            }
-            fileWriter.close();
-            Debug.exitMethod();
-        }catch(IOException ioe){
-        	ioe.printStackTrace(System.out);
+		try {
+			//BufferedWriter bw = FileUtil.getWriter(hiscoreFile);
+			BufferedWriter bw = new BufferedWriter(new FileWriter(scoreFile));
+			for (int i = 0; i < 10; i++) {
+				if (score > scores[i].getScore()) {
+					bw.write(name+";"+playerClass+";"+score+";"+now+";"+player.getGameSessionInfo().getTurns()+";"+player.getGameSessionInfo().getShortDeathString()+";"+player.getGameSessionInfo().getDeathLevel());
+					bw.newLine();
+					score = -1;
+					if (i == 9) {
+						break;
+					}
+				}
+				bw.write(scores[i].getName()+";"+scores[i].getPlayerClass()+";"+scores[i].getScore()+";"+scores[i].getDate()+";"+scores[i].getTurns()+";"+scores[i].getDeathString()+";"+scores[i].getDeathLevel());
+				bw.newLine();
+			}
+			bw.close();
+			Debug.exitMethod();
+		}catch(IOException ioe){
+			ioe.printStackTrace(System.out);
 			Game.crash("Invalid or corrupt hiscore table", ioe);
-        }
+		}
 	}
 
-	public static void saveMemorialFile(Player player){
-		try{
-			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-			String now = sdf.format(new Date());
-			BufferedWriter fileWriter = FileUtil.getWriter("memorials/"+player.getName()+"("+now+").life");
+
+	public static void saveMemorialFile(Player player) {
+		// the character died, you game-overed. eg "Sonia(31-01-2025).life"
+		// seems insufficient, if I immediately do another run and choose Sonia
+		// as charname, on same day!?
+		try {
+			File bonesDir = getUserFile(BONES_PATH);
+			String bonesName = getMemorialFileName(player, false); // game over
+			File bonesFile = new File(bonesDir, bonesName);
+			BufferedWriter fileWriter = new BufferedWriter(new FileWriter(bonesFile));
+			
 			GameSessionInfo gsi = player.getGameSessionInfo();
 			gsi.setDeathLevelDescription(player.getLevel().getDescription());
 			String heshe = (player.getSex() == Player.MALE ? "He" : "She");
@@ -206,6 +399,7 @@ public class GameFiles {
 		
 	}
 	
+	
 	static class SaveFilenameFilter implements FilenameFilter {
 		private Player p;
 		public SaveFilenameFilter(Player p) {
@@ -216,44 +410,61 @@ public class GameFiles {
 		}
 	}
 	
-	public static void saveGame(Game g, Player p){
-		//Delete previous saves
-		File saveDirectory = new File("savegame");
-		File[] previousSaves = saveDirectory.listFiles(new SaveFilenameFilter(p));
-		for (File file: previousSaves){
-			file.delete();
+	
+	public static void saveGame(Game g, Player p) {
+		// Delete previous saves
+		File saveDir = GameFiles.getUserFile(SAVES_PATH);
+		File[] previousSaves = saveDir.listFiles(new SaveFilenameFilter(p));
+		if (previousSaves != null && previousSaves.length > 0) {
+			for (File file: previousSaves) {
+				file.delete();
+			}
 		}
 		
-		String filename = "savegame/"+p.getName()+", a Lv"+p.getPlayerLevel()+" "+p.getClassString()+".sav";
+		String filename = p.getName()+", a Lv"+p.getPlayerLevel()+" "+p.getClassString()+".sav";
+		File savef = new File(saveDir, filename);
 		p.setSelector(null);
 		try {
+			/*
 			SerializableChecker sc = new SerializableChecker();
 			sc.writeObject(g);
 			sc.close();
-			
-			ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(filename));
+			*/
+			ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(savef));
 			os.writeObject(g);
 			os.close();
 		} catch (IOException ioe){
 			Game.crash("Error saving the game", ioe);
+		} catch (ExceptionInInitializerError eiie) {
+			System.err.println("serializablechecker may have failed?");
+			eiie.printStackTrace();
 		}
 		
 	}
 	
-	public static void permadeath(Player p){
-		File saveDirectory = new File("savegame");
-		File[] previousSaves = saveDirectory.listFiles(new SaveFilenameFilter(p));
-		for (File file: previousSaves){
+	/**
+	 * Deletes all savegame files with name of given player.
+	 * @param p
+	 */
+	public static void permadeath(Player p) {
+		File saveDir = getUserFile(SAVES_PATH);
+		File[] previousSaves = saveDir.listFiles(new SaveFilenameFilter(p));
+		if (previousSaves == null) {
+			return;	// nothing to delete/save directory empty or not found.
+		}
+		for (File file: previousSaves) {
 			file.delete();
 		}
-		
 	}
 	
-	public static void saveChardump(Player player){
-		try{
-			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh-mm-ss");
-			String now = sdf.format(new Date());
-			BufferedWriter fileWriter = FileUtil.getWriter("memorials/"+player.getName()+" {Alive}("+now+").life");
+	
+	public static void saveChardump(Player player) {
+		try {
+			File bonesDir = getUserFile(BONES_PATH);
+			String bonesName = getMemorialFileName(player, true);
+			File bonesFile = new File(bonesDir, bonesName);
+			BufferedWriter fileWriter = new BufferedWriter(new FileWriter(bonesFile));
+			
 			GameSessionInfo gsi = player.getGameSessionInfo();
 			gsi.setDeathLevelDescription(player.getLevel().getDescription());
 			String heshe = (player.getSex() == Player.MALE ? "He" : "She");
@@ -344,37 +555,56 @@ public class GameFiles {
 			Game.crash("Error writing the chardump", ioe);
 		}
 	}
-			
-	public static Hashtable getMonsterRecord(){
-		Hashtable ret = new Hashtable();
-        try{
-            BufferedReader lectorArchivo = FileUtil.getReader("graveyard");
-            String line = lectorArchivo.readLine();
-            while (line != null){
-            	String [] regs = line.split(",");
-            	MonsterRecord x = new MonsterRecord();
-            	x.setMonsterID(regs[0]);
-            	x.setKilled(Integer.parseInt(regs[1]));
-            	x.setKillers(Integer.parseInt(regs[2]));
-            	ret.put(x.getMonsterID(), x);
-            	line = lectorArchivo.readLine();
-            }
-            return ret;
-        }catch(IOException ioe){
-        	Game.crash("Invalid or corrupt graveyard", ioe);
-    	}catch(NumberFormatException nfe){
-        	Game.crash("Corrupt graveyard", nfe);
-    	}
-    	return null;
+
+
+	private static String getMemorialFileName(Player player, boolean succeeded) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh-mm-ss");
+		String now = sdf.format(new Date());
+		String live = succeeded ? " {Alive}": "";
+		String bonesName = player.getName()+live+"("+now+").life";
+		return bonesName;
+	}
+
+
+	public static Hashtable<String, MonsterRecord> getMonsterRecord() {
+		Hashtable<String, MonsterRecord> ret = new Hashtable<>();
+		// 'graveyard' isn't an intuitive name. maybe "Hunting Records"? killcounts?
+		File huntRecord = getUserFile(HUNTRECORD_FILE);
+		if (!huntRecord.exists()) {
+			// Create default 'graveyard'. Current default is: blank file.
+			writeToFile("", huntRecord);
+		}
+		
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(huntRecord));
+			String line = br.readLine();
+			while (line != null) {
+				String[] regs = line.split(",");
+				MonsterRecord x = new MonsterRecord();
+				x.setMonsterID(regs[0]);
+				x.setKilled(Integer.parseInt(regs[1]));
+				x.setKillers(Integer.parseInt(regs[2]));
+				ret.put(x.getMonsterID(), x);
+				line = br.readLine();
+			}
+			br.close();
+			return ret;
+		} catch(IOException ioe) {
+			Game.crash("Invalid/corrupt hunt-records.", ioe);
+		} catch (NumberFormatException nfe) {
+			Game.crash("Corrupt hunt-records", nfe);
+		}
+		return null;
 	}
 	
-	public static void updateGraveyard(Hashtable graveyard, GameSessionInfo gsi){
+	
+	public static void updateGraveyard(Hashtable graveyard, GameSessionInfo gsi) {
 		Hashtable session = gsi.getDeathCount();
 		Enumeration keys = session.keys();
-		while (keys.hasMoreElements()){
+		while (keys.hasMoreElements()) {
 			String monsterID = (String) keys.nextElement();
-			MonsterDeath deaths = (MonsterDeath) gsi.getDeathCount().get(monsterID);
-			MonsterRecord record = (MonsterRecord) graveyard.get(monsterID);
+			MonsterDeath deaths = (MonsterDeath)gsi.getDeathCount().get(monsterID);
+			MonsterRecord record = (MonsterRecord)graveyard.get(monsterID);
 			if (record == null){
 				record = new MonsterRecord();
 				record.setMonsterID(monsterID);
@@ -397,19 +627,20 @@ public class GameFiles {
 		}
 		
 		// Save to file
-		try{
-			BufferedWriter fileWriter = FileUtil.getWriter("graveyard");
+		File huntRecordFile = getUserFile(HUNTRECORD_FILE);
+		try {
+			BufferedWriter bw = new BufferedWriter(new FileWriter(huntRecordFile));
 			Enumeration wKeys = graveyard.keys();
 			while (wKeys.hasMoreElements()){
-				MonsterRecord record = (MonsterRecord) graveyard.get(wKeys.nextElement());
-				fileWriter.write(record.getMonsterID()+","+record.getKilled()+","+record.getKillers());
-       			fileWriter.newLine();
+				MonsterRecord record = (MonsterRecord)graveyard.get(wKeys.nextElement());
+				bw.write(record.getMonsterID()+","+record.getKilled()+","+record.getKillers());
+				bw.newLine();
 			}
-            fileWriter.close();
-        }catch(IOException ioe){
-        	ioe.printStackTrace(System.out);
+			bw.close();
+		} catch (IOException ioe) {
+			ioe.printStackTrace(System.out);
 			Game.crash("Invalid or corrupt graveyard", ioe);
-        }
+		}
 		
 	}
 }

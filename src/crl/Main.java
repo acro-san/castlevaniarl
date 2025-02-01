@@ -95,6 +95,9 @@ public class Main {
 	private static UserInterface ui;
 	private static UISelector uiSelector;
 	
+	private static final boolean
+		CHECK_WEB_FOR_NEW_VERSION = false;
+	
 	private static Game currentGame;
 	private static boolean createNew = true;
 	private static int mode;
@@ -229,26 +232,29 @@ public class Main {
         	}
 			Player.initializeWhips("LEATHER_WHIP", "CHAIN_WHIP", "VKILLERW","THORN_WHIP", "FLAME_WHIP", "LIT_WHIP");
 			
-			try {
-				GameVersion latestVersion = GameVersion.getLatestVersion();
-				if (latestVersion == null){
+			if (CHECK_WEB_FOR_NEW_VERSION) {
+				try {
+					GameVersion latestVersion = GameVersion.getLatestVersion();
+					if (latestVersion == null){
+						ui.showVersionDialog("Error checking for updates.", true);
+						System.err.println("null latest version");
+					} else if (latestVersion.equals(GameVersion.getCurrentVersion())){
+						ui.showVersionDialog("You are using the latest available version", false);
+					} else {
+						ui.showVersionDialog("A newer version, "+latestVersion.getCode()+" from "+latestVersion.getFormattedDate()+" is available!", true);
+					}
+				} catch (HttpException ex) {
 					ui.showVersionDialog("Error checking for updates.", true);
-					System.err.println("null latest version");
-				} else if (latestVersion.equals(GameVersion.getCurrentVersion())){
-					ui.showVersionDialog("You are using the latest available version", false);
-				} else {
-					ui.showVersionDialog("A newer version, "+latestVersion.getCode()+" from "+latestVersion.getFormattedDate()+" is available!", true);
+					ex.printStackTrace();
+				} catch (IOException ex) {
+					ui.showVersionDialog("Error checking for updates.", true);
+					ex.printStackTrace();
 				}
-			} catch (HttpException ex) {
-				ui.showVersionDialog("Error checking for updates.", true);
-				ex.printStackTrace();
-			} catch (IOException ex) {
-				ui.showVersionDialog("Error checking for updates.", true);
-				ex.printStackTrace();
 			}
 			createNew = false;
-    	}
+		}
 	}
+	
 	private static Properties configuration;
 	private static Properties UIconfiguration;
 	private static String uiFile;
@@ -275,11 +281,11 @@ public class Main {
 	}
 	
 	
-				
-	private static void	title() {
+	
+	private static void title() {
 		STMusicManagerNew.thus.playKey("TITLE");
 		int choice = Display.thus.showTitleScreen();
-		switch (choice){
+		switch (choice) {
 		case 0:
 			newGame();
 			break;
@@ -296,8 +302,8 @@ public class Main {
 			arena();
 			break;
 		case 5:
-			Display.thus.showHiscores(GameFiles.loadScores("hiscore.tbl"));
-			Display.thus.showHiscores(GameFiles.loadScores("arena.tbl"));
+			Display.thus.showHiscores(GameFiles.loadHighScores());
+			Display.thus.showHiscores(GameFiles.loadArenaScores());
 			title();
 			break;
 		
@@ -306,10 +312,7 @@ public class Main {
 			System.out.println("Thank you for playing!");
 			System.exit(0);
 			break;
-		
 		}
-		
-			
 	}
 	
 	private static void prologue(){
@@ -325,8 +328,8 @@ public class Main {
 		title();
 	}
 	
-	private static void arena(){
-		if (currentGame != null){
+	private static void arena() {
+		if (currentGame != null) {
 			ui.removeCommandListener(currentGame);
 		}
 		currentGame = new Game();
@@ -351,9 +354,8 @@ public class Main {
 		title();
 	}
 	
-	private static void loadGame(){
-		File saveDirectory = new File("savegame");
-		File[] saves = saveDirectory.listFiles(new SaveGameFilenameFilter() );
+	private static void loadGame() {
+		File[] saves = GameFiles.listSaves();
 		
 		int index = Display.thus.showSavedGames(saves);
 		if (index == -1)
@@ -716,17 +718,6 @@ public class Main {
 	public static Hashtable getMonsterRecord() {
 		return monsterRecord;
 	}
-    
-}
-
-class SaveGameFilenameFilter implements FilenameFilter {
-
-	public boolean accept(File arg0, String arg1) {
-		//if (arg0.getName().endsWith(".sav"))
-		if (arg1.endsWith(".sav"))
-			return true;
-		else
-			return false;
-	}
 	
 }
+

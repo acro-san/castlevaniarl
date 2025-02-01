@@ -435,20 +435,21 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 		if (Display.thus.showResumeScreen(player)){
 			GameFiles.saveMemorialFile(player);
 		}
-    }
+	}
 	
     public void informEvent(int code){
     	informEvent(code, null);
     }
 
-    private String [] DEATHMESSAGES = new String[]{
+	private static final String[] DEATHMESSAGES = {
 		"You are dead... and Dracula is still alive",
 		"All hopes are lost.",
 		"It's the end.",
 		"Let us enjoy this evening for pleasure, the night is still young...",
 		"Game Over",
 		"Better luck next time, Son of a Belmont"
-    };
+	};
+	
 	public void informEvent(int code, Object param){
 		Debug.enterMethod(this, "informEvent", code+","+param);
 		switch (code){
@@ -513,12 +514,20 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 		Display.thus.showEndgame(player);
 	}*/
 
-	private void finishGame(){
-		if (!player.isDoNotRecordScore()){
+	private void finishGame() {
+		if (!player.isDoNotRecordScore()) {
 			GameFiles.updateGraveyard(Main.getMonsterRecord(), player.getGameSessionInfo());
-			GameFiles.saveHiScore(player, player.getFlag("ARENA_FIGHTER")?"arena.tbl":"hiscore.tbl");
+			boolean wasArenaMode = player.getFlag("ARENA_FIGHTER");
+			HiScore[] showScores = null;
+			if (wasArenaMode) {
+				GameFiles.saveArenaHighScore(player);
+				showScores = GameFiles.loadArenaScores();
+			} else {
+				GameFiles.saveHighScore(player);
+				showScores = GameFiles.loadHighScores();
+			}
 			resumeScreen();
-			Display.thus.showHiscores(GameFiles.loadScores(player.getFlag("ARENA_FIGHTER")?"arena.tbl":"hiscore.tbl"));
+			Display.thus.showHiscores(showScores);
 		}
 		GameFiles.permadeath(player);
 		exitGame();
