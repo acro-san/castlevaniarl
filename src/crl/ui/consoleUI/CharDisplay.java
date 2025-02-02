@@ -1,39 +1,30 @@
 package crl.ui.consoleUI;
 
-import java.awt.Color;
 import java.io.File;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import javax.swing.JTextArea;
-
 import crl.Main;
+import crl.conf.console.data.CharCuts;
+import crl.data.Text;
+import crl.game.Game;
+import crl.game.MonsterRecord;
+import crl.game.STMusicManagerNew;
+import crl.monster.Monster;
+import crl.npc.Hostage;
 import crl.player.GameSessionInfo;
 import crl.player.HiScore;
 import crl.player.Player;
 import crl.player.advancements.Advancement;
-import crl.ui.CommandListener;
 import crl.ui.Display;
-import crl.ui.UserInterface;
 import crl.ui.consoleUI.cuts.CharChat;
-import crl.ui.graphicsUI.GFXDisplay;
-import crl.monster.Monster;
-import crl.npc.*;
-import crl.conf.console.data.CharCuts;
-import crl.game.Game;
-import crl.game.GameFiles;
-import crl.game.MonsterRecord;
-import crl.game.STMusicManagerNew;
-import crl.item.ItemDefinition;
-import crl.item.ItemDataTable;
 import sz.csi.CharKey;
 import sz.csi.ConsoleSystemInterface;
 import sz.csi.textcomponents.TextBox;
 import sz.util.Position;
 import sz.util.TxtTpl;
-import sz.util.Util;
 
-public class CharDisplay extends Display{
+public class CharDisplay extends Display {
 	private ConsoleSystemInterface si;
 	
 	public CharDisplay(ConsoleSystemInterface si){
@@ -44,31 +35,21 @@ public class CharDisplay extends Display{
 		((ConsoleUserInterface)Main.ui).showPersistantMessageBox = false;
 		si.cls();
 		printBars();
+
 		//Brahms Castle
 		int castlex = 35;
 		int castley = 5;
-		si.print(castlex,castley+0, "                   /\\", ConsoleSystemInterface.BROWN);
-		si.print(castlex,castley+1, "                  |  |", ConsoleSystemInterface.BROWN);
-		si.print(castlex,castley+2, "                  |  |", ConsoleSystemInterface.BROWN);
-		si.print(castlex,castley+3, "                  \\  / .", ConsoleSystemInterface.BROWN);
-		si.print(castlex,castley+4, "                   || / \\", ConsoleSystemInterface.BROWN);
-		si.print(castlex,castley+5, "                  / , | |", ConsoleSystemInterface.BROWN);
-		si.print(castlex,castley+6, "                  | \\/' |.:", ConsoleSystemInterface.BROWN);
-		si.print(castlex,castley+7, "                  ',      |", ConsoleSystemInterface.BROWN);
-		si.print(castlex,castley+8, "                   |      |", ConsoleSystemInterface.BROWN);
-		si.print(castlex,castley+9, "                  /      <", ConsoleSystemInterface.BROWN);
-		si.print(castlex,castley+10, "                  |       |", ConsoleSystemInterface.BROWN);
-		si.print(castlex,castley+11, "                 ,'       `\\", ConsoleSystemInterface.BROWN);
-		si.print(castlex,castley+12, "               _.|          \\__", ConsoleSystemInterface.BROWN);
-		si.print(castlex,castley+13, "__....__     ,'                `'--.", ConsoleSystemInterface.BROWN);
-		si.print(castlex,castley+14, "        `''''                       `''", ConsoleSystemInterface.BROWN);
-		si.print(20,12, "a. New Game", ConsoleSystemInterface.WHITE);
-		si.print(20,13, "b. Journey Onward", ConsoleSystemInterface.WHITE);
-		si.print(20,14, "c. View Prologue", ConsoleSystemInterface.WHITE);
-		si.print(20,15, "d. Training", ConsoleSystemInterface.WHITE);
-		si.print(20,16, "e. Prelude Arena", ConsoleSystemInterface.WHITE);
-		si.print(20,17, "f. Show HiScores", ConsoleSystemInterface.WHITE);
-		si.print(20,18, "g. Quit", ConsoleSystemInterface.WHITE);
+		for (String c: Text.TUI_CASTLE) {
+			si.print(castlex,castley, c, ConsoleSystemInterface.BROWN);
+			castley++;
+		}	// (15 lines ascii art)
+
+		int titleMenuX = 20;
+		int titleMenuY = 12;
+		for (String optionTxt: Text.TITLE_MENU) {
+			si.print(titleMenuX, titleMenuY, optionTxt, ConsoleSystemInterface.WHITE);
+			titleMenuY++;	// goes to 18, with 7 titlemenu items.
+		}
 		
 		// CRL Logo
 		int logox = 20;
@@ -79,26 +60,29 @@ public class CharDisplay extends Display{
 		si.print(logox+5,logoy, "/\\", ConsoleSystemInterface.YELLOW);
 		si.print(logox+5,logoy+1, "|astlevaniaRL", ConsoleSystemInterface.YELLOW);
 		si.print(logox+5,logoy+2, "\\/", ConsoleSystemInterface.YELLOW);
-		String messageX = "'CastleVania' is a trademark of Konami Corporation.";
-		si.print((80 - messageX.length()) / 2,20, messageX, ConsoleSystemInterface.DARK_RED);
-		messageX = "CastlevaniaRL v"+Game.getVersion()+", Developed by Santiago Zapata 2005-2024";
-		si.print((80 - messageX.length()) / 2,21, messageX, ConsoleSystemInterface.WHITE);
-		messageX = "Midi Tracks by Jorge E. Fuentes, JiLost, Nicholas and Tom Kim";
-		si.print((80 - messageX.length()) / 2,22, messageX, ConsoleSystemInterface.WHITE);
+		
+		String t = Text.TITLE_DISCLAIMER;
+		si.print((80 - t.length()) / 2, 20, t, ConsoleSystemInterface.DARK_RED);
+		t = Text.TITLE_GAME_VER_DEV;
+		si.print((80 - t.length()) / 2, 21, t, ConsoleSystemInterface.WHITE);
+		t = Text.TITLE_MUSICCREDIT;
+		si.print((80 - t.length()) / 2, 22, t, ConsoleSystemInterface.WHITE);
 
 		si.refresh();
-    	STMusicManagerNew.thus.playKey("TITLE");
-    	CharKey x = new CharKey(CharKey.NONE);
+		STMusicManagerNew.thus.playKey("TITLE");
+		CharKey x = new CharKey(CharKey.NONE);
+		// TODO process menu-defined keycodes based on menu itself? ...
 		while (x.code != CharKey.A && x.code != CharKey.a &&
 				x.code != CharKey.B && x.code != CharKey.b &&
 				x.code != CharKey.C && x.code != CharKey.c &&
 				x.code != CharKey.E && x.code != CharKey.e &&
 				x.code != CharKey.D && x.code != CharKey.d &&
 				x.code != CharKey.G && x.code != CharKey.g &&
-				x.code != CharKey.F && x.code != CharKey.f)
+				x.code != CharKey.F && x.code != CharKey.f) {
 			x = si.inkey();
+		}
 		si.cls();
-		switch (x.code){
+		switch (x.code) {
 		case CharKey.A: case CharKey.a:
 			return 0;
 		case CharKey.B: case CharKey.b:
@@ -115,10 +99,10 @@ public class CharDisplay extends Display{
 			return 6;
 		}
 		return 0;
-		
 	}
 	
-	public void showIntro(Player player){
+	
+	public void showIntro(Player player) {
 		si.cls();
 		printBars();
 		si.print(32,2, "Prologue", ConsoleSystemInterface.DARK_RED);
@@ -128,17 +112,14 @@ public class CharDisplay extends Display{
 		tb1.setHeight(3);
 		tb1.setWidth(76);
 		tb1.setForeColor(ConsoleSystemInterface.RED);
-		tb1.setText("In the year of 1691, a dark castle emerges from the cursed soils of the plains of Transylvannia."+
-				" Chaos and death spread along the land, as the evil count Dracula unleases his powers, turning it into a pool of blood");
+		tb1.setText(Text.PROLOGUE_LINE0);
 		
 		TextBox tb2 = new TextBox(si);
 		tb2.setPosition(2,8);
 		tb2.setHeight(4);
 		tb2.setWidth(76);
 		tb2.setForeColor(ConsoleSystemInterface.RED);
-		tb2.setText("The trip to the castle was long and harsh, after enduring many challenges through all Transylvannia, "+
-		"you are close to the castle of chaos. You are almost at Castlevania, and you are here on business: " + 
-		"To destroy forever the Curse of the Evil Count.");
+		tb2.setText(Text.PROLOGUE_LINE1);
 		
 		TextBox tb = new TextBox(si);
 		tb.setPosition(2,13);

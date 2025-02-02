@@ -289,7 +289,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		int mapY = sh - 60 - (lh * 3);
 		Graphics2D g = si.getGraphics2D();
 		Color cellColor = null;
-		long t0 = System.nanoTime();
+		//long t0 = System.nanoTime();
 		Position pp = player.getPosition();
 		final int
 			px = pp.x,
@@ -332,9 +332,9 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 			}
 		}
 		mmRedrawCount++;
-		long mmdrawTNanos = System.nanoTime() - t0;
-		double dtimeMicros = (double)mmdrawTNanos / 1000;
-		System.out.format("mmdraw[%05d]: %3.3fus\n", mmRedrawCount, dtimeMicros);
+		//long mmdrawTNanos = System.nanoTime() - t0;
+		//double dtimeMicros = (double)mmdrawTNanos / 1000;
+		//System.out.format("mmdraw[%05d]: %3.3fus\n", mmRedrawCount, dtimeMicros);
 	}
 	
     private void enterScreen(){

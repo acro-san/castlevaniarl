@@ -25,42 +25,50 @@ import crl.player.HiScore;
 import crl.player.Player;
 import crl.player.advancements.Advancement;
 import crl.ui.Display;
-import crl.ui.UserInterface;
 import crl.ui.graphicsUI.components.GFXChatBox;
 import crl.monster.Monster;
 import crl.npc.*;
 import crl.conf.gfx.data.GFXConfiguration;
 import crl.conf.gfx.data.GFXCuts;
+import crl.data.Text;
 import crl.game.Game;
 import crl.game.MonsterRecord;
 
-public class GFXDisplay extends Display{
+public class GFXDisplay extends Display {
+	
 	private SwingSystemInterface si;
 	
-	private String IMG_TITLE;  
-	private String IMG_PROLOGUE;
-	private String IMG_RESUME;
-	private String IMG_ENDGAME;
-	private String IMG_HISCORES;
-	//private String IMG_HELP;
-	private String IMG_SAVED;
-	private String IMG_LEVEL_UP;
-	public static String IMG_FRAME;
-	public static Font FNT_TEXT;
-	public static Font FNT_PROLOGUE;
-	public static Font FNT_TITLE;
-	public static Font FNT_DIALOGUEIN;
-	public static Font FNT_MONO;
-	private BufferedImage IMG_MAP;
-	private BufferedImage IMG_MAPMARKER;
-	private BufferedImage IMG_PICKER;
-	private BufferedImage IMG_BORDERS;
-		
+	private String
+		IMG_TITLE,
+		IMG_PROLOGUE,
+		IMG_RESUME,
+		IMG_ENDGAME,
+		IMG_HISCORES,
+		//IMG_HELP;
+		IMG_SAVED,
+		IMG_LEVEL_UP;
+	
+	public static String
+		IMG_FRAME;
+	
+	public static Font
+		FNT_TEXT,
+		FNT_PROLOGUE,
+		FNT_TITLE,
+		FNT_DIALOGUEIN,
+		FNT_MONO;
+	
+	private BufferedImage
+		IMG_MAP,
+		IMG_MAPMARKER,
+		IMG_PICKER,
+		IMG_BORDERS;
+	
 	public static Color COLOR_BOLD;
 	
 	protected GFXConfiguration configuration;
 	
-	private void initProperties(Properties p){
+	private void initProperties(Properties p) {
 		IMG_TITLE = p.getProperty("IMG_TITLE");
 		IMG_PROLOGUE = p.getProperty("IMG_PROLOGUE");
 		IMG_RESUME = p.getProperty("IMG_RESUME");
@@ -82,11 +90,11 @@ public class GFXDisplay extends Display{
 			FNT_PROLOGUE = PropertyFilters.getFont(p.getProperty("FNT_PROLOGUE"), p.getProperty("FNT_PROLOGUE_SIZE"));
 			FNT_DIALOGUEIN  = FNT_TEXT;
 			FNT_MONO = PropertyFilters.getFont(p.getProperty("FNT_MONO"), p.getProperty("FNT_MONO_SIZE"));
-		} catch (FontFormatException ffe){
+		} catch (FontFormatException ffe) {
 			Game.crash("Error loading the font", ffe);
-		} catch (IOException ioe){
+		} catch (IOException ioe) {
 			Game.crash("Error loading the font", ioe);
-		} catch (Exception e){
+		} catch (Exception e) {
 			Game.crash("Error loading images", e);
 		}
 	}
@@ -95,7 +103,7 @@ public class GFXDisplay extends Display{
 
 	private GFXChatBox gfxChatBox;
 	
-	public GFXDisplay(SwingSystemInterface si, Properties p, GFXConfiguration configuration){
+	public GFXDisplay(SwingSystemInterface si, Properties p, GFXConfiguration configuration) {
 		this.configuration = configuration;
 		initProperties(p);
 		this.si = si;
@@ -127,46 +135,47 @@ public class GFXDisplay extends Display{
 			
 			gfxChatBox.setBounds(50,20,700,220);
 			gfxChatBox.setVisible(false);
+		} catch (Exception e) {
+			Game.crash("Error loading UI data", e);
 		}
-		 catch (Exception e){
-			 Game.crash("Error loading UI data", e);
-		 }
-		 si.add(addornedTextArea);
-		 si.add(gfxChatBox);
+		si.add(addornedTextArea);
+		si.add(gfxChatBox);
 	}
+	
 	
 	public int showTitleScreen() {
 		double scale = configuration.getScreenScale();
-		int middlePoint = configuration.getScreenWidth() / 2;
-		int pickerXCoordinate = (configuration.getScreenWidth() / 2) - (IMG_PICKER.getWidth() / 2);
+		int centreX = configuration.getScreenWidth() / 2;
+		int pickerX = (configuration.getScreenWidth() / 2) - (IMG_PICKER.getWidth() / 2);
 		GFXUserInterface gui = (GFXUserInterface)Main.ui;
 		gui.messageBox.setVisible(false);
 		gui.persistantMessageBox.setVisible(false);
 		si.setFont(FNT_TEXT);
 		si.drawImage(IMG_TITLE);
 
-		si.printAtPixelCentered(middlePoint, (int)(530*scale), "'CastleVania' is a trademark of Konami Corporation.", GFXDisplay.COLOR_BOLD);
-		si.printAtPixelCentered(middlePoint, (int)(555*scale), "CastlevaniaRL v"+Game.getVersion()+", Developed by Santiago Zapata 2005-2007, 2010, 2024", Color.WHITE);
-		si.printAtPixelCentered(middlePoint, (int)(570*scale), "Artwork by Christopher Barrett, 2006-2007", Color.WHITE);
-		si.printAtPixelCentered(middlePoint, (int)(585*scale), "Midi Tracks by Jorge E. Fuentes, JiLost, Nicholas and Tom Kim", Color.WHITE);
+		si.printAtPixelCentered(centreX, (int)(530*scale), "'CastleVania' is a trademark of Konami Corporation.", GFXDisplay.COLOR_BOLD);
+		si.printAtPixelCentered(centreX, (int)(555*scale), "CastlevaniaRL v"+Game.getVersion()+", Developed by Santiago Zapata 2005-2007, 2010, 2024", Color.WHITE);
+		si.printAtPixelCentered(centreX, (int)(570*scale), "Artwork by Christopher Barrett, 2006-2007", Color.WHITE);
+		si.printAtPixelCentered(centreX, (int)(585*scale), "Midi Tracks by Jorge E. Fuentes, JiLost, Nicholas and Tom Kim", Color.WHITE);
 		CharKey x = new CharKey(CharKey.NONE);
-    	int choice = 0;
-    	si.saveBuffer();
-    	while (true) {
-    		si.restore();
-
-    		si.drawImage(pickerXCoordinate, (int)((356+choice*20)*scale), IMG_PICKER);
-    		si.printAtPixelCentered(middlePoint,(int)(368*scale), "a. New Game", Color.WHITE);
-    		
-    		si.printAtPixelCentered(middlePoint,(int)(388*scale), "b. Load Character", Color.WHITE);
-    		
-    		si.printAtPixelCentered(middlePoint,(int)(408*scale), "c. View Prologue", Color.WHITE);
-    		si.printAtPixelCentered(middlePoint,(int)(428*scale), "d. Training", Color.WHITE);
-    		si.printAtPixelCentered(middlePoint,(int)(448*scale), "e. Prelude Arena", Color.WHITE);
-    		si.printAtPixelCentered(middlePoint,(int)(468*scale), "f. Show HiScores", Color.WHITE);
-    		si.printAtPixelCentered(middlePoint,(int)(488*scale), "g. Quit", Color.WHITE);
-    		si.refresh();
-			while (x.code != CharKey.A && x.code != CharKey.a &&
+		int choice = 0;
+		si.saveBuffer();
+		final int ROWHEIGHT = 20;
+		while (true) {
+			si.restore();
+			
+			si.drawImage(pickerX, (int)((356+choice*ROWHEIGHT)*scale), IMG_PICKER);	// TitleMenu-Selection-Bar.
+			
+			// 356 is...? And then the text is getting drawn at 368 - so, is that 356+12? 12 being... txt descent?
+			// is 356 just an eyeballed menu y position?? TODO: debug outlines and mouse picking logic also.
+			int tmenuTxtY = 356+12;	// 368. thereafter add rowheights. and: *scale... why's that?
+			for (String tItem: Text.TITLE_MENU) {
+				si.printAtPixelCentered(centreX,(int)(tmenuTxtY*scale), tItem, Color.WHITE);
+				tmenuTxtY += ROWHEIGHT;
+			}
+			si.refresh();
+			
+			while (	x.code != CharKey.A && x.code != CharKey.a &&
 					x.code != CharKey.B && x.code != CharKey.b &&
 					x.code != CharKey.C && x.code != CharKey.c &&
 					x.code != CharKey.D && x.code != CharKey.d &&
@@ -175,32 +184,48 @@ public class GFXDisplay extends Display{
 					x.code != CharKey.F && x.code != CharKey.f &&
 					x.code != CharKey.UARROW && x.code != CharKey.DARROW &&
 					x.code != CharKey.SPACE && x.code != CharKey.ENTER)
+			{
 				x = si.inkey();
-			switch (x.code){
-			case CharKey.A: case CharKey.a:
+			}
+			switch (x.code) {
+			case CharKey.A:
+			case CharKey.a:
 				return 0;
-			case CharKey.B: case CharKey.b:
+			case CharKey.B:
+			case CharKey.b:
 				return 1;
-			case CharKey.C: case CharKey.c:
+			case CharKey.C:
+			case CharKey.c:
 				return 2;
-			case CharKey.D: case CharKey.d:
+			case CharKey.D:
+			case CharKey.d:
 				return 3;
-			case CharKey.E: case CharKey.e:
+			case CharKey.E: 
+			case CharKey.e:
 				return 4;
-			case CharKey.F: case CharKey.f:
+			case CharKey.F:
+			case CharKey.f:
 				return 5;
-			case CharKey.G: case CharKey.g:
+			case CharKey.G:
+			case CharKey.g:
 				return 6;
 			case CharKey.UARROW:
-				if (choice > 0)
+				if (choice > 0) {
 					choice--;
+				} else if (choice == 0) {
+					choice = Text.TITLE_MENU.length-1;
+				}
 				break;
 			case CharKey.DARROW:
-				if (choice < 6)
+				if (choice < Text.TITLE_MENU.length-1) {
 					choice++;
+				} else if (choice == Text.TITLE_MENU.length-1) {
+					choice = 0;	// wrap
+				}
 				break;
-			case CharKey.SPACE: case CharKey.ENTER:
-				return choice;
+			case CharKey.SPACE:
+			case CharKey.ENTER:
+				return choice;	// Only if choice active/enabled (not disabled?)
 			}
 			x.code = CharKey.NONE;
 		}
