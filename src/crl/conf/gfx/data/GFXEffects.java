@@ -21,7 +21,7 @@ import crl.ui.graphicsUI.effects.GFXSequentialEffect;
 import crl.ui.graphicsUI.effects.GFXSplashEffect;
 
 public class GFXEffects {
-	private Vector<Position> SFX_BIBLE_STEPS = new Vector<Position>(10);
+	private Vector<Position> SFX_BIBLE_STEPS = new Vector<>(55);
 	private BufferedImage IMG_EFFECTS;
 	
 	private BufferedImage[][] CURVED_FRAMES;
@@ -94,7 +94,7 @@ public class GFXEffects {
 	}
 
 	private BufferedImage createSlashFrame(BufferedImage tileset, int baseX, int baseY, int baseWidth, int baseHeight) {
-		int effectsScale = this.configuration.effectsScale;
+		int effectsScale = configuration.effectsScale;
 		try {
 			return ImageUtils.crearImagen(
 				tileset,
@@ -263,63 +263,19 @@ public class GFXEffects {
 		STR_FRAMES[7][3] = ImageUtils.hFlip(STR_FRAMES[2][3]);
 		STR_FRAMES[7][4] = ImageUtils.hFlip(STR_FRAMES[2][4]);
 		
-		SFX_BIBLE_STEPS.add(new Position(1,0));
-		SFX_BIBLE_STEPS.add(new Position(2,-1));
-		SFX_BIBLE_STEPS.add(new Position(1,-2));
-		SFX_BIBLE_STEPS.add(new Position(0,-2));
-		SFX_BIBLE_STEPS.add(new Position(-1,-2));
-		SFX_BIBLE_STEPS.add(new Position(-2,-1));
-		SFX_BIBLE_STEPS.add(new Position(-2,0));
-		SFX_BIBLE_STEPS.add(new Position(-2,1));
-		SFX_BIBLE_STEPS.add(new Position(-1,2));
-		SFX_BIBLE_STEPS.add(new Position(0,2));
-		SFX_BIBLE_STEPS.add(new Position(1,2));
-		SFX_BIBLE_STEPS.add(new Position(2,2));
-		SFX_BIBLE_STEPS.add(new Position(3,1));
-		SFX_BIBLE_STEPS.add(new Position(4,0));
-		SFX_BIBLE_STEPS.add(new Position(4,-1));
-		SFX_BIBLE_STEPS.add(new Position(4,-2));
-		SFX_BIBLE_STEPS.add(new Position(4,-3));
-		SFX_BIBLE_STEPS.add(new Position(3,-4));
-		SFX_BIBLE_STEPS.add(new Position(2,-4));
-		SFX_BIBLE_STEPS.add(new Position(1,-4));
-		SFX_BIBLE_STEPS.add(new Position(0,-4));
-		SFX_BIBLE_STEPS.add(new Position(-1,-4));
-		SFX_BIBLE_STEPS.add(new Position(-2,-4));
-		SFX_BIBLE_STEPS.add(new Position(-3,-3));
-		SFX_BIBLE_STEPS.add(new Position(-4,-2));
-		SFX_BIBLE_STEPS.add(new Position(-4,-1));
-		SFX_BIBLE_STEPS.add(new Position(-4,0));
-		SFX_BIBLE_STEPS.add(new Position(-4,1));
-		SFX_BIBLE_STEPS.add(new Position(-4,2));
-		SFX_BIBLE_STEPS.add(new Position(-3,3));
-		SFX_BIBLE_STEPS.add(new Position(-2,4));
-		SFX_BIBLE_STEPS.add(new Position(-1,4));
-		SFX_BIBLE_STEPS.add(new Position(0,4));
-		SFX_BIBLE_STEPS.add(new Position(1,4));
-		SFX_BIBLE_STEPS.add(new Position(2,4));
-		SFX_BIBLE_STEPS.add(new Position(3,4));
-		SFX_BIBLE_STEPS.add(new Position(4,3));
-		SFX_BIBLE_STEPS.add(new Position(5,2));
-		SFX_BIBLE_STEPS.add(new Position(6,1));
-		SFX_BIBLE_STEPS.add(new Position(6,0));
-		SFX_BIBLE_STEPS.add(new Position(6,-1));
-		SFX_BIBLE_STEPS.add(new Position(6,-2));
-		SFX_BIBLE_STEPS.add(new Position(6,-3));
-		SFX_BIBLE_STEPS.add(new Position(6,-4));
-		SFX_BIBLE_STEPS.add(new Position(5,-5));
-		SFX_BIBLE_STEPS.add(new Position(4,-6));
-		SFX_BIBLE_STEPS.add(new Position(3,-7));
-		SFX_BIBLE_STEPS.add(new Position(2,-8));
-		SFX_BIBLE_STEPS.add(new Position(1,-9));
-		SFX_BIBLE_STEPS.add(new Position(0,-10));
-		SFX_BIBLE_STEPS.add(new Position(-1,-11));
-		SFX_BIBLE_STEPS.add(new Position(-2,-12));
-		SFX_BIBLE_STEPS.add(new Position(-3,-13));
-		SFX_BIBLE_STEPS.add(new Position(-4,-14));
-		SFX_BIBLE_STEPS.add(new Position(-5,-15));
-		SFX_BIBLE_STEPS.add(new Position(-6,-16));
-	}	
+		final int[] bibleCoords = new int[] {
+			 1,0,	2,-1,	1,-2,	0,-2,	-1,-2,	-2,-1,	-2,0,	-2,1,
+			-1,2,	0 ,2,	1, 2,	2,2,	3,1,	4,0,	4,-1,	4,-2,
+			4,-3,	3,-4,	2,-4,	1,-4,	0,-4,	-1,-4,	-2,-4,	-3,-3,
+			-4,-2,	-4,-1,	-4,0,	-4,1,	-4,2,	-3,3,	-2,4,	-1,4,
+			0,4,	1,4,	2,4,	3,4,	4,3,	5,2,	6,1,	6,0,
+			6,-1,	6,-2,	6,-3,	6,-4,	5,-5,	4,-6,	3,-7,	2,-8,
+			1,-9,	0,-10,	-1,-11,	-2,-12,	-3,-13,	-4,-14,	-5,-15,	-6,-16
+		};
+		for (int i=0; i<bibleCoords.length; i +=2) {
+			SFX_BIBLE_STEPS.add(new Position(bibleCoords[i], bibleCoords[i+1]));
+		}
+	}
 	
 	private BufferedImage[] load(int frames, int xpos, int ypos) {
 		int effectsScale = this.configuration.effectsScale;
@@ -400,12 +356,12 @@ public class GFXEffects {
 		return load(1, xpos, ypos);
 	}
 	
-	private GFXEffect [] effects;
+	private GFXEffect[] effects;
 	
 	
 	protected void LoadEffects() {
 		effects = new GFXEffect[] {
-			//Animated Missile Effects			
+			//Animated Missile Effects
 			new GFXAnimatedMissileEffect("SFX_CHARGE_BALL", load2(0,0), 50, configuration),
 			new GFXAnimatedEffect("SFX_HOMING_BALL",load2(2,0), 60, configuration),
 			new GFXDirectionalMissileEffect("SFX_METEORBALL", load8(8,0), 30, configuration),

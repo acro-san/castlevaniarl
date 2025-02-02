@@ -4,8 +4,6 @@ package crl.level;
 import java.io.Serializable;
 import java.util.*;
 
-import javax.swing.JOptionPane;
-
 import sz.fov.*;
 import sz.util.*;
 
@@ -20,11 +18,10 @@ import crl.feature.*;
 import crl.game.Game;
 import crl.actor.*;
 import crl.cuts.Unleasher;
-import crl.data.Cells;
 import crl.player.*;
 import crl.levelgen.*;
 
-public class Level implements FOVMap, Serializable{
+public class Level implements FOVMap, Serializable {
 	private String ID;
 	private Unleasher[] unleashers = new Unleasher[]{};
 	private Cell[][][] map;
@@ -49,8 +46,10 @@ public class Level implements FOVMap, Serializable{
 	private Hashtable bloods = new Hashtable();
 	private Hashtable frosts = new Hashtable();
 	private Hashtable items = new Hashtable();
-	private Hashtable exits = new Hashtable();
-	private Hashtable exitPositions = new Hashtable();
+	
+	private Hashtable<String, Position> exits = new Hashtable<>();
+	private Hashtable<Integer, String> exitPositions = new Hashtable<>();
+	// FIXME: Integer, String. also WHY STRING FFS?
 	
 	private Hashtable hashCounters = new Hashtable();
 	
@@ -61,7 +60,10 @@ public class Level implements FOVMap, Serializable{
 	
 	public void addExit(Position where, String levelID){
 		exits.put(levelID, where);
-		exitPositions.put(where.toString(), levelID);
+		/// int posHash = where.hashCode();	// This override of hashCode STILL uses STRING! why!?
+		// what's max map dims? Since large x,y values shouldn't be possible...
+		// how about hashing them into an int?
+		exitPositions.put(where.ihash(), levelID);
 	}
 	
 	public Position getExitFor(String levelID){
@@ -173,22 +175,33 @@ public class Level implements FOVMap, Serializable{
 		return messagesneffects;
 	}
 
-	public Cell getMapCell(int x, int y, int z){
-		if (z<map.length && x<map[0].length && y < map[0][0].length && x >= 0 && y >= 0 && z >= 0)
-			return map[z][x][y];
-		else return null;
-	}
-
-	public Feature getFeatureAt(Position x){
-		return features.getFeatureAt(x);
+	public Cell getMapCell(int x, int y) {
+		return getMapCell(x, y, 0);
 	}
 	
-	public Feature[] getFeaturesAt(Position x){
-		return features.getFeaturesAt(x);
+	public Cell getMapCell(int x, int y, int z) {
+		if (z >= 0 && z<map.length &&
+			x >= 0 && x<map[0].length &&
+			y >= 0 && y <map[0][0].length) {
+			return map[z][x][y];
+		}
+		return null;
+	}
+
+	public Feature getFeatureAt(int x, int y) {
+		return features.getFeatureAt(x, y);
+	}
+	
+	public Feature getFeatureAt(Position p){
+		return features.getFeatureAt(p);
+	}
+	
+	public Feature[] getFeaturesAt(Position p){
+		return features.getFeaturesAt(p);
 	}
 	
 	Position tempFeaturePosition = new Position(0,0);
-	public Feature getFeatureAt(int x, int y, int z){
+	public Feature getFeatureAt(int x, int y, int z) {
 		tempFeaturePosition.x = x;
 		tempFeaturePosition.y = y;
 		tempFeaturePosition.z = z;
@@ -776,9 +789,10 @@ public class Level implements FOVMap, Serializable{
 	
 	public void anihilate(){
 		smartFeatures.clear();
-		Vector mounds = features.getAllOf("MOUND");
-		for (int i = 0; i < mounds.size(); i++)
-			features.removeFeature((Feature)mounds.elementAt(i));
+		Vector<Feature> mounds = features.getAllOf("MOUND");
+		for (int i = 0; i < mounds.size(); i++) {
+			features.removeFeature(mounds.elementAt(i));
+		}
 		monsters.removeAll();
 		dispatcher.removeAll();
 		dispatcher.addActor(player);
@@ -787,7 +801,7 @@ public class Level implements FOVMap, Serializable{
 	private boolean isRutinary = true;
 	
 	
-	public void anihilateMonsters(){
+	public void anihilateMonsters() {
 		for (int i = 0; i < monsters.size(); i++){
 			if (boss != null && monsters.elementAt(i)==boss)
 				continue;
@@ -803,9 +817,10 @@ public class Level implements FOVMap, Serializable{
 	}
 	
 	public void destroyCandles(){
-		Vector candles = features.getAllOf("CANDLE");
-		for (int i = 0; i < candles.size(); i++)
-			destroyFeature((Feature)candles.elementAt(i));
+		Vector<Feature> candles = features.getAllOf("CANDLE");
+		for (int i = 0; i < candles.size(); i++) {
+			destroyFeature(candles.elementAt(i));
+		}
 	}
 	
 	public boolean isDay(){
@@ -1062,14 +1077,18 @@ public class Level implements FOVMap, Serializable{
 		return getExitOn(pos) != null;
 	}
 	
-	public String getExitOn(Position pos){
-		return (String)exitPositions.get(pos.toString());
+	
+	public String getExitOn(Position pos) {
+		return (String)exitPositions.get(pos.ihash());	// FIXME RLY!?!!?
+	}
+	
+	// exit struct, rather than str? or is this str an ID?
+	public String getExitOn(int x, int y) {
+		return (String)exitPositions.get(Position.ihash(x,y,0));
 	}
 	
 	
-	
-	
-	public MonsterSpawnInfo[] getSpawnInfo (){
+	public MonsterSpawnInfo[] getSpawnInfo() {
 		return inhabitants;
 	}
 

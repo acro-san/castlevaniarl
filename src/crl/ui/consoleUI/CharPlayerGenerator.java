@@ -3,6 +3,7 @@ package crl.ui.consoleUI;
 import sz.csi.CharKey;
 import sz.csi.ConsoleSystemInterface;
 import sz.csi.textcomponents.TextBox;
+import sz.util.TxtTpl;
 import crl.Main;
 import crl.game.PlayerGenerator;
 import crl.player.Player;
@@ -68,7 +69,7 @@ public class CharPlayerGenerator extends PlayerGenerator{
     	int choice = 0;
     	while (true){
     		txtClassDescription.clear();
-    		txtClassDescription.setText(CLASS_DESCRIPTIONS[choice]);
+    		txtClassDescription.setText(TxtTpl.t(name,sex,CLASS_DESCRIPTIONS[choice]));
     		txtClassDescription.draw();
     		si.print(2,6+choice,"*", ConsoleSystemInterface.RED);
     		si.print(35,7,apps[choice].getChar(), apps[choice].getColor());

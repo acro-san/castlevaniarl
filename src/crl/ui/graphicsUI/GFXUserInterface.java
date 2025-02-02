@@ -77,34 +77,34 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 	
 	// Relations
 
- 	private transient SwingSystemInterface si;
+	private transient SwingSystemInterface si;
 
- 	private Font FNT_MESSAGEBOX;
- 	private Font FNT_PERSISTANTMESSAGEBOX;
- 	
-	private BufferedImage 
-		HEALTH_RED, 
+	private Font FNT_MESSAGEBOX;
+	private Font FNT_PERSISTANTMESSAGEBOX;
+	
+	private BufferedImage
+		HEALTH_RED,
 		HEALTH_DARK_RED,
-		HEALTH_MAGENTA, 
-		HEALTH_WHITE, 
+		HEALTH_MAGENTA,
+		HEALTH_WHITE,
 		HEALTH_YELLOW,
-		HEALTH_BROWN, 
+		HEALTH_BROWN,
 		HEALTH_PURPLE,
 
 		HEART_TILE,
-		GOLD_TILE, 
+		GOLD_TILE,
 		KEY_TILE,
 		
 		TILE_MORNING_TIME,
 		TILE_NOON_TIME,
-    	TILE_AFTERNOON_TIME,
-    	TILE_DUSK_TIME,
-    	TILE_NIGHT_TIME,
+		TILE_AFTERNOON_TIME,
+		TILE_DUSK_TIME,
+		TILE_NIGHT_TIME,
 		TILE_DAWN_TIME,
 	
-    	TILE_NO_SHOT,
-    	TILE_SHOT_II,
-    	TILE_SHOT_III,
+		TILE_NO_SHOT,
+		TILE_SHOT_II,
+		TILE_SHOT_III,
 
 		TILE_LINE_STEPS, 
 		TILE_LINE_AIM,
@@ -138,86 +138,80 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		IMG_NO_BTN,
 		
 		IMG_ICON;
-	private Color 
+	
+	private Color
 		COLOR_BORDER_OUT, COLOR_BORDER_IN, COLOR_WINDOW_BACKGROUND;
 	private Color
 		COLOR_LAST_MESSAGE = Color.WHITE,
 		COLOR_OLD_MESSAGE = Color.GRAY;
-	private final static Color
+	
+	private static final Color
 		WATERCOLOR_BLOCKED = new Color(0,50, 100, 200),
 		WATERCOLOR = new Color(0,70, 120, 200),
 		RAINCOLOR = new Color(180,200, 250, 100),
 		THUNDERCOLOR = new Color(180,200, 200, 150),
-		FOGCOLOR = new Color(200,200, 200, 200);
+		FOGCOLOR = new Color(200,200, 200, 200),
+		
+		TRANSPARENT_GRAY = new Color(20,20,20,180),
+		MAP_NOSOLID_LOS = new Color(204,182,116),
+		MAP_NOSOLID = new Color(148,122,60),
+		MAP_SOLID = new Color(180,154,68),
+		MINIMAP_WATER = new Color(100,123,130),//new Color(65,103,135),
+		MINIMAP_WATER_FOW = new Color(67,92,102);//new Color(10,81,116);	// in 'fog of war' (non-LoS)
+
 	
 	protected GFXConfiguration configuration;
 	
-	/**
-	 * Default constructor
-	 * 
-	 * @param configuration Configuration for this user interface
-	 */
 	public GFXUserInterface(GFXConfiguration configuration) {
 		this.configuration = configuration;
 	}
-	
-	// Setters
-	/** Sets the object which will be informed of the player commands.
-     * this corresponds to the Game object */
-	
-	//Getters
 
-    // Smart Getters
-    public Position getAbsolutePosition(Position insideLevel){
-    	Position relative = Position.subs(insideLevel, player.getPosition());
+
+	public Position getAbsolutePosition(Position insideLevel) {
+		Position relative = Position.subs(insideLevel, player.getPosition());
 		return Position.add(PC_POS, relative);
 	}
 
 	/*public Position
-				VP_START = new Position(0,0),
-				VP_END = new Position (31,18),
-				PC_POS = new Position (12,9);*/
-				
-    public Position
-				VP_START = new Position(0,0),
-				VP_END = new Position (5,5),
-				PC_POS = new Position (3,3);
+		VP_START = new Position(0,0),
+		VP_END = new Position (31,18),
+		PC_POS = new Position (12,9);*/
+	
+	public Position
+		VP_START = new Position(0,0),
+		VP_END = new Position (5,5),
+		PC_POS = new Position (3,3);
 
-    public void setFlipFacing(boolean val){
-    	flipFacing = val;
-    }
+	public void setFlipFacing(boolean val){
+		flipFacing = val;
+	}
 
-    private boolean [][] FOVMask;
-    
-    private Image getImageForMystic(int mysticID){
-    	switch (mysticID){
-    	case Player.AXE:
-    		return IMG_AXE;
-    	case Player.BIBLE:
-    		return IMG_BIBLE;
-    	case Player.CROSS:
-    		return IMG_CROSS;
-    	case Player.DAGGER:
-    		return IMG_DAGGER;
-    	case Player.HOLY:
-    		return IMG_HOLY;
-    	case Player.SACRED_CRYSTAL:
-    		return IMG_CRYSTAL;
-    	case Player.SACRED_FIST:
-    		return IMG_FIST;
-    	case Player.STOPWATCH:
-    		return IMG_STOPWATCH;
-    	}
-    	return null;
-    }
-  
-    
-    
-    private Color TRANSPARENT_GRAY = new Color(20,20,20,180);
-    private Color MAP_NOSOLID_LOS = new Color(204,182,116);
-    private Color MAP_NOSOLID = new Color(148,122,60);
-    private Color MAP_SOLID = new Color(180,154,68);
-    private void examineLevelMap(){
+	private boolean [][] FOVMask;
+	
+	private Image getImageForMystic(int mysticID){
+		switch (mysticID){
+		case Player.AXE:
+			return IMG_AXE;
+		case Player.BIBLE:
+			return IMG_BIBLE;
+		case Player.CROSS:
+			return IMG_CROSS;
+		case Player.DAGGER:
+			return IMG_DAGGER;
+		case Player.HOLY:
+			return IMG_HOLY;
+		case Player.SACRED_CRYSTAL:
+			return IMG_CRYSTAL;
+		case Player.SACRED_FIST:
+			return IMG_FIST;
+		case Player.STOPWATCH:
+			return IMG_STOPWATCH;
+		}
+		return null;
+	}
+
+
+	private void examineLevelMap() {
 		messageBox.setVisible(false);
 		isCursorEnabled = false;
 		si.saveBuffer();
@@ -233,8 +227,8 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		g.fillRect(0,0,sw,sh);
 		Color cellColor = null;
 		Position runner = new Position(0,0,player.getPosition().z);
-		for (int x = 0; x < level.getWidth(); x++, runner.x++, runner.y = 0)
-			for (int y = 0; y < level.getHeight(); y++, runner.y++){
+		for (int x = 0; x < level.getWidth(); x++, runner.x++, runner.y = 0) {
+			for (int y = 0; y < level.getHeight(); y++, runner.y++) {
 				if (!level.remembers(x,y))
 					//cellColor = Color.BLACK;
 					continue;
@@ -270,8 +264,8 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 				//g.fillOval(30+remnantx+x*5, 30+remnanty+y*5, 5,5);
 				g.fillRect(30+remnantx+x*3, 30+remnanty+y*3, 3,3);
 			}
-			si.refresh();	
-		
+		}
+		si.refresh();
 		
 		si.waitKey(CharKey.SPACE);
 		messageBox.setVisible(true);
@@ -281,49 +275,69 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		
 	}
 
+	private static long mmRedrawCount = 0;
 	/*
 	 * Expensively render the minimap as part of the HUD instead of
-	 * being a separete mode.
+	 * being a separate mode.
 	 */
-	private void renderMiniMap(){
+	private void renderMiniMap() {
 		int lw = level.getWidth();
 		int lh = level.getHeight();
-		int sw = this.configuration.getScreenWidth();
-		int sh = this.configuration.getScreenHeight();
-		int mapX = sw - 60 - (lw * 3); 
-		int mapY = sh - 60 - (lh * 3); 
+		int sw = configuration.getScreenWidth();
+		int sh = configuration.getScreenHeight();
+		int mapX = sw - 60 - (lw * 3);
+		int mapY = sh - 60 - (lh * 3);
 		Graphics2D g = si.getGraphics2D();
 		Color cellColor = null;
-		Position runner = new Position(0,0,player.getPosition().z);
-		for (int x = 0; x < level.getWidth(); x++, runner.x++, runner.y = 0) {
-			for (int y = 0; y < level.getHeight(); y++, runner.y++){
-				if (player.getPosition().x == x && player.getPosition().y == y) {
-					cellColor = Color.RED;
-				} else if (!level.remembers(x,y)) {
+		long t0 = System.nanoTime();
+		Position pp = player.getPosition();
+		final int
+			px = pp.x,
+			py = pp.y;
+		for (int x = 0; x < lw; x++) {
+			for (int y = 0; y < lh; y++) {
+				if (!level.remembers(x, y)) {
 					continue;
+				}
+				
+				if (px == x && py == y) {
+					cellColor = Color.RED;
 				} else {
-					Cell current = level.getMapCell(runner);
-					if (current == null)
+					Cell current = level.getMapCell(x, y);	// put an int Exit Index in the map?
+					if (current == null) {
 						continue;
-					if (level.getExitOn(runner) != null) {
+					}
+					if (level.getExitOn(x, y) != null) {
 						cellColor = Color.RED;
 					} else {
-						Feature currentF = level.getFeatureAt(runner);
-						if (current.isSolid() || (currentF != null && currentF.isSolid())) {
-							cellColor = MAP_SOLID;
-						} else if (level.isVisible(x,y)){
-							cellColor = MAP_NOSOLID_LOS;
+						if (current.isWater() || current.isShallowWater()) {
+							if (level.isVisible(x, y)) {
+								cellColor = MINIMAP_WATER;
+							} else {
+								cellColor = MINIMAP_WATER_FOW;
+							}
 						} else {
-							cellColor = MAP_NOSOLID;
+							Feature currentF = level.getFeatureAt(x, y);
+							if (current.isSolid() || (currentF != null && currentF.isSolid())) {
+								cellColor = MAP_SOLID;
+							} else if (level.isVisible(x, y)) {
+								cellColor = MAP_NOSOLID_LOS;
+							} else {
+								cellColor = MAP_NOSOLID;
+							}
 						}
 					}
 				}
 				g.setColor(cellColor);
-				g.fillRect(mapX + x * 3, mapY + y * 3, 3,3);
+				g.fillRect(mapX + x * 3, mapY + y * 3, 3,3);	// *Oh*? would an imgbuffer matter for perf?
 			}
 		}
+		mmRedrawCount++;
+		long mmdrawTNanos = System.nanoTime() - t0;
+		double dtimeMicros = (double)mmdrawTNanos / 1000;
+		System.out.format("mmdraw[%05d]: %3.3fus\n", mmRedrawCount, dtimeMicros);
 	}
-    
+	
     private void enterScreen(){
     	messageBox.setVisible(false);
     	isCursorEnabled = false;
@@ -494,11 +508,13 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 	   return ret;
 	}
 
-    // Drawing Methods
-	public void drawEffect(Effect what){
-		if (what == null)
+	// Drawing Methods
+	public void drawEffect(Effect what) {
+		if (what == null) {
 			return;
-		if (insideViewPort(getAbsolutePosition(what.getPosition()))){
+		}
+		if (insideViewPort(getAbsolutePosition(what.getPosition()))) {
+			
 			((GFXEffect)what).drawEffect(this, si);
 		}
 	}
@@ -509,15 +525,16 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 
 	private void drawLevel(){
 		Debug.enterMethod(this, "drawLevel");
+		Position pp = player.getPosition();
+		final int
+			px = pp.x,
+			py = pp.y,
+			pz = pp.z;
 		//Cell[] [] cells = level.getCellsAround(player.getPosition().x,player.getPosition().y, player.getPosition().z, range);
-		Cell[] [] rcells = level.getMemoryCellsAround(player.getPosition().x,player.getPosition().y, player.getPosition().z, xrange,yrange);
-		Cell[] [] vcells = level.getVisibleCellsAround(player.getPosition().x,
-													   player.getPosition().y, 
-													   player.getPosition().z, 
-													   xrange,
-													   yrange);
+		Cell[] [] rcells = level.getMemoryCellsAround(px,py,pz, xrange,yrange);
+		Cell[] [] vcells = level.getVisibleCellsAround(px,py,pz,xrange,yrange);
 		
-		Position runner = new Position(player.getPosition().x - xrange, player.getPosition().y-yrange, player.getPosition().z);
+		Position runner = new Position(px - xrange, py-yrange, pz);
 		
 		monstersOnSight.removeAllElements();
 		featuresOnSight.removeAllElements();
@@ -564,8 +581,8 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 						frosty = true;
 						//TODO: Apply a blue tint
 					}
-					int depthFromPlayer =level.getDepthFromPlayer(player.getPosition().x - xrange + x, player.getPosition().y - yrange + y); 
-					if (depthFromPlayer != 0 ){
+					int depthFromPlayer =level.getDepthFromPlayer(px - xrange + x, py - yrange + y);
+					if (depthFromPlayer != 0 ) {
 						drawImageVP(
 							(PC_POS.x-xrange+x) * 32,
 							(PC_POS.y-yrange+y) * 32 + depthFromPlayer * 10 - 17,
@@ -604,13 +621,13 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 				}
 				runner.x++;
 			}
-			runner.x = player.getPosition().x-xrange;
+			runner.x = px - xrange;
 			for (int x=0; x<vcells.length; x++){
 				int cellHeight = 0;
 				if (vcells[x][y] != null){
 					cellHeight = vcells[x][y].getHeight();
 					Feature feat = level.getFeatureAt(runner);
-					if (feat != null){
+					if (feat != null) {
 						if (feat.isVisible()) {
 							GFXAppearance featApp = (GFXAppearance)feat.getAppearance();
 							drawImageVP(

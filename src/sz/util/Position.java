@@ -96,8 +96,19 @@ public class Position implements java.io.Serializable {
 		x += p.x;
 		y += p.y;
 		z += p.z;
-
 	}
 
+
+	public static final int ihash(int x, int y, int z) {
+		int hash =
+			((z << 24) & 0xff000000) |
+			((y << 12) & 0x00fff000) |
+			((x      ) & 0x00000fff);
+		return hash;
+	}
+	
+	public int ihash() {
+		return ihash(x, y, z);
+	}
 
 }

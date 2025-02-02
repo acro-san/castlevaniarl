@@ -5,21 +5,29 @@ import java.util.*;
 
 import sz.util.*;
 
-public class VFeatures implements Serializable{
-   	Vector features;
-	Hashtable mLocs;
+public class VFeatures implements Serializable {
+	
+	private Vector<Feature> features;
+	private Hashtable<Integer, Feature> mLocs;	// ? How many features can be on one Cell?
 
-	private Vector temp = new Vector();
-	public void addFeature(Feature what){
+	private Vector<Feature> temp = new Vector<>();
+	private Vector<Feature> tempVector = new Vector<>();	// ??
+	
+	public VFeatures(int size) {
+		features = new Vector<>(size);
+		mLocs = new Hashtable<>(size);
+	}
+	
+	public void addFeature(Feature what) {
 		features.add(what);
 		//mLocs.put(what, what.getPosition());
-		mLocs.put(what.getPosition(), what);
+		mLocs.put(what.getPosition().ihash(), what);
 	}
 
-	public Feature[] getFeaturesAt(Position p){
+	public Feature[] getFeaturesAt(Position p) {
 		temp.clear();
 		for (int i=0; i<features.size(); i++){
-			if (((Feature)features.elementAt(i)).getPosition().equals(p)){
+			if ((features.elementAt(i)).getPosition().equals(p)){
 				temp.add(features.elementAt(i));
 			}
 		}
@@ -30,34 +38,42 @@ public class VFeatures implements Serializable{
 		}
 	}
 	
+	public Feature getFeatureAt(int x, int y) {
+		int poshash = Position.ihash(x, y, 0);
+		// array of? features at a given cell...?
+		if (!mLocs.containsKey(poshash)) {
+			return null;
+		}
+		return mLocs.get(poshash);
+	}
+	
 	public Feature getFeatureAt(Position p){
 		//return (Feature) mLocs.get(p);
 		for (int i=0; i<features.size(); i++){
-			if (((Feature)features.elementAt(i)).getPosition().equals(p)){
-				return (Feature)features.elementAt(i);
+			if ((features.elementAt(i)).getPosition().equals(p)){
+				return features.elementAt(i);
 			}
 		}
 		//Debug.byebye("Feature not found! "+p);
 		return null;
 	}
 
-	public VFeatures(int size){
-		features = new Vector(size);
-		mLocs = new Hashtable(size);
-	}
 
-	public void removeFeature(Feature o){
+	public void removeFeature(Feature o) {
 		features.remove(o);
-		if (mLocs.containsValue(o))
-			mLocs.remove(o);
+		// remove location-hashed entry also
+		if (mLocs.containsValue(o)) {
+			mLocs.remove(o);	// FIXME This looks wrong
+		}
 	}
 	
-	private Vector tempVector = new Vector();
-	public Vector getAllOf(String featureID){
+	
+	// This is used solely by Level class, to getAllOf "MOUND" and "CANDLE".
+	public Vector<Feature> getAllOf(String featureID) {
 		tempVector.removeAllElements();
-		for (int i = 0; i < features.size(); i++){
-			Feature f = (Feature) features.elementAt(i);
-			if (f.getID().equals(featureID)){
+		for (int i = 0; i < features.size(); i++) {
+			Feature f = features.elementAt(i);
+			if (f.getID().equals(featureID)) {
 				tempVector.add(f);
 			}
 		}
