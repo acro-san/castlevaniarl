@@ -456,12 +456,12 @@ public class Player extends Actor {
 				if (getFlag("WEAPON_MASTER") && getPlayerClass() != CLASS_KNIGHT){
 					
 				} else {
-					UserInterface.getUI().showImportantMessage("You have become a master with "+ItemDefinition.getCategoryDescription(category)+"!");
+					Main.ui.showImportantMessage("You have become a master with "+ItemDefinition.getCategoryDescription(category)+"!");
 					s.increase();
 					setFlag("WEAPON_MASTER", true);
 				}
 			} else if (s.getCount() < 10){
-				UserInterface.getUI().showImportantMessage("You become better with "+ItemDefinition.getCategoryDescription(category)+". Press Space to continue.");
+				Main.ui.showImportantMessage("You become better with "+ItemDefinition.getCategoryDescription(category)+". Press Space to continue.");
 				s.increase();
 			}
 		}
@@ -586,7 +586,7 @@ public class Player extends Actor {
 			}
 		}
 		damage("The "+who.getDescription()+" hits you.", dam);
-		UserInterface.getUI().drawEffect(EffectFactory.getSingleton().createLocatedEffect(getPosition(), "SFX_QUICK_WHITE_HIT"));
+		Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(getPosition(), "SFX_QUICK_WHITE_HIT"));
 		if (hits < 0){
 			if (getSex() == MALE)
 				SFXManager.play("wav/die_male.wav");
@@ -1019,15 +1019,14 @@ public class Player extends Actor {
 			level.addMessage("You are petrified!");
 			updateStatus();
 			see();
-			UserInterface.getUI().refresh();
+			Main.ui.refresh();
 		} else if (isFainted()){
 			updateStatus();
 			see();
-			UserInterface.getUI().refresh();
+			Main.ui.refresh();
 		} else {
 			super.act();
 		}
-		 
 	}
 
 	public void land(){
@@ -1110,7 +1109,8 @@ public class Player extends Actor {
 		}
 		if (destinationCell.getDamageOnStep() > 0){
 			if (!isInvincible()){
-				selfDamage("You are injured by the "+destinationCell.getShortDescription(), Player.DAMAGE_WALKED_ON_LAVA, new Damage(2, false));
+				selfDamage("You are injured by the "+destinationCell.getShortDescription(),
+					Player.DAMAGE_WALKED_ON_LAVA, new Damage(2, false));
 			}
 		}
 
@@ -1150,13 +1150,14 @@ public class Player extends Actor {
 					level.destroyFeature(destinationFeature);
 				}
 				
-				if (destinationFeature.getID().equals("TELEPORT")){
-					if (getGold()>1000){
-						UserInterface.getUI().showMessage("Drop a thousand in gold to return to Petra? [Y/N]");
-						if (UserInterface.getUI().prompt()){
-							if (getHostage() != null){
-								UserInterface.getUI().showMessage("Abandon "+getHostage().getDescription()+"? [Y/N]");
-								if (UserInterface.getUI().prompt()){
+				if (destinationFeature.getID().equals("TELEPORT")) {
+					if (getGold() > 1000) {
+						UserInterface ui = Main.ui;
+						ui.showMessage("Drop a thousand in gold to return to Petra? [Y/N]");
+						if (ui.prompt()) {
+							if (getHostage() != null) {
+								ui.showMessage("Abandon "+getHostage().getDescription()+"? [Y/N]");
+								if (ui.prompt()) {
 									abandonHostage();
 								} else {
 									return;
@@ -1341,11 +1342,11 @@ public class Player extends Actor {
 		level.addMessage("A blast of holy light surrounds you!");
 		//level.addEffect(new SplashEffect(getPosition(), "****~~~~,,,,....", Appearance.WHITE));
 		SFXManager.play("wav/lazrshot.wav");
-		level.addEffect(EffectFactory.getSingleton().createLocatedEffect(getPosition(), "SFX_ROSARY_BLAST"));
+		Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(getPosition(), "SFX_ROSARY_BLAST"));
 		
 		String message = "";
 
-		Vector monsters = (Vector) level.getMonsters().getVector().clone();
+		Vector monsters = (Vector)level.getMonsters().getVector().clone();
 		Vector removables = new Vector();
 		for (int i = 0; i < monsters.size(); i++) {
 			Monster monster = (Monster) monsters.elementAt(i);

@@ -3,6 +3,7 @@ package crl.action;
 import sz.util.Debug;
 import sz.util.Position;
 import sz.util.Util;
+import crl.Main;
 import crl.actor.Actor;
 import crl.feature.Feature;
 import crl.item.Merchant;
@@ -13,7 +14,6 @@ import crl.npc.Hostage;
 import crl.npc.NPC;
 import crl.player.Damage;
 import crl.player.Player;
-import crl.ui.UserInterface;
 
 public class Walk extends Action{
 	private Player aPlayer;
@@ -73,7 +73,7 @@ public class Walk extends Action{
 			if (destinationCell.isSolid() && !aPlayer.isEthereal()){
 				if (destinationCell.getID().startsWith("SIGNPOST")){
 					//aLevel.addMessage("The signpost reads : "+destinationCell.getDescription());
-					UserInterface.getUI().setPersistantMessage(destinationCell.getDescription());
+					Main.ui.setPersistantMessage(destinationCell.getDescription());
 				}else{
 					aLevel.addMessage("You bump into the "+destinationCell.getShortDescription());
 				}

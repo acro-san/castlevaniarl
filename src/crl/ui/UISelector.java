@@ -11,7 +11,8 @@ import crl.ai.ActionSelector;
 import crl.level.Level;
 import crl.player.Player;
 
-public abstract class UISelector implements ActionSelector  {
+public abstract class UISelector implements ActionSelector {
+	
 	protected Hashtable gameActions = new Hashtable();
 	
 	protected Action advance;
@@ -23,9 +24,16 @@ public abstract class UISelector implements ActionSelector  {
 	public static int WEAPON_KEY;
 	public int DONOTHING1_KEY;
 	public int DONOTHING2_KEY;
-	public static int UP1_KEY, UP2_KEY, LEFT1_KEY, LEFT2_KEY, RIGHT1_KEY, RIGHT2_KEY, DOWN1_KEY, DOWN2_KEY, UPRIGHT1_KEY, UPRIGHT2_KEY,
-	UPLEFT1_KEY, UPLEFT2_KEY, DOWNLEFT1_KEY, DOWNLEFT2_KEY, DOWNRIGHT1_KEY, DOWNRIGHT2_KEY, SELF1_KEY, SELF2_KEY;
-	
+	public static int
+		UP1_KEY, UP2_KEY,
+		LEFT1_KEY, LEFT2_KEY,
+		RIGHT1_KEY, RIGHT2_KEY,
+		DOWN1_KEY, DOWN2_KEY,
+		UPRIGHT1_KEY, UPRIGHT2_KEY,
+		UPLEFT1_KEY, UPLEFT2_KEY,
+		DOWNLEFT1_KEY, DOWNLEFT2_KEY,
+		DOWNRIGHT1_KEY, DOWNRIGHT2_KEY,
+		SELF1_KEY, SELF2_KEY;
 
 	public void setPlayer (Player p){
 		player = p;
@@ -43,16 +51,16 @@ public abstract class UISelector implements ActionSelector  {
 		return ret;
 	}
 
-	private transient UserInterface ui;
-	
-	public UserInterface getUI(){
+	///private transient UserInterface ui;
+/*	public UserInterface getUI(){
 		if (ui == null)
 			ui = UserInterface.getUI();
 		return ui;
 	}
-	
-	protected void init(UserAction[] gameActions, Action advance, Action target, Action attack, UserInterface ui, Properties keyBindings){
-		this.ui = ui;
+*/
+	//UserInterface ui
+	protected void init(UserAction[] gameActions, Action advance, Action target, Action attack, Properties keyBindings) {
+		//this.ui = ui;
 		this.advance = advance;
 		this.target = target;
 		this.attack = attack;
@@ -82,11 +90,11 @@ public abstract class UISelector implements ActionSelector  {
 		SELF2_KEY  = Integer.parseInt(keyBindings.getProperty("SELF2_KEY"));
 	}
 	
-    public boolean isArrow(CharKey input) {
+	public boolean isArrow(CharKey input) {
 		return toIntDirection(input) != -1;
 	}
-    
-    public static int toIntDirection(CharKey ck){
+	
+	public static int toIntDirection(CharKey ck){
 		if (isKey(ck, UP1_KEY, UP2_KEY))
 			return Action.UP;
 		else

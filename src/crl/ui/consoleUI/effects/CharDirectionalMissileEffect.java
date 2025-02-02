@@ -4,6 +4,7 @@ import crl.ui.*;
 import crl.ui.consoleUI.ConsoleUserInterface;
 import sz.csi.ConsoleSystemInterface;
 import sz.util.*;
+import crl.Main;
 import crl.action.*;
 
 public class CharDirectionalMissileEffect extends CharDirectedEffect {
@@ -39,8 +40,8 @@ public class CharDirectionalMissileEffect extends CharDirectedEffect {
 	}
 	
 	public void drawEffect(ConsoleUserInterface ui, ConsoleSystemInterface si){
-		UserInterface.getUI().getPlayer().see();
-		UserInterface.getUI().refresh();
+		Main.ui.getPlayer().see();
+		Main.ui.refresh();
 		
 		Position oldPoint = effectLine.next();
 		int oldColor = -1;

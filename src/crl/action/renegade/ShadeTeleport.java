@@ -2,6 +2,7 @@ package crl.action.renegade;
 
 import sz.util.Line;
 import sz.util.Position;
+import crl.Main;
 import crl.action.Action;
 import crl.action.HeartAction;
 import crl.actor.Actor;
@@ -57,7 +58,7 @@ public class ShadeTeleport extends HeartAction{
 		
 		player.setPosition(new Position(runner));
 		player.see();
-		UserInterface.getUI().refresh();
+		Main.ui.refresh();
 		
 	}
 

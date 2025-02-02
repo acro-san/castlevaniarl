@@ -88,9 +88,13 @@ import crl.ui.graphicsUI.SwingSystemInterface;
 import crl.ui.graphicsUI.effects.GFXEffectFactory;
 
 public class Main {
-	private final static int JCURSES_CONSOLE = 0, SWING_GFX = 1, SWING_CONSOLE = 2;
+	private final static int
+		JCURSES_CONSOLE = 0,
+		SWING_GFX = 1,
+		SWING_CONSOLE = 2;
 	
-	private static UserInterface ui;
+	private static int uiMode;	// default is SWING_GFX...
+	public static UserInterface ui;
 	private static UISelector uiSelector;
 	
 	private static final boolean
@@ -108,7 +112,7 @@ public class Main {
 	
 	private static Game currentGame;
 	private static boolean createNew = true;
-	private static int mode;
+
 	
 	public static String getConfigurationVal(String key){
 		return configuration.getProperty(key);
@@ -123,7 +127,7 @@ public class Main {
 			GFXConfiguration gfx_configuration = null;
             try {
     			
-    			switch (mode){
+    			switch (uiMode){
 				case SWING_GFX:
 					gfx_configuration = new GFXConfiguration();
 					gfx_configuration.LoadConfiguration(UIconfiguration);
@@ -146,41 +150,36 @@ public class Main {
 				initializeNPCs();
 				initializeFeatures();
 				initializeSmartFeatures();
-				switch (mode){
-				case SWING_GFX:			
+				switch (uiMode){
+				case SWING_GFX:
 					System.out.println("Initializing Swing GFX System Interface");
 					SwingSystemInterface si = new SwingSystemInterface(gfx_configuration);
-					System.out.println("Initializing Swing GFX User Interface");										
-					UserInterface.setSingleton(new GFXUserInterface(gfx_configuration));
+					System.out.println("Initializing Swing GFX User Interface");
+					ui = new GFXUserInterface(gfx_configuration);
 					GFXCuts.initializeSingleton();
 					Display.thus = new GFXDisplay(si, UIconfiguration, gfx_configuration);
 					PlayerGenerator.thus = new GFXPlayerGenerator(si, gfx_configuration);
-					//PlayerGenerator.thus.initSpecialPlayers();
 					EffectFactory.setSingleton(new GFXEffectFactory());
 					((GFXEffectFactory)EffectFactory.getSingleton()).setEffects(new GFXEffects(gfx_configuration).getEffects());
-					ui = UserInterface.getUI();
 					initializeUI(si);
 					break;
 				case JCURSES_CONSOLE:
 					System.out.println("Initializing JCurses System Interface");
 					ConsoleSystemInterface csi = null;
-					try{
+					try {
 						csi = new JCursesConsoleInterface();
+					} catch (ExceptionInInitializerError eiie) {
+						crash("Fatal Error Initializing JCurses", eiie);
+						eiie.printStackTrace();
+						System.exit(-1);
 					}
-		            catch (ExceptionInInitializerError eiie){
-		            	crash("Fatal Error Initializing JCurses", eiie);
-		            	eiie.printStackTrace();
-		                System.exit(-1);
-		            }
-		            System.out.println("Initializing Console User Interface");
-					UserInterface.setSingleton(new ConsoleUserInterface());
+					System.out.println("Initializing Console User Interface");
+					ui = new ConsoleUserInterface();
 					CharCuts.initializeSingleton();
 					Display.thus = new CharDisplay(csi);
 					PlayerGenerator.thus = new CharPlayerGenerator(csi);
-					//PlayerGenerator.thus.initSpecialPlayers();
 					EffectFactory.setSingleton(new CharEffectFactory());
 					((CharEffectFactory)EffectFactory.getSingleton()).setEffects(new CharEffects().getEffects());
-					ui = UserInterface.getUI();
 					initializeUI(csi);
 					break;
 				case SWING_CONSOLE:
@@ -188,21 +187,18 @@ public class Main {
 					csi = null;
 					csi = new WSwingConsoleInterface();
 					System.out.println("Initializing Console User Interface");
-					UserInterface.setSingleton(new ConsoleUserInterface());
+					ui = new ConsoleUserInterface();
 					CharCuts.initializeSingleton();
 					Display.thus = new CharDisplay(csi);
 					PlayerGenerator.thus = new CharPlayerGenerator(csi);
-					//PlayerGenerator.thus.initSpecialPlayers();
 					EffectFactory.setSingleton(new CharEffectFactory());
 					((CharEffectFactory)EffectFactory.getSingleton()).setEffects(new CharEffects().getEffects());
-					ui = UserInterface.getUI();
 					initializeUI(csi);
 				}
-				
-            } catch (Exception e){
-            	crash("Error initializing", e);
-            }
-            STMusicManagerNew.initManager();
+			} catch (Exception e){
+				crash("Error initializing", e);
+			}
+			STMusicManagerNew.initManager();
         	if (configuration.getProperty("enableSound") != null && configuration.getProperty("enableSound").equals("true")){ // Sound
         		if (configuration.getProperty("enableMusic") == null || !configuration.getProperty("enableMusic").equals("true")){ // Music
     	    		STMusicManagerNew.thus.setEnabled(false);
@@ -276,7 +272,7 @@ public class Main {
 	    	System.exit(-1);
 	    }
 	    
-	    if (mode == SWING_GFX){
+	    if (uiMode == SWING_GFX){
 		    UIconfiguration = new Properties();
 		    try {
 		    	UIconfiguration.load(new FileInputStream(uiFile));
@@ -533,16 +529,16 @@ public class Main {
 		
 
 		
-		switch (mode){
+		switch (uiMode){
 		case SWING_GFX:
 			((GFXUserInterface)ui).init((SwingSystemInterface)si, userCommands, target);
 			uiSelector = new GFXUISelector();
-			((GFXUISelector)uiSelector).init((SwingSystemInterface)si, userActions, UIconfiguration, walkAction, target, attack, (GFXUserInterface)ui, keyBindings);
+			((GFXUISelector)uiSelector).init((SwingSystemInterface)si, userActions, UIconfiguration, walkAction, target, attack, keyBindings);
 			break;
 		case JCURSES_CONSOLE:
 			((ConsoleUserInterface)ui).init((ConsoleSystemInterface)si, userCommands, target);
 			uiSelector = new ConsoleUISelector();
-			((ConsoleUISelector)uiSelector).init((ConsoleSystemInterface)si, userActions, walkAction, target, attack, (ConsoleUserInterface)ui, keyBindings);
+			((ConsoleUISelector)uiSelector).init((ConsoleSystemInterface)si, userActions, walkAction, target, attack, keyBindings);
 			break;
 		case SWING_CONSOLE:
 			//((ConsoleUserInterface)ui).init((WSwingConsoleInterface)si, userActions, userCommands, walkAction, target, attack);
@@ -581,21 +577,21 @@ public class Main {
 	}
 
 	public static void main(String args[]){
-		mode = SWING_GFX;
+		uiMode = SWING_GFX;
 		//mode = SWING_CONSOLE;
 		uiFile = "slash-barrett.ui";
 		if (args!= null && args.length > 0){
 			if (args[0].equalsIgnoreCase("sgfx")){
-				mode = SWING_GFX;
+				uiMode = SWING_GFX;
 				if (args.length > 1)
 					uiFile = args[1];
 				else
 					uiFile = "slash-barrett.ui";
 			}
 			else if (args[0].equalsIgnoreCase("jc"))
-				mode = JCURSES_CONSOLE;
+				uiMode = JCURSES_CONSOLE;
 			else if (args[0].equalsIgnoreCase("sc"))
-				mode = SWING_CONSOLE;
+				uiMode = SWING_CONSOLE;
 		}
 		
 		init();

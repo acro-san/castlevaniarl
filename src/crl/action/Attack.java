@@ -2,6 +2,7 @@ package crl.action;
 
 import sz.util.Position;
 import sz.util.Util;
+import crl.Main;
 import crl.actor.Actor;
 import crl.feature.Feature;
 import crl.item.Item;
@@ -94,14 +95,14 @@ public class Attack extends Action{
 
 		String [] sfx = weaponDef.attackSFX.split(" ");
 		if (sfx.length > 0)
-			if (sfx[0].equals("MELEE")){
+			if (sfx[0].equals("MELEE")) {
 				Effect me = EffectFactory.getSingleton().createDirectionalEffect(performer.getPosition(), targetDirection, weapon.getRange(), "SFX_WP_"+weaponDef.getID()); 
-				aLevel.addEffect(me);
+				Main.ui.drawEffect(me);
 			}
-			else if (sfx[0].equals("BEAM")){
+			else if (sfx[0].equals("BEAM")) {
 				Effect me = EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(), targetPosition, "SFX_WP_"+weaponDef.getID(), weapon.getRange());
-				aLevel.addEffect(me);
-			}else if (sfx[0].equals("MISSILE")){
+				Main.ui.drawEffect(me);
+			}else if (sfx[0].equals("MISSILE")) {
 				Effect me = EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(), targetPosition, "SFX_WP_"+weaponDef.getID(), weapon.getRange());
 				if (!weapon.isSlicesThrough()){
 					int i = 0;
@@ -124,7 +125,7 @@ public class Attack extends Action{
 					}
 					me = EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(), targetPosition, "SFX_WP_"+weaponDef.getID(), i);
 				}
-				aLevel.addEffect(me);
+				Main.ui.drawEffect(me);
 			}
 
 		

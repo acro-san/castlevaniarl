@@ -2,6 +2,7 @@ package crl.action.monster;
 
 import sz.util.Debug;
 import sz.util.Position;
+import crl.Main;
 import crl.action.Action;
 import crl.game.SFXManager;
 import crl.level.Cell;
@@ -85,7 +86,7 @@ public class MonsterCharge extends Action{
 			}
 			aMonster.setPosition(destinationPoint);
 			if (i < range - 1) {
-				UserInterface.getUI().safeRefresh(); // We need to show the player the enemy in the updated position
+				Main.ui.safeRefresh(); // We need to show the player the enemy in the updated position
 				actionAnimationPause();
 			}
 		}

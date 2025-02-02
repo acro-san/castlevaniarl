@@ -1,7 +1,7 @@
 package crl.monster;
 
 import sz.util.*;
-
+import crl.Main;
 import crl.action.*;
 import crl.item.*;
 import crl.level.Emerger;
@@ -156,7 +156,7 @@ public class Monster extends Actor implements Cloneable{
 			dam *= 2;
 		message.append(" ("+dam+")");
 		hits -= dam;
-		UserInterface.getUI().drawEffect(EffectFactory.getSingleton().createLocatedEffect(getPosition(), "SFX_QUICK_WHITE_HIT"));
+		Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(getPosition(), "SFX_QUICK_WHITE_HIT"));
 		if (getDefinition().getBloodContent() > 0){
 			if (level.getPlayer().hasCounter(Consts.C_BLOOD_THIRST) &&
 					Position.flatDistance(getPosition(), level.getPlayer().getPosition()) < 3){
@@ -180,7 +180,7 @@ public class Monster extends Actor implements Cloneable{
 				/*} else
 					setFeaturePrize("KEY");*/
 				//level.addEffect(new DoubleSplashEffect(getPosition(), "O....,,..,.,.,,......", Appearance.RED, ".,,,,..,,.,.,..,,,,,,", Appearance.WHITE));
-				level.addEffect(EffectFactory.getSingleton().createLocatedEffect(getPosition(), "SFX_BOSS_DEATH"));
+				Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(getPosition(), "SFX_BOSS_DEATH"));
 				level.addMessage("The whole level trembles with holy energy!");
 				level.removeBoss();
 				level.getPlayer().addHistoricEvent("vanquished the "+this.getDescription()+" on the "+level.getDescription());

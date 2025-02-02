@@ -1,6 +1,7 @@
 package crl.action.vkiller;
 
 import sz.util.Position;
+import crl.Main;
 import crl.action.HeartAction;
 import crl.level.Level;
 import crl.monster.VMonster;
@@ -23,7 +24,7 @@ public class SoulBlast extends HeartAction{
         aLevel.addMessage("Soul Blast!");
         int damage = 50 + aLevel.getPlayer().getShotLevel()*2 + aLevel.getPlayer().getSoulPower()*3;
 		Position blastPosition = performer.getPosition();
-		aLevel.addEffect(EffectFactory.getSingleton().createLocatedEffect(blastPosition, "SFX_SOUL_BLAST"));
+		Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(blastPosition, "SFX_SOUL_BLAST"));
 		
 		VMonster monsters = aLevel.getMonsters();
 		for (int i = 0; i < monsters.size(); i++){

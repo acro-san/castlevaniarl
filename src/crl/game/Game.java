@@ -431,8 +431,8 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 	
 	private void resumeScreen(){
 		STMusicManagerNew.thus.playKey("GAME_OVER");
-		UserInterface.getUI().showMessageHistory();
-		if (Display.thus.showResumeScreen(player)){
+		Main.ui.showMessageHistory();
+		if (Display.thus.showResumeScreen(player)) {
 			GameFiles.saveMemorialFile(player);
 		}
 	}

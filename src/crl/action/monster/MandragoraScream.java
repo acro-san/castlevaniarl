@@ -3,7 +3,7 @@ package crl.action.monster;
 import java.util.Vector;
 
 import sz.util.Position;
-
+import crl.Main;
 import crl.action.Action;
 import crl.game.SFXManager;
 import crl.monster.Monster;
@@ -29,10 +29,8 @@ public class MandragoraScream extends Action {
 		if (performer.getFlag("MANDRAGORA_PULLED")){
 			SFXManager.play(SCREAM_WAV);
 			performer.getLevel().addMessage("* The Mandragora emits an earth-shattering scream!!! *");
-			performer.getLevel().addEffect(EffectFactory.getSingleton().createLocatedEffect(performer.getPosition(), "SFX_MANDRAGORA_SCREAM"));
-
+			Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(performer.getPosition(), "SFX_MANDRAGORA_SCREAM"));
 			
-
 			VMonster monsters = performer.getLevel().getMonsters();
 			Vector<Monster> removables = new Vector<Monster>();
 			for (int i = 0; i < monsters.size(); i++){

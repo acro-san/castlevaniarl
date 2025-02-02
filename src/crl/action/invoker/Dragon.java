@@ -1,6 +1,7 @@
 package crl.action.invoker;
 
 import sz.util.Position;
+import crl.Main;
 import crl.action.Action;
 import crl.action.HeartAction;
 import crl.actor.Actor;
@@ -9,7 +10,6 @@ import crl.level.Cell;
 import crl.level.Level;
 import crl.monster.Monster;
 import crl.player.Player;
-import crl.ui.UserInterface;
 import crl.ui.effects.EffectFactory;
 
 public class Dragon extends HeartAction{
@@ -108,7 +108,7 @@ public class Dragon extends HeartAction{
 		Level aLevel = performer.getLevel();
         Player aPlayer = aLevel.getPlayer();
         //UserInterface.getUI().drawEffect(new TileEffect(destinationPoint, 'o', Appearance.GREEN, 150));
-        UserInterface.getUI().drawEffect(EffectFactory.getSingleton().createLocatedEffect(destinationPoint, "SFX_DRAGONFIRE"));
+        Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(destinationPoint, "SFX_DRAGONFIRE"));
 		//aLevel.addBlood(destinationPoint, 8);
 		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
         if (destinationFeature != null && destinationFeature.isDestroyable()){

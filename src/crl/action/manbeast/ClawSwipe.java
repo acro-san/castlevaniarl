@@ -1,6 +1,7 @@
 package crl.action.manbeast;
 
 import sz.util.Position;
+import crl.Main;
 import crl.action.Action;
 import crl.action.HeartAction;
 import crl.actor.Actor;
@@ -91,10 +92,10 @@ public class ClawSwipe extends HeartAction{
 	private boolean hit (Position destinationPoint, int damage){
 		StringBuffer message = new StringBuffer();
 		Level aLevel = performer.getLevel();
-        Player aPlayer = aLevel.getPlayer();
-        //UserInterface.getUI().drawEffect(new TileEffect(destinationPoint, '*', Appearance.RED, 100));
-        UserInterface.getUI().drawEffect(EffectFactory.getSingleton().createLocatedEffect(destinationPoint, "SFX_RED_HIT"));
-        
+		Player aPlayer = aLevel.getPlayer();
+		//UserInterface.getUI().drawEffect(new TileEffect(destinationPoint, '*', Appearance.RED, 100));
+		Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(destinationPoint, "SFX_RED_HIT"));
+		
 		//aLevel.addBlood(destinationPoint, 8);
 		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
         if (destinationFeature != null && destinationFeature.isDestroyable()){

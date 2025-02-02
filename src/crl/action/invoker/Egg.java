@@ -2,6 +2,7 @@ package crl.action.invoker;
 
 import sz.util.Line;
 import sz.util.Position;
+import crl.Main;
 import crl.action.HeartAction;
 import crl.feature.Feature;
 import crl.level.Cell;
@@ -45,18 +46,18 @@ public class Egg extends HeartAction{
 					break;
 				}
 			}
-			aLevel.addEffect(EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(), targetPosition, "SFX_EGG", i));
+			Main.ui.drawEffect(EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(), targetPosition, "SFX_EGG", i));
         }
 		
-		if (destinationCell == null){
+		if (destinationCell == null) {
 			flameOrigin = aLevel.getDeepPosition(flameOrigin);
-			if (flameOrigin == null){
+			if (flameOrigin == null) {
 				aLevel.addMessage("The eggs falls into a pit!");
 				return;
 			}
 		}
 		
-		aLevel.addEffect(EffectFactory.getSingleton().createLocatedEffect(flameOrigin, "SFX_EGG_BLAST"));
+		Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(flameOrigin, "SFX_EGG_BLAST"));
 
 		StringBuffer message = new StringBuffer();
 		for (int x = flameOrigin.x -1; x <= flameOrigin.x+1; x++)

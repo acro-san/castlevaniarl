@@ -1,5 +1,6 @@
 package crl.cuts.ingame.vindelith1;
 
+import crl.Main;
 import crl.action.Action;
 import crl.cuts.Unleasher;
 import crl.game.Game;
@@ -14,20 +15,19 @@ public class Vindelith2 extends Unleasher {
 
 	public void unleash(Level level, Game game) {
 		//if (level.getFlag("VINDELITHMEETING")&& level.getCounter("COUNTBACK_VINDELITHMEETING").isOver()){
-			Display.thus.showChat("VINDELITH1", game);
-			NPC claw = level.getNPCByID("UNIDED_CLAW");
-			NPC vind = level.getNPCByID("UNIDED_VINDELITH");
-			level.addEffect(EffectFactory.getSingleton().createDirectionalEffect(claw.getPosition(), Action.RIGHT, 1, "SFX_WP_BASELARD"));
-			level.addEffect(EffectFactory.getSingleton().createDirectionalEffect(vind.getPosition(), Action.LEFT, 2, "SFX_WP_BASELARD"));
-			level.addEffect(EffectFactory.getSingleton().createDirectionalEffect(claw.getPosition(), Action.RIGHT, 1, "SFX_WP_BASELARD"));
-			level.addEffect(EffectFactory.getSingleton().createDirectionalEffect(vind.getPosition(), Action.LEFT, 2, "SFX_WP_BASELARD"));
-			level.addEffect(EffectFactory.getSingleton().createDirectionalEffect(claw.getPosition(), Action.RIGHT, 1, "SFX_WP_BASELARD"));
-			Display.thus.showChat("VINDELITH2", game);
-			level.removeMonster(level.getNPCByID("UNIDED_VINDELITH"));
-			level.removeMonster(claw);
-			UserInterface.getUI().refresh();
-			enabled = false;
-		//}
+		Display.thus.showChat("VINDELITH1", game);
+		NPC claw = level.getNPCByID("UNIDED_CLAW");
+		NPC vind = level.getNPCByID("UNIDED_VINDELITH");
+		Main.ui.drawEffect(EffectFactory.getSingleton().createDirectionalEffect(claw.getPosition(), Action.RIGHT, 1, "SFX_WP_BASELARD"));
+		Main.ui.drawEffect(EffectFactory.getSingleton().createDirectionalEffect(vind.getPosition(), Action.LEFT, 2, "SFX_WP_BASELARD"));
+		Main.ui.drawEffect(EffectFactory.getSingleton().createDirectionalEffect(claw.getPosition(), Action.RIGHT, 1, "SFX_WP_BASELARD"));
+		Main.ui.drawEffect(EffectFactory.getSingleton().createDirectionalEffect(vind.getPosition(), Action.LEFT, 2, "SFX_WP_BASELARD"));
+		Main.ui.drawEffect(EffectFactory.getSingleton().createDirectionalEffect(claw.getPosition(), Action.RIGHT, 1, "SFX_WP_BASELARD"));
+		Display.thus.showChat("VINDELITH2", game);
+		level.removeMonster(level.getNPCByID("UNIDED_VINDELITH"));
+		level.removeMonster(claw);
+		Main.ui.refresh();
+		enabled = false;
 	}
 
 }

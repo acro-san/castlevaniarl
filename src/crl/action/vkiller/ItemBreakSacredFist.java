@@ -2,6 +2,7 @@ package crl.action.vkiller;
 
 import sz.util.Line;
 import sz.util.Position;
+import crl.Main;
 import crl.action.BeamProjectileSkill;
 import crl.level.Cell;
 import crl.level.Level;
@@ -94,7 +95,7 @@ public class ItemBreakSacredFist extends BeamProjectileSkill{
 		
 		player.setPosition(new Position(runner));
 		player.see();
-		UserInterface.getUI().refresh();
+		Main.ui.refresh();
 		
 	}
 	

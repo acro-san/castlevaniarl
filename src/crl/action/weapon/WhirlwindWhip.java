@@ -1,5 +1,6 @@
 package crl.action.weapon;
 import sz.util.Position;
+import crl.Main;
 import crl.action.Action;
 import crl.actor.Actor;
 import crl.feature.Feature;
@@ -42,12 +43,12 @@ public class WhirlwindWhip extends Action{
 	private boolean hit (Position destinationPoint, int attack){
 		StringBuffer message = new StringBuffer();
 		Level aLevel = performer.getLevel();
-        Player aPlayer = aLevel.getPlayer();
-        UserInterface.getUI().drawEffect(EffectFactory.getSingleton().createLocatedEffect(destinationPoint, "SFX_WHITE_HIT"));
+		Player aPlayer = aLevel.getPlayer();
+		Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(destinationPoint, "SFX_WHITE_HIT"));
 		//aLevel.addBlood(destinationPoint, 8);
 		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-        if (destinationFeature != null && destinationFeature.isDestroyable()){
-	       	message.append("You crush the "+destinationFeature.getDescription());
+		if (destinationFeature != null && destinationFeature.isDestroyable()) {
+			message.append("You crush the "+destinationFeature.getDescription());
 
 			Feature prize = destinationFeature.damage(aPlayer, attack);
 	       	if (prize != null){

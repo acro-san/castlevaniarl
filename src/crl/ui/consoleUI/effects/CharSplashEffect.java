@@ -20,8 +20,8 @@ public class CharSplashEffect extends CharEffect{
     }
     
 	public void drawEffect(ConsoleUserInterface ui, ConsoleSystemInterface si){
-		UserInterface.getUI().getPlayer().see();
-		UserInterface.getUI().refresh();
+		Main.ui.getPlayer().see();
+		Main.ui.refresh();
 		
 		si.setAutoRefresh(false);
 		//ui.refresh();

@@ -9,7 +9,7 @@ import crl.item.ItemDefinition;
 import crl.player.Consts;
 import crl.player.Damage;
 import crl.player.Player;
-import crl.ui.UserInterface;
+
 
 public class Use extends Action{
 	public String getID(){
@@ -18,10 +18,10 @@ public class Use extends Action{
 	
 	public boolean needsItem(){
 		return true;
-    }
+	}
 
-    public String getPromptItem(){
-    	return "What do you want to use?";
+	public String getPromptItem(){
+		return "What do you want to use?";
 	}
 
 	public void execute(){
@@ -32,8 +32,8 @@ public class Use extends Action{
 		
 		if (def.getID().equals("SOUL_RECALL")){
 			if (aPlayer.getHostage()!=null){
-				UserInterface.getUI().showMessage("Abandon "+aPlayer.getHostage().getDescription()+"? [Y/N]");
-				if (UserInterface.getUI().prompt()){
+				Main.ui.showMessage("Abandon "+aPlayer.getHostage().getDescription()+"? [Y/N]");
+				if (Main.ui.prompt()) {
 					aPlayer.abandonHostage();
 				} else {
 					return;

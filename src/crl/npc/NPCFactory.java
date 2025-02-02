@@ -26,8 +26,9 @@ public class NPCFactory {
 	
 	public Hostage buildHostage(){
 		Hostage ret = new Hostage((NPCDefinition) definitions.get((String)Util.randomPick(hostages)));
-		if (UserInterface.getUI().getPlayer().getPlayerClass() != Player.CLASS_VAMPIREKILLER) {
-			int artifactCategory = ((int) (UserInterface.getUI().getPlayer().getPlayerLevel() / 6.0d));
+		Player p = Main.ui.getPlayer();	//FIXME: *SURELY* the UI isn't where the player's stored though?
+		if (p.getPlayerClass() != Player.CLASS_VAMPIREKILLER) {
+			int artifactCategory = ((int) (p.getPlayerLevel() / 6.0));
 			ret.setItemReward(Main.itemData.createWeapon(Util.randPick(hostageArtifacts[artifactCategory]),""));
 		}
 		return ret;

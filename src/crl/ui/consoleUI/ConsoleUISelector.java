@@ -6,6 +6,7 @@ import sz.csi.CharKey;
 import sz.csi.ConsoleSystemInterface;
 import sz.util.Debug;
 import sz.util.Position;
+import crl.Main;
 import crl.action.Action;
 import crl.actor.Actor;
 import crl.actor.Message;
@@ -15,18 +16,18 @@ import crl.monster.Monster;
 import crl.npc.NPC;
 import crl.player.Player;
 import crl.ui.ActionCancelException;
-import crl.ui.CommandListener;
 import crl.ui.UISelector;
 import crl.ui.UserAction;
 
 public class ConsoleUISelector extends UISelector {
 	private ConsoleSystemInterface si;
+	
 	public ConsoleUserInterface ui(){
-		return (ConsoleUserInterface) getUI();
+		return (ConsoleUserInterface)Main.ui;
 	}
 	
-	public void init(ConsoleSystemInterface csi, UserAction[] gameActions, Action advance, Action target, Action attack, ConsoleUserInterface ui, Properties keyBindings){
-		super.init(gameActions, advance, target, attack, ui, keyBindings);
+	public void init(ConsoleSystemInterface csi, UserAction[] gameActions, Action advance, Action target, Action attack, Properties keyBindings) {
+		super.init(gameActions, advance, target, attack, keyBindings);
 		this.si = csi;
 	}
 	

@@ -2,6 +2,7 @@ package crl.action;
 
 import sz.util.Debug;
 import sz.util.Position;
+import crl.Main;
 import crl.actor.Actor;
 import crl.feature.Feature;
 import crl.item.Merchant;
@@ -124,7 +125,7 @@ public class Jump extends Action{
         		}
         		if (i < jumpingRange-1){
 					aPlayer.setPosition(destinationPoint);
-					UserInterface.getUI().safeRefresh();
+					Main.ui.safeRefresh();
 					actionAnimationPause();
 					continue out;
         		}
@@ -150,7 +151,7 @@ public class Jump extends Action{
 				if (!destinationCell.isSolid()) {
 					if (i < jumpingRange-1) {
 						aPlayer.setPosition(destinationPoint);
-						UserInterface.getUI().safeRefresh();
+						Main.ui.safeRefresh();
 						actionAnimationPause();
 					} else {
 						aPlayer.landOn(destinationPoint);

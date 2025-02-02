@@ -513,7 +513,9 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 			return;
 		}
 		if (insideViewPort(getAbsolutePosition(what.getPosition()))) {
-			
+			// TODO(acro): Replace polymorphic flow control,
+			// to clarify where the rendering code and data are defined.
+		//	GFXEffectRenderer.drawEffect(fx, this, si);
 			((GFXEffect)what).drawEffect(this, si);
 		}
 	}

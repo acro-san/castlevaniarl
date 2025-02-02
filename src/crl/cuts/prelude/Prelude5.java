@@ -1,5 +1,6 @@
 package crl.cuts.prelude;
 
+import crl.Main;
 import crl.action.ActionFactory;
 import crl.conf.console.data.CharCuts;
 import crl.cuts.Unleasher;
@@ -14,8 +15,8 @@ public class Prelude5 extends Unleasher {
 		if (!level.getFlag("CHRIS_DEAD") || level.getMonsterByID("PRELUDE_DRACULA").getHits () > 50)
 			return;
 		Display.thus.showChat("PRELUDE_DRACULA3", game);
-		UserInterface.getUI().drawEffect(EffectFactory.getSingleton().createLocatedEffect(level.getPlayer().getPosition(), "SFX_MORPH_SOLEIYU"));
-		UserInterface.getUI().refresh();
+		Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(level.getPlayer().getPosition(), "SFX_MORPH_SOLEIYU"));
+		Main.ui.refresh();
 		Display.thus.showChat("PRELUDE_DRACULA4", game);
 		//level.getMonsterByID("PRELUDE_DRACULA").execute(ActionFactory.getActionFactory().getAction("PRELUDE_MORPH_SOLEIYU"));
 		//Display.thus.showChat(CharCuts.thus.get("PRELUDE_DRACULA4"));

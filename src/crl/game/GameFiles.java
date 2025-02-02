@@ -18,6 +18,7 @@ import java.util.Vector;
 
 import sz.util.Debug;
 import sz.util.FileUtil;
+import crl.Main;
 import crl.item.ItemDefinition;
 import crl.monster.MonsterDefinition;
 import crl.player.Equipment;
@@ -396,7 +397,7 @@ public class GameFiles {
 			}
 			fileWriter.newLine();
 			fileWriter.write("-- Last Messages --");fileWriter.newLine();
-			Vector messages = UserInterface.getUI().getMessageBuffer();
+			Vector messages = Main.ui.getMessageBuffer();
 			for (int j = 0; j < messages.size(); j++){
 				fileWriter.write(messages.elementAt(j).toString());fileWriter.newLine();
 			}
@@ -553,7 +554,7 @@ public class GameFiles {
 			}
 			fileWriter.newLine();
 			fileWriter.write("-- Latest Messages --");fileWriter.newLine();
-			Vector messages = UserInterface.getUI().getMessageBuffer();
+			Vector messages = Main.ui.getMessageBuffer();
 			for (int j = 0; j < messages.size(); j++){
 				fileWriter.write(messages.elementAt(j).toString());fileWriter.newLine();
 			}

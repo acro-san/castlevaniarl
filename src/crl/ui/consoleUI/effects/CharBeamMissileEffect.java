@@ -3,6 +3,7 @@ import crl.ui.*;
 import crl.ui.consoleUI.ConsoleUserInterface;
 import sz.csi.ConsoleSystemInterface;
 import sz.util.*;
+import crl.Main;
 import crl.action.*;
 
 public class CharBeamMissileEffect extends CharDirectedEffect {
@@ -10,8 +11,9 @@ public class CharBeamMissileEffect extends CharDirectedEffect {
 	private int misColor;
 	
 	public void drawEffect(ConsoleUserInterface ui, ConsoleSystemInterface si){
-		UserInterface.getUI().getPlayer().see();
-		UserInterface.getUI().refresh();
+		Main.ui.getPlayer().see();
+		Main.ui.refresh();
+		// ?? Why not use console ui parameter?
 		
 		Position oldPoint = effectLine.next();
 		int too = 0;

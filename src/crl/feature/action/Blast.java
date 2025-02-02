@@ -1,6 +1,7 @@
 package crl.feature.action;
 
 import sz.util.Position;
+import crl.Main;
 import crl.action.Action;
 import crl.level.Level;
 import crl.monster.Monster;
@@ -21,7 +22,7 @@ public class Blast extends Action{
 		Position blastPosition = performer.getPosition();
 		
 		//aLevel.addEffect(new SplashEffect(blastPosition, "Oo,.", Appearance.CYAN));
-		aLevel.addEffect(EffectFactory.getSingleton().createLocatedEffect(blastPosition, "SFX_CRYSTAL_BLAST"));
+		Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(blastPosition, "SFX_CRYSTAL_BLAST"));
 		Position destinationPoint = new Position(0,0, performer.getPosition().z);
 		for (int x = blastPosition.x -3; x <= blastPosition.x+3; x++)
 			for (int y = blastPosition.y -3; y <= blastPosition.y+3; y++){

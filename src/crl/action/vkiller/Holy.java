@@ -3,6 +3,7 @@ package crl.action.vkiller;
 import sz.util.Line;
 import sz.util.Position;
 import sz.util.Util;
+import crl.Main;
 import crl.action.Action;
 import crl.action.HeartAction;
 import crl.feature.Feature;
@@ -62,7 +63,7 @@ public class Holy extends HeartAction{
 			}
 		}
 		
-		aLevel.addEffect(EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(), targetPosition, "SFX_HOLY", i));
+		Main.ui.drawEffect(EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(), targetPosition, "SFX_HOLY", i));
 		
 		if (destinationCell == null){
 			flameOrigin = aLevel.getDeepPosition(flameOrigin);
@@ -72,7 +73,7 @@ public class Holy extends HeartAction{
 			}
 		}
 		
-		aLevel.addEffect(EffectFactory.getSingleton().createLocatedEffect(flameOrigin, "SFX_HOLY_FLAME"));
+		Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(flameOrigin, "SFX_HOLY_FLAME"));
 		aLevel.addSmartFeature("BURNING_FLAME", flameOrigin);
 		aLevel.addSmartFeature("BURNING_FLAME", Position.add(flameOrigin, Action.directionToVariation(Action.UPLEFT)));
 		aLevel.addSmartFeature("BURNING_FLAME", Position.add(flameOrigin, Action.directionToVariation(Action.UPRIGHT)));

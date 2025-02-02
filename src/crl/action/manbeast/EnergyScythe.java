@@ -1,6 +1,7 @@
 package crl.action.manbeast;
 
 import sz.util.Position;
+import crl.Main;
 import crl.action.Action;
 import crl.action.BeamProjectileSkill;
 import crl.action.HeartAction;
@@ -35,7 +36,7 @@ public class EnergyScythe extends HeartAction{
 		Player aPlayer = (Player)performer;
 		int damage = 10 + aPlayer.getAttack();
 		Level aLevel = aPlayer.getLevel();
-   		int otherDir1 = 0;
+		int otherDir1 = 0;
 		int otherDir2 = 0;
 		switch (targetDirection){
 			case Action.UP:
@@ -95,9 +96,9 @@ public class EnergyScythe extends HeartAction{
 	private boolean hit (Position destinationPoint, int damage){
 		StringBuffer message = new StringBuffer();
 		Level aLevel = performer.getLevel();
-        Player aPlayer = aLevel.getPlayer();
-        //UserInterface.getUI().drawEffect(new TileEffect(destinationPoint, '*', Appearance.RED, 100));
-        UserInterface.getUI().drawEffect(EffectFactory.getSingleton().createLocatedEffect(destinationPoint, "SFX_RED_HIT"));
+		Player aPlayer = aLevel.getPlayer();
+		//UserInterface.getUI().drawEffect(new TileEffect(destinationPoint, '*', Appearance.RED, 100));
+		Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(destinationPoint, "SFX_RED_HIT"));
 		//aLevel.addBlood(destinationPoint, 8);
 		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
         if (destinationFeature != null && destinationFeature.isDestroyable()){

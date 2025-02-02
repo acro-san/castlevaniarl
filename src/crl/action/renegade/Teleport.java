@@ -2,6 +2,7 @@ package crl.action.renegade;
 
 import sz.util.Line;
 import sz.util.Position;
+import crl.Main;
 import crl.action.Action;
 import crl.action.HeartAction;
 import crl.actor.Actor;
@@ -60,7 +61,7 @@ public class Teleport extends HeartAction{
 		
 		player.landOn(prerunner);
 		player.see();
-		UserInterface.getUI().refresh();
+		Main.ui.refresh();
 		
 	}
 

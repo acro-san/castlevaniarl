@@ -2,6 +2,7 @@ package crl.action.vkiller;
 
 import sz.util.Line;
 import sz.util.Position;
+import crl.Main;
 import crl.action.Action;
 import crl.action.HeartAction;
 import crl.actor.Actor;
@@ -55,7 +56,7 @@ public class WarpDash extends HeartAction{
 		player.landOn(new Position(runner));
 		drawEffect(EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(), targetPosition, "SFX_WARPDASH", i));
 		player.see();
-		UserInterface.getUI().refresh();
+		Main.ui.refresh();
 	}
 
 	public int getCost(){

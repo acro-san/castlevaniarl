@@ -40,8 +40,8 @@ public class CharDisplay extends Display{
 		this.si = si;
 	}
 	
-	public int showTitleScreen(){
-		((ConsoleUserInterface)UserInterface.getUI()).showPersistantMessageBox = false;
+	public int showTitleScreen() {
+		((ConsoleUserInterface)Main.ui).showPersistantMessageBox = false;
 		si.cls();
 		printBars();
 		//Brahms Castle
@@ -70,7 +70,7 @@ public class CharDisplay extends Display{
 		si.print(20,17, "f. Show HiScores", ConsoleSystemInterface.WHITE);
 		si.print(20,18, "g. Quit", ConsoleSystemInterface.WHITE);
 		
-    	//CRL Logo
+		// CRL Logo
 		int logox = 20;
 		int logoy = 4;
 		si.print(logox+2,logoy, " /-  -----------\\", ConsoleSystemInterface.RED);
@@ -139,7 +139,7 @@ public class CharDisplay extends Display{
 		tb2.setText("The trip to the castle was long and harsh, after enduring many challenges through all Transylvannia, "+
 		"you are close to the castle of chaos. You are almost at Castlevania, and you are here on business: " + 
 		"To destroy forever the Curse of the Evil Count.");
-		       
+		
 		TextBox tb = new TextBox(si);
 		tb.setPosition(2,13);
 		tb.setHeight(4);
@@ -185,7 +185,7 @@ public class CharDisplay extends Display{
 		}
 */		si.print(2,14, "Do you want to save your character memorial? [Y/N]");
 		si.refresh();
-		return UserInterface.getUI().prompt();
+		return Main.ui.prompt();
 	}
 
 	public void showEndgame(Player player){

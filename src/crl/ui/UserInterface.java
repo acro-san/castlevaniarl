@@ -49,22 +49,12 @@ public abstract class UserInterface implements CommandListener/*, Runnable*/{
     // Relations
 	protected Player player;
 
-	// Setters
-	/** Sets the object which will be informed of the player commands.
-     * this corresponds to the Game object */
-	
-	
-	//Getters
-    public Player getPlayer() {
+	public Player getPlayer() {
 		return player;
 	}
 
-    // Smart Getters
-	
-    
-    //  Final attributes
-    
-    public final static String verboseSkills[] = new String []{
+
+	public final static String verboseSkills[] = {
 		"Unskilled", 
 		"Mediocre(1)", 
 		"Mediocre(2)", 
@@ -78,7 +68,6 @@ public abstract class UserInterface implements CommandListener/*, Runnable*/{
 		"Master"
 	};
 
-    //private final int WEAPONCODE = CharKey.SPACE;
 
     private boolean [][] FOVMask;
     //Interactive Methods
@@ -86,7 +75,7 @@ public abstract class UserInterface implements CommandListener/*, Runnable*/{
     
     public abstract void launchMerchant(Merchant who);
     
-    public abstract void chat (NPC who);
+    public abstract void chat(NPC who);
     
     public abstract boolean promptChat (NPC who);
 
@@ -249,14 +238,14 @@ public abstract class UserInterface implements CommandListener/*, Runnable*/{
 	}
 	
 	//	 Singleton
-	private static UserInterface singleton;
+//	private static UserInterface singleton;
 	
-	public static void setSingleton(UserInterface ui){
-		singleton = ui;
-	}
-	public static UserInterface getUI (){
-		return singleton;
-	}
+//	public static void setSingleton(UserInterface ui){
+//		singleton = ui;
+//	}
+//	public static UserInterface getUI (){
+//		return singleton;
+//	}
 	
 	public abstract void setTargets(Action a) throws ActionCancelException;
 	public abstract void showMessageHistory();

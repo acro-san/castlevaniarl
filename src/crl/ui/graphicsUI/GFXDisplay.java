@@ -135,12 +135,13 @@ public class GFXDisplay extends Display{
 		 si.add(gfxChatBox);
 	}
 	
-	public int showTitleScreen(){
+	public int showTitleScreen() {
 		double scale = configuration.getScreenScale();
 		int middlePoint = configuration.getScreenWidth() / 2;
 		int pickerXCoordinate = (configuration.getScreenWidth() / 2) - (IMG_PICKER.getWidth() / 2);
-		((GFXUserInterface)UserInterface.getUI()).messageBox.setVisible(false);
-		((GFXUserInterface)UserInterface.getUI()).persistantMessageBox.setVisible(false);
+		GFXUserInterface gui = (GFXUserInterface)Main.ui;
+		gui.messageBox.setVisible(false);
+		gui.persistantMessageBox.setVisible(false);
 		si.setFont(FNT_TEXT);
 		si.drawImage(IMG_TITLE);
 
@@ -156,7 +157,9 @@ public class GFXDisplay extends Display{
 
     		si.drawImage(pickerXCoordinate, (int)((356+choice*20)*scale), IMG_PICKER);
     		si.printAtPixelCentered(middlePoint,(int)(368*scale), "a. New Game", Color.WHITE);
+    		
     		si.printAtPixelCentered(middlePoint,(int)(388*scale), "b. Load Character", Color.WHITE);
+    		
     		si.printAtPixelCentered(middlePoint,(int)(408*scale), "c. View Prologue", Color.WHITE);
     		si.printAtPixelCentered(middlePoint,(int)(428*scale), "d. Training", Color.WHITE);
     		si.printAtPixelCentered(middlePoint,(int)(448*scale), "e. Prelude Arena", Color.WHITE);
@@ -203,7 +206,7 @@ public class GFXDisplay extends Display{
 		}
 	}
 	
-	public void showIntro(Player player){
+	public void showIntro(Player player) {
 		si.drawImage(IMG_PROLOGUE);
 		si.setFont(FNT_TITLE);
 		si.printAtPixel(156,136, "prologue", Color.WHITE);
@@ -218,8 +221,8 @@ public class GFXDisplay extends Display{
 		"turning its forests and lakes into a pool of blood. \n\n"+
 		"The trip to the castle was long and harsh, after enduring many challenges through all Transylvannia, "+
 		"you are close to the castle of chaos. You are almost at Castlevania, and you are here on business: " + 
-		"To destroy forever the Curse of the Evil Count.\n\n"+ 
-						
+		"To destroy forever the Curse of the Evil Count.\n\n"+
+		
 		player.getPlot()+", "+player.getDescription()+" stands on a forest near the town of Petra and the cursed castle; "+
 		player.getPlot2() +" and the fate running through his veins being the sole hope for mankind.");
 		
@@ -230,8 +233,8 @@ public class GFXDisplay extends Display{
 		si.remove(t1);
 	}
 	
-	public boolean showResumeScreen(Player player){
-		((GFXUserInterface)UserInterface.getUI()).messageBox.setVisible(false);
+	public boolean showResumeScreen(Player player) {
+		((GFXUserInterface)Main.ui).messageBox.setVisible(false);
 		si.drawImage(IMG_RESUME);
 		
 		GameSessionInfo gsi = player.getGameSessionInfo();
@@ -258,13 +261,13 @@ public class GFXDisplay extends Display{
 */		si.setFont(FNT_TEXT);
 		si.print(2,14, "Do you want to save your character memorial? [Y/N]", Color.WHITE);
 		si.refresh();
-		boolean ret = UserInterface.getUI().prompt();
+		boolean ret = Main.ui.prompt();
 		si.remove(t1);
 		return ret;
 	}
 
 	public void showEndgame(Player player){
-		((GFXUserInterface)UserInterface.getUI()).messageBox.setVisible(false);
+		((GFXUserInterface)Main.ui).messageBox.setVisible(false);
 		si.drawImage(IMG_ENDGAME);
 		si.setFont(FNT_TITLE);
 		si.printAtPixel(156,136, "Epilogue", Color.WHITE);
@@ -378,8 +381,9 @@ public class GFXDisplay extends Display{
 		showTextBox(text,30,40,300,300);
 	}
 	
-	public Advancement showLevelUp(Vector<Advancement> advancements){
-		((GFXUserInterface)UserInterface.getUI()).messageBox.setVisible(false);
+	public Advancement showLevelUp(Vector<Advancement> advancements) {
+		GFXUserInterface gui = (GFXUserInterface)Main.ui;
+		gui.messageBox.setVisible(false);
 		
 		si.saveBuffer();
 		si.drawImage(IMG_LEVEL_UP);
@@ -392,7 +396,7 @@ public class GFXDisplay extends Display{
 		int choice = readAlphaToNumber(advancements.size());
 		si.restore();
 		si.refresh();
-		((GFXUserInterface)UserInterface.getUI()).messageBox.setVisible(true);
+		gui.messageBox.setVisible(true);
 		return (Advancement)advancements.elementAt(choice);
 		
 		/*si.saveBuffer();
@@ -589,7 +593,8 @@ public class GFXDisplay extends Display{
 	}
 	
 	public void showMonsterScreen(Monster who, Player player) {
-		((GFXUserInterface)UserInterface.getUI()).messageBox.setVisible(false);
+		GFXUserInterface gui = (GFXUserInterface)Main.ui;
+		gui.messageBox.setVisible(false);
 		GFXAppearance app = (GFXAppearance)who.getAppearance();
 		//si.saveBuffer();
 		si.drawImage(IMG_LEVEL_UP);
@@ -616,14 +621,11 @@ public class GFXDisplay extends Display{
 		si.print(2,20, "[Press Space]",Color.WHITE);
 		si.refresh();
 		si.waitKey(CharKey.SPACE);
-		((GFXUserInterface)UserInterface.getUI()).messageBox.setVisible(true);
+		gui.messageBox.setVisible(true);
 		t1.setVisible(false);
 		si.remove(t1);
 		si.restore();
 		si.refresh();
 	}
 
-
-	
 }
-

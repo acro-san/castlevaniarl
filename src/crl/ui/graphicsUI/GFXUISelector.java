@@ -10,6 +10,7 @@ import java.util.Properties;
 import sz.csi.CharKey;
 import sz.util.Debug;
 import sz.util.Position;
+import crl.Main;
 import crl.action.Action;
 import crl.actor.Actor;
 import crl.actor.Message;
@@ -19,7 +20,6 @@ import crl.monster.Monster;
 import crl.npc.NPC;
 import crl.player.Player;
 import crl.ui.ActionCancelException;
-import crl.ui.CommandListener;
 import crl.ui.UISelector;
 import crl.ui.UserAction;
 
@@ -29,8 +29,8 @@ public class GFXUISelector extends UISelector implements ActionSelector, MouseLi
 	
 	
 	public void init(SwingSystemInterface psi, UserAction[] gameActions, Properties UIProperties,
-			Action advance, Action target, Action attack, GFXUserInterface ui, Properties keyBindings){
-		super.init(gameActions, advance, target, attack, ui, keyBindings);
+			Action advance, Action target, Action attack, Properties keyBindings){
+		super.init(gameActions, advance, target, attack, keyBindings);
 		this.si = psi;
 		if (UIProperties.getProperty("useMouse").equals("true")){
 			psi.addMouseListener(this);
@@ -41,28 +41,21 @@ public class GFXUISelector extends UISelector implements ActionSelector, MouseLi
 	}
 	
 	
-	
-	
-	public GFXUserInterface ui(){
-		return (GFXUserInterface) getUI();
+	public GFXUserInterface ui() {
+		return (GFXUserInterface)Main.ui;
 	}
-	/** 
-	 * Returns the Action that the player wants to perform.
-     * It may also forward a command instead
-     * 
-     */
 	
-	public Action selectAction(Actor who){
-    	Debug.enterMethod(this, "selectAction", who);
+	public Action selectAction(Actor who) {
+		Debug.enterMethod(this, "selectAction", who);
 	    CharKey input = null;
 	    Action ret = null;
-	    while (ret == null){
+	    while (ret == null) {
 	    	if (ui().gameOver())
 	    		return null;
 			input = si.inkey();
 			if (input.code == CharKey.NONE && !useMouse)
 				continue;
-			ret = ((GFXUserInterface)getUI()).selectCommand(input);
+			ret = ui().selectCommand(input);
 			if (ret != null){
 				if (ret.canPerform(player))
             		return ret;

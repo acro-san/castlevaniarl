@@ -1,22 +1,17 @@
 package crl.action.vkiller;
 
-import sz.util.Debug;
-import sz.util.Line;
-import sz.util.Position;
-import sz.util.Util;
-import crl.action.Action;
+import crl.Main;
 import crl.action.HeartAction;
-import crl.actor.Actor;
 import crl.feature.Feature;
-import crl.level.Cell;
 import crl.level.Level;
 import crl.monster.Monster;
 import crl.monster.VMonster;
 import crl.player.Player;
-import crl.ui.UserInterface;
 import crl.ui.effects.EffectFactory;
+import sz.util.Position;
+import sz.util.Util;
 
-public class ItemBreakHoly extends HeartAction{
+public class ItemBreakHoly extends HeartAction {
 	public int getHeartCost() {
 		return 5;
 	}
@@ -28,10 +23,8 @@ public class ItemBreakHoly extends HeartAction{
 		Player aPlayer = (Player) performer;
         Level aLevel = performer.getLevel();
 		aLevel.addMessage("You jump! You unleash a rain of holy water!");
-		UserInterface.getUI().drawEffect(EffectFactory.getSingleton().createLocatedEffect(aPlayer.getPosition(), "SFX_HOLY_RAINSPLASH"));
-		int damage = 6 + 
-		getPlayer().getShotLevel()+ 
-		getPlayer().getSoulPower();
+		Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(aPlayer.getPosition(), "SFX_HOLY_RAINSPLASH"));
+		int damage = 6 + getPlayer().getShotLevel() + getPlayer().getSoulPower();
 		
 		VMonster monsters = aLevel.getMonsters();
 		for (int i = 0; i < monsters.size(); i++){
@@ -45,7 +38,7 @@ public class ItemBreakHoly extends HeartAction{
 				aLevel.addMessage(buff.toString());
 			}
 		}
-		UserInterface.getUI().refresh();
+		Main.ui.refresh();
 		
 		int drops = Util.rand(20,40);
 
@@ -54,8 +47,8 @@ public class ItemBreakHoly extends HeartAction{
 			int ydif = 5-Util.rand(0,10);
 			Position destinationPoint = Position.add(aPlayer.getPosition(), new Position(xdif,ydif));
 			if (aLevel.isValidCoordinate(destinationPoint)){
-				aLevel.addEffect(EffectFactory.getSingleton().createLocatedEffect(destinationPoint, "SFX_HOLY_RAINDROP"));
-				UserInterface.getUI().refresh();
+				Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(destinationPoint, "SFX_HOLY_RAINDROP"));
+				Main.ui.refresh();
 				Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
 	        	if (destinationFeature != null && destinationFeature.isDestroyable()){
 					Feature prize = destinationFeature.damage(aPlayer, damage);

@@ -141,7 +141,7 @@ public class Level implements FOVMap, Serializable {
 	public void addMessage(Message what){
 		/*what = null;
 		what.getText();*/
-		UserInterface.getUI().addMessage(what);
+		Main.ui.addMessage(what);
 		//dispatcher.addActor(what, true, what);
 	}
 
@@ -167,11 +167,8 @@ public class Level implements FOVMap, Serializable {
 		dispatcher.removeActor(what);
 	}
 
-	public void addEffect (Effect what){
-		UserInterface.getUI().drawEffect(what);
-	}
 
-	public SZQueue getMessagesAndEffects(){
+	public SZQueue getMessagesAndEffects() {
 		return messagesneffects;
 	}
 

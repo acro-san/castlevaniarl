@@ -1,5 +1,6 @@
 package crl.action.vkiller;
 
+import crl.Main;
 import crl.action.HeartAction;
 import crl.level.Level;
 import crl.player.Player;
@@ -18,7 +19,7 @@ public class SoulWind extends HeartAction{
 		super.execute();
 		Player aPlayer = (Player) performer;
 		Level x = performer.getLevel();
-		x.addEffect(EffectFactory.getSingleton().createLocatedEffect(aPlayer.getPosition(), "SFX_SOUL_WIND"));
+		Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(aPlayer.getPosition(), "SFX_SOUL_WIND"));
 		x.addMessage("Soul Wind!");
 		x.stopTime(20 + aPlayer.getShotLevel()*5+ 2*aPlayer.getSoulPower());
 	}

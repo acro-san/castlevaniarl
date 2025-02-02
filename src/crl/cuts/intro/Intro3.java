@@ -2,19 +2,20 @@ package crl.cuts.intro;
 
 import sz.util.Position;
 import sz.util.Util;
+import crl.Main;
 import crl.cuts.Unleasher;
 import crl.game.Game;
 import crl.game.STMusicManagerNew;
 import crl.level.Level;
 import crl.monster.Monster;
 import crl.monster.MonsterFactory;
-import crl.ui.UserInterface;
 
 public class Intro3 extends Unleasher {
 
 	public void unleash(Level level, Game game) {
-		if (level.getFlag("INTRO2")&& level.getCounter("COUNTBACK_INTRO_2").isOver()){
-			level.addMessage("A monstruous Warg appears out of nowhere! Remember to [j]ump, attack from safe distance (with [.]), and use your [p]owers!");
+		if (level.getFlag("INTRO2") && level.getCounter("COUNTBACK_INTRO_2").isOver()) {
+			level.addMessage(
+			"A monstruous Warg appears out of nowhere! Remember to [j]ump, attack from safe distance (with [.]), and use your [p]owers!");
 			Position playerFloor = new Position(level.getPlayer().getPosition());
 			playerFloor.z = 2;
 			while (true) {
@@ -35,7 +36,7 @@ public class Intro3 extends Unleasher {
 			enabled = false;
 			level.removeCounter("COUNTBACK_INTRO_2");
 			level.getPlayer().see();
-			UserInterface.getUI().refresh();
+			Main.ui.refresh();
 		}
 	}
 

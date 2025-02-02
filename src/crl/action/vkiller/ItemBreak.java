@@ -1,5 +1,6 @@
 package crl.action.vkiller;
 
+import crl.Main;
 import crl.action.HeartAction;
 import crl.player.Player;
 import crl.ui.ActionCancelException;
@@ -59,7 +60,7 @@ public class ItemBreak extends HeartAction{
 			
 		}
 		try {
-			UserInterface.getUI().setTargets(breakAction);
+			Main.ui.setTargets(breakAction);
 			if (breakAction.canPerform(performer))
 				breakAction.execute();
 		} catch (ActionCancelException ace){

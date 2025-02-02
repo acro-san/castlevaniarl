@@ -5,6 +5,7 @@ import java.util.Vector;
 import sz.csi.CharKey;
 import sz.util.OutParameter;
 import sz.util.Position;
+import crl.Main;
 import crl.actor.Actor;
 import crl.item.Item;
 import crl.player.Player;
@@ -207,7 +208,7 @@ public abstract class Action implements java.io.Serializable{
 	}
 	
 	protected void drawEffect(Effect x){
-		UserInterface.getUI().drawEffect(x);
+		Main.ui.drawEffect(x);
 	}
 	
 	public String getSFX(){
