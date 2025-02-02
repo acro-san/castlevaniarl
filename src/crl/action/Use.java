@@ -28,7 +28,7 @@ public class Use extends Action{
 
 		Player aPlayer = (Player) performer;
 		ItemDefinition def = targetItem.getDefinition();
-		String[] effect = def.getEffectOnUse().split(" ");
+		String[] effect = def.effectOnUse.split(" ");
 		
 		if (def.getID().equals("SOUL_RECALL")){
 			if (aPlayer.getHostage()!=null){
@@ -161,9 +161,9 @@ public class Use extends Action{
 			}
 			performer.getLevel().addMessage(message.toString());
 		}
-		if (def.isSingleUse())
+		if (def.isSingleUse) {
 			aPlayer.reduceQuantityOf(targetItem);
-
+		}
 
 	}
 

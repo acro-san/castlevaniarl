@@ -44,7 +44,7 @@ public class TargetPS extends ProjectileSkill{
 		if (weapon.getReloadTurns() > 0 &&
 			weapon.getRemainingTurnsToReload() > 0)
 			weapon.setRemainingTurnsToReload(weapon.getRemainingTurnsToReload()-1);
-		if (weaponDef.isSingleUse()){
+		if (weaponDef.isSingleUse) {
 			if (weapon.getReloadTurns() > 0){
 				if (weapon.getRemainingTurnsToReload() == 0) {
 					player.setWeapon(null);
@@ -85,7 +85,7 @@ public class TargetPS extends ProjectileSkill{
 	
 	private boolean reload(Item weapon, Player aPlayer){
 		if (weapon != null){
-			if (aPlayer.getGold() < weapon.getDefinition().getReloadCostGold()){
+			if (aPlayer.getGold() < weapon.getDefinition().reloadCostGold){
 				aPlayer.getLevel().addMessage("You can't reload the " + weapon.getDescription());
 				return false;
 			}else if (aPlayer.getHearts() < 1){
@@ -94,10 +94,12 @@ public class TargetPS extends ProjectileSkill{
 			}
 			else {
 				weapon.reload();
-				aPlayer.reduceGold(weapon.getDefinition().getReloadCostGold());
+				aPlayer.reduceGold(weapon.getDefinition().reloadCostGold);
 				aPlayer.reduceHearts(1);
-				aPlayer.getLevel().addMessage("You reload the " + weapon.getDescription()+" ("+weapon.getDefinition().getReloadCostGold()+" gold)");
-				reloadTime = 10*weapon.getDefinition().getReloadTurns();
+				aPlayer.getLevel().addMessage("You reload the " + 
+				weapon.getDescription()+" ("+
+					weapon.getDefinition().reloadCostGold+" gold)");
+				reloadTime = 10*weapon.getDefinition().reloadTurns;
 				return true;
 			}
 		} else
@@ -174,7 +176,7 @@ public class TargetPS extends ProjectileSkill{
 
 
 	public int getRange() {
-		return weapon.getDefinition().getRange();
+		return weapon.getDefinition().range;
 	}
 
 	public String getSelfTargettedMessage() {

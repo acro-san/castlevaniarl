@@ -69,10 +69,11 @@ public class Equipment implements MenuItem, GFXMenuItem{
 	}
 
 	public String getMenuDetail() {
-		if (menuDetail)
- 			return "  "+item.getDefinition().getMenuDescription();
- 		else
- 			return null;
+		if (menuDetail) {
+			return "  "+item.getDefinition().menuDescription;
+		} else {
+			return null;
+		}
 	}
 
 	public Image getMenuImage() {

@@ -67,7 +67,7 @@ public class ItemDataTable {
 		}
 		ItemDefinition def = get(ID);
 		Item item = new Item(def);
-		if (!def.isFixedMaterial()) {
+		if (!def.isFixedMaterial) {
 			Debug.doAssert(modMaterial != null, "Material " + material
 					+ " not found at create weapon");
 			item.addPreModifier(modMaterial);
@@ -84,7 +84,7 @@ public class ItemDataTable {
 
 		ItemDefinition def = get(ID);
 		Item item = new Item(def);
-		if (!def.isFixedMaterial()) {
+		if (!def.isFixedMaterial) {
 			Debug.doAssert(modMaterial != null, "Material " + material
 					+ " not found at create shield");
 			item.addPreModifier(modMaterial);
@@ -101,7 +101,7 @@ public class ItemDataTable {
 
 		ItemDefinition def = get(ID);
 		Item item = new Item(def);
-		if (!def.isFixedMaterial()) {
+		if (!def.isFixedMaterial) {
 			item.addPreModifier(modMaterial);
 		}
 		return item;
@@ -135,7 +135,7 @@ public class ItemDataTable {
 				def = (ItemDefinition)Util.randomPick(weaponDefinitions);
 			else
 				def = (ItemDefinition)Util.randomPick(armorDefinitions);
-			int pinLevel = def.getPinLevel();
+			int pinLevel = def.pinLevel;
 			if (pinLevel == 0)
 				continue;
 			int diff = Math.abs(level.getLevelNumber() - pinLevel);
@@ -149,7 +149,7 @@ public class ItemDataTable {
 				prob = (int) Math.round(prob / 2.0d);
 			}
 
-			if (def.isUnique()) {
+			if (def.isUnique) {
 				if (Game.wasUniqueGenerated(def.getID())) {
 					i++;
 					continue;
@@ -157,13 +157,13 @@ public class ItemDataTable {
 				prob = (int) Math.round(prob / 5.0d);
 			}
 
-			if (def.getCoolness() > player.getCoolness()) {
+			if (def.coolness > player.coolness) {
 				i++;
 				continue;
 			}
 
-			if (Util.chance(prob) && Util.chance(def.getRarity())) {
-				if (def.isUnique()) {
+			if (Util.chance(prob) && Util.chance(def.rarity)) {
+				if (def.isUnique) {
 					Game.registerUniqueGenerated(def.getID());
 				}
 				break out;
@@ -177,24 +177,24 @@ public class ItemDataTable {
 			return null;
 		}
 		Item item = new Item(def);
-		player.reduceCoolness(def.getCoolness());
-		if (def.isUnique()) {
+		player.coolness -= def.coolness;
+		if (def.isUnique) {
 			return item;
 		}
 		if (def.equipType == ItemDefinition.EQUIPTYPE_WEAPON) {
-			if (!def.isFixedMaterial())
+			if (!def.isFixedMaterial)
 				setMaterial(item, level.getLevelNumber(), MOD_MATERIAL);
 			if (Util.chance(20))
 				setWeaponModifiers(item, level.getLevelNumber());
 			return item;
 		} else if (def.equipType == ItemDefinition.EQUIPTYPE_ARMOR) {
-			if (!def.isFixedMaterial())
+			if (!def.isFixedMaterial)
 				setMaterial(item, level.getLevelNumber(), MOD_ARMOR_MATERIAL);
 			if (Util.chance(10))
 				setArmorModifiers(item, level.getLevelNumber());
 			return item;
 		} else if (def.equipType == ItemDefinition.EQUIPTYPE_SHIELD) {
-			if (!def.isFixedMaterial())
+			if (!def.isFixedMaterial)
 				setMaterial(item, level.getLevelNumber(), MOD_MATERIAL);
 			if (Util.chance(20))
 				setWeaponModifiers(item, level.getLevelNumber());

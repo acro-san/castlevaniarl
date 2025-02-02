@@ -8,7 +8,7 @@ public class Reload extends Action{
 	private transient Item weapon;
 	public int getCost() {
 		if (weapon != null)
-			return 10 * weapon.getDefinition().getReloadCostGold();
+			return 10 * weapon.getDefinition().reloadCostGold;
 		else
 			return 50;
 	}
@@ -21,15 +21,17 @@ public class Reload extends Action{
 		Player aPlayer = (Player) performer;
 		weapon = aPlayer.getWeapon();
 		if (weapon != null){
-			if (weapon.getDefinition().isSingleUse()){
+			if (weapon.getDefinition().isSingleUse){
 				aPlayer.getLevel().addMessage("You can't reload the " + weapon.getDescription());
-			} else if (aPlayer.getGold() < weapon.getDefinition().getReloadCostGold())
+			} else if (aPlayer.getGold() < weapon.getDefinition().reloadCostGold)
 				aPlayer.getLevel().addMessage("You can't reload the " + weapon.getDescription());
 			else {
 				weapon.reload();
-				aPlayer.reduceGold(weapon.getDefinition().getReloadCostGold());
+				aPlayer.reduceGold(weapon.getDefinition().reloadCostGold);
 				aPlayer.reduceHearts(1);
-				aPlayer.getLevel().addMessage("You reload the " + weapon.getDescription()+" ("+weapon.getDefinition().getReloadCostGold()+" gold)");
+				aPlayer.getLevel().addMessage(
+					"You reload the " + weapon.getDescription()+
+					" ("+weapon.getDefinition().reloadCostGold+" gold)");
 			}
 		} else
 			aPlayer.getLevel().addMessage("You can't reload yourself");
@@ -38,26 +40,24 @@ public class Reload extends Action{
 	public boolean canPerform(Actor a){
 		Player aPlayer = getPlayer(a);
 		Item weapon = aPlayer.getWeapon();
-		if (weapon != null){
-			if (weapon.getReloadTurns()>0){
-				if (aPlayer.getGold() < weapon.getDefinition().getReloadCostGold()){
-					invalidationMessage = "You need "+weapon.getDefinition().getReloadCostGold()+" gold to reload the " + weapon.getDescription();
-					return false;
-				}
-				else {
-					if (aPlayer.getHearts() > 0)
-						return true;
-					else {
-						invalidationMessage = "You need soul power to reload the " + weapon.getDescription();
-						return false;
-					}
-				}
-			} else {
-				invalidationMessage = "The " + weapon.getDescription()+" cannot be reloaded";
-				return false;
-			}
-		} else {
+		if (weapon == null) {
 			invalidationMessage = "You can't reload yourself";
+			return false;
+		}
+		
+		if (weapon.getReloadTurns() <= 0) {
+			invalidationMessage = "The " + weapon.getDescription()+" cannot be reloaded";
+			return false;
+		}
+		if (aPlayer.getGold() < weapon.getDefinition().reloadCostGold) {
+			invalidationMessage = "You need "+weapon.getDefinition().reloadCostGold+" gold to reload the " + weapon.getDescription();
+			return false;
+		}
+
+		if (aPlayer.getHearts() > 0) {
+			return true;
+		} else {
+			invalidationMessage = "You need soul power to reload the " + weapon.getDescription();
 			return false;
 		}
 	}

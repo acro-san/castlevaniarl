@@ -368,7 +368,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 							BasicListItem li = (BasicListItem)sightListItems.get(item.getDefinition().getID());
 							if (li == null){
 								//Debug.say("Adding "+item.getDefinition().getID()+" to the hashtable");
-								sightListItems.put(item.getDefinition().getID(), new BasicListItem(((CharAppearance)item.getAppearance()).getChar(), ((CharAppearance)item.getAppearance()).getColor(), item.getDefinition().getDescription()));
+								sightListItems.put(item.getDefinition().getID(), new BasicListItem(((CharAppearance)item.getAppearance()).getChar(), ((CharAppearance)item.getAppearance()).getColor(), item.getDefinition().description));
 								li = (BasicListItem)sightListItems.get(item.getDefinition().getID());
 							}
 							if (!itemsOnSight.contains(li))
@@ -1179,7 +1179,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 	 		}
 	 		si.print(52, 8, fill(selected.getDescription(), 25), ConsoleSystemInterface.RED);
 	 		itemDescription.clear();
-	 		itemDescription.setText(selected.getDefinition().getMenuDescription());
+	 		itemDescription.setText(selected.getDefinition().menuDescription);
 	 		
 	 		
 	 		itemUsageChoices.draw();

@@ -1594,7 +1594,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 	 			break;
 	 		}
 	 		si.print(52, 8, selected.getDescription(), GFXDisplay.COLOR_BOLD);
-	 		itemDescription.setText(selected.getDefinition().getMenuDescription());
+	 		itemDescription.setText(selected.getDefinition().menuDescription);
 	 		si.refresh();
 	 		
 	 		itemUsageChoices.draw();
@@ -2232,7 +2232,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 				Item smi = (Item) value;
 				ren.setIcon(new ImageIcon(((GFXAppearance)smi.getAppearance()).getIconImage()));
 				//ren.setText(smi.getMenuDescription());
-				ren.setText(smi.getAttributesDescription() + " ["+smi.getDefinition().getMenuDescription()+"] ($"+smi.getGoldPrice()+")");
+				ren.setText(smi.getAttributesDescription() + " ["+smi.getDefinition().menuDescription+"] ($"+smi.getGoldPrice()+")");
 				ren.setOpaque(isSelected);
 				return ren;
 			}

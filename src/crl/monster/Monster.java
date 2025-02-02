@@ -137,7 +137,7 @@ public class Monster extends Actor implements Cloneable{
 	public void damageWithWeapon(StringBuffer message, int dam){
 		Item wep = level.getPlayer().getWeapon();
 		if (wep != null)
-			level.getPlayer().increaseWeaponSkill(wep.getDefinition().getWeaponCategory());
+			level.getPlayer().increaseWeaponSkill(wep.getDefinition().weaponCategory);
 		else
 			level.getPlayer().increaseWeaponSkill(ItemDefinition.CAT_UNARMED);
 		damage(message, dam);
@@ -417,14 +417,15 @@ public class Monster extends Actor implements Cloneable{
 		int hitChance = 100 - getEvadeChance();
 		hitChance = (int)Math.round((hitChance + magicalHit)/2.0d);
 		int penalty = 0;
-		if (isWeaponAttack){
+		if (isWeaponAttack) {
 			penalty = (int)(Position.distance(getPosition(), attackOrigin)/4);
-			if (attacker.getWeapon().isHarmsUndead() && isUndead())
+			if (attacker.getWeapon().isHarmsUndead() && isUndead()) {
 				magicalDamage *= 2;
-			attacker.increaseWeaponSkill(attacker.getWeapon().getDefinition().getWeaponCategory());
-				
-		}
+			}
+			attacker.increaseWeaponSkill(attacker.getWeapon().getDefinition().weaponCategory);
 			
+		}
+		
 		magicalDamage -= penalty;
 		int evasion = 100 - hitChance;
 		

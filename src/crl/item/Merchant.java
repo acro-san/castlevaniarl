@@ -10,19 +10,37 @@ import crl.Main;
 import crl.data.*;
 
 public class Merchant extends NPC {
+	
 	private String merchantName;
 	private int refreshTurns = -1;
-	private int merchandiseType;
+	private byte merchandiseType;
+	
+	private final static String[] MERCHANT_NAMES = {
+		"Kaleth",
+		"Adam",
+		"Invenior",
+		"Dimitri",
+		"Merdotios",
+		"Richard",
+		"Tommy",
+		"Valentina",
+		"Astrith",
+		"Julieth",
+		"Jazeth",
+		"Juran",
+		"Camilla",
+		"Emer"
+	};
 
-	public String getMerchandiseTypeDesc(){
-		switch (merchandiseType){
-		case ItemDefinition.SHOP_ARMOR:
+	public String getMerchandiseTypeDesc() {
+		switch (merchandiseType) {
+		case ItemDefinition.SHOPTYPE_ARMOR:
 			return "armor";
-		case ItemDefinition.SHOP_CRAFTS:
+		case ItemDefinition.SHOPTYPE_CRAFTS:
 			return "general goods";
-		case ItemDefinition.SHOP_MAGIC:
+		case ItemDefinition.SHOPTYPE_MAGIC:
 			return "magic goods";
-		case ItemDefinition.SHOP_WEAPONS:
+		case ItemDefinition.SHOPTYPE_WEAPONS:
 			return "weapons";
 		}
 		return "";
@@ -32,31 +50,34 @@ public class Merchant extends NPC {
 		return merchantName;
 	}
 
-	public Merchant (NPCDefinition def, int pMerchandiseType){
+	public Merchant(NPCDefinition def, int pMerchandiseType) {
 		super(def);
-		merchandiseType = pMerchandiseType;
-		merchantName = merchantNames[Util.rand(0, merchantNames.length-1)];
+		merchandiseType = (byte)pMerchandiseType;
+		merchantName = MERCHANT_NAMES[Util.rand(0, MERCHANT_NAMES.length-1)];
 	}
 	
-	public String getDescription(){
+	public String getDescription() {
 		return merchantName;
 	}
 	
-	public Vector getMerchandiseFor(Player player){
-		if (refreshTurns == -1 || player.getGameSessionInfo().getTurns() - refreshTurns > 1000)  {
+	public Vector getMerchandiseFor(Player player) {
+		int gameTurns = player.getGameSessionInfo().getTurns();
+		if (refreshTurns == -1 || gameTurns - refreshTurns > 1000) {
 			if (player.getPlayerClass() == Player.CLASS_VAMPIREKILLER && (
-					merchandiseType == ItemDefinition.SHOP_WEAPONS ||
-					merchandiseType == ItemDefinition.SHOP_ARMOR)
-					) ;
-			else
+					merchandiseType == ItemDefinition.SHOPTYPE_WEAPONS ||
+					merchandiseType == ItemDefinition.SHOPTYPE_ARMOR)
+					)
+			{
+				;	// no refresh ??
+			} else {
 				refreshMerchandise(player);
-			refreshTurns = player.getGameSessionInfo().getTurns();
+			}
+			refreshTurns = gameTurns;
 		}
 		return inventory;
 	}
 
-	//private Vector merchandises = new Vector();
-	private Vector inventory;
+	private Vector<Item> inventory;
 
 	/*private void refreshMerchandise(Player player){
 		merchandises = new Vector();
@@ -83,14 +104,14 @@ public class Merchant extends NPC {
 	
 	public void refreshMerchandise(Player player) {
 		if (player.getPlayerClass() == Player.CLASS_VAMPIREKILLER && (
-				merchandiseType == ItemDefinition.SHOP_WEAPONS ||
-				merchandiseType == ItemDefinition.SHOP_ARMOR)
+				merchandiseType == ItemDefinition.SHOPTYPE_WEAPONS ||
+				merchandiseType == ItemDefinition.SHOPTYPE_ARMOR)
 			)
 		{
 			return;
 		}
 		
-		inventory = new Vector();
+		inventory = new Vector<>();
 		Vector vectorIDs = new Vector();
 		ItemDefinition[] defs = Items.defs;
 		int itemNumber = Util.rand(6,12);
@@ -101,27 +122,30 @@ public class Merchant extends NPC {
 			if (tries > 200)
 				break;
 			ItemDefinition def = defs[Util.rand(0, defs.length - 1)];
-			if (def.getShopCategory() != merchandiseType)
+			if (def.shopCategory != merchandiseType) {
 				continue;
-			if (!Util.chance(def.getShopChance()))
+			}
+			if (!Util.chance(def.shopChance)) {
 				continue;
-			if (vectorIDs.contains(def.getID()))
+			}
+			if (vectorIDs.contains(def.getID())) {
 				continue;
+			}
 			items++;
 			Item item = new Item(def);
 			vectorIDs.add(def.getID());
-			if (def.isUnique())
+			if (def.isUnique) {
 				inventory.add(item);
-			else if (def.getAttack() > 0) {
-				if (!def.isFixedMaterial()) {
+			} else if (def.attack > 0) {
+				if (!def.isFixedMaterial) {
 					Main.itemData.setMaterial(item, level.getLevelNumber(), ItemDataTable.MOD_MATERIAL);
 				}
 				if (Util.chance(20)) {
 					Main.itemData.setWeaponModifiers(item, level.getLevelNumber());
 				}
 				inventory.add(item);
-			} else if (def.getDefense() > 0) {
-				if (!def.isFixedMaterial()) {
+			} else if (def.defense > 0) {
+				if (!def.isFixedMaterial) {
 					Main.itemData.setMaterial(item, level.getLevelNumber(),ItemDataTable.MOD_ARMOR_MATERIAL);
 				}
 				if (Util.chance(10)) {
@@ -134,24 +158,8 @@ public class Merchant extends NPC {
 		}
 	}
 
-	private final static String[] merchantNames = {
-		"Kaleth",
-		"Adam",
-		"Invenior",
-		"Dimitri",
-		"Merdotios",
-		"Richard",
-		"Tommy",
-		"Valentina",
-		"Astrith",
-		"Julieth",
-		"Jazeth",
-		"Juran",
-		"Camilla",
-		"Emer"
-	};
 
-	public int getAttack(){
+	public int getAttack() {
 		return 4;
 	}
 }

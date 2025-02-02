@@ -45,7 +45,7 @@ public class Attack extends Action{
 		/*if (player.hasCounter(Consts.C_WOLFMORPH) || player.hasCounter(Consts.C_WOLFMORPH2))
 			weapon = null;*/
 		
-		if (weapon == null || weapon.getDefinition().getWeaponCategory().equals(ItemDefinition.CAT_UNARMED)) {
+		if (weapon == null || weapon.getDefinition().weaponCategory.equals(ItemDefinition.CAT_UNARMED)) {
 			if (targetDirection == Action.SELF && aLevel.getMonsterAt(player.getPosition()) == null){
 				aLevel.addMessage("Don't hit yourself");
 				return;
@@ -92,7 +92,7 @@ public class Attack extends Action{
 					return;
 			}
 
-		String [] sfx = weaponDef.getAttackSFX().split(" ");
+		String [] sfx = weaponDef.attackSFX.split(" ");
 		if (sfx.length > 0)
 			if (sfx[0].equals("MELEE")){
 				Effect me = EffectFactory.getSingleton().createDirectionalEffect(performer.getPosition(), targetDirection, weapon.getRange(), "SFX_WP_"+weaponDef.getID()); 
@@ -220,8 +220,8 @@ public class Attack extends Action{
 		if (weapon.getReloadTurns() > 0 &&
 			weapon.getRemainingTurnsToReload() > 0)
 			weapon.setRemainingTurnsToReload(weapon.getRemainingTurnsToReload()-1);
-		if (weaponDef.isSingleUse()){
-			if (weapon.getReloadTurns() > 0){
+		if (weaponDef.isSingleUse) {
+			if (weapon.getReloadTurns() > 0) {
 				if (weapon.getRemainingTurnsToReload() == 0) {
 					player.setWeapon(null);
 				}
@@ -242,26 +242,27 @@ public class Attack extends Action{
 		return targetDirection;
 	}
 
-	private boolean reload(Item weapon, Player aPlayer){
-		if (weapon != null){
-			if (aPlayer.getGold() < weapon.getDefinition().getReloadCostGold()){
-				aPlayer.getLevel().addMessage("You can't reload the " + weapon.getDescription());
-				return false;
-			} else if (aPlayer.getHearts() < 2){
-				aPlayer.getLevel().addMessage("You can't reload the " + weapon.getDescription());
-				return false;
-			}
-			else {
-				weapon.reload();
-				aPlayer.reduceGold(weapon.getDefinition().getReloadCostGold());
-				aPlayer.reduceHearts(2);
-				aPlayer.getLevel().addMessage("You reload the " + weapon.getDescription()+" ("+weapon.getDefinition().getReloadCostGold()+" gold)");
-				reloadTime = 10*weapon.getDefinition().getReloadTurns();
-				return true;
-			}
-		} else
+	private boolean reload(Item weapon, Player aPlayer) {
+		if (weapon == null) {
 			aPlayer.getLevel().addMessage("You can't reload yourself");
-		return false;
+			return false;
+		}
+		
+		if (aPlayer.getGold() < weapon.getDefinition().reloadCostGold) {
+			aPlayer.getLevel().addMessage("You can't afford to reload the " + weapon.getDescription());
+			return false;
+		}
+		if (aPlayer.getHearts() < 2) {
+			aPlayer.getLevel().addMessage("You can't reload the " + weapon.getDescription());
+			return false;
+		}
+		
+		weapon.reload();
+		aPlayer.reduceGold(weapon.getDefinition().reloadCostGold);
+		aPlayer.reduceHearts(2);
+		aPlayer.getLevel().addMessage("You reload the " + weapon.getDescription()+" ("+weapon.getDefinition().reloadCostGold+" gold)");
+		reloadTime = 10*weapon.getDefinition().reloadTurns;
+		return true;
 	}
 	
 	public int getCost(){

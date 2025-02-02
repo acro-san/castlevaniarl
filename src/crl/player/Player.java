@@ -100,7 +100,7 @@ public class Player extends Actor {
 	private int castCost = 50;
 	private int evadeChance;
 	private int attack;
-	private int coolness;
+	public int coolness;
 	
 	//Vampire Killer
 	private int daggerLevel;
@@ -684,7 +684,7 @@ public class Player extends Actor {
 		if (effectOnAcquire[0].equals("CARRY"))
 			setCarryMax (Integer.parseInt(effectOnAcquire[1]));
 
-		if (!effectOnAcquire[0].equals("") && toAdd.getDefinition().isSingleUse()) ;
+		if (!effectOnAcquire[0].equals("") && toAdd.getDefinition().isSingleUse) ;
 
 		else {
 			if (canCarry()){
@@ -996,9 +996,9 @@ public class Player extends Actor {
 		addLastIncrement(INCREMENT_HEARTS,1);
 		SFXManager.play("wav/levelup.wav");
 		informPlayerEvent(EVT_LEVELUP);
-		increaseCoolness(20);
+		coolness += 20;
 		playerLevel++;
-		deservesLevelUp = false;		
+		deservesLevelUp = false;
 	}
 	
 	public void act(){
@@ -2900,20 +2900,24 @@ public class Player extends Actor {
 		return attackDescription;
 	}
 	
-	public int getWeaponAttack(){
+	public int getWeaponAttack() {
 		double multiplier = 1;
-		if (isSwimming())
-			multiplier = 0.5d;
-		if (weapon != null) 
-			if (getPlayerClass() == Player.CLASS_VAMPIREKILLER){
-				return (int) (multiplier * (weaponSkill(weapon.getDefinition().getWeaponCategory()) + (int)Math.round(getAttack() * (weapon.getAttack()/2.0D))));
-			} else
-				return (int)(multiplier * (weapon.getAttack() + 
-					weaponSkill(weapon.getDefinition().getWeaponCategory()) + 
+		if (isSwimming()) {
+			multiplier = 0.5;
+		}
+		if (weapon != null) {
+			if (getPlayerClass() == Player.CLASS_VAMPIREKILLER) {
+				return (int)(multiplier * (weaponSkill(weapon.getDefinition().weaponCategory) +
+						(int)Math.round(getAttack() * (weapon.getAttack()/2.0))));
+			} else {
+				return (int)(multiplier * (weapon.getAttack() +
+					weaponSkill(weapon.getDefinition().weaponCategory) +
 					getAttack() +
-					(weapon.hasCounter(Consts.C_WEAPON_ENCHANTMENT)?2:0)));
-		else
-			return (int) (multiplier * getPunchDamage());
+					(weapon.hasCounter(Consts.C_WEAPON_ENCHANTMENT) ? 2 : 0)));
+			}
+		} else {
+			return (int)(multiplier * getPunchDamage());
+		}
 	}
 	
 	
@@ -2975,6 +2979,7 @@ public class Player extends Actor {
 		}
 	}
 	
+	/*
 	public void increaseCoolness(int x){
 		coolness += x;
 	}
@@ -2986,6 +2991,7 @@ public class Player extends Actor {
 	public int getCoolness(){
 		return coolness;
 	}
+	*/
 
 	public void abandonHostage(){
 		getHostage().setPosition(getPosition());

@@ -47,26 +47,26 @@ public class Item implements Serializable, MenuItem, GFXMenuItem {
 	}
 
 	public void reload(){
-		setRemainingTurnsToReload(getDefinition().getReloadTurns());
+		setRemainingTurnsToReload(getDefinition().reloadTurns);
 	}
 
 	public boolean isVisible(){
-		return !getDefinition().getAppearance().getID().equals("VOID");
+		return !getDefinition().appearance.getID().equals("VOID");
 	}
 
 	/*Unsafe, Coupled*/
 	public char getMenuChar() {
-		return ((CharAppearance)getDefinition().getAppearance()).getChar();
+		return ((CharAppearance)getDefinition().appearance).getChar();
 	}
 	
 	/*Unsafe, Coupled*/
 	public int getMenuColor() {
-		return ((CharAppearance)getDefinition().getAppearance()).getColor();
+		return ((CharAppearance)getDefinition().appearance).getColor();
 	}
 
 	public String getMenuDescription() {
 		if (shopMode)
-			return getAttributesDescription()+ " ["+getDefinition().getMenuDescription()+"] ($"+getGoldPrice()+")";
+			return getAttributesDescription()+ " ["+getDefinition().menuDescription+"] ($"+getGoldPrice()+")";
 		else
 			return getAttributesDescription();
 	}
@@ -76,7 +76,7 @@ public class Item implements Serializable, MenuItem, GFXMenuItem {
 		for (int i = 0; i < premodifiers.size(); i++){
 			description += ((Modifier)premodifiers.get(i)).getDescription();
 		}
-		description += getDefinition().getDescription();
+		description += getDefinition().description;
 		for (int i = 0; i < postmodifiers.size(); i++){
 			description += ((Modifier)postmodifiers.get(i)).getDescription();
 		}
@@ -85,7 +85,7 @@ public class Item implements Serializable, MenuItem, GFXMenuItem {
 	}
 	
 	public Appearance getAppearance() {
-		return getDefinition().getAppearance();
+		return getDefinition().appearance;
 	}
 
 	private int getModifiersAttackBonus(){
@@ -168,23 +168,23 @@ public class Item implements Serializable, MenuItem, GFXMenuItem {
 	}
 	
 	public int getAttack() {
-		int ret = getDefinition().getAttack()+getModifiersAttackBonus();
-		if (getDefinition().getAttack()>0 && ret <= 0)
+		int ret = getDefinition().attack + getModifiersAttackBonus();
+		if (getDefinition().attack > 0 && ret <= 0)
 			return 1;
 		else
-			return ret; 
+			return ret;
 	}
 
 	public int getAttackCost() {
-		return getDefinition().getAttackCost()+getModifiersAttackCost();
+		return getDefinition().attackCost + getModifiersAttackCost();
 	}
 
 	public int getDefense() {
-		return getDefinition().getDefense()+getModifiersDefenseBonus();
+		return getDefinition().defense + getModifiersDefenseBonus();
 	}
 
 	public String getEffectOnAcquire() {
-		return getDefinition().getEffectOnAcquire();
+		return getDefinition().effectOnAcquire;
 	}
 
 	/*public String getEffectOnStep() {
@@ -192,31 +192,31 @@ public class Item implements Serializable, MenuItem, GFXMenuItem {
 	}*/
 
 	public String getEffectOnUse() {
-		return getDefinition().getEffectOnUse();
+		return getDefinition().effectOnUse;
 	}
 
 	public int getFeatureTurns() {
-		return getDefinition().getFeatureTurns();
+		return getDefinition().featureTurns;
 	}
 
 	public boolean isHarmsUndead() {
-		return getDefinition().isHarmsUndead() || modifiersHarmUndead();
+		return getDefinition().harmsUndead || modifiersHarmUndead();
 	}
 
 	public String getPlacedSmartFeature() {
-		return getDefinition().getPlacedSmartFeature();
+		return getDefinition().placedSmartFeature;
 	}
 
 	public int getRange() {
-		return getDefinition().getRange() + getModifiersRangeBonus();
+		return getDefinition().range + getModifiersRangeBonus();
 	}
 
 	public int getReloadTurns() {
-		return getDefinition().getReloadTurns();
+		return getDefinition().reloadTurns;
 	}
 
 	public boolean isSlicesThrough() {
-		return getDefinition().isSlicesThrough() || modifiersSliceThru();
+		return getDefinition().slicesThrough || modifiersSliceThru();
 	}
 
 	/*public String getThrowMessage() {
@@ -224,15 +224,15 @@ public class Item implements Serializable, MenuItem, GFXMenuItem {
 	}*/
 
 	public int getThrowRange() {
-		return getDefinition().getThrowRange();
+		return getDefinition().throwRange;
 	}
 
 	public String getUseMessage() {
-		return getDefinition().getUseMessage();
+		return getDefinition().useMessage;
 	}
 
 	public int getVerticalRange() {
-		return getDefinition().getVerticalRange();
+		return getDefinition().verticalRange;
 	}
 	
 	public String getAttributesDescription(){
@@ -259,8 +259,8 @@ public class Item implements Serializable, MenuItem, GFXMenuItem {
 				base+= "RNG:"+getRange()+","+getVerticalRange();
 			else
 				base+= "RNG:"+getRange();
-		if (definition.getReloadCostGold() > 0){
-			base += " RLD:"+definition.getReloadCostGold()+"$";
+		if (definition.reloadCostGold > 0){
+			base += " RLD:"+definition.reloadCostGold+"$";
 		}
 		if (getAttack() > 0 || getDefense() > 0 || getRange() > 1 || getVerticalRange() > 0)
 			base+= ")";
@@ -298,19 +298,19 @@ public class Item implements Serializable, MenuItem, GFXMenuItem {
 	}
 	
 	public String getShopDescription(){
-		return getDefinition().getShopDescription();
+		return getDefinition().shopDescription;
 	}
 	
 	public int getGoldPrice(){
-		double modifiersGold = 1+ getModifiersGoldMod();
+		double modifiersGold = 1 + getModifiersGoldMod();
 		if (modifiersGold == 1)
-			return getDefinition().getGoldPrice();
+			return getDefinition().goldPrice;
 		else
-			return (int)(Math.round(getDefinition().getGoldPrice() * getModifiersGoldMod()));
+			return (int)(Math.round(getDefinition().goldPrice * getModifiersGoldMod()));
 	}
 	
 	public String getWeaponCategory(){
-		return getDefinition().getWeaponCategory();
+		return getDefinition().weaponCategory;
 	}
 	
 	protected Hashtable hashCounters = new Hashtable();
@@ -351,15 +351,15 @@ public class Item implements Serializable, MenuItem, GFXMenuItem {
 	}
 	
 	public boolean isTwoHanded(){
-		return getDefinition().isTwoHanded();
+		return getDefinition().isTwoHanded;
 	}
 	
 	public int getCoverage(){
-		return getDefinition().getCoverage();
+		return getDefinition().coverage;
 	}
 	
 	public String getAttackSound(){
-		return getDefinition().getAttackSound();
+		return getDefinition().attackSound;
 	}
 	
 	

@@ -401,7 +401,7 @@ public abstract class PlayerGenerator {
 		for (int i = 0; i < items; i++){
 			player.addItem(itf.createItem(Util.randPick(initItems)));
 		}
-		player.increaseCoolness(10);
+		player.coolness += 10;
 		return player;
 	}
 	

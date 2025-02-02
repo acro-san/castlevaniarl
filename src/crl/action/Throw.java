@@ -88,7 +88,7 @@ public class Throw extends Action{
 	}
 
 	public String getPromptPosition(){
-		return "Where do you want to throw the "+targetItem.getDefinition().getDescription()+"?";
+		return "Where do you want to throw the "+targetItem.getDefinition().description+"?";
 	}
 
 	public String getSFX(){

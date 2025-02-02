@@ -48,7 +48,7 @@ public class Equip extends Action{
 				if (currentArmor != null) {
 					player.addItem(currentArmor);
 				}
-				performer.getLevel().addMessage("You wear the "+def.getDescription());
+				performer.getLevel().addMessage("You wear the "+def.description);
 				player.setArmor(targetItem);
 				break;
 				
@@ -89,7 +89,7 @@ public class Equip extends Action{
 						performer.getLevel().addMessage("You put your "+currentWeapon.getDescription()+" in your belt.");
 					}
 				}
-				performer.getLevel().addMessage("You wield the "+def.getDescription());
+				performer.getLevel().addMessage("You wield the "+def.description);
 				player.setWeapon(targetItem);
 				player.reduceQuantityOf(targetItem);
 				
@@ -122,7 +122,7 @@ public class Equip extends Action{
 				
 				player.setShield(targetItem);
 				player.reduceQuantityOf(targetItem);
-				performer.getLevel().addMessage("You wear the "+def.getDescription());
+				performer.getLevel().addMessage("You wear the "+def.description);
 				break;
 		}
 	}

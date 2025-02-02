@@ -2,10 +2,17 @@ package crl.item;
 
 import java.io.Serializable;
 
-public class Modifier implements Serializable{
+public class Modifier implements Serializable {
 	private String description;
 	private String id;
 	private double priceModifier;
+	private int atkBonus;
+	private int rangeBonus;
+	private boolean harmsUndead;
+	private boolean slicesThru;
+	private int atkCostBonus;
+	private int defenseBonus;
+	private int chance;
 	
 	public int getChance() {
 		return chance;
@@ -25,13 +32,6 @@ public class Modifier implements Serializable{
 		return description;
 	}
 	
-	private int atkBonus;
-	private int rangeBonus;
-	private boolean harmsUndead;
-	private boolean slicesThru;
-	private int atkCostBonus;
-	private int defenseBonus;
-	private int chance;
 	public int getAtkBonus() {
 		return atkBonus;
 	}
