@@ -370,10 +370,9 @@ public class Main {
 			title();
 		try {
 			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(saves[index]));
-			currentGame = (Game) ois.readObject();
+			currentGame = (Game)ois.readObject();
 			ois.close();
-		} catch (IOException ioe){
- 
+		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		} catch (ClassNotFoundException cnfe){
 			crash("Invalid savefile or wrong version", new CRLException("Invalid savefile or wrong version"));

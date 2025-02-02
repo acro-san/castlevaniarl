@@ -71,8 +71,10 @@ public class Cells {
 			"You're now ready to fight! With your mystic weapon you should have no problem dispatching these weak foes.\n\n"+
 			"You can evade the skeleton bones by moving out of their firing range. They always target your previous location!", aps.get("SIGN_POST"), true, false);
 
-		ret [139] = new Cell("SIGNPOST_T9", "signpost", "You can access your skills using 'p' " +
-			"and check your inventory using 'i'. Press '?' for complete reference. \n \n You can access most of the item manipulation commands from the Inventory screen!\n \n Walk through here to leave this area and end your training \n \n CastleVania awaits!", aps.get("SIGN_POST"), true, false);
+		ret [139] = new Cell("SIGNPOST_T9", "signpost", "Access your skills with 'p'," +
+			"and your inventory with 'i'. Press '?' for help with all other keys.\n\n"+
+			"Most item manipulation commands can be used on the Inventory screen!\n\n"+
+			"Walk west here to leave this area, ending your training\n\nCastleVania awaits!", aps.get("SIGN_POST"), true, false);
 		
 		
 		/*Town*/
