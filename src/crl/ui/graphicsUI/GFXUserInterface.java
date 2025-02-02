@@ -293,17 +293,16 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		Position pp = player.getPosition();
 		final int
 			px = pp.x,
-			py = pp.y;
+			py = pp.y,
+			pz = pp.z;
 		for (int x = 0; x < lw; x++) {
 			for (int y = 0; y < lh; y++) {
-				if (!level.remembers(x, y)) {
-					continue;
-				}
-				
 				if (px == x && py == y) {
 					cellColor = Color.RED;
+				} else if (!level.remembers(x, y)) {
+					continue;
 				} else {
-					Cell current = level.getMapCell(x, y);	// put an int Exit Index in the map?
+					Cell current = level.getMapCell(x, y, pz);	// put an int Exit Index in the map?
 					if (current == null) {
 						continue;
 					}
