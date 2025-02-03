@@ -4,16 +4,18 @@ import sz.csi.CharKey;
 import sz.util.*;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.*;
 
+import crl.player.Equipment;
 import crl.ui.graphicsUI.GFXDisplay;
 import crl.ui.graphicsUI.SwingSystemInterface;
 
 
 public class BorderedMenuBox {
 	
-	private Vector items;
+	private Vector<Equipment> items;
 	private String title = "";
 
 	//State Attributes
@@ -51,7 +53,7 @@ public class BorderedMenuBox {
 	public void setItemsPerPage(int ipp){
 		itemsPerPage = ipp;
 	}
-	public void setMenuItems(Vector items){
+	public void setMenuItems(Vector<Equipment> items) {
 		this.items = items;
 	}
 
@@ -78,16 +80,17 @@ public class BorderedMenuBox {
 		int realPosX = xpos*10 - 20;
 		int realPosY = ypos*24 - 30;
 		
-		si.getGraphics2D().setColor(backgroundColor);
-		si.getGraphics2D().fillRect(realPosX+6, realPosY+6, realW-14, realH-14);
-		si.getGraphics2D().setColor(borderOut);
-		si.getGraphics2D().drawRect(realPosX+6,realPosY+6,realW-14,realH-14);
-		si.getGraphics2D().setColor(borderIn);
-		si.getGraphics2D().drawRect(realPosX+8,realPosY+8,realW-18,realH-18);
-		/*si.getGraphics2D().drawImage(borders[0], 0,0, null);
-		si.getGraphics2D().drawImage(borders[1], realW-inset,0, null);
-		si.getGraphics2D().drawImage(borders[2], 0, realH - inset,null);
-		si.getGraphics2D().drawImage(borders[3], realW -inset, realH - inset,null);*/
+		Graphics2D g = si.getGraphics2D();
+		g.setColor(backgroundColor);
+		g.fillRect(realPosX+6, realPosY+6, realW-14, realH-14);
+		g.setColor(borderOut);
+		g.drawRect(realPosX+6,realPosY+6,realW-14,realH-14);
+		g.setColor(borderIn);
+		g.drawRect(realPosX+8,realPosY+8,realW-18,realH-18);
+		/*g.drawImage(borders[0], 0,0, null);
+		g.drawImage(borders[1], realW-inset,0, null);
+		g.drawImage(borders[2], 0, realH - inset,null);
+		g.drawImage(borders[3], realW -inset, realH - inset,null);*/
 		si.drawImage(realPosX,realPosY, border2);
 		si.drawImage(realPosX+realW-inset,realPosY, border1);
 		si.drawImage(realPosX+0, realPosY+realH - inset,border4);

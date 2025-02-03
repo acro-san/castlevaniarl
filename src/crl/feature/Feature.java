@@ -36,15 +36,15 @@ public class Feature implements Cloneable, java.io.Serializable {
 		return ID;
 	}
 
-	private Feature getPrizeFor(Player p){
-		if (p.deservesUpgrade())
+	private Feature getPrizeFor(Player p) {
+		if (p.deservesUpgrade()) {
 			return FeatureFactory.getFactory().buildFeature("UPGRADE");
-		
-        String [] prizeList = null;
+		}
+		String[] prizeList = null;
 
-        if (p.getPlayerClass() == Player.CLASS_VAMPIREKILLER) {
-        	if (Util.chance(10)){
-        		//Will get a mystic weapon
+		if (p.getPlayerClass() == Player.CLASS_VAMPIREKILLER) {
+			if (Util.chance(10)) {
+				//Will get a mystic weapon
         		if (p.getFlag("MYSTIC_CRYSTAL") && Util.chance(50))
         			prizeList = new String[]{"CRYSTALWP"};
         		else if (p.getFlag("MYSTIC_FIST") && Util.chance(50))
@@ -60,45 +60,43 @@ public class Feature implements Cloneable, java.io.Serializable {
         		else 
         			prizeList = new String[]{"AXEWP", "DAGGERWP"};
         	} else
-	        if (Util.chance(40))
-    	    if (Util.chance(30))
-        	if (Util.chance(10))
-	        if (Util.chance(10))
-    	    if (Util.chance(10))
-   	    		prizeList = new String[]{"WHITE_MONEY_BAG"};
-			else
-				prizeList = new String[]{"POT_ROAST"};
-			else
-				prizeList = new String[]{"INVISIBILITY_POTION", "ROSARY", "BLUE_MONEY_BAG"};
-			else
-				prizeList = new String[]{"RED_MONEY_BAG"};
-			else
-				prizeList = new String[]{"BIGHEART"};
-			else
-				prizeList = new String[]{"SMALLHEART"};
+        		if (Util.chance(40))
+        			if (Util.chance(30))
+        				if (Util.chance(10))
+        					if (Util.chance(10))
+        						if (Util.chance(10))
+        							prizeList = new String[]{"WHITE_MONEY_BAG"};
+        						else
+        							prizeList = new String[]{"POT_ROAST"};
+        					else
+        						prizeList = new String[]{"INVISIBILITY_POTION", "ROSARY", "BLUE_MONEY_BAG"};
+        				else
+        					prizeList = new String[]{"RED_MONEY_BAG"};
+        			else
+        				prizeList = new String[]{"BIGHEART"};
+        		else
+        			prizeList = new String[]{"SMALLHEART"};
     	} else {
-	        if (Util.chance(50))
-    	    if (Util.chance(40))
-        	if (Util.chance(10))
-	        if (Util.chance(10))
-    	    if (Util.chance(10))
-    	    	prizeList = new String[]{"WHITE_MONEY_BAG"};
-			else
-				prizeList = new String[]{"POT_ROAST"};
-			else
-				prizeList = new String[]{"INVISIBILITY_POTION", "ROSARY", "BLUE_MONEY_BAG"};
-			else
-				prizeList = new String[]{"RED_MONEY_BAG"};
-			else
-				prizeList = new String[]{"BIGHEART"};
-			else
-				prizeList = new String[]{"SMALLHEART"};    	
+    		if (Util.chance(50))
+    			if (Util.chance(40))
+    				if (Util.chance(10))
+    					if (Util.chance(10))
+    						if (Util.chance(10))
+    							prizeList = new String[]{"WHITE_MONEY_BAG"};
+    						else
+    							prizeList = new String[]{"POT_ROAST"};
+    					else
+    						prizeList = new String[]{"INVISIBILITY_POTION", "ROSARY", "BLUE_MONEY_BAG"};
+    				else
+    					prizeList = new String[]{"RED_MONEY_BAG"};
+    			else
+    				prizeList = new String[]{"BIGHEART"};
+    		else
+    			prizeList = new String[]{"SMALLHEART"};    	
     	}
         //return FeatureFactory.getFactory().buildFeature("ROSARY");
-        if (prizeList != null)
-        	return FeatureFactory.getFactory().buildFeature(Util.randPick(prizeList));
-        else
-        	return null;
+		//prizelist can't be null.
+        return FeatureFactory.getFactory().buildFeature(Util.randPick(prizeList));
 	}
 
 	public Feature damage(Player p, int damage){

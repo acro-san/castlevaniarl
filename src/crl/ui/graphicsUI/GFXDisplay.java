@@ -153,10 +153,10 @@ public class GFXDisplay extends Display {
 		si.setFont(FNT_TEXT);
 		si.drawImage(IMG_TITLE);
 
-		si.printAtPixelCentered(centreX, (int)(530*scale), "'CastleVania' is a trademark of Konami Corporation.", GFXDisplay.COLOR_BOLD);
-		si.printAtPixelCentered(centreX, (int)(555*scale), "CastlevaniaRL v"+Game.getVersion()+", Developed by Santiago Zapata 2005-2007, 2010, 2024", Color.WHITE);
-		si.printAtPixelCentered(centreX, (int)(570*scale), "Artwork by Christopher Barrett, 2006-2007", Color.WHITE);
-		si.printAtPixelCentered(centreX, (int)(585*scale), "Midi Tracks by Jorge E. Fuentes, JiLost, Nicholas and Tom Kim", Color.WHITE);
+		si.printAtPixelCentered(centreX, (int)(530*scale), Text.TITLE_DISCLAIMER, GFXDisplay.COLOR_BOLD);
+		si.printAtPixelCentered(centreX, (int)(555*scale), Text.TITLE_GAME_VER_DEV, Color.WHITE);
+		si.printAtPixelCentered(centreX, (int)(570*scale), Text.TITLE_ARTCREDIT, Color.WHITE);
+		si.printAtPixelCentered(centreX, (int)(585*scale), Text.TITLE_MUSICCREDIT, Color.WHITE);
 		CharKey x = new CharKey(CharKey.NONE);
 		int choice = 0;
 		si.saveBuffer();
@@ -166,8 +166,9 @@ public class GFXDisplay extends Display {
 			
 			si.drawImage(pickerX, (int)((356+choice*ROWHEIGHT)*scale), IMG_PICKER);	// TitleMenu-Selection-Bar.
 			
-			// 356 is...? And then the text is getting drawn at 368 - so, is that 356+12? 12 being... txt descent?
-			// is 356 just an eyeballed menu y position?? TODO: debug outlines and mouse picking logic also.
+			// 356 is? ..the text is drawn at 368 - so, +12? 12 being... leading/ascent?
+			// then 356 is just hardcoded menu y position?
+			// TODO: debug outlines and mouse picking logic also.
 			int tmenuTxtY = 356+12;	// 368. thereafter add rowheights. and: *scale... why's that?
 			for (String tItem: Text.TITLE_MENU) {
 				si.printAtPixelCentered(centreX,(int)(tmenuTxtY*scale), tItem, Color.WHITE);
@@ -241,13 +242,16 @@ public class GFXDisplay extends Display {
 		JTextArea t1 = createTempArea(150,170,this.configuration.getScreenWidth() - 300,400);
 		t1.setFont(FNT_PROLOGUE);
 		t1.setForeground(Color.WHITE);
-		t1.setText("In the year of 1691, a dark castle emerges from the cursed soils of the plains of Transylvannia. "+
+		t1.setText(
+		Text.PROLOGUE_LINE0 + "\n\n" + Text.PROLOGUE_LINE1 + "\n\n" +
+		/*
+		"In the year of 1691, a dark castle emerges from the cursed soils of the plains of Transylvannia. "+
 		"Chaos and death spread along the land, as the evil count Dracula unleases his powers, "+ 
 		"turning its forests and lakes into a pool of blood. \n\n"+
 		"The trip to the castle was long and harsh, after enduring many challenges through all Transylvannia, "+
 		"you are close to the castle of chaos. You are almost at Castlevania, and you are here on business: " + 
 		"To destroy forever the Curse of the Evil Count.\n\n"+
-		
+		*/
 		player.getPlot()+", "+player.getDescription()+" stands on a forest near the town of Petra and the cursed castle; "+
 		player.getPlot2() +" and the fate running through his veins being the sole hope for mankind.");
 		

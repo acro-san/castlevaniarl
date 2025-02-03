@@ -9,12 +9,13 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
-//import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -22,10 +23,15 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.Hashtable;
 
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 //import javax.swing.border.LineBorder;
+import javax.swing.KeyStroke;
 
 import crl.conf.gfx.data.GFXConfiguration;
 import crl.game.Game;
@@ -34,20 +40,17 @@ import sz.csi.CharKey;
 import sz.util.ImageUtils;
 import sz.util.Position;
 
-public class SwingSystemInterface implements Runnable {
+public class SwingSystemInterface {
 	
 	protected GFXConfiguration configuration;
 
-	public void run() {
-		
-	}
+	private boolean isFullscreen = false;
 	
 	private SwingInterfacePanel sip;
 	private StrokeNClickInformer aStrokeInformer;
 	private Position caretPosition = new Position(0,0);
 	private Hashtable<String, Image> images = new Hashtable<String, Image>();
 	
-	//private JTextArea invTextArea;
 	private JFrame frameMain;
 	private Point posClic;
 
@@ -84,50 +87,59 @@ public class SwingSystemInterface implements Runnable {
 	
 	public SwingSystemInterface(GFXConfiguration configuration) {
 		this.configuration = configuration;
-		frameMain = new JFrame();
 		
-		Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
-		frameMain.setBounds((size.width - configuration.getScreenWidth())/2,
-				            (size.height-configuration.getScreenHeight())/2,
-				            configuration.getScreenWidth(),
-				            configuration.getScreenHeight());
-		//frameMain.getContentPane().setLayout(new GridLayout(1,1));
+		frameMain = new JFrame();
+		setWindowedBounds();
+		
 		frameMain.setUndecorated(true);
 		
 		sip = new SwingInterfacePanel(configuration);
 		frameMain.setContentPane(sip);
-		//frameMain.getContentPane().add(sip);
 
-		frameMain.setVisible(true);
 		frameMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//FIXME: Do Game-close / file-save-check funcs!!
+		//FIXME: Do Game-close / file-save-check funcs!
 		frameMain.setBackground(Color.BLACK);
 		//SZ030507 aStrokeInformer = new StrokeInformer();
+		
+		// ... InputMap / keymap mapping?
 		aStrokeInformer = new StrokeNClickInformer();
 		frameMain.addKeyListener(aStrokeInformer);
+		
+		ActionMap am = frameMain.getRootPane().getActionMap();
+		InputMap im = frameMain.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+		
+		// bindKey(funcname, key, im, am);
+		String fsname = "FULLSCREEN_KEY";
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_F11, 0), fsname);
+		am.put(fsname, new AbstractAction() {
+			public void actionPerformed(ActionEvent ae) {
+				toggleFullscreen();
+			}
+		});
+		
 		frameMain.addMouseListener(aStrokeInformer);
 		frameMain.setFocusable(true);
-		sip.init();
-		/*invTextArea = new JTextArea();
-		invTextArea.setEditable(false);
-		invTextArea.setEnabled(false);
-		invTextArea.setOpaque(false);
-		invTextArea.setForeground(Color.WHITE);
-		invTextArea.setVisible(false);*/
-		//sip.add(invTextArea);
+		frameMain.setVisible(true);		// needed before sip.init to get non-null gfx ref.
+		frameMain.requestFocusInWindow();
 		
-		frameMain.addMouseMotionListener(new MouseMotionListener(){
+		sip.init();
+		
+		// if windowed, why not enable titlebar dragging like a normal win?
+		// then, it can have mouse interaction with the game itself?
+		// or: detect mousemoved and press/release separate from drags?
+		// finicky, though. Means no drag interactions, and slight misclicks move window.
+		frameMain.addMouseMotionListener(new MouseMotionListener() {
 			public void mouseDragged(MouseEvent e) {
+				Point fl = frameMain.getLocation();
 				frameMain.setLocation(
-					e.getX()-posClic.x+frameMain.getLocation().x,
-					e.getY()-posClic.y+frameMain.getLocation().y);
+					e.getX() - posClic.x + fl.x,
+					e.getY() - posClic.y + fl.y);
 			}
 			
 			public void mouseMoved(MouseEvent e) {}
 		});
 		
 		frameMain.addMouseListener(new MouseListener() {
-
 			public void mouseClicked(MouseEvent e) {}
 
 			public void mouseEntered(MouseEvent e) {}
@@ -140,43 +152,114 @@ public class SwingSystemInterface implements Runnable {
 
 			public void mouseReleased(MouseEvent e) {}
 		});
-		// NB: TOGGLE FULLSCREEN keybind. no prompt.
-		int n = JOptionPane.showConfirmDialog(frameMain,
-			"Activate Full Screen Mode?", "Welcome to CastlevaniaRL", JOptionPane.YES_NO_OPTION);
-		if (n == 0) {
-			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-			GraphicsDevice gs = ge.getDefaultScreenDevice();
-			if (gs.isFullScreenSupported()){
-				DisplayMode[] modes = gs.getDisplayModes();
-				for (int i = 0; i < modes.length; i++) {
-					System.out.println(modes[i].getWidth() + "x" + modes[i].getHeight() );
-				}
-				int screenWidth = 1024;
-				int screenHeight = 768;
-				DisplayMode displayMode = gs.getDisplayMode();
-				displayMode = new DisplayMode(
-					screenWidth, screenHeight, displayMode.getBitDepth(), displayMode.getRefreshRate());
-				gs.setFullScreenWindow(frameMain);
-				try {
-					gs.setDisplayMode(displayMode);
-				} catch (Exception e) {
-					gs.setFullScreenWindow(null);
-				}
-			}
+		
+	}
+	
+	
+	private void setWindowedBounds() {
+		Dimension ssize = Toolkit.getDefaultToolkit().getScreenSize();
+		int ww = configuration.getScreenWidth(),	//game screen width
+			wh = configuration.getScreenHeight();
+		frameMain.getContentPane().setPreferredSize(new Dimension(ww, wh));
+		frameMain.setBounds(
+			(ssize.width - ww) / 2,
+			(ssize.height- wh) / 2,
+			ww,
+			wh);
+	}
+
+	public void enableFullscreen(JFrame win) {
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		GraphicsDevice gd = ge.getDefaultScreenDevice();
+		
+		GraphicsDevice[] gds = ge.getScreenDevices();
+		if (gds.length > 1) {
+			System.err.println("SwingSysInterface: Multiple graphics devices!");
+		}
+		
+		GraphicsConfiguration gc = gd.getDefaultConfiguration();
+		Dimension screendim = Toolkit.getDefaultToolkit().getScreenSize();
+		java.awt.Insets ins = Toolkit.getDefaultToolkit().getScreenInsets(gc);
+		
+		//System.err.println("Go Fullscreen: Screen res is: "+screendim.width + "x"+screendim.height+" " + ins + "\nSupported modes:");
+		if (!gd.isFullScreenSupported()) {
+			return;
+		}
+		
+		int targetScreenWidth = 1024;
+		int targetScreenHeight = 768;	// why *this* res?
+		// how about 16:9 to avoid stretching? 480p? 1080p? 2160p? With black borders?
+		// FIXME : Not retaining windowed mode position. returns to centre.
+		// so if moved and then fullscreened/unfullscreened, loses position.
+		
+		DisplayMode usableDisplayMode = getFirstUsableDisplayMode(gd, targetScreenWidth, targetScreenHeight);
+		if (usableDisplayMode == null) {
+			System.err.format("No suitable fullscreen display mode matched (%d x %d)\n", targetScreenWidth, targetScreenHeight);
+			return;
+		}
+		gd.setFullScreenWindow(win);
+		try {
+			gd.setDisplayMode(usableDisplayMode);
+		} catch (Exception e) {
+			e.printStackTrace();
+			gd.setFullScreenWindow(null);
 		}
 	}
 	
 	
-	public void cls(){
-		sip.cls();
+	private static DisplayMode getFirstUsableDisplayMode(GraphicsDevice g, int targetW, int targetH) {
+		DisplayMode[] modes = g.getDisplayModes();
+		for (DisplayMode d: modes) {
+			//System.err.format("%s x %s (%d bpp), %s Hz\n", d.getWidth(), d.getHeight(), d.getBitDepth(), d.getRefreshRate());
+			if	(d.getWidth() == targetW && d.getHeight() == targetH) {
+				return d;
+			}
+		}
+		return null;	// unable to match resolution
 	}
 	
-	public void drawImage(String filename){
+	//private java.awt.Rectangle windowedBounds = null;
+	private Point windowedLoc = null;
+	public void toggleFullscreen() {
+		if (isFullscreen) {
+			disableFullscreen();
+			isFullscreen = false;
+			return;
+		}
+		windowedLoc = frameMain.getLocation();
+		enableFullscreen(frameMain);
+		isFullscreen = true;
+	}
+
+
+	private synchronized void disableFullscreen() {
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().
+			getDefaultScreenDevice();
+		gd.setFullScreenWindow(null);
+		
+		
+		frameMain.dispose();
+		setWindowedBounds();
+		if (windowedLoc != null) {
+			frameMain.setLocation(windowedLoc);
+		}
+		frameMain.pack();
+		frameMain.setVisible(true);
+		//setCursor(...);
+	}
+	
+	
+	public void cls() {
+		sip.cls();
+	}
+
+
+	public void drawImage(String filename) {
 		Image im = images.get(filename);
-		if (im == null){
+		if (im == null) {
 			try {
 				im = ImageUtils.createImage(filename);
-			} catch (Exception e){
+			} catch (Exception e) {
 				Game.crash("Exception trying to create image "+filename, e);
 			}
 			images.put(filename, im);
@@ -190,39 +273,7 @@ public class SwingSystemInterface implements Runnable {
 		sip.repaint();
 	}
 	
-	public void refresh(){
-		//invTextArea.setVisible(false);
-		sip.repaint();
-	}
-	
-	/*public void print(int x, int y, String text){
-		sip.print(x*10, y*24, text);
-	}*/
-	
-	public void printAtPixel(int x, int y, String text){
-		sip.print(x, y, text);
-	}
-	
-	public void printAtPixel(int x, int y, String text, Color color){
-		sip.print(x, y, text, color);
-	}
-	
-	public void printAtPixelCentered(int x, int y, String text, Color color) {
-		sip.print(x, y, text, color, true);
-	}
-
-	public void print(int x, int y, String text, Color color){
-		sip.print(x*10, y*24, text, color);
-	}
-	
-	public void waitKey (int keyCode){
-		CharKey x = new CharKey(CharKey.NONE);
-		while (x.code != keyCode)
-			x = inkey();
-	}
-	
-
-	public void drawImage(int scrX, int scrY, Image img){
+	public void drawImage(int scrX, int scrY, Image img) {
 		sip.drawImage(scrX, scrY, img);
 	}
 	
@@ -239,7 +290,6 @@ public class SwingSystemInterface implements Runnable {
 		sip.drawImage(scrX, scrY, im);
 	}
 
-	
 	public void drawImageCC(int consoleX, int consoleY, Image img){
 		drawImage(consoleX*10, consoleY*24, img);
 	}
@@ -248,9 +298,42 @@ public class SwingSystemInterface implements Runnable {
 		drawImage(consoleX*10, consoleY*24, img);
 	}
 	
+	
+	public void refresh(){
+		//invTextArea.setVisible(false);
+		sip.repaint();
+	}
+	
+	/*public void print(int x, int y, String text){
+		sip.print(x*10, y*24, text);
+	}*/
+	
+	public void printAtPixel(int x, int y, String text) {
+		sip.print(x, y, text);
+	}
+	
+	public void printAtPixel(int x, int y, String text, Color color) {
+		sip.print(x, y, text, color);
+	}
+	
+	public void printAtPixelCentered(int x, int y, String text, Color color) {
+		sip.print(x, y, text, color, true);
+	}
+
+	public void print(int x, int y, String text, Color color) {
+		sip.print(x*10, y*24, text, color);
+	}
+	
+	public void waitKey (int keyCode) {
+		CharKey x = new CharKey(CharKey.NONE);
+		while (x.code != keyCode)
+			x = inkey();
+	}
+
+	
 	public synchronized CharKey inkey(){
-	    aStrokeInformer.informKey(Thread.currentThread());
-	    try {
+		aStrokeInformer.informKey(Thread.currentThread());
+		try {
 			this.wait();
 		} catch (InterruptedException ie) {}
 		CharKey ret = new CharKey(aStrokeInformer.getInkeyBuffer());
@@ -486,167 +569,167 @@ class SwingInterfacePanel extends JPanel{
 	
 }
 
-class StrokeInformer implements KeyListener{
+class StrokeInformer implements KeyListener {
 	protected int bufferCode;
+	
+	@Deprecated
 	protected transient Thread keyListener;
 
-	public StrokeInformer(){
+	public StrokeInformer() {
 		bufferCode = -1;
 	}
 
-	public void informKey (Thread toWho){
+	public void informKey(Thread toWho) {
 		keyListener = toWho;
 	}
 
-	public int getInkeyBuffer(){
+	public int getInkeyBuffer( ){
 		return bufferCode;
 	}
 
 	public void keyPressed(KeyEvent e) {
-	    bufferCode = charCode(e);
-	    //if (!e.isShiftDown())
-	    if (keyListener != null)
-		    keyListener.interrupt();
-    }
+		bufferCode = charCode(e);
+		//if (!e.isShiftDown())
+		if (keyListener != null) {
+			keyListener.interrupt();
+		}
+	}
 
-    private int charCode(KeyEvent x){
-    	int code = x.getKeyCode();
-    	if(x.isControlDown()) {
+	private int charCode(KeyEvent x) {
+		int code = x.getKeyCode();
+		if(x.isControlDown()) {
 			return CharKey.CTRL;
 		}
-    	if (code >= KeyEvent.VK_A && code <= KeyEvent.VK_Z){
-    		if (x.getKeyChar() >= 'a'){
-	    		int diff = KeyEvent.VK_A - CharKey.a;
-   		 		return code-diff;
-   			} else {
-	   			int diff = KeyEvent.VK_A - CharKey.A;
-   		 		return code-diff;
-   			}
-    	}
-
-		switch (x.getKeyCode()){
-			case KeyEvent.VK_SPACE:
-				return CharKey.SPACE;
-			case KeyEvent.VK_COMMA:
-				return CharKey.COMMA;
-			case KeyEvent.VK_PERIOD: 
-				return CharKey.DOT;
-			case KeyEvent.VK_DELETE:
-				return CharKey.DELETE;
-			case KeyEvent.VK_NUMPAD0:
-				return CharKey.N0;
-			case KeyEvent.VK_NUMPAD1:
-				return CharKey.N1;
-			case KeyEvent.VK_NUMPAD2:
-				return CharKey.N2;
-			case KeyEvent.VK_NUMPAD3:
-				return CharKey.N3;
-			case KeyEvent.VK_NUMPAD4:
-				return CharKey.N4;
-			case KeyEvent.VK_NUMPAD5:
-				return CharKey.N5;
-			case KeyEvent.VK_NUMPAD6:
-				return CharKey.N6;
-			case KeyEvent.VK_NUMPAD7:
-				return CharKey.N7;
-			case KeyEvent.VK_NUMPAD8:
-				return CharKey.N8;
-			case KeyEvent.VK_NUMPAD9:
-				return CharKey.N9;
-			case KeyEvent.VK_1:
-				return CharKey.N1;
-			case KeyEvent.VK_2:
-				return CharKey.N2;
-			case KeyEvent.VK_3:
-				return CharKey.N3;
-			case KeyEvent.VK_4:
-				return CharKey.N4;
-			case KeyEvent.VK_5:
-				return CharKey.N5;
-			case KeyEvent.VK_6:
-				return CharKey.N6;
-			case KeyEvent.VK_7:
-				return CharKey.N7;
-			case KeyEvent.VK_8:
-				return CharKey.N8;
-			case KeyEvent.VK_9:
-				return CharKey.N9;
-			case KeyEvent.VK_F1:
-				return CharKey.F1;
-			case KeyEvent.VK_F2:
-				return CharKey.F2;
-			case KeyEvent.VK_F3:
-				return CharKey.F3;
-			case KeyEvent.VK_F4:
-				return CharKey.F4;
-			case KeyEvent.VK_F5:
-				return CharKey.F5;
-			case KeyEvent.VK_F6:
-				return CharKey.F6;
-			case KeyEvent.VK_F7:
-				return CharKey.F7;
-			case KeyEvent.VK_F8:
-				return CharKey.F8;
-			case KeyEvent.VK_F9:
-				return CharKey.F9;
-			case KeyEvent.VK_F10:
-				return CharKey.F10;
-			case KeyEvent.VK_F11:
-				return CharKey.F11;
-			case KeyEvent.VK_F12:
-				return CharKey.F12;
-			case KeyEvent.VK_ENTER:
-				return CharKey.ENTER;
-			case KeyEvent.VK_BACK_SPACE:
-				return CharKey.BACKSPACE;
-			case KeyEvent.VK_ESCAPE:
-				return CharKey.ESC;
-			case KeyEvent.VK_UP:
-				return CharKey.UARROW;
-			case KeyEvent.VK_DOWN:
-				return CharKey.DARROW;
-			case KeyEvent.VK_LEFT:
-				return CharKey.LARROW;
-			case KeyEvent.VK_RIGHT:
-				return CharKey.RARROW;
-			
-
+		if (code >= KeyEvent.VK_A && code <= KeyEvent.VK_Z){
+			if (x.getKeyChar() >= 'a'){
+				int diff = KeyEvent.VK_A - CharKey.a;
+				return code-diff;
+			} else {
+				int diff = KeyEvent.VK_A - CharKey.A;
+				return code-diff;
+			}
 		}
-		if (x.getKeyChar() == '.')
-    		return CharKey.DOT;
-    	if (x.getKeyChar() == '?')
-    		return CharKey.QUESTION;
+
+		switch (x.getKeyCode()) {
+		case KeyEvent.VK_SPACE:
+			return CharKey.SPACE;
+		case KeyEvent.VK_COMMA:
+			return CharKey.COMMA;
+		case KeyEvent.VK_PERIOD: 
+			return CharKey.DOT;
+		case KeyEvent.VK_DELETE:
+			return CharKey.DELETE;
+		case KeyEvent.VK_NUMPAD0:
+			return CharKey.N0;
+		case KeyEvent.VK_NUMPAD1:
+			return CharKey.N1;
+		case KeyEvent.VK_NUMPAD2:
+			return CharKey.N2;
+		case KeyEvent.VK_NUMPAD3:
+			return CharKey.N3;
+		case KeyEvent.VK_NUMPAD4:
+			return CharKey.N4;
+		case KeyEvent.VK_NUMPAD5:
+			return CharKey.N5;
+		case KeyEvent.VK_NUMPAD6:
+			return CharKey.N6;
+		case KeyEvent.VK_NUMPAD7:
+			return CharKey.N7;
+		case KeyEvent.VK_NUMPAD8:
+			return CharKey.N8;
+		case KeyEvent.VK_NUMPAD9:
+			return CharKey.N9;
+		case KeyEvent.VK_1:
+			return CharKey.N1;
+		case KeyEvent.VK_2:
+			return CharKey.N2;
+		case KeyEvent.VK_3:
+			return CharKey.N3;
+		case KeyEvent.VK_4:
+			return CharKey.N4;
+		case KeyEvent.VK_5:
+			return CharKey.N5;
+		case KeyEvent.VK_6:
+			return CharKey.N6;
+		case KeyEvent.VK_7:
+			return CharKey.N7;
+		case KeyEvent.VK_8:
+			return CharKey.N8;
+		case KeyEvent.VK_9:
+			return CharKey.N9;
+		case KeyEvent.VK_F1:
+			return CharKey.F1;
+		case KeyEvent.VK_F2:
+			return CharKey.F2;
+		case KeyEvent.VK_F3:
+			return CharKey.F3;
+		case KeyEvent.VK_F4:
+			return CharKey.F4;
+		case KeyEvent.VK_F5:
+			return CharKey.F5;
+		case KeyEvent.VK_F6:
+			return CharKey.F6;
+		case KeyEvent.VK_F7:
+			return CharKey.F7;
+		case KeyEvent.VK_F8:
+			return CharKey.F8;
+		case KeyEvent.VK_F9:
+			return CharKey.F9;
+		case KeyEvent.VK_F10:
+			return CharKey.F10;
+		case KeyEvent.VK_F11:
+			return CharKey.F11;
+		case KeyEvent.VK_F12:
+			return CharKey.F12;
+		case KeyEvent.VK_ENTER:
+			return CharKey.ENTER;
+		case KeyEvent.VK_BACK_SPACE:
+			return CharKey.BACKSPACE;
+		case KeyEvent.VK_ESCAPE:
+			return CharKey.ESC;
+		case KeyEvent.VK_UP:
+			return CharKey.UARROW;
+		case KeyEvent.VK_DOWN:
+			return CharKey.DARROW;
+		case KeyEvent.VK_LEFT:
+			return CharKey.LARROW;
+		case KeyEvent.VK_RIGHT:
+			return CharKey.RARROW;
+		}
+		
+		if (x.getKeyChar() == '.') {
+			return CharKey.DOT;
+		}
+		if (x.getKeyChar() == '?') {
+			return CharKey.QUESTION;
+		}
 		return -1;
 	}
 
-    
-    public void keyReleased(KeyEvent e) {}
-    public void keyTyped(KeyEvent e) {}
+
+	public void keyReleased(KeyEvent e) {}
+	public void keyTyped(KeyEvent e) {}
 }
 
-class StrokeNClickInformer extends StrokeInformer implements MouseListener{
+class StrokeNClickInformer extends StrokeInformer implements MouseListener {
 	public void mousePressed(MouseEvent e) {
-		if (keyListener != null){
+		if (keyListener != null) {
 			bufferCode = CharKey.NONE;
-		    keyListener.interrupt();
+			keyListener.interrupt();
 		}
 	}
 	
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 	
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 

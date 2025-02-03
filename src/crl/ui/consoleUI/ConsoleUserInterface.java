@@ -25,6 +25,7 @@ import crl.feature.*;
 import crl.game.GameFiles;
 import crl.game.STMusicManagerNew;
 import crl.actor.*;
+import crl.data.Text;
 import crl.ui.*;
 
 /** 
@@ -50,28 +51,22 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 	private Hashtable /*BasicListItem*/ sightListItems = new Hashtable();
 	// Relations
 
- 	private transient ConsoleSystemInterface si;
+	private transient ConsoleSystemInterface si;
 
-	// Setters
-	/** Sets the object which will be informed of the player commands.
-     * this corresponds to the Game object */
-	
-	//Getters
 
-    // Smart Getters
-    public Position getAbsolutePosition(Position insideLevel){
-    	Position relative = Position.subs(insideLevel, player.getPosition());
+	public Position getAbsolutePosition(Position insideLevel){
+		Position relative = Position.subs(insideLevel, player.getPosition());
 		return Position.add(PC_POS, relative);
 	}
 
 	public final Position
-				VP_START = new Position(1,3),
-				VP_END = new Position (51,21),
-				PC_POS = new Position (25,12);
+		VP_START = new Position(1,3),
+		VP_END = new Position (51,21),
+		PC_POS = new Position (25,12);
 
-    private boolean [][] FOVMask;
-    //Interactive Methods
-    public void doLook(){
+	private boolean [][] FOVMask;
+	//Interactive Methods
+	public void doLook(){
 		Position offset = new Position (0,0);
 		messageBox.setForeColor(ConsoleSystemInterface.RED);
 		si.saveBuffer();
@@ -137,97 +132,106 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		refresh();
 	}
 
-    public void launchMerchant(Merchant who){
-    	Debug.enterMethod(this, "launchMerchant", who);
-    	si.saveBuffer();
-    	
-    	Vector merchandise = who.getMerchandiseFor(player);
-    	if (merchandise == null || merchandise.size() == 0){
-    		chat(who);
-    		return;
-    	}
-   		Equipment.eqMode = true;
-   		Item.shopMode = true;
-   		MenuBox menuBox = new MenuBox(si);
-  		menuBox.setHeight(24);
-  		menuBox.setWidth(79);
-  		menuBox.setPosition(0,0);
-  		menuBox.setMenuItems(merchandise);
-  		menuBox.setPromptSize(5);
-  		menuBox.setPrompt("Greetings "+player.getName()+"... I am "+who.getName()+", the "+who.getMerchandiseTypeDesc()+" merchant. May I interest you in an item?");
-  		menuBox.setForeColor(ConsoleSystemInterface.RED);
-  		menuBox.setBorder(true);
+	public void launchMerchant(Merchant who) {
+		Debug.enterMethod(this, "launchMerchant", who);
+		si.saveBuffer();
+		
+		Vector<Item> merchandise = who.getMerchandiseFor(player);
+		if (merchandise == null || merchandise.size() == 0) {
+			chat(who);
+			return;
+		}
+		Equipment.eqMode = true;
+		Item.shopMode = true;
+		MenuBox menuBox = new MenuBox(si);
+		menuBox.setHeight(24);
+		menuBox.setWidth(79);
+		menuBox.setPosition(0,0);
+		menuBox.setMenuItems(merchandise);
+		menuBox.setPromptSize(5);
+		
+		String merchantPrompt = String.format(
+		"Greetings %s... I am %s, the %s merchant. May I interest you in an item?",
+		player.getName(), who.getName(), who.getMerchandiseTypeDesc());
+		menuBox.setPrompt(merchantPrompt);
+		menuBox.setForeColor(ConsoleSystemInterface.RED);
+		menuBox.setBorder(true);
 		while (true) {
 			menuBox.setTitle(who.getName()+" (Gold:"+player.getGold()+")");
-			Item choice = (Item)menuBox.getSelection();
-			if (choice == null)
+			Item item = (Item)menuBox.getSelection();
+			if (item == null) {
 				break;
-			
-			menuBox.setPrompt("The "+choice.getDescription()+", "+choice.getShopDescription()+"; it costs "+choice.getGoldPrice()+", Do you want to buy it? (Y/n)");
-			menuBox.draw();
-	 		if (prompt())
-	 			if (player.getGold() >= choice.getGoldPrice()) {
-	 				player.reduceGold(choice.getGoldPrice());
-	 				if (player.canCarry())
-	 					player.addItem(choice);
-	 				else
-	 					level.addItem(player.getPosition(), choice);
-					menuBox.setPrompt("Thanks!, May I interest you in something else?");
-			 	} else {
-			 		menuBox.setPrompt("I am afraid you don\'t have enough gold");
-			 	}
-			else {
-				menuBox.setPrompt("Too bad... May I interest you in something else?");
 			}
-	 		//menuBox.draw();
+			
+			String sellPrompt = String.format(
+			"The %s, %s; it costs %s, Do you want to buy it? (Y/n)",
+			item.getDescription(), item.getShopDescription(), item.getGoldPrice()
+			);
+			menuBox.setPrompt(sellPrompt);
+			menuBox.draw();
+			if (prompt()) {
+				if (player.getGold() >= item.getGoldPrice()) {
+					player.reduceGold(item.getGoldPrice());
+					if (player.canCarry()) {
+						player.addItem(item);
+					} else {
+						level.addItem(player.getPosition(), item);
+					}
+					menuBox.setPrompt(Text.MERCHANT_BUY_CONFIRM);
+				} else {
+					menuBox.setPrompt(Text.MERCHANT_BUY_FAIL_NOGOLD);
+				}
+			} else {
+				menuBox.setPrompt(Text.MERCHANT_BUY_CANCEL);
+			}
+			//menuBox.draw();
 		}
 		Equipment.eqMode = false;
 		Item.shopMode = false;
 		si.restore();
 		Debug.exitMethod();
 	}
-    
-   public void chat (NPC who){
-	   si.saveBuffer();
-	   Debug.enterMethod(this, "chat", who);
- 		TextBox chatBox = new TextBox(si);
- 		chatBox.setHeight(7);
- 		chatBox.setWidth(33);
- 		chatBox.setPosition(28, 3);
- 		chatBox.setBorder(true);
- 		chatBox.setForeColor(ConsoleSystemInterface.WHITE);
- 		chatBox.setBorderColor(ConsoleSystemInterface.WHITE);
- 		chatBox.setText(who.getTalkMessage());
- 		chatBox.setTitle(who.getDescription());
- 		chatBox.draw();
- 		si.refresh();
- 		waitKey();
- 		si.restore();
- 		Debug.exitMethod();
-	}
-   
-   public boolean promptChat (NPC who){
-	   si.saveBuffer();
-	   Debug.enterMethod(this, "chat", who);
- 		TextBox chatBox = new TextBox(si);
- 		chatBox.setHeight(7);
- 		chatBox.setWidth(33);
- 		chatBox.setPosition(28, 3);
- 		chatBox.setBorder(true);
- 		chatBox.setForeColor(ConsoleSystemInterface.WHITE);
- 		chatBox.setBorderColor(ConsoleSystemInterface.WHITE);
- 		chatBox.setText(who.getTalkMessage());
- 		chatBox.draw();
- 		si.refresh();
- 		boolean ret = prompt();
- 		si.restore();
- 		Debug.exitMethod();
- 		return ret;
- 		
+	
+	public void chat (NPC who) {
+		si.saveBuffer();
+		Debug.enterMethod(this, "chat", who);
+		TextBox chatBox = new TextBox(si);
+		chatBox.setHeight(7);
+		chatBox.setWidth(33);
+		chatBox.setPosition(28, 3);
+		chatBox.setBorder(true);
+		chatBox.setForeColor(ConsoleSystemInterface.WHITE);
+		chatBox.setBorderColor(ConsoleSystemInterface.WHITE);
+		chatBox.setText(who.getTalkMessage());
+		chatBox.setTitle(who.getDescription());
+		chatBox.draw();
+		si.refresh();
+		waitKey();
+		si.restore();
+		Debug.exitMethod();
 	}
 
-    // Drawing Methods
-	public void drawEffect(Effect what){
+	public boolean promptChat (NPC who){
+		si.saveBuffer();
+		Debug.enterMethod(this, "chat", who);
+		TextBox chatBox = new TextBox(si);
+		chatBox.setHeight(7);
+		chatBox.setWidth(33);
+		chatBox.setPosition(28, 3);
+		chatBox.setBorder(true);
+		chatBox.setForeColor(ConsoleSystemInterface.WHITE);
+		chatBox.setBorderColor(ConsoleSystemInterface.WHITE);
+		chatBox.setText(who.getTalkMessage());
+		chatBox.draw();
+		si.refresh();
+		boolean ret = prompt();
+		si.restore();
+		Debug.exitMethod();
+		return ret;
+	}
+
+	// Drawing Methods
+	public void drawEffect(Effect what) {
 		//Debug.enterMethod(this, "drawEffect", what);
 		if (what == null)
 			return;

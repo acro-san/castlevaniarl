@@ -137,7 +137,7 @@ public class CharKey {
 		;
 
 	public int code;
-	public final static Hashtable mirrors = new Hashtable(20);
+	public final static Hashtable<String,String> mirrors = new Hashtable<>(20);
 
 	{
 		mirrors.put(""+OPENSHARPBRACETS, "[");

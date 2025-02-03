@@ -43,6 +43,7 @@ import crl.feature.*;
 import crl.game.*;
 import crl.actor.*;
 import crl.conf.gfx.data.GFXConfiguration;
+import crl.data.Text;
 import crl.ui.*;
 
 /** 
@@ -436,75 +437,74 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 				if (offset.y >= yrange) offset.y = yrange;
 				if (offset.y <= -yrange) offset.y = -yrange;
 			}
-     	}
+		}
 		messageBox.setText("Look mode off");
 		si.restore();
 		si.refresh();
-		
-	
 	}
 
-    public synchronized void launchMerchant(Merchant who){
-    	Debug.enterMethod(this, "launchMerchant", who);
-    	Equipment.eqMode = true;
-    	Item.shopMode = true;
-    	Vector merchandise = who.getMerchandiseFor(player);
-    	if (merchandise == null || merchandise.size() == 0){
-    		chat(who);
-    		Debug.exitMethod();
-    		return;
-    	}
-    	merchantBox.setMerchandise(merchandise);
-    	merchantBox.setVisible(true);
-    	merchantBox.setPrompt("Greetings "+player.getName()+"... I am "+who.getName()+", the "+who.getMerchandiseTypeDesc()+" merchant. May I interest you in an item?");
-    	while (true) {
-    		merchantBox.setGold(player.getGold());
-    		merchantBox.informChoice(Thread.currentThread());
-    		try {
-     			this.wait();
-     		} catch (InterruptedException ie) {
-     			
-     		}
+
+	public synchronized void launchMerchant(Merchant who){
+		Debug.enterMethod(this, "launchMerchant", who);
+		Equipment.eqMode = true;
+		Item.shopMode = true;
+		Vector<Item> merchandise = who.getMerchandiseFor(player);
+		if (merchandise == null || merchandise.size() == 0){
+			chat(who);
+			Debug.exitMethod();
+			return;
+		}
+		merchantBox.setMerchandise(merchandise);
+		merchantBox.setVisible(true);
+		merchantBox.setPrompt("Greetings "+player.getName()+"... I am "+who.getName()+", the "+who.getMerchandiseTypeDesc()+" merchant. May I interest you in an item?");
+		while (true) {
+			merchantBox.setGold(player.getGold());
+			merchantBox.informChoice(Thread.currentThread());
+			try {
+				this.wait();
+			} catch (InterruptedException ie) {
+				
+			}
 			Item choice = merchantBox.getSelection();
 			if (choice == null)
 				break;
-	 		
- 			if (player.getGold() >= choice.getGoldPrice()) {
- 				player.reduceGold(choice.getGoldPrice());
- 				if (player.canCarry())
- 					player.addItem(choice);
- 				else
- 					level.addItem(player.getPosition(), choice);
-				merchantBox.setPrompt("Thanks!, May I interest you in something else?");
-		 	} else {
-		 		merchantBox.setPrompt("I am afraid you don\'t have enough gold");
-		 	}
- 			
+			
+			if (player.getGold() >= choice.getGoldPrice()) {
+				player.reduceGold(choice.getGoldPrice());
+				if (player.canCarry())
+					player.addItem(choice);
+				else
+					level.addItem(player.getPosition(), choice);	// Or random position on floor around you?
+				merchantBox.setPrompt(Text.MERCHANT_BUY_CONFIRM);
+			} else {
+				merchantBox.setPrompt(Text.MERCHANT_BUY_FAIL_NOGOLD);
+			}
+			
 		}
- 		merchantBox.setVisible(false);
- 		si.recoverFocus();
- 		Equipment.eqMode = false;
- 		Item.shopMode = false;
- 		Debug.exitMethod();
+		merchantBox.setVisible(false);
+		si.recoverFocus();
+		Equipment.eqMode = false;
+		Item.shopMode = false;
+		Debug.exitMethod();
 	}
-    
-   public void chat (NPC who){
-	   Debug.enterMethod(this, "chat", who);
-	   si.saveBuffer();
-	   ((GFXDisplay)Display.thus).showTextBox(who.getDescription()+" says: \n   \""+who.getTalkMessage()+"\"", 280, 30, 330, 170);
-	   si.refresh();
-	   //waitKey();
-	   si.restore();
-	   Debug.exitMethod();
+	
+	public void chat(NPC who) {
+		Debug.enterMethod(this, "chat", who);
+		si.saveBuffer();
+		((GFXDisplay)Display.thus).showTextBox(who.getDescription()+" says: \n   \""+who.getTalkMessage()+"\"", 280, 30, 330, 170);
+		si.refresh();
+		//waitKey();
+		si.restore();
+		Debug.exitMethod();
 	}
-   
-   public boolean promptChat (NPC who){
-	   si.saveBuffer();
-	   boolean ret = ((GFXDisplay)Display.thus).showTextBoxPrompt(who.getTalkMessage(), 280, 30, 330, 170);
-	   si.refresh();
-	   //waitKey();
-	   si.restore();
-	   return ret;
+
+	public boolean promptChat(NPC who) {
+		si.saveBuffer();
+		boolean ret = ((GFXDisplay)Display.thus).showTextBoxPrompt(who.getTalkMessage(), 280, 30, 330, 170);
+		si.refresh();
+		//waitKey();
+		si.restore();
+		return ret;
 	}
 
 	// Drawing Methods
@@ -652,10 +652,10 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 						}
 					}
 
-					Vector items = level.getItemsAt(runner);
+					Vector<Item> items = level.getItemsAt(runner);
 					Item item = null;
 					if (items != null){
-						item = (Item) items.elementAt(0);
+						item = items.elementAt(0);
 					}
 					if (item != null){
 						if (item.isVisible()){
@@ -703,7 +703,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 					// Draw Masks
 					Color mask = null;
 
-					//Water
+					// Water
 					if (vcells[x][y].isWater()){
 						if (level.canFloatUpward(runner)){
 							mask = WATERCOLOR;
@@ -712,14 +712,16 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 							
 						}
 					}
-					if (mask != null){
+					if (mask != null) {
 						si.getGraphics2D().setColor(mask);
-						si.getGraphics2D().fillRect((PC_POS.x-xrange+x)*STANDARD_WIDTH + this.configuration.getCameraPosition().x,(PC_POS.y-yrange+y)*STANDARD_WIDTH + this.configuration.getCameraPosition().y, STANDARD_WIDTH, STANDARD_WIDTH);
+						si.getGraphics2D().fillRect(
+							(PC_POS.x-xrange+x)*STANDARD_WIDTH + this.configuration.getCameraPosition().x,
+							(PC_POS.y-yrange+y)*STANDARD_WIDTH + this.configuration.getCameraPosition().y,
+							STANDARD_WIDTH, STANDARD_WIDTH);
 					}
 				}
-				//runner.y++;
 				runner.x++;
-			} 
+			}
 			/*runner.y = player.getPosition().y-yrange;
 			runner.x ++;*/
 			runner.x = player.getPosition().x-xrange;
@@ -747,16 +749,15 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 					this.configuration.getScreenHeight());
 		}*/
 		
-		
 		Debug.exitMethod();
 	}
 	
 	public void addMessage(Message message){
 		Debug.enterMethod(this, "addMessage", message);
 		if (eraseOnArrival){
-	 		messageBox.clear();
-	 		messageBox.setForeground(COLOR_LAST_MESSAGE);
-	 		eraseOnArrival = false;
+			messageBox.clear();
+			messageBox.setForeground(COLOR_LAST_MESSAGE);
+			eraseOnArrival = false;
 		}
 		if (message.getLocation().z != player.getPosition().z || !insideViewPort(getAbsolutePosition(message.getLocation()))){
 			Debug.exitMethod();
@@ -781,97 +782,95 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 	
 	private boolean isCursorEnabled = false;
 	
-    private void drawPlayerStatus(){
-	    Debug.enterMethod(this, "drawPlayerStatus");
-	    Image foreColor;
-	    Image backColor;
-	    switch (((player.getHits()-1) / 20) + 1){
-	    case 1:
-	    	foreColor = HEALTH_RED;
-	    	backColor = HEALTH_WHITE;
-	    	break;
-	    case 2:
-	    	foreColor = HEALTH_DARK_RED;
-	    	backColor = HEALTH_RED;
-	    	break;
-	    default:
-	    	foreColor = HEALTH_MAGENTA;
-	    	backColor = HEALTH_DARK_RED;
-	    	break;
-	    }
-	    
-	    Image timeTile = null;
-	    switch (level.getDayTime()){
-	    case Level.MORNING:
-	    	timeTile = TILE_MORNING_TIME;
-	    	break;
-	    case Level.NOON:
-	    	timeTile = TILE_NOON_TIME;
-	    	break;
-	    case Level.AFTERNOON:
-	    	timeTile = TILE_AFTERNOON_TIME;
-	    	break;
-	    case Level.DUSK:
-	    	timeTile = TILE_DUSK_TIME;
-	    	break;
-	    case Level.NIGHT:
-	    	timeTile = TILE_NIGHT_TIME;
-	    	break;
-	    case Level.DAWN:
-	    	timeTile = TILE_DAWN_TIME;
-	    	break;
-	    }
-	    
-	    
-	    
-	    Image shotTile = TILE_NO_SHOT;
-	    if (player.getShotLevel() == 1)
-	    	shotTile = TILE_SHOT_II;
-	    if (player.getShotLevel() == 2)
-	    	shotTile = TILE_SHOT_III;
-	    if (shotTile != null)
-	    	si.drawImage(18,80, shotTile);
-	    int rest = ((player.getHits()-1) % 20) + 1; 
-	    
-    	si.printAtPixel(14,30,player.getName()+", the Lv"+player.getPlayerLevel()+" "+player.getClassString()+" " + player.getScore() + " " + player.getStatusString(), Color.WHITE);
-    	si.drawImage(14,35, TILE_WEAPON_BACK);
-    	si.drawImage(38,35, TILE_HEALTH_BACK);
-    	
-   		for (int i = 0; i < 20; i++)
-   			if (i+1 <= rest)
-   				si.drawImage(41+ (i*6),40, foreColor);
-   			else 
-   				si.drawImage(41+ (i*6),40, backColor);
-   		
-    	if (player.getLevel().getBoss() != null){
-    		int sixthiedBossHits =  (int)Math.ceil((player.getLevel().getBoss().getHits() * 60.0)/(double)player.getLevel().getBoss().getMaxHits());
-    		Image foreColorB;
-    	    Image backColorB;
-    	    //switch (((player.getLevel().getBoss().getHits()-1) / 20) + 1){
-    	    switch (((sixthiedBossHits-1) / 20) + 1){
-    	    case 1:
-    	    	foreColorB = HEALTH_YELLOW;
-    	    	backColorB = HEALTH_WHITE;
-    	    	break;
-    	    case 2:
-    	    	foreColorB = HEALTH_BROWN;
-    	    	backColorB = HEALTH_YELLOW;
-    	    	break;
-    	    default:
-    	    	foreColorB = HEALTH_PURPLE;
-    	    	backColorB = HEALTH_BROWN;
-    	    	break;
-    	    }
-    	    
-    	    int restB = ((sixthiedBossHits-1) % 20) + 1;
-    		
-    		for (int i = 0; i < 20; i++) {
+	private void drawPlayerStatus(){
+		Debug.enterMethod(this, "drawPlayerStatus");
+		Image foreColor;
+		Image backColor;
+		switch (((player.getHits()-1) / 20) + 1){
+		case 1:
+			foreColor = HEALTH_RED;
+			backColor = HEALTH_WHITE;
+			break;
+		case 2:
+			foreColor = HEALTH_DARK_RED;
+			backColor = HEALTH_RED;
+			break;
+		default:
+			foreColor = HEALTH_MAGENTA;
+			backColor = HEALTH_DARK_RED;
+			break;
+		}
+		
+		Image timeTile = null;
+		switch (level.getDayTime()){
+		case Level.MORNING:
+			timeTile = TILE_MORNING_TIME;
+			break;
+		case Level.NOON:
+			timeTile = TILE_NOON_TIME;
+			break;
+		case Level.AFTERNOON:
+			timeTile = TILE_AFTERNOON_TIME;
+			break;
+		case Level.DUSK:
+			timeTile = TILE_DUSK_TIME;
+			break;
+		case Level.NIGHT:
+			timeTile = TILE_NIGHT_TIME;
+			break;
+		case Level.DAWN:
+			timeTile = TILE_DAWN_TIME;
+			break;
+		}
+		
+		Image shotTile = TILE_NO_SHOT;
+		if (player.getShotLevel() == 1)
+			shotTile = TILE_SHOT_II;
+		if (player.getShotLevel() == 2)
+			shotTile = TILE_SHOT_III;
+		if (shotTile != null)
+			si.drawImage(18,80, shotTile);
+		int rest = ((player.getHits()-1) % 20) + 1;
+		
+		si.printAtPixel(14,30,player.getName()+", the Lv"+player.getPlayerLevel()+" "+player.getClassString()+" " + player.getScore() + " " + player.getStatusString(), Color.WHITE);
+		si.drawImage(14,35, TILE_WEAPON_BACK);
+		si.drawImage(38,35, TILE_HEALTH_BACK);
+		
+		for (int i = 0; i < 20; i++)
+			if (i+1 <= rest)
+				si.drawImage(41+ (i*6),40, foreColor);
+			else
+				si.drawImage(41+ (i*6),40, backColor);
+		
+		if (player.getLevel().getBoss() != null) {
+			int sixthiedBossHits =  (int)Math.ceil((player.getLevel().getBoss().getHits() * 60.0)/(double)player.getLevel().getBoss().getMaxHits());
+			Image foreColorB;
+			Image backColorB;
+			//switch (((player.getLevel().getBoss().getHits()-1) / 20) + 1){
+			switch (((sixthiedBossHits-1) / 20) + 1) {
+			case 1:
+				foreColorB = HEALTH_YELLOW;
+				backColorB = HEALTH_WHITE;
+				break;
+			case 2:
+				foreColorB = HEALTH_BROWN;
+				backColorB = HEALTH_YELLOW;
+				break;
+			default:
+				foreColorB = HEALTH_PURPLE;
+				backColorB = HEALTH_BROWN;
+				break;
+			}
+			
+			int restB = ((sixthiedBossHits-1) % 20) + 1;
+			
+			for (int i = 0; i < 20; i++) {
 				si.drawImage(this.configuration.getScreenWidth() - 135 + (i*6), this.configuration.getScreenHeight() - 60, i + 1 <= restB ? foreColorB : backColorB);
 			}
-    	}
-    	
-    	//TODO: Add the background
-    	if  (player.getPlayerClass() == Player.CLASS_VAMPIREKILLER){
+		}
+		
+		//TODO: Add the background
+		if  (player.getPlayerClass() == Player.CLASS_VAMPIREKILLER){
     		if (player.getMysticWeapon() != -1)
     			si.drawImage(18,38, getImageForMystic(player.getMysticWeapon()));
     	}else
@@ -1117,41 +1116,41 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 			return null;
 	}
 	
-    private Position pickPosition(String prompt, int fireKeyCode) throws ActionCancelException{
-    	Debug.enterMethod(this, "pickPosition");
-    	messageBox.setForeground(COLOR_LAST_MESSAGE);
-    	messageBox.setText(prompt);
-    	Position defaultTarget = null; 
-   		Position nearest = getNearestMonsterPosition();
-   		if (nearest != null){
-   			defaultTarget = nearest;
-   		} else {
-   			defaultTarget = null;
-   		}
-    	
-    	Position browser = null;
-    	Position offset = new Position (0,0);
-    	if (lockedMonster != null){
-			if (!player.sees(lockedMonster)  || lockedMonster.isDead()){
-				lockedMonster = null;
-			}
-			else
-				defaultTarget = new Position(lockedMonster.getPosition());
+	private Position pickPosition(String prompt, int fireKeyCode) throws ActionCancelException{
+		Debug.enterMethod(this, "pickPosition");
+		messageBox.setForeground(COLOR_LAST_MESSAGE);
+		messageBox.setText(prompt);
+		Position defaultTarget = null;
+		Position nearest = getNearestMonsterPosition();
+		if (nearest != null) {
+			defaultTarget = nearest;
+		} else {
+			defaultTarget = null;
 		}
-    	    	
-    	if (defaultTarget == null) {
-    		offset = new Position (0,0);
-    	} else{
+		
+		Position browser = null;
+		Position offset = new Position (0,0);
+		if (lockedMonster != null) {
+			if (!player.sees(lockedMonster)  || lockedMonster.isDead()) {
+				lockedMonster = null;
+			} else {
+				defaultTarget = new Position(lockedMonster.getPosition());
+			}
+		}
+		
+		if (defaultTarget == null) {
+			offset = new Position (0,0);
+		} else {
 			offset = new Position(defaultTarget.x - player.getPosition().x, defaultTarget.y - player.getPosition().y);
 		}
-    	
-    	if (!insideViewPort(PC_POS.x + offset.x,PC_POS.y + offset.y)){
-    		offset = new Position (0,0);
-    	}
-    	
-    	/*if (!insideViewPort(offset))
-    		offset = new Position (0,0);*/
-    	
+		
+		if (!insideViewPort(PC_POS.x + offset.x,PC_POS.y + offset.y)) {
+			offset = new Position (0,0);
+		}
+		
+		/*if (!insideViewPort(offset))
+		offset = new Position (0,0);*/
+		
 		si.refresh();
 		si.saveBuffer();
 		
@@ -1164,18 +1163,18 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 			if (FOVMask[PC_POS.x + offset.x][PC_POS.y + offset.y]){
 				Cell choosen = level.getMapCell(browser);
 				Feature feat = level.getFeatureAt(browser);
-				Vector items = level.getItemsAt(browser);
+				Vector<Item> items = level.getItemsAt(browser);
 				if (choosen != null)
 					cellHeight = choosen.getHeight();
 				Item item = null;
 				if (items != null) {
-					item = (Item) items.elementAt(0);
+					item = items.elementAt(0);
 				}
 				Actor actor = level.getActorAt(browser);
 				if (choosen != null)
 					looked += choosen.getDescription();
 				if (level.getBloodAt(browser) != null)
-				    looked += "{bloody}";
+					looked += "{bloody}";
 				if (feat != null)
 					looked += ", "+ feat.getDescription();
 				if (actor != null)
@@ -1215,10 +1214,9 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 			if (offset.x <= -xrange) offset.x = -xrange;
 			if (offset.y >= yrange) offset.y = yrange;
 			if (offset.y <= -yrange) offset.y = -yrange;
-     	}
+		}
 		
-		
-    }
+	}
 
 	private int pickDirection(String prompt) throws ActionCancelException{
 		Debug.enterMethod(this, "pickDirection");
@@ -1288,16 +1286,16 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 	
 	private Item pickItem(String prompt) throws ActionCancelException{
 		enterScreen();
-  		Vector inventory = player.getInventory();
-  		BorderedMenuBox menuBox = GetMenuBox();
-  		menuBox.setGap(35);
-  		menuBox.setPosition(6,4);
-  		menuBox.setWidth(70);
-  		menuBox.setItemsPerPage(12);
-  		menuBox.setMenuItems(inventory);
-  		menuBox.setTitle(prompt);
-  		si.saveBuffer();
-  		//menuBox.draw();
+		Vector inventory = player.getInventory();
+		BorderedMenuBox menuBox = GetMenuBox();
+		menuBox.setGap(35);
+		menuBox.setPosition(6,4);
+		menuBox.setWidth(70);
+		menuBox.setItemsPerPage(12);
+		menuBox.setMenuItems(inventory);
+		menuBox.setTitle(prompt);
+		si.saveBuffer();
+		//menuBox.draw();
 		Equipment equipment = (Equipment)menuBox.getSelection();
 		si.restore();
 		if (equipment == null){
@@ -1315,31 +1313,30 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 	}
 	
 	
-	private Vector pickMultiItems(String prompt) throws ActionCancelException{
+	private Vector<Item> pickMultiItems(String prompt) throws ActionCancelException{
 		//Equipment.eqMode = true;
-		Vector inventory = player.getInventory();
+		Vector<Equipment> inventory = player.getInventory();
 		BorderedMenuBox menuBox = GetMenuBox();
-  		menuBox.setBounds(25,3,40,18);
-  		//menuBox.setPromptSize(2);
-  		menuBox.setMenuItems(inventory);
-  		menuBox.setTitle(prompt);
-  		//menuBox.setForeColor(ConsoleSystemInterface.RED);
-  		//menuBox.setBorder(true);
-  		Vector ret = new Vector();
-  		BorderedMenuBox selectedBox = GetMenuBox();
-  		selectedBox.setBounds(5,3,20,18);
-  		//selectedBox.setPromptSize(2);
-  		selectedBox.setTitle("Selected Items");
-  		selectedBox.setMenuItems(ret);
-  		//selectedBox.setForeColor(ConsoleSystemInterface.RED);
-  		
-  		si.saveBuffer();
-  		
-		while (true){
+		menuBox.setBounds(25,3,40,18);
+		//menuBox.setPromptSize(2);
+		menuBox.setMenuItems(inventory);
+		menuBox.setTitle(prompt);
+		//menuBox.setForeColor(ConsoleSystemInterface.RED);
+		//menuBox.setBorder(true);
+		Vector ret = new Vector();
+		BorderedMenuBox selectedBox = GetMenuBox();
+		selectedBox.setBounds(5,3,20,18);
+		//selectedBox.setPromptSize(2);
+		selectedBox.setTitle("Selected Items");
+		selectedBox.setMenuItems(ret);
+		//selectedBox.setForeColor(ConsoleSystemInterface.RED);
+		
+		si.saveBuffer();
+		
+		while (true) {
 			selectedBox.draw();
 			menuBox.draw();
 			
-	  		
 			Equipment equipment = (Equipment)menuBox.getSelection();
 			if (equipment == null)
 				break;
@@ -1351,7 +1348,8 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		return ret;
 	}
 
-	public void processQuit(){
+
+	public void processQuit() {
 		messageBox.setForeground(COLOR_LAST_MESSAGE);
 		messageBox.setText(quitMessages[Util.rand(0, quitMessages.length-1)]+" (y/n)");
 		si.refresh();
@@ -1387,8 +1385,8 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		si.refresh();
 	}
 
-	public boolean prompt (){
-		
+
+	public boolean prompt () {
 		CharKey x = new CharKey(CharKey.NONE);
 		while (x.code != CharKey.Y && x.code != CharKey.y && x.code != CharKey.N && x.code != CharKey.n)
 			x = si.inkey();

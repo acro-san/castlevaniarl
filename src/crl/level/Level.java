@@ -8,9 +8,6 @@ import sz.fov.*;
 import sz.util.*;
 
 import crl.Main;
-import crl.ui.*;
-import crl.ui.effects.*;
-
 import crl.item.*;
 import crl.monster.*;
 import crl.npc.NPC;
@@ -45,7 +42,7 @@ public class Level implements FOVMap, Serializable {
 	
 	private Hashtable bloods = new Hashtable();
 	private Hashtable frosts = new Hashtable();
-	private Hashtable items = new Hashtable();
+	private Hashtable<String, Vector<Item>> items = new Hashtable<>();
 	
 	private Hashtable<String, Position> exits = new Hashtable<>();
 	private Hashtable<Integer, String> exitPositions = new Hashtable<>();
@@ -75,31 +72,32 @@ public class Level implements FOVMap, Serializable {
 	}
 	
 	public void addItem(Position where, Item what){
-		Vector stack = (Vector)items.get(where.toString());
-		if (stack == null){
-			stack = new Vector(5);
+		Vector<Item> stack = items.get(where.toString());
+		if (stack == null) {
+			stack = new Vector<>(5);
 			items.put(where.toString(), stack);
 		}
 		stack.add(what);
 	}
 
 	public void removeItemFrom(Item what, Position where){
-		Vector stack = (Vector)items.get(where.toString());
-		if (stack != null){
+		Vector<Item> stack = items.get(where.toString());
+		if (stack != null) {
 			stack.remove(what);
 			if (stack.size() == 0)
 				items.values().remove(stack);
 		}
 	}
 	
-	public Vector getItemsAt(Position where){
-		return (Vector) items.get(where.toString());
+	public Vector<Item> getItemsAt(Position where) {
+		return items.get(where.toString());
 	}
 
 
 	public void addFrost(Position where, int frostness){
-		if (getFrostAt(where) != 0)
+		if (getFrostAt(where) != 0) {
 			frosts.remove(where);
+		}
 		frosts.put(where.toString(), new Counter(frostness));
 	}
 
@@ -302,18 +300,18 @@ public class Level implements FOVMap, Serializable {
 	}
 
 	public void createMonster(String who, Position where/*, String feat*/){
-	 	Monster x = MonsterFactory.getFactory().buildMonster(who);
-	 	x.setPosition(where);
-	 	/*if (!feat.equals(""))
-	 		x.setFeaturePrize(feat);
-	 	*/
-	 	addMonster(x);
-    }
+		Monster x = MonsterFactory.getFactory().buildMonster(who);
+		x.setPosition(where);
+		/*if (!feat.equals(""))
+			x.setFeaturePrize(feat);
+		*/
+		addMonster(x);
+	}
 
-    public void setBoss(Monster what){
-    	boss = what;
-    	addMonster(what);
-    }
+	public void setBoss(Monster what){
+		boss = what;
+		addMonster(what);
+	}
 
 	public void addMonster(Monster what){
 		monsters.addMonster(what);
@@ -328,7 +326,7 @@ public class Level implements FOVMap, Serializable {
 	}
 
 	public void removeMonster(Monster what){
-        monsters.remove(what);
+		monsters.remove(what);
 		dispatcher.removeActor(what);
 		what.setLevel(this);
 	}
@@ -361,9 +359,9 @@ public class Level implements FOVMap, Serializable {
 			lightAt(what.getPosition(), what.getLight(), true);
 		}
 	}
+	
 	private Position lightRunner = new Position(0,0);
-	private void lightAt(Position where, int intensity, boolean light){
-		
+	private void lightAt(Position where, int intensity, boolean light) {
 		lightRunner.z = where.z;
 		for (int x = where.x-intensity; x <= where.x+intensity; x++){
 			for (int y = where.y-intensity; y <= where.y+intensity; y++){
@@ -376,17 +374,15 @@ public class Level implements FOVMap, Serializable {
 			}
 		}
 	}
-	
-	
 
-	public void addSmartFeature(SmartFeature what){
 
+	public void addSmartFeature(SmartFeature what) {
 		smartFeatures.put(what.getPosition().toString(), what);
 		what.setLevel(this);
 		dispatcher.addActor(what);
 	}
 
-	public void addSmartFeature (String featureID, Position location){
+	public void addSmartFeature(String featureID, Position location) {
 		SmartFeature x = SmartFeatureFactory.getFactory().buildFeature(featureID);
 		x.setPosition(location.x, location.y, location.z);
 		addSmartFeature(x);
@@ -413,10 +409,6 @@ public class Level implements FOVMap, Serializable {
 		player.setLevel(this);
 	}
 
-
-	/*public java.util.Vector getMonsters(){
-		return monsters;
-	} */
 
 	public Cell[][][] getCells(){
 		return map;
@@ -525,9 +517,10 @@ public class Level implements FOVMap, Serializable {
 	}
 
 
-	public void populate(){
-		if (getDwellersInfo() == null || getDwellersInfo().length == 0)
+	public void populate() {
+		if (getDwellersInfo() == null || getDwellersInfo().length == 0) {
 			return;
+		}
 		int enemies = Util.rand(10,15)*getDepth();
 		Position spawnPosition = new Position(0, 0);
 		for (int i = 0; i < enemies; i++){
@@ -542,8 +535,9 @@ public class Level implements FOVMap, Serializable {
 				spawnPosition.x = Util.rand(1,getWidth()-2);
 				spawnPosition.y = Util.rand(1,getHeight()-2);
 				spawnPosition.z = Util.rand(0, getDepth()-1);
-				if (random.getSpawnLocation() == MonsterSpawnInfo.UNDERGROUND || random.getSpawnLocation() == MonsterSpawnInfo.BORDER){
-					if (!isWalkable(spawnPosition) || getMapCell(spawnPosition).isWater() || getMapCell(spawnPosition).isShallowWater()){
+				if (random.getSpawnLocation() == MonsterSpawnInfo.UNDERGROUND || 
+					random.getSpawnLocation() == MonsterSpawnInfo.BORDER) {
+					if (!isWalkable(spawnPosition) || getMapCell(spawnPosition).isWater() || getMapCell(spawnPosition).isShallowWater()) {
 						tries++;
 						continue;
 					} else {

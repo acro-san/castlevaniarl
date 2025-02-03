@@ -37,10 +37,15 @@ import crl.player.advancements.invoker.*;
 import crl.player.advancements.manbeast.*;
 
 public class Player extends Actor {
+	
 	private Game game;
+	
 	private boolean doNotRecordScore = false;
-	private static int HITMAX = 60;
-	public static final Advancement 
+	
+	private static int
+		HITMAX = 60;
+	
+	public static final Advancement
 		ADV_MERCURY = new AdvMercury(),
 		ADV_VENUS = new AdvVenus(),
 		ADV_TERRA = new AdvTerra(),
@@ -67,7 +72,8 @@ public class Player extends Actor {
 	// Attributes
 	private String name;
 	private int sex;
-    private int playerClass;
+	private int playerClass;
+	
     private String plot;
     private String plot2;
     private String description;
@@ -157,15 +163,17 @@ public class Player extends Actor {
 		return currentHostage;
 	}
 
-	public void addKeys(int x){
+
+	public void addKeys(int x) {
 		keys += x;
 	}
 
-	public void addGold(int x){
+	public void addGold(int x) {
 		gold += x;
 		addScore(x);
 		gameSessionInfo.addGold(x);
 	}
+	
 	
 	public void setGold(int x){
 		gold = x;
@@ -180,7 +188,7 @@ public class Player extends Actor {
 	}
 
 	public void addScore(int x){
-		score+=x;
+		score += x;
 	}
 	
 	private int[] advancementLevels;
@@ -202,9 +210,9 @@ public class Player extends Actor {
 	}
 	
 	private boolean deservesLevelUp = false;
-	public void addXP(int x){
+	public void addXP(int x) {
 		xp += x;
-		if (xp>=nextLevelXP){
+		if (xp >= nextLevelXP) {
 			deservesLevelUp = true;
 		}
 	}
@@ -404,19 +412,19 @@ public class Player extends Actor {
 			} 
 			dam.setDamage(1);
 		}
-		if (isInvincible()){
+		if (isInvincible()) {
 			level.addMessage("You are invincible!");
 			return;
 		}
-		if (getSex()==MALE){
-			if (Util.chance(50)){
-				SFXManager.play("wav/hurt_male.wav");				
+		if (getSex()==MALE) {
+			if (Util.chance(50)) {
+				SFXManager.play("wav/hurt_male.wav");
 			} else {
 				SFXManager.play("wav/hurt_male2.wav");
 			}
 		} else {
-			if (Util.chance(50)){
-				SFXManager.play("wav/hurt_female.wav");				
+			if (Util.chance(50)) {
+				SFXManager.play("wav/hurt_female.wav");
 			} else {
 				SFXManager.play("wav/hurt_female2.wav");
 			}
@@ -424,10 +432,12 @@ public class Player extends Actor {
 		
 		hits -= dam.getDamage();
 		level.addMessage(damageSource + " {"+dam.getDamage()+"}");
-		if (Util.chance(50))
+		if (Util.chance(50)) {
 			decreaseWhip();
-		if (Util.chance(40))
+		}
+		if (Util.chance(40)) {
 			level.addBlood(getPosition(), Util.rand(0,1));
+		}
 	}
 
 	public void selfDamage(String damageSource, int damageType, Damage dam){
@@ -587,7 +597,7 @@ public class Player extends Actor {
 		}
 		damage("The "+who.getDescription()+" hits you.", dam);
 		Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(getPosition(), "SFX_QUICK_WHITE_HIT"));
-		if (hits < 0){
+		if (hits < 0) {
 			if (getSex() == MALE)
 				SFXManager.play("wav/die_male.wav");
 			else
@@ -610,7 +620,7 @@ public class Player extends Actor {
 		currentMysticWeapon = value;
 	}
 
-	private Hashtable inventory = new Hashtable();
+	private Hashtable<String, Equipment> inventory = new Hashtable<>();
 
 	public String getSecondaryWeaponDescription(){
 		if (getPlayerClass() == CLASS_VAMPIREKILLER){
@@ -689,7 +699,7 @@ public class Player extends Actor {
 		else {
 			if (canCarry()){
 				String toAddID = toAdd.getFullID();
-				Equipment equipmentx = (Equipment) inventory.get(toAddID);
+				Equipment equipmentx = (Equipment)inventory.get(toAddID);
 				if (equipmentx == null)
 					inventory.put(toAddID, new Equipment(toAdd, 1));
 				else
@@ -722,11 +732,11 @@ public class Player extends Actor {
 		inventory.remove(toRemove.getItem().getFullID());
 	}
 	
-	public boolean hasItem (Item item){
+	public boolean hasItem(Item item){
 		return inventory.containsKey(item.getFullID());
 	}
 	
-	public boolean hasItemByID (String itemID){
+	public boolean hasItemByID(String itemID){
 		return inventory.containsKey(itemID);
 	}
 
@@ -734,32 +744,24 @@ public class Player extends Actor {
 		inventory.remove(toRemove.getDefinition().getID());
 	}*/
 
-	public Vector getInventory(){
-		Vector ret = new Vector();
-		Enumeration x = inventory.elements();
-		while (x.hasMoreElements())
+	public Vector<Equipment> getInventory() {
+		Vector<Equipment> ret = new Vector<>();
+		Enumeration<Equipment> x = inventory.elements();
+		while (x.hasMoreElements()) {
 			ret.add(x.nextElement());
+		}
 		return ret;
 	}
 
 
-	public void addHearts(int howMuch){
+	public void addHearts(int howMuch) {
 		minorHeartCount++;
 		hearts += howMuch;
-		if (hearts > heartMax)
+		if (hearts > heartMax) {
 			hearts = heartMax;
+		}
 	}
-
-	public int getHits() {
-		return hits;
-	}
-
-	public void setHits(int value) {
-		hits = value;
-		if (hits > hitsMax)
-			hits = hitsMax;
-	}
-
+	
 	public int getHearts() {
 		return hearts;
 	}
@@ -768,12 +770,23 @@ public class Player extends Actor {
 		hearts = value;
 	}
 
+	public int getHits() {
+		return hits;
+	}
+
+	public void setHits(int value) {
+		hits = value;
+		if (hits > hitsMax) {
+			hits = hitsMax;
+		}
+	}
+
 	public String getName() {
 		return name;
 	}
 
 	private String classString;
-	public String getClassString(){
+	public String getClassString() {
 		return classString;
 	}
 
@@ -793,7 +806,7 @@ public class Player extends Actor {
 		hearts -= jijiji;
 	}
 
-	public static String weaponName(int code){
+	public static String weaponName(int code) {	//playerWeaponID?
 		switch (code){
 			case AXE:
 				return "Axe";
