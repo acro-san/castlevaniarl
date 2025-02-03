@@ -80,7 +80,7 @@ public class GameFiles {
 			profileFolder = new File(userhome,
 				"Library/Application Support/" + APP_NAME + "/");
 		} else if (OS_IS_LINUX) {
-			profileFolder = new File(userhome, "."+APP_NAME + "/");
+			profileFolder = new File(userhome, ".config/" + APP_NAME + "/");
 		} else {
 			System.err.println("Unknown OS.");
 			profileFolder = new File(userhome, "."+APP_NAME + "/");
