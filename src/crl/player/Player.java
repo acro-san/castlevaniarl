@@ -74,17 +74,17 @@ public class Player extends Actor {
 	private int sex;
 	private int playerClass;
 	
-    private String plot;
-    private String plot2;
-    private String description;
+	private String plot;
+	private String plot2;
+	private String description;
 
 	//Status
-    private int playerLevel = 1;
-    private int xp;
-    private int nextLevelXP = 1000; //5000
-    private int hearts;
-    private int heartMax;
-    private int score;
+	private int playerLevel = 1;
+	private int xp;
+	private int nextLevelXP = 1000; //5000
+	private int hearts;
+	private int heartMax;
+	private int score;
 	private int keys;
 	private int carryMax;
 	private int hits;
@@ -93,8 +93,8 @@ public class Player extends Actor {
 	private int breathing = 25;
 	private int gold;
 	private int soulPower;
-	private Hashtable weaponSkillsCounters = new Hashtable();
-	private Hashtable weaponSkills = new Hashtable();
+	private Hashtable<String,Counter> weaponSkillsCounters = new Hashtable<>();
+	private Hashtable<String,Counter> weaponSkills = new Hashtable<>();
 	private Hashtable customMessages = new Hashtable(); 
 	/*private int[] weaponSkillsCounters = new int[13];
 	private int[] weaponSkills = new int[13];*/
@@ -715,9 +715,10 @@ public class Player extends Actor {
 
 	public int getItemCount(){
 		int eqCount = 0;
-		Enumeration en = inventory.elements();
-		while (en.hasMoreElements())
-			eqCount += ((Equipment)en.nextElement()).getQuantity();
+		Enumeration<Equipment> en = inventory.elements();
+		while (en.hasMoreElements()) {
+			eqCount += (en.nextElement()).getQuantity();
+		}
 		return eqCount;
 	}
 	public boolean canCarry(){
@@ -1087,23 +1088,23 @@ public class Player extends Actor {
 	public void landOn (Position destinationPoint, boolean step){
 		Debug.enterMethod(this, "landOn", destinationPoint);
 		Cell destinationCell = level.getMapCell(destinationPoint);
-        if (destinationCell == null || destinationCell.isEthereal()){
-        	destinationPoint = level.getDeepPosition(destinationPoint);
-        	if (destinationPoint == null) {
-        		level.addMessage("You fall into a endless pit!");
+		if (destinationCell == null || destinationCell.isEthereal()){
+			destinationPoint = level.getDeepPosition(destinationPoint);
+			if (destinationPoint == null) {
+				level.addMessage("You fall into a endless pit!");
 				gameSessionInfo.setDeathCause(GameSessionInfo.ENDLESS_PIT);
 				hits = -1;
 				informPlayerEvent(Player.DEATH);
 				Debug.exitMethod();
 				return;
-        	}else {
-        		destinationCell = level.getMapCell(destinationPoint);
-        	}
-        }
-        
-        setPosition(destinationPoint);
-        
-		if (destinationCell.isSolid() && !isEthereal()){
+			} else {
+				destinationCell = level.getMapCell(destinationPoint);
+			}
+		}
+		
+		setPosition(destinationPoint);
+		
+		if (destinationCell.isSolid() && !isEthereal()) {
 			// Tries to land on a freesquare around
 			Position tryp = getFreeSquareAround(destinationPoint);
 			if (tryp == null){
@@ -1120,30 +1121,31 @@ public class Player extends Actor {
 			}
 			
 		}
-		if (destinationCell.getDamageOnStep() > 0){
+		if (destinationCell.getDamageOnStep() > 0) {
 			if (!isInvincible()){
 				selfDamage("You are injured by the "+destinationCell.getShortDescription(),
 					Player.DAMAGE_WALKED_ON_LAVA, new Damage(2, false));
 			}
 		}
 
-		if (step && destinationCell.getHeightMod() != 0){
+		if (step && destinationCell.getHeightMod() != 0) {
 			setPosition(Position.add(destinationPoint, new Position(0,0, destinationCell.getHeightMod())));
 		}
 		
-		if (destinationCell.isShallowWater()){
+		if (destinationCell.isShallowWater()) {
 			level.addMessage("You swim in the "+destinationCell.getShortDescription()+"!");
 		}
-		Vector destinationItems = level.getItemsAt(destinationPoint);
-		if (destinationItems != null){
-			if (destinationItems.size() == 1)
-				level.addMessage("There is a "+((Item)destinationItems.elementAt(0)).getDescription()+" here");
-			else 
+		Vector<Item> destinationItems = level.getItemsAt(destinationPoint);
+		if (destinationItems != null) {
+			if (destinationItems.size() == 1) {
+				level.addMessage("There is a "+(destinationItems.elementAt(0)).getDescription()+" here");
+			} else {
 				level.addMessage("There are several items here");
+			}
 		}
 		
 		Actor aActor = level.getActorAt(destinationPoint);
-		if (aActor instanceof Hostage){
+		if (aActor instanceof Hostage) {
 			if (!hasHostage() && !((Hostage)aActor).isRescued()){
 				setHostage((Hostage)aActor);
 				addHistoricEvent("rescued "+aActor.getDescription()+" from the "+level.getDescription());
@@ -1154,7 +1156,7 @@ public class Player extends Actor {
 		Feature[] destinationFeatures = level.getFeaturesAt(destinationPoint);
 		Feature destinationFeature = null;
 		boolean played = false;
-		if (destinationFeatures != null){
+		if (destinationFeatures != null) {
 			for (int i = 0; i < destinationFeatures.length; i++){
 				destinationFeature = destinationFeatures[i];
 				if (destinationFeature.getKeyCost() > 0){
@@ -1665,10 +1667,10 @@ public class Player extends Actor {
 		}
     }
 
-	private Vector availableSkills = new Vector(10);
+	private Vector<Skill> availableSkills = new Vector<>(10);
 
 	
-	public Vector getAvailableSkills(){
+	public Vector<Skill> getAvailableSkills(){
 		availableSkills.removeAllElements();
 		if (getFlag("PASIVE_DODGE"))
 			availableSkills.add(skills.get("DODGE"));
@@ -1712,8 +1714,8 @@ public class Player extends Actor {
 			if (getFlag("PASIVE_BACKFLIP"))
 				availableSkills.add(skills.get("BACKFLIP"));
 			
-		}else
-		if (playerClass == CLASS_RENEGADE){
+		} else
+		if (playerClass == CLASS_RENEGADE) {
 			availableSkills.add(skills.get("FIREBALL"));
 			availableSkills.add(skills.get("SOULSTEAL"));
 			if (getFlag("SKILL_SUMMONSOUL"))
@@ -1873,7 +1875,8 @@ public class Player extends Actor {
 
 	}
 
-	private final static Hashtable skills = new Hashtable();
+	// SkillDEFINITIONS.
+	private final static Hashtable<String, Skill> skills = new Hashtable();
 	static{
 		skills.put("DIVING_SLIDE", new Skill("Diving Slide", new DivingSlide(), 8));
 		skills.put("SPINNING_SLICE", new Skill("Spinning Slice", new SpinningSlice(), 8));
@@ -1911,7 +1914,6 @@ public class Player extends Actor {
 		skills.put("SKILL_SOULBLAST", new Skill("Soul Blast", new SoulBlast(), 20));
 		skills.put("SLIDE_KICK", new Skill("Slide Kick", new SlideKick(), 2));
 		
-			
 		
 		// Renegade Skills
 		skills.put("FIREBALL", new Skill("Fireball", new Fireball(), 2));
@@ -1982,17 +1984,21 @@ public class Player extends Actor {
 		skills.put("SHIELD_GUARD", new Skill("Shield Guard", new Defend(), 1));
 		
 		
-		
 	}
 
-	public final static int DEATH = 0, WIN = 1, DROWNED = 2, KEYINMINENT = 3;
+
+	public final static int
+		DEATH = 0,
+		WIN = 1,
+		DROWNED = 2,
+		KEYINMINENT = 3;
 
 	public final static int
 		EVT_FO23RWARD = 7,
-		EVT_RE23TURN = 8, 
-		EVT_MERCHANT = 9, 
-		EVT_SMASHED = 10, 
-		EVT_CHAT = 11, 
+		EVT_RE23TURN = 8,
+		EVT_MERCHANT = 9,
+		EVT_SMASHED = 10,
+		EVT_CHAT = 11,
 		EVT_LEVELUP = 12,
 		EVT_NEXT_LEVEL_DEPRECATED = 13,
 		EVT_BACK_LEVEL_DEPRECATED = 14,
@@ -2000,7 +2006,9 @@ public class Player extends Actor {
 		EVT_FORWARDTIME = 16,
 		EVT_INN = 17;
 	
-	public final static int MALE = 1, FEMALE = 2;
+	public final static int
+		MALE = 1,
+		FEMALE = 2;
 
 	public final static int
 		CLASS_VAMPIREKILLER = 0,
@@ -2017,7 +2025,7 @@ public class Player extends Actor {
 		DAMAGE_POISON = 3,
 		DAMAGE_JINX = 4;
 
-	public final static String 
+	public final static String
 		STATUS_STUN = "STUN",
 		STATUS_POISON = "POISON",
 		STATUS_PETRIFY = "PETRIFY",
@@ -2057,30 +2065,30 @@ public class Player extends Actor {
 
 	public String getStatusString(){
 		String status = "";
-	   	if (isInvisible())
+		if (isInvisible())
 			status +="Invisible ";
 		if (hasEnergyField())
 			status +="EnergyField ";
-    	if (hasIncreasedDefense())
-    		status +="Protected ";
-    	if (hasIncreasedJumping())
-    		status +="Spring ";
-    	if (isInvincible())
-    		status +="Invincible ";
-    	if (hasCounter(Consts.C_BLOOD_THIRST))
-    		status +="Vampiric ";
-    	if (hasCounter(Consts.C_BATMORPH))
-    		status +="Bat ";
-    	if (hasCounter(Consts.C_BATMORPH2))
-        	status +="HBat ";
-    	if (hasCounter(Consts.C_MYSTMORPH))
-        	status +="Myst ";
-    	if (hasCounter(Consts.C_MYSTMORPH2))
-        	status +="HMyst ";
-    	if (hasCounter(Consts.C_WOLFMORPH))
-        	status +="Wolf ";
-    	if (hasCounter(Consts.C_WOLFMORPH2))
-        	status +="HWolf ";
+		if (hasIncreasedDefense())
+			status +="Protected ";
+		if (hasIncreasedJumping())
+			status +="Spring ";
+		if (isInvincible())
+			status +="Invincible ";
+		if (hasCounter(Consts.C_BLOOD_THIRST))
+			status +="Vampiric ";
+		if (hasCounter(Consts.C_BATMORPH))
+			status +="Bat ";
+		if (hasCounter(Consts.C_BATMORPH2))
+			status +="HBat ";
+		if (hasCounter(Consts.C_MYSTMORPH))
+			status +="Myst ";
+		if (hasCounter(Consts.C_MYSTMORPH2))
+			status +="HMyst ";
+		if (hasCounter(Consts.C_WOLFMORPH))
+			status +="Wolf ";
+		if (hasCounter(Consts.C_WOLFMORPH2))
+			status +="HWolf ";
 		if (hasCounter(Consts.C_LUPINEMORPH))
 			status +="Wolvish ";
 		if (hasCounter(Consts.C_BEARMORPH))
@@ -2099,30 +2107,32 @@ public class Player extends Actor {
 			status +="Guarding ";
 
 		if (isPoisoned())
-    		status +="Poison ";
-    	if (isStunned())
-    		status +="Stun ";
-    	if (isPetrified())
-    		status +="Stone ";
-    	if (getHoverHeight() > 0){
-    		status +="Fly("+getHoverHeight()+")";
-    	}
-    	if (hasCounter(Consts.C_FIREBALL_WHIP))
-    		status +="EnchantWhip ";
-    	if (hasCounter(Consts.C_WEAPON_ENCHANTMENT))
-    		status +="EnchantWeapon ";
-    	if (hasCounter(Consts.C_ENERGYSHIELD))
-    		status +="EnergyShield ";
-    	if (hasCounter(Consts.C_MAGICLIGHT))
-    		status +="MagicLight ";
-    	if (getFlag("PLAYER_SWIMMING"))
-    		status +="Swimming (O2="+getCounter("OXYGEN")+") ";
-    	return status;
-    }
+			status +="Poison ";
+		if (isStunned())
+			status +="Stun ";
+		if (isPetrified())
+			status +="Stone ";
+		if (getHoverHeight() > 0) {
+			status +="Fly("+getHoverHeight()+")";
+		}
+		if (hasCounter(Consts.C_FIREBALL_WHIP))
+			status +="EnchantWhip ";
+		if (hasCounter(Consts.C_WEAPON_ENCHANTMENT))
+			status +="EnchantWeapon ";
+		if (hasCounter(Consts.C_ENERGYSHIELD))
+			status +="EnergyShield ";
+		if (hasCounter(Consts.C_MAGICLIGHT))
+			status +="MagicLight ";
+		if (getFlag("PLAYER_SWIMMING"))
+			status +="Swimming (O2="+getCounter("OXYGEN")+") ";
+		return status;
+	}
+
 
 	public int getDaggerLevel(){
 		return daggerLevel;
 	}
+
 
 	public final static int
 		DAGGER = 0,
@@ -2135,7 +2145,7 @@ public class Player extends Actor {
 		SACRED_FIST = 7 ,
 		SACRED_REBOUND = 8;
 
-	private final static Action [] MYSTIC_ACTIONS = new Action[] {
+	private final static Action[] MYSTIC_ACTIONS = {
 		new Dagger(),
 		new Axe(),
 		new Holy(),
@@ -2147,7 +2157,7 @@ public class Player extends Actor {
 		new Rebound()
 	};
 
-	public Action getMysticAction(){
+	public Action getMysticAction() {
 		if (getMysticWeapon() == -1)
 			return null;
 		else
@@ -2166,6 +2176,7 @@ public class Player extends Actor {
 		this.description = description;
 	}
 
+	
 	public String getPlot() {
 		return plot;
 	}
@@ -2179,6 +2190,7 @@ public class Player extends Actor {
 		this.plot2 = plot2;
 	}
 
+
 	public int getHitsMax() {
 		return hitsMax;
 	}
@@ -2188,20 +2200,21 @@ public class Player extends Actor {
 	}
 	
 	public void increaseHeartMax(int how){
-		heartMax+=how;
+		heartMax += how;
 	}
 	
-	public void increaseHitsMax(int how){
-		hitsMax+=how;
+	public void increaseHitsMax(int how) {
+		assert(how > 0);
+		hitsMax += how;
 		if (hitsMax > HITMAX)
 			hitsMax = HITMAX;
 	}
 	
-	public void increaseMUpgradeCount(){
+	public void increaseMUpgradeCount() {
 		mUpgradeCount++;
 	}
 	
-	public boolean justJumped(){
+	public boolean justJumped( ){
 		return justJumped;
 	}
 	

@@ -2,6 +2,7 @@ package crl.ui;
 
 import java.util.*;
 
+import sz.csi.textcomponents.BasicListItem;
 import sz.util.*;
 
 import crl.action.*;
@@ -36,17 +37,17 @@ public abstract class UserInterface implements CommandListener/*, Runnable*/{
 	
 	//Status
 	protected Vector monstersOnSight = new Vector();
-	protected Vector featuresOnSight = new Vector();
+	protected Vector <BasicListItem> featuresOnSight = new Vector<>();
 	protected Vector itemsOnSight = new Vector();
 	protected Action actionSelectedByCommand;
 	
 	//Components
 	
 	protected boolean eraseOnArrival; // Erase the buffer upon the arrival of a new msg
-   	
+	
 	protected String lastMessage; 
 	protected Level level;
-    // Relations
+	// Relations
 	protected Player player;
 
 	public Player getPlayer() {
@@ -122,34 +123,34 @@ public abstract class UserInterface implements CommandListener/*, Runnable*/{
 	
 	public abstract boolean isDisplaying(Actor who);
 
-    public void levelChange(){
+	public void levelChange(){
 		level = player.getLevel();
 	}
-    
+	
 	protected void informPlayerCommand(int command) {
-	    Debug.enterMethod(this, "informPlayerCommand", command+"");
-	    for (int i =0; i < commandListeners.size(); i++){
-	    	((CommandListener)commandListeners.elementAt(i)).commandSelected(command);
-	    }
+		Debug.enterMethod(this, "informPlayerCommand", command+"");
+		for (int i =0; i < commandListeners.size(); i++){
+			(commandListeners.elementAt(i)).commandSelected(command);
+		}
 		Debug.exitMethod();
-    }
+	}
 	
 	public void addCommandListener(CommandListener pCl) {
 		commandListeners.add(pCl);
-    }
+	}
 	
 	public void removeCommandListener(CommandListener pCl){
 		commandListeners.remove(pCl);
 	}
 	
 	protected Hashtable gameCommands = new Hashtable(); 
-	private Vector commandListeners = new Vector (5); // Class CommandListener
+	private Vector<CommandListener> commandListeners = new Vector<>(5);
 
-    
-    /**
-     * Prompts for Yes or NO
-     */
-    public abstract boolean prompt ();
+	
+	/**
+	 * Prompts for Yes or NO
+	 */
+	public abstract boolean prompt();
 
 	public abstract void refresh();
 

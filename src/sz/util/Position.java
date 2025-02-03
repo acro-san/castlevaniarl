@@ -3,6 +3,7 @@ package sz.util;
 public class Position implements java.io.Serializable {
 	public int x,y,z;
 
+	/*
 	public int x(){
 		return x;
 	}
@@ -14,7 +15,7 @@ public class Position implements java.io.Serializable {
 	public int z(){
 		return z;
 	}
-	
+	*/
 	
 	public Position(int px, int py){
 		x = px;

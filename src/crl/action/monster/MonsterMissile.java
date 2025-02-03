@@ -138,36 +138,38 @@ public class MonsterMissile extends Action{
 		return "";
 	}
 	
-	private int solveDirection(Position old, Position newP){
-		if (newP.x() == old.x()){
-			if (newP.y() > old.y()){
+	private int solveDirection(Position old, Position newP) {
+		if (newP.x == old.x) {
+			if (newP.y > old.y) {
 				return Action.DOWN;
 			} else {
-                 return Action.UP;
+				return Action.UP;
 			}
-		} else
-		if (newP.y() == old.y()){
-			if (newP.x() > old.x()){
-				return Action.RIGHT;
-			} else {
-				return Action.LEFT;
-			}
-		} else
-		if (newP.x() < old.x()){
-			if (newP.y() > old.y())
-				return Action.DOWNLEFT;
-			else
-				return Action.UPLEFT;
 		} else {
-            if (newP.y() > old.y())
-				return Action.DOWNRIGHT;
-			else
-				return Action.UPRIGHT;
+			if (newP.y == old.y) {
+				if (newP.x > old.x) {
+					return Action.RIGHT;
+				} else {
+					return Action.LEFT;
+				}
+			} else {
+				if (newP.x < old.x) {
+					if (newP.y > old.y)
+						return Action.DOWNLEFT;
+					else
+						return Action.UPLEFT;
+				} else {
+					if (newP.y > old.y)
+						return Action.DOWNRIGHT;
+					else
+						return Action.UPRIGHT;
+				}
+			}
 		}
 	}
 
-	public int getCost(){
-		Monster m = (Monster) performer;
+	public int getCost() {
+		Monster m = (Monster)performer;
 		if (m.getAttackCost() == 0){
 			Debug.say("quickie monster");
 			return 10;

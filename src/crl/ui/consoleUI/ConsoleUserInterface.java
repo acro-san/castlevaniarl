@@ -48,7 +48,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 	
 	private boolean eraseOnArrival; // Erase the buffer upon the arrival of a new msg
 	
-	private Hashtable /*BasicListItem*/ sightListItems = new Hashtable();
+	private Hashtable<String,BasicListItem> sightListItems = new Hashtable<>();
 	// Relations
 
 	private transient ConsoleSystemInterface si;
@@ -338,14 +338,15 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 					Feature feat = level.getFeatureAt(runner);
 					if (feat != null){
 						if (feat.isVisible()) {
-							BasicListItem li = (BasicListItem)sightListItems.get(feat.getID());
-							if (li == null){
+							BasicListItem li = sightListItems.get(feat.getID());
+							if (li == null) {
 								Debug.say("Adding "+feat.getID()+" to the hashtable");
 								sightListItems.put(feat.getID(), new BasicListItem(((CharAppearance)feat.getAppearance()).getChar(), ((CharAppearance)feat.getAppearance()).getColor(), feat.getDescription()));
-								li = (BasicListItem)sightListItems.get(feat.getID());
+								li = sightListItems.get(feat.getID());
 							}
-							if (feat.isRelevant() && !featuresOnSight.contains(li)) 
-									featuresOnSight.add(li);
+							if (feat.isRelevant() && !featuresOnSight.contains(li)) {
+								featuresOnSight.add(li);
+							}
 							CharAppearance featApp = (CharAppearance)feat.getAppearance();
 							si.print(PC_POS.x-xrange+x,PC_POS.y-yrange+y, featApp.getChar(), featApp.getColor());
 						}
@@ -1583,8 +1584,9 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		int maxDist = 15;
 		for (int i = 0; i < monsters.size(); i++){
 			Monster monster = (Monster) monsters.elementAt(i);
-			if (monster.getPosition().z() != level.getPlayer().getPosition().z())
+			if (monster.getPosition().z != level.getPlayer().getPosition().z) {
 				continue;
+			}
 			int distance = Position.flatDistance(level.getPlayer().getPosition(), monster.getPosition());
 			if (distance < maxDist && distance< minDist && player.sees(monster)){
 				minDist = distance;

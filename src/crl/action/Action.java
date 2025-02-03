@@ -12,7 +12,7 @@ import crl.player.Player;
 import crl.ui.UserInterface;
 import crl.ui.effects.Effect;
 
-public abstract class Action implements java.io.Serializable{
+public abstract class Action implements java.io.Serializable {
 	protected Actor performer;
 
 	protected int targetDirection;
@@ -34,16 +34,16 @@ public abstract class Action implements java.io.Serializable{
 	
 	public abstract String getID();
 	
-	public int getCost(){
+	public int getCost() {
 		return 50;
 	}
 
-	protected boolean checkHearts(int q){
+	protected boolean checkHearts(int q) {
 		boolean ret = ((Player)performer).getHearts() >= q;
 		if (ret)
 			((Player)performer).reduceHearts(q);
 		return ret;
-    }
+	}
 
 	public void setPerformer(Actor what){
 		performer = what;
@@ -65,7 +65,7 @@ public abstract class Action implements java.io.Serializable{
 		targetItem = what;
 	}
 	
-	public void setMultiItems(Vector what){
+	public void setMultiItems(Vector what) {
 		this.targetMultiItems = what;
 	}
 
@@ -127,45 +127,46 @@ public abstract class Action implements java.io.Serializable{
 		return Position.mul(pos, -1);
 	}
 
-	public final static Position VARUP = new Position(0,-1);
-	public final static Position VARDN = new Position(0,1);
-	public final static Position VARLF = new Position(-1,0);
-	public final static Position VARRG = new Position(1,0);
-	public final static Position VARUR = new Position(1,-1);
-	public final static Position VARUL = new Position(-1,-1);
-	public final static Position VARDR = new Position(1,1);
-	public final static Position VARDL = new Position(-1,1);
-	public final static Position VARSL = new Position(0,0);
+	public final static Position
+		VARUP = new Position(0 ,-1),
+		VARDN = new Position(0 , 1),
+		VARLF = new Position(-1, 0),
+		VARRG = new Position(1 , 0),
+		VARUR = new Position(1 ,-1),
+		VARUL = new Position(-1,-1),
+		VARDR = new Position(1 , 1),
+		VARDL = new Position(-1, 1),
+		VARSL = new Position(0 , 0);
 
-	public static Position directionToVariation(int code){
-		switch (code){
-			case UP:
+	public static Position directionToVariation(int code) {
+		switch (code) {
+		case UP:
 			return VARUP;
-			case DOWN:
+		case DOWN:
 			return VARDN;
-			case LEFT:
+		case LEFT:
 			return VARLF;
-			case RIGHT:
+		case RIGHT:
 			return VARRG;
-			case UPRIGHT:
+		case UPRIGHT:
 			return VARUR;
-			case UPLEFT:
+		case UPLEFT:
 			return VARUL;
-			case DOWNRIGHT:
+		case DOWNRIGHT:
 			return VARDR;
-			case DOWNLEFT:
+		case DOWNLEFT:
 			return VARDL;
-			case SELF:
+		case SELF:
 			return VARSL;
-			default:
+		default:
 			return null;
 		}
 	}
 
 	public static int toIntDirection(Position what){
-		switch (what.x()){
+		switch (what.x) {
 			case 1:
-				switch (what.y()){
+				switch (what.y) {
 					case 1:
 						return DOWNRIGHT;
 					case 0:
@@ -174,14 +175,14 @@ public abstract class Action implements java.io.Serializable{
 						return UPRIGHT;
 				}
 			case 0:
-				switch (what.y()){
+				switch (what.y) {
 					case 1:
 						return DOWN;
 					case -1:
 						return UP;
 				}
 			case -1:
-				switch (what.y()){
+				switch (what.y) {
 					case 1:
 						return DOWNLEFT;
 					case 0:

@@ -1102,8 +1102,9 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		int maxDist = 15;
 		for (int i = 0; i < monsters.size(); i++){
 			Monster monster = (Monster) monsters.elementAt(i);
-			if (monster.getPosition().z() != level.getPlayer().getPosition().z())
+			if (monster.getPosition().z != level.getPlayer().getPosition().z) {
 				continue;
+			}
 			int distance = Position.flatDistance(level.getPlayer().getPosition(), monster.getPosition());
 			if (distance < maxDist && distance< minDist && player.sees(monster)){
 				minDist = distance;

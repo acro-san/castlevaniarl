@@ -1,6 +1,5 @@
 package crl.ui.consoleUI.effects;
 
-import crl.ui.*;
 import crl.ui.consoleUI.ConsoleUserInterface;
 import sz.csi.ConsoleSystemInterface;
 import sz.util.*;
@@ -11,28 +10,29 @@ public class CharDirectionalMissileEffect extends CharDirectedEffect {
 	private String missile;
 	private int misColor;
 	
-	private int solveDirection(Position old, Position newP){
-		if (newP.x() == old.x()){
-			if (newP.y() > old.y()){
+	// THIS LOGIC EXISTS ELSEWHERE ALREADY. 'resolvedir'?
+	private int solveDirection(Position old, Position newP) {
+		if (newP.x == old.x){
+			if (newP.y > old.y) {
 				return Action.DOWN;
 			} else {
                  return Action.UP;
 			}
 		} else
-		if (newP.y() == old.y()){
-			if (newP.x() > old.x()){
+		if (newP.y == old.y){
+			if (newP.x > old.x) {
 				return Action.RIGHT;
 			} else {
 				return Action.LEFT;
 			}
 		} else
-		if (newP.x() < old.x()){
-			if (newP.y() > old.y())
+		if (newP.x < old.x){
+			if (newP.y > old.y)
 				return Action.DOWNLEFT;
 			else
 				return Action.UPLEFT;
 		} else {
-            if (newP.y() > old.y())
+            if (newP.y > old.y)
 				return Action.DOWNRIGHT;
 			else
 				return Action.UPRIGHT;
@@ -53,7 +53,7 @@ public class CharDirectionalMissileEffect extends CharDirectedEffect {
 			if (i != 0){
 				Position relative = Position.subs(oldPoint, ui.getPlayer().getPosition());
 				Position toPrint = Position.add(ui.PC_POS, relative);
-				si.safeprint(toPrint.x(), toPrint.y(), oldChar, oldColor);
+				si.safeprint(toPrint.x, toPrint.y, oldChar, oldColor);
 			}
 		
 			oldPoint = new Position(next);
@@ -88,14 +88,14 @@ public class CharDirectionalMissileEffect extends CharDirectedEffect {
 			Position toPrint = Position.add(ui.PC_POS, relative);
 			if (!ui.insideViewPort(toPrint))
 				break;
-			oldChar = si.peekChar(toPrint.x(), toPrint.y());
-			oldColor = si.peekColor(toPrint.x(), toPrint.y());
-			si.safeprint(toPrint.x(), toPrint.y(), icon, misColor);
+			oldChar = si.peekChar(toPrint.x, toPrint.y);
+			oldColor = si.peekColor(toPrint.x, toPrint.y);
+			si.safeprint(toPrint.x, toPrint.y, icon, misColor);
 			animationPause();
 		}
 	}
 
-	public CharDirectionalMissileEffect(String ID, String missile, int misColor, int delay){
+	public CharDirectionalMissileEffect(String ID, String missile, int misColor, int delay) {
 		super(ID);
 		setMissile(missile);
 		setMisColor(misColor);

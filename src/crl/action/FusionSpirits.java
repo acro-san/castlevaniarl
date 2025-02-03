@@ -23,7 +23,7 @@ public class FusionSpirits extends Action{
 		/*Checks all the items to be spirits*/
 		for (Iterator item = targetMultiItems.iterator(); item.hasNext();) {
 			Item element = (Item) item.next();
-			if (!element.getDefinition().getID().endsWith("SPIRIT")){
+			if (!element.getDefinition().getID().endsWith("SPIRIT")) {
 				performer.getLevel().addMessage(element.getDescription() + " is not an spirit");
 				return;
 			}

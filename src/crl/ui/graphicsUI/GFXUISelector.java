@@ -23,7 +23,7 @@ import crl.ui.ActionCancelException;
 import crl.ui.UISelector;
 import crl.ui.UserAction;
 
-public class GFXUISelector extends UISelector implements ActionSelector, MouseListener, MouseMotionListener, Serializable{
+public class GFXUISelector extends UISelector implements ActionSelector, MouseListener, MouseMotionListener, Serializable {
 	private transient SwingSystemInterface si;
 	private boolean useMouse = false;
 	
@@ -392,9 +392,9 @@ public class GFXUISelector extends UISelector implements ActionSelector, MouseLi
 	}
 	
 	public static int toIntDirection(Position what){
-		switch (what.x()){
+		switch (what.x) {
 			case 1:
-				switch (what.y()){
+				switch (what.y) {
 					case 1:
 						return Action.DOWNRIGHT;
 					case 0:
@@ -403,14 +403,14 @@ public class GFXUISelector extends UISelector implements ActionSelector, MouseLi
 						return Action.UPRIGHT;
 				}
 			case 0:
-				switch (what.y()){
+				switch (what.y){
 					case 1:
 						return Action.DOWN;
 					case -1:
 						return Action.UP;
 				}
 			case -1:
-				switch (what.y()){
+				switch (what.y) {
 					case 1:
 						return Action.DOWNLEFT;
 					case 0:

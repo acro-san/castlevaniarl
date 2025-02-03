@@ -1,11 +1,10 @@
 package crl.ui.consoleUI.effects;
 
 import sz.csi.ConsoleSystemInterface;
-import sz.util.Line;
 import sz.util.Position;
 import crl.ui.consoleUI.ConsoleUserInterface;
 
-public class CharAnimatedMissileEffect extends CharDirectedEffect{
+public class CharAnimatedMissileEffect extends CharDirectedEffect {
 	private String missile;
 	private int misColor;
 
@@ -23,7 +22,7 @@ public class CharAnimatedMissileEffect extends CharDirectedEffect{
 			if (i != 0){
 				Position relative = Position.subs(oldPoint, ui.getPlayer().getPosition());
 				Position toPrint = Position.add(ui.PC_POS, relative);
-				si.safeprint(toPrint.x(), toPrint.y(), oldChar, oldColor);
+				si.safeprint(toPrint.x, toPrint.y, oldChar, oldColor);
 			}
 		
 			oldPoint = new Position(next);
@@ -37,9 +36,9 @@ public class CharAnimatedMissileEffect extends CharDirectedEffect{
 			if (!ui.insideViewPort(toPrint))
 				//break;
 				continue;
-			oldChar = si.peekChar(toPrint.x(), toPrint.y());
-			oldColor = si.peekColor(toPrint.x(), toPrint.y());
-			si.print(toPrint.x(), toPrint.y(), icon, misColor);
+			oldChar = si.peekChar(toPrint.x, toPrint.y);
+			oldColor = si.peekColor(toPrint.x, toPrint.y);
+			si.print(toPrint.x, toPrint.y, icon, misColor);
 			animationPause();
 		}
 	}

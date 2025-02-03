@@ -1,10 +1,10 @@
 package crl.ui.consoleUI.effects;
-import crl.ui.*;
+
 import crl.ui.consoleUI.ConsoleUserInterface;
 import sz.csi.ConsoleSystemInterface;
 import sz.util.*;
 import crl.Main;
-import crl.action.*;
+
 
 public class CharBeamMissileEffect extends CharDirectedEffect {
 	private String missile;
@@ -15,7 +15,8 @@ public class CharBeamMissileEffect extends CharDirectedEffect {
 		Main.ui.refresh();
 		// ?? Why not use console ui parameter?
 		
-		Position oldPoint = effectLine.next();
+		//Position oldPoint = 
+		effectLine.next();
 		int too = 0;
 		for (int i = 0; i < depth; i++){
 			Position next = effectLine.next();
@@ -27,7 +28,7 @@ public class CharBeamMissileEffect extends CharDirectedEffect {
 			Position toPrint = Position.add(ui.PC_POS, relative);
 			if (!ui.insideViewPort(toPrint))
 				break;
-			si.safeprint(toPrint.x(), toPrint.y(), icon, misColor);
+			si.safeprint(toPrint.x, toPrint.y, icon, misColor);
 			animationPause();
 		}
 	}

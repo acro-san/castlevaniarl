@@ -11,28 +11,31 @@ import crl.ui.graphicsUI.SwingSystemInterface;
 public class GFXDirectionalMissileEffect extends GFXDirectedEffect {
 	private Image[] missile;
 	
-	private int solveDirection(Position old, Position newP){
-		if (newP.x() == old.x()){
-			if (newP.y() > old.y()){
+	// FIXME(ac): This is the THIRD copy of this same function, i think.
+	// to find them all, make Position.x private and see what breaks.
+	// or search whole codebase for 'newP'
+	private int solveDirection(Position old, Position newP) {
+		if (newP.x == old.x){
+			if (newP.y > old.y) {
 				return Action.DOWN;
 			} else {
-                 return Action.UP;
+				return Action.UP;
 			}
 		} else
-		if (newP.y() == old.y()){
-			if (newP.x() > old.x()){
+		if (newP.y == old.y){
+			if (newP.x > old.x) {
 				return Action.RIGHT;
 			} else {
 				return Action.LEFT;
 			}
 		} else
-		if (newP.x() < old.x()){
-			if (newP.y() > old.y())
+		if (newP.x < old.x) {
+			if (newP.y > old.y)
 				return Action.DOWNLEFT;
 			else
 				return Action.UPLEFT;
 		} else {
-            if (newP.y() > old.y())
+			if (newP.y > old.y)
 				return Action.DOWNRIGHT;
 			else
 				return Action.UPRIGHT;
@@ -84,7 +87,7 @@ public class GFXDirectionalMissileEffect extends GFXDirectedEffect {
 			Position toPrint = Position.add(ui.PC_POS, relative);
 			if (!ui.insideViewPort(toPrint))
 				break;
-			ui.drawImageVP(toPrint.x() * 32, toPrint.y() * 32 - 4 * height, icon);
+			ui.drawImageVP(toPrint.x * 32, toPrint.y * 32 - 4 * height, icon);
 			si.refresh();
 			animationPause();
 			si.restore();

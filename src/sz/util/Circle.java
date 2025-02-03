@@ -5,13 +5,13 @@ import java.util.ArrayList;
 public class Circle {
 	private Position center;
 	private int radius;
-	public Circle (Position p, int radius){
+	public Circle (Position p, int radius) {
 		this.center = p;
 		this.radius = radius;
 	}
 	
-	public ArrayList getPoints (){
-		ArrayList ret = new ArrayList();
+	public ArrayList<Position> getPoints() {
+		ArrayList<Position> ret = new ArrayList<>();
 		int d = 3 - (2 * radius);
 		Position runner = new Position(0, radius);
 		Position zero = new Position(0,0);
@@ -36,15 +36,15 @@ public class Circle {
 	}
 
 
-	private void addPoints(Position center, int x, int y, ArrayList collection){
-		collection.add(new Position(center.x + x, center.y + y));
-		collection.add(new Position(center.x + x, center.y - y));
-		collection.add(new Position(center.x - x, center.y + y));
-		collection.add(new Position(center.x - x, center.y - y));
-		collection.add(new Position(center.x + y, center.y + x));
-		collection.add(new Position(center.x + y, center.y - x));
-		collection.add(new Position(center.x - y, center.y + x));
-		collection.add(new Position(center.x - y, center.y - x));
+	private void addPoints(Position center, int x, int y, ArrayList<Position> list) {
+		list.add(new Position(center.x + x, center.y + y));
+		list.add(new Position(center.x + x, center.y - y));
+		list.add(new Position(center.x - x, center.y + y));
+		list.add(new Position(center.x - x, center.y - y));
+		list.add(new Position(center.x + y, center.y + x));
+		list.add(new Position(center.x + y, center.y - x));
+		list.add(new Position(center.x - y, center.y + x));
+		list.add(new Position(center.x - y, center.y - x));
 	}
 
 }

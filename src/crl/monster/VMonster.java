@@ -5,13 +5,11 @@ import java.util.*;
 import sz.util.*;
 
 public class VMonster implements java.io.Serializable{
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -8389021604207397015L;
+	
 	private Vector<Monster> monsters;
 
-	public void addMonster(Monster what){
+	public void addMonster(Monster what) {
 		monsters.add(what);
 //		Debug.say(what.getPosition().toString());
 		//mLocs.put(what.getPosition().toString(), what);

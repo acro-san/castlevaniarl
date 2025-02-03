@@ -27,7 +27,7 @@ public class Level implements FOVMap, Serializable {
 	private boolean[][][] remembered;
 	private VMonster monsters;
 	private VFeatures features;
-	private Hashtable smartFeatures = new Hashtable();
+	private Hashtable<String, SmartFeature> smartFeatures = new Hashtable<>();
 	private Player player;
 	private SZQueue messagesneffects;
 	private Dispatcher dispatcher;
@@ -40,20 +40,20 @@ public class Level implements FOVMap, Serializable {
 	private MonsterSpawnInfo[] inhabitants;
 	private MonsterSpawnInfo[] dwellersInfo;
 	
-	private Hashtable bloods = new Hashtable();
-	private Hashtable frosts = new Hashtable();
+	private Hashtable<String,String> bloods = new Hashtable<>();
+	private Hashtable<String, Counter> frosts = new Hashtable<>();
 	private Hashtable<String, Vector<Item>> items = new Hashtable<>();
 	
 	private Hashtable<String, Position> exits = new Hashtable<>();
 	private Hashtable<Integer, String> exitPositions = new Hashtable<>();
 	// FIXME: Integer, String. also WHY STRING FFS?
 	
-	private Hashtable hashCounters = new Hashtable();
+	private Hashtable<String,Counter> hashCounters = new Hashtable<>();
 	
 	private String mapLocationKey;
 	
-	private Vector doomedFeatures = new Vector();
-	private Vector lightSources = new Vector();
+	private Vector<Feature> doomedFeatures = new Vector<>();
+	private Vector<Feature> lightSources = new Vector<>();
 	
 	public void addExit(Position where, String levelID){
 		exits.put(levelID, where);
@@ -94,18 +94,18 @@ public class Level implements FOVMap, Serializable {
 	}
 
 
-	public void addFrost(Position where, int frostness){
+	public void addFrost(Position where, int frostness) {
 		if (getFrostAt(where) != 0) {
-			frosts.remove(where);
+			frosts.remove(where.toString());
 		}
 		frosts.put(where.toString(), new Counter(frostness));
 	}
 
-	public void addBlood(Position where, int bloodness){
+	public void addBlood(Position where, int bloodness) {
 		if (Main.getConfigurationVal("blood").equals("false"))
 			return;
 		if (getBloodAt(where) != null)
-			bloods.remove(where);
+			bloods.remove(where.toString());
 		if (!isValidCoordinate(where))
 			return;
 		if (getMapCell(where) == null || getMapCell(where).isSolid())
@@ -114,8 +114,8 @@ public class Level implements FOVMap, Serializable {
 			bloods.put(where.toString(), bloodness+"");
 	}
 
-	public String getBloodAt(Position where){
-		return (String) bloods.get(where.toString());
+	public String getBloodAt(Position where) {
+		return bloods.get(where.toString());
 	}
 
 	public int getFrostAt(Position where){
@@ -225,7 +225,7 @@ public class Level implements FOVMap, Serializable {
 
 	public void destroyFeature(Feature what){
 		//if (what.getLight()>0){
-		if (lightSources.contains(what)){
+		if (lightSources.contains(what)) {
 			lightSources.remove(what);
 			lightAt(what.getPosition(), what.getLight(), false);
 			for(int i = 0; i < lightSources.size(); i++){
@@ -647,7 +647,7 @@ public class Level implements FOVMap, Serializable {
 			player.informPlayerEvent(Player.EVT_FORWARD);*/
 		if (hashCounters.size() > 0){
 			for (int i = 0; i < hashCounters.size(); i++){
-				((Counter)hashCounters.elements().nextElement()).reduce();
+				(hashCounters.elements().nextElement()).reduce();
 			}
 		}
 		reduceFrosts();
@@ -659,13 +659,13 @@ public class Level implements FOVMap, Serializable {
 				destroyFeature(f);
 			}
 		}*/
-		for (int i = 0; i < doomedFeatures.size(); i++){
-			Feature f = (Feature) doomedFeatures.elementAt(i);
+		for (int i = 0; i < doomedFeatures.size(); i++) {
+			Feature f = doomedFeatures.elementAt(i);
 			f.setFaint(f.getFaint()-1);
 		}
 		for (int i = 0; i < doomedFeatures.size(); i++){
-			Feature f = (Feature) doomedFeatures.elementAt(i);
-			if (f.getFaint() <= 0){
+			Feature f = doomedFeatures.elementAt(i);
+			if (f.getFaint() <= 0) {
 				doomedFeatures.remove(f);
 				destroyFeature(f);
 				i--;
@@ -673,17 +673,17 @@ public class Level implements FOVMap, Serializable {
 		}
 	}
 
-	private void reduceFrosts(){
-		Enumeration counters = frosts.elements();
-		while (counters.hasMoreElements()){
-			Counter counter = (Counter)counters.nextElement();
+	private void reduceFrosts() {
+		Enumeration<Counter> counters = frosts.elements();
+		while (counters.hasMoreElements()) {
+			Counter counter = counters.nextElement();
 			counter.reduce();
 		}
 
-		Enumeration keys = frosts.keys();
+		Enumeration<String> keys = frosts.keys();
 		while (keys.hasMoreElements()){
-			Object key = keys.nextElement();
-			if  (((Counter)frosts.get(key)).isOver()){
+			String key = keys.nextElement();
+			if ((frosts.get(key)).isOver()) {
 				addMessage("The ice melts away!");
 				player.land();
 				frosts.remove(key);
