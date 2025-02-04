@@ -18,21 +18,20 @@ public class PreludeArena2 extends Unleasher {
 		return ret;
 	}
 	private int counterLimit = 400;
-	public void unleash(Level level, Game game){
+	public void unleash(Level level, Game game) {
 		counter++;
-		if (counter > counterLimit){
-			
+		if (counter > counterLimit) {
 			counterLimit = counter*2;
 			counter = 0;
 			superCounter++;
-			switch (superCounter){
+			switch (superCounter) {
 			case 1:
-				level.setInhabitants(new MonsterSpawnInfo[]{
+				level.setInhabitants(new MonsterSpawnInfo[] {
 					new MonsterSpawnInfo("SKELETON_PANTHER", MonsterSpawnInfo.UNDERGROUND, 100),
 					new MonsterSpawnInfo("BLACK_KNIGHT", MonsterSpawnInfo.UNDERGROUND, 100),
 					new MonsterSpawnInfo("SKULL_HEAD", MonsterSpawnInfo.UNDERGROUND, 100)
 				});
-				level.setLevelNumber(2);
+				level.levelNumber = 2;
 				level.setMusicKeyMorning("ARENA2");
 				level.setMusicKeyNoon("ARENA2");
 				STMusicManagerNew.thus.playKey("ARENA2");
@@ -45,42 +44,42 @@ public class PreludeArena2 extends Unleasher {
 					new MonsterSpawnInfo("SKELETON_PANTHER", MonsterSpawnInfo.UNDERGROUND, 100),
 					new MonsterSpawnInfo("AXE_KNIGHT", MonsterSpawnInfo.UNDERGROUND, 100)
 				});
-				level.setLevelNumber(3);
+				level.levelNumber = 3;
 				level.setMusicKeyMorning("ARENA3");
 				level.setMusicKeyNoon("ARENA3");
 				STMusicManagerNew.thus.playKey("ARENA3");
 				break;
 			case 3:
 				level.setInhabitants(doInhabitants(new String[]{"DURGA","BLADE_SOLDIER","BONE_HALBERD","CROW"}));
-				level.setLevelNumber(4);
+				level.levelNumber = 4;
 				level.setMusicKeyMorning("ARENA4");
 				level.setMusicKeyNoon("ARENA4");
 				STMusicManagerNew.thus.playKey("ARENA4");
 				break;
 			case 4:
 				level.setInhabitants(doInhabitants(new String[]{"COCKATRICE","COOPER_ARMOR","SALOME"}));
-				level.setLevelNumber(5);
+				level.levelNumber = 5;
 				level.setMusicKeyMorning("ARENA5");
 				level.setMusicKeyNoon("ARENA5");
 				STMusicManagerNew.thus.playKey("ARENA5");
 				break;
 			case 5:
 				level.setInhabitants(doInhabitants(new String[]{"LILITH","BONE_MUSKET","VAMPIRE_BAT"}));
-				level.setLevelNumber(6);
+				level.levelNumber = 6;
 				level.setMusicKeyMorning("ARENA6");
 				level.setMusicKeyNoon("ARENA6");
 				STMusicManagerNew.thus.playKey("ARENA6");
 				break;
 			case 6:
 				level.setInhabitants(doInhabitants(new String[]{"ZELDO","CAGNAZOO","KNIFE_MERMAN"}));
-				level.setLevelNumber(7);
+				level.levelNumber = 7;
 				level.setMusicKeyMorning("ARENA7");
 				level.setMusicKeyNoon("ARENA7");
 				STMusicManagerNew.thus.playKey("ARENA7");
 				break;
 			case 7:
 				level.setInhabitants(doInhabitants(new String[]{"GIANTBAT"}));
-				level.setLevelNumber(8);
+				level.levelNumber = 8;
 				level.setMusicKeyMorning("ARENA8");
 				level.setMusicKeyNoon("ARENA8");
 				STMusicManagerNew.thus.playKey("ARENA8");

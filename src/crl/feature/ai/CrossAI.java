@@ -10,7 +10,7 @@ import crl.feature.action.CrossBack;
 import crl.ui.UserInterface;
 import sz.util.*;
 
-public class CrossAI implements ActionSelector, Cloneable{
+public class CrossAI implements ActionSelector, Cloneable {
 	public String getID() {
 		return "CROSS_SELECTOR";
 	}
@@ -18,7 +18,7 @@ public class CrossAI implements ActionSelector, Cloneable{
 	private Position targetPosition;
 
 
-	public Action selectAction(Actor who){
+	public Action selectAction(Actor who) {
 		Action ret = new CrossBack();
 		ret.setPosition(targetPosition);
 		who.die();
@@ -28,9 +28,9 @@ public class CrossAI implements ActionSelector, Cloneable{
 		return ret;
 	}
 
-	public ActionSelector derive(){
+	public ActionSelector derive() {
 		try {
-			return (ActionSelector) clone();
+			return (ActionSelector)clone();
 		} catch (CloneNotSupportedException cnse){
 			return null;
 		}

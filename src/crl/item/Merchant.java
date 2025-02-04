@@ -138,18 +138,18 @@ public class Merchant extends NPC {
 				inventory.add(item);
 			} else if (def.attack > 0) {
 				if (!def.isFixedMaterial) {
-					Main.itemData.setMaterial(item, level.getLevelNumber(), ItemDataTable.MOD_MATERIAL);
+					Main.itemData.setMaterial(item, level.levelNumber, ItemDataTable.MOD_MATERIAL);
 				}
 				if (Util.chance(20)) {
-					Main.itemData.setWeaponModifiers(item, level.getLevelNumber());
+					Main.itemData.setWeaponModifiers(item, level.levelNumber);
 				}
 				inventory.add(item);
 			} else if (def.defense > 0) {
 				if (!def.isFixedMaterial) {
-					Main.itemData.setMaterial(item, level.getLevelNumber(),ItemDataTable.MOD_ARMOR_MATERIAL);
+					Main.itemData.setMaterial(item, level.levelNumber, ItemDataTable.MOD_ARMOR_MATERIAL);
 				}
 				if (Util.chance(10)) {
-					Main.itemData.setArmorModifiers(item, level.getLevelNumber());
+					Main.itemData.setArmorModifiers(item, level.levelNumber);
 				}
 				inventory.add(item);
 			} else {

@@ -96,7 +96,7 @@ public class Feature implements Cloneable, java.io.Serializable {
     			else
     				prizeList = new String[]{"BIGHEART"};
     		else
-    			prizeList = new String[]{"SMALLHEART"};    	
+    			prizeList = new String[]{"SMALLHEART"};
     	}
 		//return FeatureFactory.buildFeature("ROSARY");
 		//prizelist can't be null.

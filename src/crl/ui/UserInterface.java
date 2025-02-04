@@ -23,8 +23,8 @@ import crl.actor.*;
 
 public abstract class UserInterface implements CommandListener/*, Runnable*/{
 	//Attributes
-	//private String[] quitMessages;
-	protected String[] quitMessages = new String[]{
+
+	protected static final String[] quitMessages = {
 		"Do you really want to abandon Transylvania?",
 		"Quit now, and let the evil count roam the world free?",
 		"Leave now, and lose this unique chance to fight for freedom?",
@@ -33,7 +33,6 @@ public abstract class UserInterface implements CommandListener/*, Runnable*/{
 		"Throw your weapons away and live a 'peaceful' life?"
 		
 	};
-	
 	
 	//Status
 	protected Vector monstersOnSight = new Vector();
@@ -45,9 +44,10 @@ public abstract class UserInterface implements CommandListener/*, Runnable*/{
 	
 	protected boolean eraseOnArrival; // Erase the buffer upon the arrival of a new msg
 	
-	protected String lastMessage; 
+	protected String lastMessage;
 	protected Level level;
 	// Relations
+	
 	protected Player player;
 
 	public Player getPlayer() {
@@ -55,20 +55,19 @@ public abstract class UserInterface implements CommandListener/*, Runnable*/{
 	}
 
 
-	public final static String verboseSkills[] = {
-		"Unskilled", 
-		"Mediocre(1)", 
-		"Mediocre(2)", 
-		"Mediocre(3)", 
+	public final static String[] verboseSkills = {
+		"Unskilled",
+		"Mediocre(1)",
+		"Mediocre(2)",
+		"Mediocre(3)",
 		"Trained(1)",
 		"Trained(2)",
-		"Trained(3)", 
+		"Trained(3)",
 		"Skilled(1)",
 		"Skilled(2)",
 		"Skilled(3)",
 		"Master"
 	};
-
 
 	private boolean [][] FOVMask;
 	//Interactive Methods
@@ -88,7 +87,7 @@ public abstract class UserInterface implements CommandListener/*, Runnable*/{
 	}
 
 	public abstract void addMessage(Message message);
-	public abstract Vector<Message> getMessageBuffer();
+	public abstract Vector<String> getMessageBuffer();
 
 	public void setPlayer(Player pPlayer){
 		player = pPlayer;

@@ -404,7 +404,7 @@ public class GameFiles {
 			fileWriter.newLine();
 			fileWriter.write("-- Last Messages --");
 			fileWriter.newLine();
-			Vector<Message> messages = Main.ui.getMessageBuffer();
+			Vector<String> messages = Main.ui.getMessageBuffer();
 			for (int j = 0; j < messages.size(); j++) {
 				fileWriter.write(messages.elementAt(j).toString());
 				fileWriter.newLine();
@@ -491,7 +491,7 @@ public class GameFiles {
 			fileWriter.newLine();
 			fileWriter.newLine();
 			fileWriter.write(player.getPlot()+", "+player.getDescription()+" journeys to the cursed castle.");fileWriter.newLine();fileWriter.newLine();
-			fileWriter.write(player.getName()+ ", the "+player.getClassString()+", survives on the "+player.getLevel().getDescription()+" (Level "+player.getLevel().getLevelNumber()+")...");fileWriter.newLine();
+			fileWriter.write(player.getName()+ ", the "+player.getClassString()+", survives on the "+player.getLevel().getDescription()+" (Level "+player.getLevel().levelNumber+")...");fileWriter.newLine();
 			fileWriter.write(heshe+" has survived for "+gsi.turns+" turns and has scored "+player.getScore()+" points, collecting a total of "+gsi.goldCount+" gold.");fileWriter.newLine();
 			fileWriter.newLine();
 			fileWriter.write(heshe +" is able to use the following skills:");fileWriter.newLine();
@@ -567,7 +567,7 @@ public class GameFiles {
 			}
 			fileWriter.newLine();
 			fileWriter.write("-- Latest Messages --");fileWriter.newLine();
-			Vector<Message> messages = Main.ui.getMessageBuffer();
+			Vector<String> messages = Main.ui.getMessageBuffer();
 			for (int j = 0; j < messages.size(); j++){
 				fileWriter.write(messages.elementAt(j).toString());
 				fileWriter.newLine();

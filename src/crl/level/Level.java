@@ -19,7 +19,10 @@ import crl.player.*;
 import crl.levelgen.*;
 
 public class Level implements FOVMap, Serializable {
+	
 	private String ID;
+	public int levelNumber;
+	
 	private Unleasher[] unleashers = new Unleasher[]{};
 	private Cell[][][] map;
 	private boolean[][][] visible;
@@ -300,7 +303,7 @@ public class Level implements FOVMap, Serializable {
 	}
 
 	public void createMonster(String who, Position where/*, String feat*/){
-		Monster x = MonsterFactory.getFactory().buildMonster(who);
+		Monster x = MonsterData.buildMonster(who);
 		x.setPosition(where);
 		/*if (!feat.equals(""))
 			x.setFeaturePrize(feat);
@@ -529,9 +532,9 @@ public class Level implements FOVMap, Serializable {
 				i--;
 				continue;
 			}
-			Monster monster = MonsterFactory.getFactory().buildMonster(random.getMonsterID());
+			Monster monster = MonsterData.buildMonster(random.getMonsterID());
 			int tries = 0;
-			while (tries < 200){
+			while (tries < 200) {
 				spawnPosition.x = Util.rand(1,getWidth()-2);
 				spawnPosition.y = Util.rand(1,getHeight()-2);
 				spawnPosition.z = Util.rand(0, getDepth()-1);
@@ -559,11 +562,12 @@ public class Level implements FOVMap, Serializable {
 		}
 	}
 	
-	public void respawn(){
-		Monster monster = MonsterFactory.getFactory().getMonsterForLevel(this);
-		int spawnPosition = MonsterFactory.getFactory().getLastSpawnPosition();
-		if (monster == null)
+	public void respawn() {
+		Monster monster = MonsterData.getMonsterForLevel(this);
+		int spawnPosition = MonsterData.getLastSpawnPosition();
+		if (monster == null) {
 			return;
+		}
 		Position nearPlayer = null;
 		boolean ok = false;
 		Position add = new Position(0,0);
@@ -589,10 +593,11 @@ public class Level implements FOVMap, Serializable {
 				add.x = Util.rand(-10,10);
 				add.y = Util.rand(-10,10);
 				nearPlayer = Position.add(player.getPosition(), add);
-				validate (nearPlayer);
+				validate(nearPlayer);
 				if (getMapCell(nearPlayer) == null || 
-					(!getMapCell(nearPlayer).isWater()))
-					continue;
+					(!getMapCell(nearPlayer).isWater())) {
+					continue;	// ?? water monsters dont spawn in shallow water??
+				}
 				ok = true;
 				break;
 			}
@@ -617,30 +622,18 @@ public class Level implements FOVMap, Serializable {
 		if (what.y > getHeight() - 1) what.y = getHeight() - 1;
 	}
 
-	public boolean isValidCoordinate(Position what){
-		return 	isValidCoordinate(what.x, what.y, what.z);
+	public boolean isValidCoordinate(Position what) {
+		return isValidCoordinate(what.x, what.y, what.z);
 	}
 	
-	public boolean isValidCoordinate(int x, int y){
-		return 	! (x < 0 ||
-					y < 0  ||
-					x > getWidth() - 1 ||
-					y > getHeight() - 1);
+	public boolean isValidCoordinate(int x, int y) {
+		return x >= 0 && y >= 0 && x < getWidth() && y < getHeight();
 	}
 	
 	public boolean isValidCoordinate(int x, int y, int z){
-		return 	z >= 0 && z < getDepth() && isValidCoordinate(x,y);
+		return z >= 0 && z < getDepth() && isValidCoordinate(x,y);
 	}
 
-	private int levelNumber;
-	
-	public int getLevelNumber() {
-		return levelNumber;
-	}
-
-	public void setLevelNumber(int value) {
-		levelNumber = value;
-	}
 
 	public void updateLevelStatus(){
 		/*if (boss != null && boss.isDead())

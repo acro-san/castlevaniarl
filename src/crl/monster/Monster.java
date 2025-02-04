@@ -234,7 +234,7 @@ public class Monster extends Actor implements Cloneable {
 			if (this instanceof NPC)
 				definition = NPC.NPC_MONSTER_DEFINITION;
 			else
-				definition = MonsterFactory.getFactory().getDefinition(defID);
+				definition = MonsterData.getDefinition(defID);
 		}
 		return definition;
 	}
@@ -373,8 +373,8 @@ public class Monster extends Actor implements Cloneable {
 	public void die(){
 		super.die();
 		level.removeMonster(this);
-		if (getAutorespawncount() > 0){
-			Emerger em = new Emerger(MonsterFactory.getFactory().buildMonster(getDefinition().getID()), getPosition(), getAutorespawncount());
+		if (getAutorespawncount() > 0) {
+			Emerger em = new Emerger(MonsterData.buildMonster(getDefinition().getID()), getPosition(), getAutorespawncount());
 			level.addActor(em);
 			em.setSelector(new EmergerAI());
 			em.setLevel(getLevel());

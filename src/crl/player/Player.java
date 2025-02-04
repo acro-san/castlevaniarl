@@ -605,7 +605,7 @@ public class Player extends Actor {
 				SFXManager.play("wav/die_female.wav");
 			gameSessionInfo.setDeathCause(GameSessionInfo.KILLED);
 			gameSessionInfo.setKillerMonster(who);
-			gameSessionInfo.deathLevel = level.getLevelNumber();
+			gameSessionInfo.deathLevel = level.levelNumber;
 		}
 		return true;
 	}
@@ -1181,7 +1181,7 @@ public class Player extends Actor {
 							}
 							SFXManager.play("wav/loutwarp.wav");
 							informPlayerEvent(Player.EVT_GOTO_LEVEL, "TOWN0");
-							getLevel().setLevelNumber(0);
+							getLevel().levelNumber = 0;
 							landOn(Position.add(getLevel().getExitFor("FOREST0"), new Position(-1,0,0)));
 							reduceGold(1000);
 							
@@ -1322,7 +1322,7 @@ public class Player extends Actor {
 
 	private void drown(){
 		gameSessionInfo.setDeathCause(GameSessionInfo.DROWNED);
-		gameSessionInfo.deathLevel =level.getLevelNumber();
+		gameSessionInfo.deathLevel = level.levelNumber;
 		this.hits = -1;
 		informPlayerEvent(Player.DROWNED);
 	}

@@ -68,7 +68,7 @@ public class StaticGenerator {
 						l.addItem(new Position(where.x+x,where.y+y,where.z), vItem);
 					}
 				} else if (cmds[1].equals("MONSTER")) {
-					Monster toAdd = MonsterFactory.getFactory().buildMonster(cmds[2]);
+					Monster toAdd = MonsterData.buildMonster(cmds[2]);
 					toAdd.setPosition(where.x+x,where.y+y,where.z);
 					l.addMonster(toAdd);
 				} else if (cmds[1].equals("EXIT")) {
@@ -130,13 +130,16 @@ public class StaticGenerator {
 						continue;
 					}
 					String iconic = (String)charMap.get(level[z][y].charAt(x)+"");
-					if (iconic == null)
+					if (iconic == null) {
 						Game.crash("mapchar "+level[z][y].charAt(x)+" not found on the level charMap", new Exception());
+					}
 					String[] cmds = iconic.split(" ");
-					if (!cmds[0].equals("NOTHING"))
+					
+					if (!cmds[0].equals("NOTHING")) {
 						cmap[z][x][y] = MapCellFactory.getMapCellFactory().getMapCell(cmds[0]);
-						
-					if (cmds.length > 1){
+					}
+					
+					if (cmds.length > 1) {
 						if (cmds[1].equals("FEATURE")){
 							if (cmds.length < 4 || Util.chance(Integer.parseInt(cmds[3]))){
 								Feature vFeature = FeatureFactory.buildFeature(cmds[2]);
@@ -155,7 +158,7 @@ public class StaticGenerator {
 							Item vItem = Main.itemData.createWeapon(cmds[2],cmds[3]);
 							ret.addItem(new Position(x,y,z), vItem);
 						}else if (cmds[1].equals("MONSTER")){
-							Monster toAdd = MonsterFactory.getFactory().buildMonster(cmds[2]);
+							Monster toAdd = MonsterData.buildMonster(cmds[2]);
 							toAdd.setPosition(x,y,z);
 							ret.addMonster(toAdd);
 						}else if (cmds[1].equals("NPC")){
@@ -208,7 +211,7 @@ public class StaticGenerator {
 							continue;
 						String[] cmds = (inhabitantsMap.get(inhabitants[z][y].charAt(x)+"")).split(" ");
 						if (cmds[0].equals("MONSTER")){
-							Monster toAdd = MonsterFactory.getFactory().buildMonster(cmds[1]);
+							Monster toAdd = MonsterData.buildMonster(cmds[1]);
 							toAdd.setPosition(x,y,z);
 							ret.addMonster(toAdd);
 						}else

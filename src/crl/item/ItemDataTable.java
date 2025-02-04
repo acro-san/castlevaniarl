@@ -122,8 +122,9 @@ public class ItemDataTable {
 		 * Util.randomElementOf(itemIDs); ItemDefinition def =
 		 * getDefinition(itemID);
 		 */
-		if (level.getLevelNumber() == -1)
+		if (level.levelNumber == -1) {
 			return null;
+		}
 		int tries = 150;	// FIXME ...?
 		int i = 0;
 		ItemDefinition def = null;
@@ -138,7 +139,7 @@ public class ItemDataTable {
 			int pinLevel = def.pinLevel;
 			if (pinLevel == 0)
 				continue;
-			int diff = Math.abs(level.getLevelNumber() - pinLevel);
+			int diff = Math.abs(level.levelNumber - pinLevel);
 			if (diff > 5) {
 				i++;
 				def = null;
@@ -146,7 +147,7 @@ public class ItemDataTable {
 			}
 			int prob = 80;
 			for (i = 0; i < diff; i++) {
-				prob = (int) Math.round(prob / 2.0d);
+				prob = (int) Math.round(prob / 2.0);
 			}
 
 			if (def.isUnique) {
@@ -154,7 +155,7 @@ public class ItemDataTable {
 					i++;
 					continue;
 				}
-				prob = (int) Math.round(prob / 5.0d);
+				prob = (int) Math.round(prob / 5.0);
 			}
 
 			if (def.coolness > player.coolness) {
@@ -183,21 +184,21 @@ public class ItemDataTable {
 		}
 		if (def.equipType == ItemDefinition.EQUIPTYPE_WEAPON) {
 			if (!def.isFixedMaterial)
-				setMaterial(item, level.getLevelNumber(), MOD_MATERIAL);
+				setMaterial(item, level.levelNumber, MOD_MATERIAL);
 			if (Util.chance(20))
-				setWeaponModifiers(item, level.getLevelNumber());
+				setWeaponModifiers(item, level.levelNumber);
 			return item;
 		} else if (def.equipType == ItemDefinition.EQUIPTYPE_ARMOR) {
 			if (!def.isFixedMaterial)
-				setMaterial(item, level.getLevelNumber(), MOD_ARMOR_MATERIAL);
+				setMaterial(item, level.levelNumber, MOD_ARMOR_MATERIAL);
 			if (Util.chance(10))
-				setArmorModifiers(item, level.getLevelNumber());
+				setArmorModifiers(item, level.levelNumber);
 			return item;
 		} else if (def.equipType == ItemDefinition.EQUIPTYPE_SHIELD) {
 			if (!def.isFixedMaterial)
-				setMaterial(item, level.getLevelNumber(), MOD_MATERIAL);
+				setMaterial(item, level.levelNumber, MOD_MATERIAL);
 			if (Util.chance(20))
-				setWeaponModifiers(item, level.getLevelNumber());
+				setWeaponModifiers(item, level.levelNumber);
 			return item;
 		} else {
 			return item;

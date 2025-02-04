@@ -14,7 +14,7 @@ import crl.item.*;
 import sz.util.*;
 import crl.level.*;
 import crl.monster.Monster;
-import crl.monster.MonsterFactory;
+import crl.monster.MonsterData;
 import crl.npc.*;
 import crl.player.Player;
 import crl.Main;
@@ -27,7 +27,7 @@ import crl.game.*;
 public class LevelMaster {
 	//private static Dispatcher currentDispatcher;
 	private static boolean firstCave = true;
-	public static Level createLevel(LevelMetaData metadata, Player player) throws CRLException{
+	public static Level createLevel(LevelMetaData metadata, Player player) throws CRLException {
 		
 		String levelID = metadata.getLevelID();
 		Debug.enterStaticMethod("LevelMaster", "createLevel");
@@ -40,7 +40,7 @@ public class LevelMaster {
 		boolean hasHostage = false;
 		boolean isStatic = false;
 		StaticPattern pattern = null;
-		if (levelID.startsWith("TOWN")){
+		if (levelID.startsWith("TOWN")) {
 			isStatic = true;
 			pattern = new BigTown();
 		} else if (levelID.startsWith("CASTLE_BRIDGE")){
@@ -142,7 +142,7 @@ public class LevelMaster {
 			pattern = new SewersBottom();
 		}
 		
-		if (isStatic){
+		if (isStatic) {
 			pattern.setup(StaticGenerator.getGenerator());
 			ret = StaticGenerator.getGenerator().createLevel();
 			ret.setRutinary(pattern.isRutinary());
@@ -162,23 +162,23 @@ public class LevelMaster {
 			ret.setMusicKeyMorning(pattern.getMusicKeyMorning());
 			ret.setMusicKeyNoon(pattern.getMusicKeyNoon());
 			
-			if (pattern.getBoss() != null){
-				Monster monsBoss = MonsterFactory.getFactory().buildMonster(pattern.getBoss());
+			if (pattern.getBoss() != null) {
+				Monster monsBoss = MonsterData.buildMonster(pattern.getBoss());
 				monsBoss.setPosition(pattern.getBossPosition());
 				ret.setBoss(monsBoss);
 			}
-			if (pattern.getUnleashers() != null){
+			if (pattern.getUnleashers() != null) {
 				ret.setUnleashers(pattern.getUnleashers());
 			}
 			ret.setMapLocationKey(pattern.getMapKey());
-		} 
+		}
 		
-		if (levelID.startsWith("PRELUDE_ARENA")){
+		if (levelID.startsWith("PRELUDE_ARENA")) {
 			x = new Respawner(6, 100);
 			x.setSelector(new RespawnAI());
 			ret.setRespawner(x);
 			overrideLevelNumber = true;
-			ret.setLevelNumber(1);
+			ret.levelNumber = 1;
 		}
 		if (levelID.startsWith("TOWN")){
 			x = new Respawner(6, 100);
@@ -208,14 +208,14 @@ public class LevelMaster {
 				new MonsterSpawnInfo("BAT", MonsterSpawnInfo.UNDERGROUND, 100),
 				new MonsterSpawnInfo("R_SKELETON", MonsterSpawnInfo.UNDERGROUND, 40)
 			});
-			ret.setLevelNumber(0);
+			ret.levelNumber = 0;
 			overrideLevelNumber = true;
 			ret.setMapLocationKey("FOREST");
 			ret.setID("CHARRIOT_W");
 			//ret.setIsCandled(true);
 			ret.setRutinary(false);
 			
-		} else if (levelID.startsWith("FOREST")){
+		} else if (levelID.startsWith("FOREST")) {
 			ForestLevelGenerator clg = new ForestLevelGenerator();
 			clg.init("FOREST_TREE", "FOREST_GRASS", "FOREST_DIRT");
 			ret = clg.generateLevel(Util.rand(50,60),Util.rand(50,60), false);
@@ -225,22 +225,22 @@ public class LevelMaster {
 			ret.setMusicKeyMorning("DAY_TRANSYLVANIA");
 			ret.setMusicKeyNoon("NIGHT_TRANSYLVANIA");
 			ret.setDwellersInfo(
-					new MonsterSpawnInfo[]{
-							new MonsterSpawnInfo("WARG", MonsterSpawnInfo.UNDERGROUND, 40),
-							new MonsterSpawnInfo("PANTHER", MonsterSpawnInfo.UNDERGROUND, 40),
-							new MonsterSpawnInfo("BAT", MonsterSpawnInfo.UNDERGROUND, 100),
-							new MonsterSpawnInfo("R_SKELETON", MonsterSpawnInfo.UNDERGROUND, 70),
-						}
-					);
+				new MonsterSpawnInfo[]{
+					new MonsterSpawnInfo("WARG", MonsterSpawnInfo.UNDERGROUND, 40),
+					new MonsterSpawnInfo("PANTHER", MonsterSpawnInfo.UNDERGROUND, 40),
+					new MonsterSpawnInfo("BAT", MonsterSpawnInfo.UNDERGROUND, 100),
+					new MonsterSpawnInfo("R_SKELETON", MonsterSpawnInfo.UNDERGROUND, 70),
+				}
+			);
 			ret.setInhabitants(new MonsterSpawnInfo[]{
 				new MonsterSpawnInfo("BAT", MonsterSpawnInfo.BORDER, 100),
 				new MonsterSpawnInfo("R_SKELETON", MonsterSpawnInfo.UNDERGROUND, 60)
 			});
-			ret.setLevelNumber(1);
+			ret.levelNumber = 1;
 			overrideLevelNumber = true;
 			ret.setMapLocationKey("FOREST");
 			//ret.setIsCandled(true);
-		} else if (levelID.startsWith("MAIN_HALL")){
+		} else if (levelID.startsWith("MAIN_HALL")) {
 			Entrance.setup(PatternGenerator.getGenerator());
 			ret = PatternGenerator.getGenerator().createLevel();
 			////ret.setDispatcher(new Dispatcher());
@@ -249,17 +249,17 @@ public class LevelMaster {
 			ret.setDescription("Marble Hall");
 			ret.setMusicKeyMorning("HALLS");
 			ret.setDwellersInfo(
-					new MonsterSpawnInfo[]{
-							new MonsterSpawnInfo("WARG", MonsterSpawnInfo.UNDERGROUND, 40),
-							new MonsterSpawnInfo("PANTHER", MonsterSpawnInfo.UNDERGROUND, 40),
-							new MonsterSpawnInfo("WHITE_SKELETON", MonsterSpawnInfo.UNDERGROUND, 80),
-							new MonsterSpawnInfo("APE_SKELETON", MonsterSpawnInfo.UNDERGROUND, 20),
-						}
-					);
+				new MonsterSpawnInfo[] {
+					new MonsterSpawnInfo("WARG", MonsterSpawnInfo.UNDERGROUND, 40),
+					new MonsterSpawnInfo("PANTHER", MonsterSpawnInfo.UNDERGROUND, 40),
+					new MonsterSpawnInfo("WHITE_SKELETON", MonsterSpawnInfo.UNDERGROUND, 80),
+					new MonsterSpawnInfo("APE_SKELETON", MonsterSpawnInfo.UNDERGROUND, 20),
+				}
+			);
 			ret.setMapLocationKey("HALL");
 			hasHostage = Util.chance(10);
 			//ret.setIsCandled(true);
-		} else if (levelID.startsWith("MOAT")){
+		} else if (levelID.startsWith("MOAT")) {
 			Moat.setup(PatternGenerator.getGenerator());
 			ret = PatternGenerator.getGenerator().createLevel();
 			//ret.setDispatcher(new Dispatcher());
@@ -268,36 +268,36 @@ public class LevelMaster {
 			ret.setDescription("Moat");
 			ret.setMusicKeyMorning("HALLS");
 			ret.setDwellersInfo(
-					new MonsterSpawnInfo[]{
-							new MonsterSpawnInfo("BONE_PILLAR", MonsterSpawnInfo.UNDERGROUND, 20),
-							new MonsterSpawnInfo("BAT", MonsterSpawnInfo.UNDERGROUND, 80),
-							new MonsterSpawnInfo("MERMAN", MonsterSpawnInfo.UNDERGROUND, 80),
-						}
-					);
+				new MonsterSpawnInfo[] {
+					new MonsterSpawnInfo("BONE_PILLAR", MonsterSpawnInfo.UNDERGROUND, 20),
+					new MonsterSpawnInfo("BAT", MonsterSpawnInfo.UNDERGROUND, 80),
+					new MonsterSpawnInfo("MERMAN", MonsterSpawnInfo.UNDERGROUND, 80),
+				}
+			);
 			ret.setMapLocationKey("HALL");
 			hasHostage = Util.chance(40);
 			//ret.setIsCandled(true);
-		} else if (levelID.startsWith("BAT_HALL")){
+		} else if (levelID.startsWith("BAT_HALL")) {
 			PatternGenerator.getGenerator().resetFeatures();
 			BatLair.setup(PatternGenerator.getGenerator());
 			ret = PatternGenerator.getGenerator().createLevel();
 			//ret.setDispatcher(new Dispatcher());
 			ret.setInhabitants(BatLair.spawnInfo);
 			ret.setRespawner(x);
-			Monster monsBoss = MonsterFactory.getFactory().buildMonster(BatLair.boss);
+			Monster monsBoss = MonsterData.buildMonster(BatLair.boss);
 			monsBoss.setPosition(BatLair.bossPosition);
 			ret.setBoss(monsBoss);
 			ret.setDescription("Giant Bat Lair");
 			ret.setMusicKeyMorning("BOSS1");
 			ret.setDwellersInfo(
-					new MonsterSpawnInfo[]{
-							new MonsterSpawnInfo("BONE_PILLAR", MonsterSpawnInfo.UNDERGROUND, 20),
-							new MonsterSpawnInfo("PANTHER", MonsterSpawnInfo.UNDERGROUND, 50),
-							new MonsterSpawnInfo("SPEAR_KNIGHT", MonsterSpawnInfo.UNDERGROUND, 40),
-							new MonsterSpawnInfo("BAT", MonsterSpawnInfo.UNDERGROUND, 90),
-						}
-					);
-			
+				new MonsterSpawnInfo[]{
+					new MonsterSpawnInfo("BONE_PILLAR", MonsterSpawnInfo.UNDERGROUND, 20),
+					new MonsterSpawnInfo("PANTHER", MonsterSpawnInfo.UNDERGROUND, 50),
+					new MonsterSpawnInfo("SPEAR_KNIGHT", MonsterSpawnInfo.UNDERGROUND, 40),
+					new MonsterSpawnInfo("BAT", MonsterSpawnInfo.UNDERGROUND, 90),
+				}
+			);
+			// FIXME Not set level number?
 			ret.setMapLocationKey("HALL");
 		} else if (levelID.startsWith("LAB")){
 			GirdLevelGenerator glg = new GirdLevelGenerator();
@@ -315,14 +315,14 @@ public class LevelMaster {
 			ret.setDescription("Castle Lab");
 			ret.setMusicKeyMorning("LAB");
 			ret.setDwellersInfo(
-					new MonsterSpawnInfo[]{
-							new MonsterSpawnInfo("BLACK_KNIGHT", MonsterSpawnInfo.UNDERGROUND, 80),
-							new MonsterSpawnInfo("PARANTHROPUS", MonsterSpawnInfo.UNDERGROUND, 70),
-							new MonsterSpawnInfo("WEREBEAR", MonsterSpawnInfo.UNDERGROUND, 50),
-							new MonsterSpawnInfo("BONE_PILLAR", MonsterSpawnInfo.UNDERGROUND, 20),
-							new MonsterSpawnInfo("AXE_KNIGHT", MonsterSpawnInfo.UNDERGROUND, 80),
-						}
-					);
+				new MonsterSpawnInfo[] {
+					new MonsterSpawnInfo("BLACK_KNIGHT", MonsterSpawnInfo.UNDERGROUND, 80),
+					new MonsterSpawnInfo("PARANTHROPUS", MonsterSpawnInfo.UNDERGROUND, 70),
+					new MonsterSpawnInfo("WEREBEAR", MonsterSpawnInfo.UNDERGROUND, 50),
+					new MonsterSpawnInfo("BONE_PILLAR", MonsterSpawnInfo.UNDERGROUND, 20),
+					new MonsterSpawnInfo("AXE_KNIGHT", MonsterSpawnInfo.UNDERGROUND, 80),
+				}
+			);
 			ret.setMapLocationKey("LAB");
 			hasHostage = Util.chance(30);
 			//ret.setIsCandled(true);
@@ -339,23 +339,21 @@ public class LevelMaster {
 			ret.setDescription("Castle Ruins");
 			ret.setMusicKeyMorning("RUINS");
 			ret.setDwellersInfo(
-					new MonsterSpawnInfo[]{
-							new MonsterSpawnInfo("BLADE_SOLDIER", MonsterSpawnInfo.UNDERGROUND, 80),
-							new MonsterSpawnInfo("BONE_HALBERD", MonsterSpawnInfo.UNDERGROUND, 50),
-							new MonsterSpawnInfo("LIZARD_SWORDSMAN", MonsterSpawnInfo.UNDERGROUND, 80),
-							new MonsterSpawnInfo("COCKATRICE", MonsterSpawnInfo.UNDERGROUND, 20)
-						}
-					);
+				new MonsterSpawnInfo[]{
+					new MonsterSpawnInfo("BLADE_SOLDIER", MonsterSpawnInfo.UNDERGROUND, 80),
+					new MonsterSpawnInfo("BONE_HALBERD", MonsterSpawnInfo.UNDERGROUND, 50),
+					new MonsterSpawnInfo("LIZARD_SWORDSMAN", MonsterSpawnInfo.UNDERGROUND, 80),
+					new MonsterSpawnInfo("COCKATRICE", MonsterSpawnInfo.UNDERGROUND, 20)
+				}
+			);
 			
-			
-			ret.setInhabitants(new MonsterSpawnInfo[]{
+			ret.setInhabitants(new MonsterSpawnInfo[] {
 				new MonsterSpawnInfo("SKELETON_PANTHER", MonsterSpawnInfo.UNDERGROUND, 80)
 			});
 			ret.setMapLocationKey("RUINS");
 			hasHostage = Util.chance(40);
 			//ret.setIsCandled(true);
-		} else if (levelID.startsWith("CAVES")){
-				
+		} else if (levelID.startsWith("CAVES")) {
 			LavaCaveLevelGenerator clg = new LavaCaveLevelGenerator();
 			clg.init("CAVE_WALL", "CAVE_FLOOR", "CAVE_WATER");
 			ret = clg.generateLevel(Util.rand(40,50),Util.rand(40,50), true, false);
@@ -366,21 +364,22 @@ public class LevelMaster {
 			});
 			ret.setDispatcher(new Dispatcher());
 			ret.setRespawner(x);
-			if (Util.chance(10))
+			if (Util.chance(10)) {
 				clg.placeClue(ret, 3);
+			}
 			ret.setDescription("Underground Caverns");
 			ret.setMusicKeyMorning("CAVES");
 			ret.setDwellersInfo(
 				new MonsterSpawnInfo[] {
-						new MonsterSpawnInfo("BLOOD_SKELETON", MonsterSpawnInfo.UNDERGROUND, 50),
-						new MonsterSpawnInfo("COOPER_ARMOR", MonsterSpawnInfo.UNDERGROUND, 40),
-						new MonsterSpawnInfo("DEATH_MANTIS", MonsterSpawnInfo.UNDERGROUND, 40),
-						new MonsterSpawnInfo("BEAST_DEMON", MonsterSpawnInfo.UNDERGROUND, 20),
-						new MonsterSpawnInfo("GOLEM", MonsterSpawnInfo.UNDERGROUND, 20),
-						new MonsterSpawnInfo("KILLER_PLANT", MonsterSpawnInfo.UNDERGROUND, 80),
-						new MonsterSpawnInfo("MERMAN", MonsterSpawnInfo.WATER, 90)
-					}
-				);
+					new MonsterSpawnInfo("BLOOD_SKELETON", MonsterSpawnInfo.UNDERGROUND, 50),
+					new MonsterSpawnInfo("COOPER_ARMOR", MonsterSpawnInfo.UNDERGROUND, 40),
+					new MonsterSpawnInfo("DEATH_MANTIS", MonsterSpawnInfo.UNDERGROUND, 40),
+					new MonsterSpawnInfo("BEAST_DEMON", MonsterSpawnInfo.UNDERGROUND, 20),
+					new MonsterSpawnInfo("GOLEM", MonsterSpawnInfo.UNDERGROUND, 20),
+					new MonsterSpawnInfo("KILLER_PLANT", MonsterSpawnInfo.UNDERGROUND, 80),
+					new MonsterSpawnInfo("MERMAN", MonsterSpawnInfo.WATER, 90)
+				}
+			);
 			ret.setMapLocationKey("CAVES");
 			if (firstCave){
 				ret.setUnleashers(new Unleasher[]{new CaveEntranceSeal()});
@@ -402,13 +401,13 @@ public class LevelMaster {
 			});
 			ret.setDispatcher(new Dispatcher());
 			ret.setRespawner(x);
-			Monster monsBoss = MonsterFactory.getFactory().buildMonster("DRAGON_KING");
+			Monster monsBoss = MonsterData.buildMonster("DRAGON_KING");
 			monsBoss.setPosition(new Position(exit));
 			ret.setBoss(monsBoss);
 			ret.setDescription("Dragon King Lair");
 			ret.setMusicKeyMorning("BOSS2");
 			ret.setMapLocationKey("CAVES");
-		} else if (levelID.startsWith("WAREHOUSE")){
+		} else if (levelID.startsWith("WAREHOUSE")) {
 			FeatureCarveGenerator fcg = new FeatureCarveGenerator();
 			ArrayList<Feature> rooms = getWareHouseRooms();
 			fcg.initialize(rooms, 
@@ -417,21 +416,21 @@ public class LevelMaster {
 					Util.rand(80,100),
 					"WAREHOUSE_FLOOR", "DUNGEON_UP", "DUNGEON_DOWN");
 			ret = fcg.generateLevel();
-			ret.setInhabitants(new MonsterSpawnInfo []{
-					new MonsterSpawnInfo("VAMPIRE_BAT", MonsterSpawnInfo.BORDER, 80),
-				});
+			ret.setInhabitants(new MonsterSpawnInfo [] {
+				new MonsterSpawnInfo("VAMPIRE_BAT", MonsterSpawnInfo.BORDER, 80),
+			});
 			ret.setDispatcher(new Dispatcher());
 			ret.setRespawner(x);
 			ret.setDescription("Warehouse");
 			ret.setMusicKeyMorning("WAREHOUSE");
 			ret.setDwellersInfo(
-					new MonsterSpawnInfo[]{
-							new MonsterSpawnInfo("ZELDO", MonsterSpawnInfo.UNDERGROUND, 40),
-							new MonsterSpawnInfo("GARGOYLE", MonsterSpawnInfo.UNDERGROUND, 70),
-							new MonsterSpawnInfo("SPEAR_SKELETON", MonsterSpawnInfo.UNDERGROUND, 70),
-							new MonsterSpawnInfo("VAMPIRE_BAT", MonsterSpawnInfo.UNDERGROUND, 50),
-						}
-					);
+				new MonsterSpawnInfo[]{
+					new MonsterSpawnInfo("ZELDO", MonsterSpawnInfo.UNDERGROUND, 40),
+					new MonsterSpawnInfo("GARGOYLE", MonsterSpawnInfo.UNDERGROUND, 70),
+					new MonsterSpawnInfo("SPEAR_SKELETON", MonsterSpawnInfo.UNDERGROUND, 70),
+					new MonsterSpawnInfo("VAMPIRE_BAT", MonsterSpawnInfo.UNDERGROUND, 50),
+				}
+			);
 			ret.setMapLocationKey("WAREHOUSE");
 			//ret.setIsCandled(true);
 			//lightCandles(ret);
@@ -443,7 +442,6 @@ public class LevelMaster {
 				ret.addExit(p, "CAVE_FORK0");
 			}
 			/*
-			
 			int xsize = Util.rand(15,17);
 			int ysize = Util.rand(15,17);
 			int entrance = Util.rand(2,xsize-2);
@@ -480,22 +478,20 @@ public class LevelMaster {
 			ret.setRespawner(x);
 			ret.setDescription("Catacombs");
 			ret.setMusicKeyMorning("CATACOMBS");
-			ret.setDwellersInfo(
-					new MonsterSpawnInfo[]{
-							new MonsterSpawnInfo("MUMMY_MAN", MonsterSpawnInfo.UNDERGROUND, 80),
-							new MonsterSpawnInfo("ARACHNE", MonsterSpawnInfo.UNDERGROUND, 40),
-							new MonsterSpawnInfo("BONE_ARK", MonsterSpawnInfo.UNDERGROUND, 20),
-							new MonsterSpawnInfo("DEMON_LORD", MonsterSpawnInfo.UNDERGROUND, 10),
-							new MonsterSpawnInfo("HEAT_SHADE", MonsterSpawnInfo.UNDERGROUND, 80),
-						}
-					);
+			ret.setDwellersInfo(new MonsterSpawnInfo[] {
+				new MonsterSpawnInfo("MUMMY_MAN", MonsterSpawnInfo.UNDERGROUND, 80),
+				new MonsterSpawnInfo("ARACHNE", MonsterSpawnInfo.UNDERGROUND, 40),
+				new MonsterSpawnInfo("BONE_ARK", MonsterSpawnInfo.UNDERGROUND, 20),
+				new MonsterSpawnInfo("DEMON_LORD", MonsterSpawnInfo.UNDERGROUND, 10),
+				new MonsterSpawnInfo("HEAT_SHADE", MonsterSpawnInfo.UNDERGROUND, 80),
+			});
 			ret.setMapLocationKey("CATACOMBS");
 			//ret.setIsCandled(true);
 		}else if (levelID.startsWith("RESERVOIR")){
 			LavaCaveLevelGenerator clg = new LavaCaveLevelGenerator();
 			clg.init("CAVE_WALL", "CAVE_WATER", "CAVE_FLOOR");
 			ret = clg.generateLevel(Util.rand(50,70),Util.rand(30,40), true, true);
-			ret.setInhabitants(new MonsterSpawnInfo[]{
+			ret.setInhabitants(new MonsterSpawnInfo[] {
 				new MonsterSpawnInfo("FROZEN_SHADE", MonsterSpawnInfo.UNDERGROUND, 80),
 				new MonsterSpawnInfo("KNIFE_MERMAN", MonsterSpawnInfo.UNDERGROUND, 80),
 				new MonsterSpawnInfo("MANDRAGORA", MonsterSpawnInfo.UNDERGROUND, 3)
@@ -504,13 +500,11 @@ public class LevelMaster {
 			ret.setRespawner(x);
 			ret.setDescription("Underwater Reservoir");
 			ret.setMusicKeyMorning("RESERVOIR");
-			ret.setDwellersInfo(
-					new MonsterSpawnInfo[]{
-							new MonsterSpawnInfo("TRITON", MonsterSpawnInfo.UNDERGROUND, 20),
-							new MonsterSpawnInfo("FROZEN_SHADE", MonsterSpawnInfo.UNDERGROUND, 80),
-							new MonsterSpawnInfo("KNIFE_MERMAN", MonsterSpawnInfo.WATER, 80),
-					}
-					);
+			ret.setDwellersInfo(new MonsterSpawnInfo[] {
+				new MonsterSpawnInfo("TRITON", MonsterSpawnInfo.UNDERGROUND, 20),
+				new MonsterSpawnInfo("FROZEN_SHADE", MonsterSpawnInfo.UNDERGROUND, 80),
+				new MonsterSpawnInfo("KNIFE_MERMAN", MonsterSpawnInfo.WATER, 80),
+			});
 			ret.setMapLocationKey("RESERVOIR");
 			//ret.setIsCandled(true);
 			if (levelID.equals("RESERVOIR0")){
@@ -518,43 +512,41 @@ public class LevelMaster {
 				ret.removeExit("_BACK");
 				ret.addExit(p, "DEEP_FORK0");
 			}
-		}else if (levelID.startsWith("INNER_QUARTERS")){
+		}else if (levelID.startsWith("INNER_QUARTERS")) {
 			FeatureCarveGenerator fcg = new FeatureCarveGenerator();
 			ArrayList<Feature> rooms = getInnerQuartersRooms();
-			fcg.initialize(rooms, 
-					"QUARTERS_WALL", 
+			fcg.initialize(rooms,
+					"QUARTERS_WALL",
 					Util.rand(80,100),
 					Util.rand(80,100),
 					"QUARTERS_CORRIDOR", "MARBLE_STAIRSDOWN_FAKE", "MARBLE_STAIRSUP_FAKE");
 			ret = fcg.generateLevel();
-			ret.setInhabitants(new MonsterSpawnInfo[]{
+			ret.setInhabitants(new MonsterSpawnInfo[] {
 				new MonsterSpawnInfo("BAT", MonsterSpawnInfo.UNDERGROUND, 80),
 			});
 			ret.setDispatcher(new Dispatcher());
 			ret.setRespawner(x);
 			ret.setDescription("Inner Quarters");
 			ret.setMusicKeyMorning("QUARTERS");
-			ret.setDwellersInfo(
-					new MonsterSpawnInfo[]{
-							new MonsterSpawnInfo("WHITE_SKELETON", MonsterSpawnInfo.UNDERGROUND, 80),
-							new MonsterSpawnInfo("ZOMBIE", MonsterSpawnInfo.UNDERGROUND, 80),
-							new MonsterSpawnInfo("SPEAR_KNIGHT", MonsterSpawnInfo.UNDERGROUND, 20),
-					}
-					);
+			ret.setDwellersInfo(new MonsterSpawnInfo[] {
+				new MonsterSpawnInfo("WHITE_SKELETON", MonsterSpawnInfo.UNDERGROUND, 80),
+				new MonsterSpawnInfo("ZOMBIE", MonsterSpawnInfo.UNDERGROUND, 80),
+				new MonsterSpawnInfo("SPEAR_KNIGHT", MonsterSpawnInfo.UNDERGROUND, 20),
+			});
 			ret.setMapLocationKey("INNER_QUARTERS");
 			//ret.setIsCandled(true);
-			if (levelID.equals("INNER_QUARTERS0")){
+			if (levelID.equals("INNER_QUARTERS0")) {
 				Position p = ret.getExitFor("_BACK");
 				ret.removeExit("_BACK");
-				ret.addExit(p, "QUARTERS_FORK0"); // Add the correspondant fork
+				ret.addExit(p, "QUARTERS_FORK0"); // Add the correspondent fork
 			}
 			//lightCandles(ret);
 			ret.setRutinary(true);
 		}else if (levelID.startsWith("DUNGEON")){
 			FeatureCarveGenerator fcg = new FeatureCarveGenerator();
 			ArrayList rooms = getDungeonRooms();
-			fcg.initialize(rooms, 
-					"DUNGEON_WALL", 
+			fcg.initialize(rooms,
+					"DUNGEON_WALL",
 					Util.rand(80,100),
 					Util.rand(80,100),
 					"DUNGEON_PASSAGE", "DUNGEON_UP", "DUNGEON_DOWN");
@@ -570,13 +562,13 @@ public class LevelMaster {
 			ret.setDescription("Castle Dungeon");
 			ret.setMusicKeyMorning("DUNGEON");
 			ret.setDwellersInfo(
-					new MonsterSpawnInfo[]{
-							new MonsterSpawnInfo("SKULL_LORD", MonsterSpawnInfo.UNDERGROUND, 20),
-							new MonsterSpawnInfo("BONE_ARCHER", MonsterSpawnInfo.UNDERGROUND, 80),
-							new MonsterSpawnInfo("AXE_KNIGHT", MonsterSpawnInfo.UNDERGROUND, 80),
-							new MonsterSpawnInfo("SALOME", MonsterSpawnInfo.UNDERGROUND, 50),
-					}
-					);
+				new MonsterSpawnInfo[]{
+						new MonsterSpawnInfo("SKULL_LORD", MonsterSpawnInfo.UNDERGROUND, 20),
+						new MonsterSpawnInfo("BONE_ARCHER", MonsterSpawnInfo.UNDERGROUND, 80),
+						new MonsterSpawnInfo("AXE_KNIGHT", MonsterSpawnInfo.UNDERGROUND, 80),
+						new MonsterSpawnInfo("SALOME", MonsterSpawnInfo.UNDERGROUND, 50),
+				}
+			);
 			
 			ret.setMapLocationKey("DUNGEON");
 			//ret.setIsCandled(true);
@@ -644,11 +636,11 @@ public class LevelMaster {
 		}else if (levelID.startsWith("DEEP_SEWERS")){
 			FeatureCarveGenerator fcg = new FeatureCarveGenerator();
 			ArrayList rooms = getDeepSewersRooms();
-			fcg.initialize(rooms, 
-					"SEWERS_WALL_WATER", 
-					Util.rand(50,70),
-					Util.rand(50,70),
-					"SEWERS_FLOOR_WATER", "SEWERS_UP_WATER", "SEWERS_DOWN_WATER");
+			fcg.initialize(rooms,
+				"SEWERS_WALL_WATER",
+				Util.rand(50,70),
+				Util.rand(50,70),
+				"SEWERS_FLOOR_WATER", "SEWERS_UP_WATER", "SEWERS_DOWN_WATER");
 			fcg.setCheckCorridor(false);
 			ret = fcg.generateLevel();
 			ret.setInhabitants(new MonsterSpawnInfo []{
@@ -659,25 +651,26 @@ public class LevelMaster {
 			ret.setRespawner(x);
 			ret.setDescription("Petra Sewers");
 			ret.setMusicKeyMorning("SEWERS");
-			ret.setDwellersInfo(
-					new MonsterSpawnInfo[]{
-							new MonsterSpawnInfo("MERMAN", MonsterSpawnInfo.WATER, 90),
-							new MonsterSpawnInfo("KNIFE_MERMAN", MonsterSpawnInfo.WATER, 20),
-					}
-					);
+			ret.setDwellersInfo(new MonsterSpawnInfo[] {
+				new MonsterSpawnInfo("MERMAN", MonsterSpawnInfo.WATER, 90),
+				new MonsterSpawnInfo("KNIFE_MERMAN", MonsterSpawnInfo.WATER, 20),
+			});
 			ret.setMapLocationKey("TOWN");
 			ret.populate();
 			ret.setRutinary(false);
 		}
-		 
 		
 		
-		if (hasHostage){
+		if (hasHostage) {
 			Hostage hostage = NPCFactory.getFactory().buildHostage();
 			hostage.setReward(100 * (Util.rand(100,150)/100));
-			while (true){
-				Position rand = new Position(Util.rand(5, ret.getWidth()), Util.rand(5, ret.getHeight()), Util.rand(0, ret.getDepth()));
-				if (ret.isItemPlaceable(rand)){
+			while (true) {
+				Position rand = new Position(
+					Util.rand(5, ret.getWidth()),
+					Util.rand(5, ret.getHeight()),
+					Util.rand(0, ret.getDepth()));
+				
+				if (ret.isItemPlaceable(rand)) {
 					hostage.setPosition(rand);
 					break;
 				}
@@ -685,17 +678,18 @@ public class LevelMaster {
 			ret.addMonster(hostage);
 		}
 		ret.setID(levelID);
-		if (!overrideLevelNumber)
-			ret.setLevelNumber(metadata.getLevelNumber());
+		if (!overrideLevelNumber) {
+			ret.levelNumber = metadata.getLevelNumber();
+		}
 		
-		if (ret.getExitFor("_BACK") != null){
+		if (ret.getExitFor("_BACK") != null) {
 			Position p = ret.getExitFor("_BACK");
 			ret.removeExit("_BACK");
 			ret.addExit(p, metadata.getExit("_BACK"));
 			
 		}
 		
-		if (ret.getExitFor("_NEXT") != null){
+		if (ret.getExitFor("_NEXT") != null) {
 			Position p = ret.getExitFor("_NEXT");
 			ret.removeExit("_NEXT");
 			ret.addExit(p, metadata.getExit("_NEXT"));
@@ -803,11 +797,11 @@ public class LevelMaster {
 		
 	}
 
-	private static ArrayList getDungeonRooms(){
+	private static ArrayList getDungeonRooms() {
 		int rooms = Util.rand(12,15);
 		//rooms = 3;
 		crl.levelgen.featureCarve.Feature room = null;
-		ArrayList ret = new ArrayList();
+		ArrayList<crl.levelgen.featureCarve.Feature> ret = new ArrayList<>();
 		String floor = "DUNGEON_FLOOR";
 		String candle = "F_DUNGEON_FLOOR CANDLE";
 		String column = "DUNGEON_WALL";

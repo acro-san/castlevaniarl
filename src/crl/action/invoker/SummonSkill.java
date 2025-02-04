@@ -5,7 +5,7 @@ import sz.util.Util;
 import crl.action.HeartAction;
 import crl.level.Level;
 import crl.monster.Monster;
-import crl.monster.MonsterFactory;
+import crl.monster.MonsterData;
 import crl.player.Consts;
 
 public abstract class SummonSkill extends HeartAction{
@@ -24,8 +24,8 @@ public abstract class SummonSkill extends HeartAction{
 				}
 				count--;
 			}
-			if (count > 0){
-				Monster m = MonsterFactory.getFactory().buildMonster(getMonsterID());
+			if (count > 0) {
+				Monster m = MonsterData.buildMonster(getMonsterID());
 				aLevel.addMessage("A "+m.getDescription()+" rises from the floor!");
 				m.setCounter(Consts.C_MONSTER_CHARM, 9999999);
 				m.setPosition(randPos);

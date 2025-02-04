@@ -99,7 +99,7 @@ public class MenuBox extends TextComponent {
 		si.refresh();
 	}
 
-	public Object getSelection (){
+	public Object getSelection() {
 		int pageElements = inHeight - promptSize;
 		while (true){
 			clearBox();

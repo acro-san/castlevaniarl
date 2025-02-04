@@ -482,161 +482,169 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		
 	}
 
-	
-    private void drawPlayerStatus(){
-	    Debug.enterMethod(this, "drawPlayerStatus");
-	    int foreColor;
-	    int backColor;
-	    switch (((player.getHits()-1) / 20) + 1){
-	    case 1:
-	    	foreColor = ConsoleSystemInterface.RED;
-	    	backColor = ConsoleSystemInterface.WHITE;
-	    	break;
-	    case 2:
-	    	foreColor = ConsoleSystemInterface.DARK_RED;
-	    	backColor = ConsoleSystemInterface.RED;
-	    	break;
-	    default:
-	    	foreColor = ConsoleSystemInterface.MAGENTA;
-	    	backColor = ConsoleSystemInterface.DARK_RED;
-	    	break;
-	    }
-	    String timeTile = "";
-	    int timeColor = ConsoleSystemInterface.YELLOW;
-	    switch (level.getDayTime()){
-	    case Level.MORNING:
-	    	timeTile = "O__";
-	    	timeColor = ConsoleSystemInterface.BROWN;
-	    	break;
-	    case Level.NOON:
-	    	timeTile = "_O_";
-	    	timeColor = ConsoleSystemInterface.YELLOW;
-	    	break;
-	    case Level.AFTERNOON:
-	    	timeTile = "__O";
-	    	timeColor = ConsoleSystemInterface.RED;
-	    	break;
-	    case Level.DUSK:
-	    	timeTile = "(__";
-	    	timeColor = ConsoleSystemInterface.BLUE;
-	    	break;
-	    case Level.NIGHT:
-	    	timeTile = "_O_";
-	    	timeColor = ConsoleSystemInterface.BLUE;
-	    	break;
-	    case Level.DAWN:
-	    	timeTile = "__)";
-	    	timeColor = ConsoleSystemInterface.BLUE;
-	    	break;
-	    }
-	    
-	    
-	    String shot ="   ";
-	    if (player.getShotLevel() == 1)
-	    	shot = "II ";
-	    if (player.getShotLevel() == 2)
-	    	shot = "III";
-	    int rest = ((player.getHits()-1) % 20) + 1; 
-	    
-    	si.print (0,0,"SCORE    "+player.getScore());
-    	si.print (0,1,"PLAYER   ");
-    	
-   		for (int i = 0; i < 20; i++)
-   			if (i+1 <= rest)
-   				si.print(i+9,1,'I', foreColor);
-   			else 
-   				si.print(i+9,1,'I', backColor);
-   		
-    	si.print (0,2,"ENEMY    ");
-    	if (player.getLevel().getBoss() != null){
-    		int sixthiedBossHits =  (int)Math.ceil((player.getLevel().getBoss().getHits() * 60.0)/(double)player.getLevel().getBoss().getMaxHits());
-    		int foreColorB = 0;
-    	    int backColorB = 0;
-    	    switch (((sixthiedBossHits-1) / 20) + 1){
-    	    case 1:
-    	    	foreColorB = ConsoleSystemInterface.YELLOW;
-    	    	backColorB = ConsoleSystemInterface.WHITE;
-    	    	break;
-    	    case 2:
-    	    	foreColorB = ConsoleSystemInterface.BROWN;
-    	    	backColorB = ConsoleSystemInterface.YELLOW;
-    	    	break;
-    	    default:
-    	    	foreColorB = ConsoleSystemInterface.PURPLE;
-    	    	backColorB = ConsoleSystemInterface.BROWN;
-    	    	break;
-    	    }
-    	    
-    	    int restB = ((sixthiedBossHits-1) % 20) + 1;
-    		
-    		for (int i = 0; i < 20; i++)
-    			if (i+1 <= restB)
-    				si.print(i+9,2,'I', foreColorB);
-    			else
-    				si.print(i+9,2,'I', backColorB);
-    	}
-    	else
-    		si.print (9,2,"IIIIIIIIIIIIIIIIIIII", ConsoleSystemInterface.WHITE);
-    	
-    	si.print (31,2,fill(player.getWeaponDescription()+" "+shot,40));
 
-    	if (player.getLevel().getLevelNumber() == -1)
-    		si.print(43,0,fill(player.getLevel().getDescription(), 35));
-    	else
-    		si.print(43,0,fill("STAGE   "+player.getLevel().getLevelNumber()+" "+player.getLevel().getDescription(), 35));
-    	
+	private void drawPlayerStatus() {
+		Debug.enterMethod(this, "drawPlayerStatus");
+		int foreColor;
+		int backColor;
+		switch (((player.getHits()-1) / 20) + 1){
+		case 1:
+			foreColor = ConsoleSystemInterface.RED;
+			backColor = ConsoleSystemInterface.WHITE;
+			break;
+		case 2:
+			foreColor = ConsoleSystemInterface.DARK_RED;
+			backColor = ConsoleSystemInterface.RED;
+			break;
+		default:
+			foreColor = ConsoleSystemInterface.MAGENTA;
+			backColor = ConsoleSystemInterface.DARK_RED;
+			break;
+		}
+		String timeTile = "";
+		int timeColor = ConsoleSystemInterface.YELLOW;
+		switch (level.getDayTime()){
+		case Level.MORNING:
+			timeTile = "O__";
+			timeColor = ConsoleSystemInterface.BROWN;
+			break;
+		case Level.NOON:
+			timeTile = "_O_";
+			timeColor = ConsoleSystemInterface.YELLOW;
+			break;
+		case Level.AFTERNOON:
+			timeTile = "__O";
+			timeColor = ConsoleSystemInterface.RED;
+			break;
+		case Level.DUSK:
+			timeTile = "(__";
+			timeColor = ConsoleSystemInterface.BLUE;
+			break;
+		case Level.NIGHT:
+			timeTile = "_O_";
+			timeColor = ConsoleSystemInterface.BLUE;
+			break;
+		case Level.DAWN:
+			timeTile = "__)";
+			timeColor = ConsoleSystemInterface.BLUE;
+			break;
+		}
+		
+		String shot ="   ";
+		if (player.getShotLevel() == 1) {
+			shot = "II ";
+		} else if (player.getShotLevel() == 2) {
+			shot = "III";
+		}
+		int rest = ((player.getHits()-1) % 20) + 1;
+		
+		si.print(0,0,"SCORE    "+player.getScore());
+		si.print(0,1,"PLAYER   ");
+		
+		for (int i = 0; i < 20; i++) {
+			if (i+1 <= rest) {
+				si.print(i+9,1,'I', foreColor);
+			} else {
+				si.print(i+9,1,'I', backColor);
+			}
+		}
+		
+		si.print(0,2,"ENEMY    ");
+		if (player.getLevel().getBoss() != null) {	// TODO && bossSeen!
+			int sixthiedBossHits =  (int)Math.ceil((player.getLevel().getBoss().getHits() * 60.0)/(double)player.getLevel().getBoss().getMaxHits());
+			int foreColorB = 0;
+			int backColorB = 0;
+			switch (((sixthiedBossHits-1) / 20) + 1) {
+			case 1:
+				foreColorB = ConsoleSystemInterface.YELLOW;
+				backColorB = ConsoleSystemInterface.WHITE;
+				break;
+			case 2:
+				foreColorB = ConsoleSystemInterface.BROWN;
+				backColorB = ConsoleSystemInterface.YELLOW;
+				break;
+			default:
+				foreColorB = ConsoleSystemInterface.PURPLE;
+				backColorB = ConsoleSystemInterface.BROWN;
+				break;
+			}
+			
+			int restB = ((sixthiedBossHits-1) % 20) + 1;
+			
+			for (int i = 0; i < 20; i++) {
+				if (i+1 <= restB) {
+					si.print(i+9,2,'I', foreColorB);
+				} else {
+					si.print(i+9,2,'I', backColorB);
+				}
+			}
+		} else {
+			si.print(9,2,"IIIIIIIIIIIIIIIIIIII", ConsoleSystemInterface.WHITE);
+		}
+		
+		si.print(31,2,fill(player.getWeaponDescription()+" "+shot,40));
+
+		if (player.getLevel().levelNumber == -1) {
+			si.print(43,0,fill(player.getLevel().getDescription(), 35));
+		} else {
+			si.print(43,0,fill("STAGE   "+player.getLevel().levelNumber+" "+player.getLevel().getDescription(), 35));
+		}
+		
 		//si.print(43+"STAGE ".length(),0);
 
-    	si.print (31,1,"v       ", ConsoleSystemInterface.RED);
-    	si.print (33,1,"- "+player.getHearts());
-    	si.print (39,1,"k     ", ConsoleSystemInterface.YELLOW); 
-        si.print (41,1,"- "+player.getKeys()); 
-        
-        si.print (47,1,"$            ", ConsoleSystemInterface.YELLOW); 
-        si.print (49,1,"- "+player.getGold());
-        
-    	si.print (60,1,"TIME - ");
-    	si.print (67,1,timeTile,timeColor);
-    	
-    	si.print (71,1,"     ",ConsoleSystemInterface.WHITE);
-    	if (player.getFlag(Consts.ENV_FOG))
-    		si.print (71,1,"FOG",ConsoleSystemInterface.TEAL);
-    	if (player.getFlag(Consts.ENV_RAIN))
-    		si.print (71,1,"RAIN",ConsoleSystemInterface.BLUE);
-    	if (player.getFlag(Consts.ENV_SUNNY))
-    		si.print (71,1,"SUNNY",ConsoleSystemInterface.YELLOW);
-    	if (player.getFlag(Consts.ENV_THUNDERSTORM))
-    		si.print (71,1,"STORM",ConsoleSystemInterface.WHITE);
-    	//si.print (71,2,"P  - 0");
+		si.print(31,1,"v       ", ConsoleSystemInterface.RED);
+		si.print(33,1,"- "+player.getHearts());
+		si.print(39,1,"k     ", ConsoleSystemInterface.YELLOW);
+		si.print(41,1,"- "+player.getKeys());
+		
+		si.print(47,1,"$            ", ConsoleSystemInterface.YELLOW);
+		si.print(49,1,"- "+player.getGold());
+		
+		si.print(60,1,"TIME - ");
+		si.print(67,1,timeTile,timeColor);
+		
+		si.print(71,1,"     ",ConsoleSystemInterface.WHITE);
+		if (player.getFlag(Consts.ENV_FOG))
+			si.print(71,1,"FOG",ConsoleSystemInterface.TEAL);
+		if (player.getFlag(Consts.ENV_RAIN))
+			si.print (71,1,"RAIN",ConsoleSystemInterface.BLUE);
+		if (player.getFlag(Consts.ENV_SUNNY))
+			si.print (71,1,"SUNNY",ConsoleSystemInterface.YELLOW);
+		if (player.getFlag(Consts.ENV_THUNDERSTORM))
+			si.print (71,1,"STORM",ConsoleSystemInterface.WHITE);
+		//si.print (71,2,"P  - 0");
 
-        
 
-        //si.print(1,24, "                                                                     ");
-        si.print(1,24, fill(player.getName()+", the Lv"+player.getPlayerLevel()+" "+player.getClassString()+" "+player.getStatusString(),70));
+		//si.print(1,24, "                                                                     ");
+		si.print(1,24, fill(player.getName()+", the Lv"+player.getPlayerLevel()+" "+player.getClassString()+" "+player.getStatusString(),70));
 
-  		Debug.exitMethod();
-    }
-    
-    private String fill(String str, int limit){
-    	if (str.length() > limit)
-    		return str.substring(0,limit);
-    	else
-    		return str+spaces(limit-str.length());
-    }
+		Debug.exitMethod();
+	}
+	
+	private String fill(String str, int limit) {
+		if (str.length() > limit) {
+			return str.substring(0,limit);
+		} else {
+			return str+spaces(limit-str.length());
+		}
+	}
 
-    private Hashtable hashSpaces =  new Hashtable();
-    private String spaces(int n){
-    	String ret = (String)hashSpaces.get(n+"");
-    	if (ret != null)
-    		return ret;
-    	ret = "";
-    	for (int i = 0; i < n; i++)
-    		ret +=" ";
-    	hashSpaces.put(n+"", ret);
-    	return ret;
-    }
-    private Action target;
-	public void init(ConsoleSystemInterface psi, UserCommand[] gameCommands, Action target){
+	private Hashtable<String, String> hashSpaces =  new Hashtable<>();
+	private String spaces(int n) {
+		String ret = hashSpaces.get(n+"");
+		if (ret != null) {
+			return ret;
+		}
+		ret = "";
+		for (int i = 0; i < n; i++) {
+			ret += " ";
+		}
+		hashSpaces.put(n+"", ret);
+		return ret;
+	}
+	
+	private Action target;
+	public void init(ConsoleSystemInterface psi, UserCommand[] gameCommands, Action target) {
 		Debug.enterMethod(this, "init");
 		this.target = target;
 		super.init(gameCommands);
@@ -656,7 +664,6 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		persistantMessageBox.setForeColor(ConsoleSystemInterface.WHITE);
 		persistantMessageBox.setTitle("Tutorial");
 
-		
 		/*monstersList.setPosition(2, 4);
 		monstersList.setWidth(27);
 		monstersList.setHeight(10);*/
@@ -673,53 +680,54 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 	 * Checks if the point, relative to the console coordinates, is inside the
 	 * ViewPort 
 	 */
-	public boolean insideViewPort(int x, int y){
-    	//return (x>=VP_START.x && x <= VP_END.x && y >= VP_START.y && y <= VP_END.y);
+	public boolean insideViewPort(int x, int y) {
+		//return (x>=VP_START.x && x <= VP_END.x && y >= VP_START.y && y <= VP_END.y);
 		return (x>=0 && x < FOVMask.length && y >= 0 && y < FOVMask[0].length) && FOVMask[x][y];
-    }
+	}
 
 	public boolean insideViewPort(Position what){
-    	return insideViewPort(what.x, what.y);
-    }
+		return insideViewPort(what.x, what.y);
+	}
 
 	public boolean isDisplaying(Actor who){
-    	return insideViewPort(getAbsolutePosition(who.getPosition()));
-    }
+		return insideViewPort(getAbsolutePosition(who.getPosition()));
+	}
 
-    private Position pickPosition(String prompt, int fireKeyCode) throws ActionCancelException{
-    	Debug.enterMethod(this, "pickPosition");
-    	messageBox.setForeColor(ConsoleSystemInterface.BLUE);
-    	messageBox.setText(prompt);
+	private Position pickPosition(String prompt, int fireKeyCode) throws ActionCancelException {
+		Debug.enterMethod(this, "pickPosition");
+		messageBox.setForeColor(ConsoleSystemInterface.BLUE);
+		messageBox.setText(prompt);
 		messageBox.draw();
 		si.refresh();
 		si.saveBuffer();
 		
 		Position defaultTarget = null; 
-   		Position nearest = getNearestMonsterPosition();
-   		if (nearest != null){
-   			defaultTarget = nearest;
-   		} else {
-   			defaultTarget = null;
-   		}
-    	
-    	Position browser = null;
-    	Position offset = new Position (0,0);
-    	if (lockedMonster != null){
-			if (!player.sees(lockedMonster)  || lockedMonster.isDead())
-				lockedMonster = null;
-			else
-				defaultTarget = new Position(lockedMonster.getPosition());
+		Position nearest = getNearestMonsterPosition();
+		if (nearest != null) {
+			defaultTarget = nearest;
+		} else {
+			defaultTarget = null;
 		}
-    	if (!insideViewPort(PC_POS.x + offset.x,PC_POS.y + offset.y)){
-    		offset = new Position (0,0);
-    	}
-    	
-    	if (defaultTarget == null) {
-    		offset = new Position (0,0);
-    	} else{
+		
+		Position browser = null;
+		Position offset = new Position (0,0);
+		if (lockedMonster != null) {
+			if (!player.sees(lockedMonster)  || lockedMonster.isDead()) {
+				lockedMonster = null;
+			} else {
+				defaultTarget = new Position(lockedMonster.getPosition());
+			}
+		}
+		if (!insideViewPort(PC_POS.x + offset.x,PC_POS.y + offset.y)) {
+			offset = new Position (0,0);
+		}
+		
+		if (defaultTarget == null) {
+			offset = new Position (0,0);
+		} else {
 			offset = new Position(defaultTarget.x - player.getPosition().x, defaultTarget.y - player.getPosition().y);
 		}
-    	while (true){
+		while (true) {
 			si.restore();
 			String looked = "";
 			browser = Position.add(player.getPosition(), offset);
@@ -732,10 +740,10 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 			if (FOVMask[PC_POS.x + offset.x][PC_POS.y + offset.y]){
 				Cell choosen = level.getMapCell(browser);
 				Feature feat = level.getFeatureAt(browser);
-				Vector items = level.getItemsAt(browser);
+				Vector<Item> items = level.getItemsAt(browser);
 				Item item = null;
 				if (items != null) {
-					item = (Item) items.elementAt(0);
+					item = (Item)items.elementAt(0);
 				}
 				Actor actor = level.getActorAt(browser);
 				si.restore();
@@ -903,14 +911,14 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		
 		si.saveBuffer();
 		
-		while (true){
+		while (true) {
 			selectedBox.draw();
 			menuBox.draw();
 			
-			
 			Equipment equipment = (Equipment)menuBox.getSelection();
-			if (equipment == null)
+			if (equipment == null) {
 				break;
+			}
 			if (!ret.contains(equipment.getItem()))
 				ret.add(equipment.getItem());
 		}
@@ -973,7 +981,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 			si.refresh();
 			si.waitKey(CharKey.SPACE);
 			player.getGameSessionInfo().setDeathCause(GameSessionInfo.QUIT);
-			player.getGameSessionInfo().deathLevel = level.getLevelNumber();
+			player.getGameSessionInfo().deathLevel = level.levelNumber;
 			informPlayerCommand(CommandListener.QUIT);
 		}
 		messageBox.draw();
@@ -1603,11 +1611,12 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 			return null;
 	}
 
-	public Vector getMessageBuffer() {
-		if (messageHistory.size()>20)
-			return new Vector(messageHistory.subList(messageHistory.size()-21,messageHistory.size()));
-		else
+	public Vector<String> getMessageBuffer() {
+		if (messageHistory.size() > 20) {
+			return new Vector<>(messageHistory.subList(messageHistory.size()-21,messageHistory.size()));
+		} else {
 			return messageHistory;
+		}
 	}
 	
 	private void examineLevelMap(){

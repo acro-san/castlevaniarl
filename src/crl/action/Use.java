@@ -48,7 +48,7 @@ public class Use extends Action{
 			SFXManager.play("wav/loutwarp.wav");
 			// We need to properly relocate the player
 			Position exit = aPlayer.getLevel().getExitFor("FOREST0");
-			aPlayer.getLevel().setLevelNumber(0);
+			aPlayer.getLevel().levelNumber = 0;
 			aPlayer.landOn(Position.add(exit, new Position(-1,0,0)));
 			aPlayer.reduceQuantityOf(targetItem);
 			return;

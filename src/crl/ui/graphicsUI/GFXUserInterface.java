@@ -879,18 +879,17 @@ public class GFXUserInterface extends UserInterface implements Runnable {
     		if (player.getMysticWeapon() != -1)
     			si.drawImage(18,38, getImageForMystic(player.getMysticWeapon()));
     	}else
-    	if (player.getWeapon() != null){
+    	if (player.getWeapon() != null) {
     		si.drawImage(18,38, ((GFXAppearance)player.getWeapon().getAppearance()).getIconImage());
     	}
-    	if (player.getLevel().getLevelNumber() != -1)
-    		si.printAtPixel(this.configuration.getScreenWidth() - 276,50,"STAGE  "+player.getLevel().getLevelNumber()+" "+player.getLevel().getDescription(), Color.WHITE);
-    	else
-    		si.printAtPixel(this.configuration.getScreenWidth() - 276,50,player.getLevel().getDescription(), Color.WHITE);
-    	
-    	
-    	
-    	
-    	//si.drawImage(759, 35, TILE_TIME_BACK);
+		if (player.getLevel().levelNumber != -1) {
+			si.printAtPixel(this.configuration.getScreenWidth() - 276,50,"STAGE  "+player.getLevel().levelNumber+" "+player.getLevel().getDescription(), Color.WHITE);
+		} else {
+			si.printAtPixel(this.configuration.getScreenWidth() - 276,50,player.getLevel().getDescription(), Color.WHITE);
+		}
+		
+		
+		//si.drawImage(759, 35, TILE_TIME_BACK);
 		int timeTilePosition = this.configuration.getScreenWidth() - 77;
     	si.drawImage(timeTilePosition, 38, timeTile);
     	if (player.getFlag(Consts.ENV_FOG))
@@ -2423,15 +2422,17 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 	}
 
 
-	public Vector getMessageBuffer() {
+	public Vector<String> getMessageBuffer() {
 		//return new Vector(messageHistory.subList(0,21));
-		if (messageHistory.size()>20)
-			return new Vector(messageHistory.subList(messageHistory.size()-21,messageHistory.size()));
-		else
+		if (messageHistory.size() > 20) {
+			return new Vector<>(messageHistory.subList(messageHistory.size()-21,messageHistory.size()));
+		} else {
 			return messageHistory;
+		}
 	}
-	
-	class HelpBox extends AddornedBorderPanel{
+
+
+	class HelpBox extends AddornedBorderPanel {
 		private GFXButton btnOk;
 		
 		public HelpBox(Image UPRIGHT, 

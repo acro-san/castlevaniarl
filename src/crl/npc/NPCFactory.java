@@ -24,7 +24,7 @@ public class NPCFactory {
 		return new Merchant((NPCDefinition) definitions.get("MERCHANT"), merchandiseType);
 	}
 	
-	public Hostage buildHostage(){
+	public Hostage buildHostage() {
 		Hostage ret = new Hostage((NPCDefinition) definitions.get((String)Util.randomPick(hostages)));
 		Player p = Main.ui.getPlayer();	//FIXME: *SURELY* the UI isn't where the player's stored though?
 		if (p.getPlayerClass() != Player.CLASS_VAMPIREKILLER) {
@@ -48,7 +48,7 @@ public class NPCFactory {
 		definitions = new Hashtable(40);
 	}
 	
-	private static String [][] hostageArtifacts = new String[][]{
+	private static String[][] hostageArtifacts = {
 		{"HOLBEIN_DAGGER", "SHOTEL"},
 		{"WEREBANE", "ALCARDE_SPEAR", "ETHANOS_BLADE"},
 		{"FIREBRAND", "GURTHANG", "HADOR"},

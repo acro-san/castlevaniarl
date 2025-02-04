@@ -64,7 +64,7 @@ import crl.game.SFXManager;
 import crl.game.STMusicManagerNew;
 import crl.item.ItemDataTable;
 import crl.level.MapCellFactory;
-import crl.monster.MonsterFactory;
+import crl.monster.MonsterData;
 import crl.npc.NPCDefinition;
 import crl.npc.NPCFactory;
 import crl.player.Player;
@@ -656,7 +656,7 @@ public class Main {
 
 
 	private static void initializeMonsters() throws CRLException {
-		MonsterFactory.getFactory().init(MonsterLoader.getMonsterDefinitions("data/monsters.ecsv","data/monsters.exml"));
+		MonsterData.init(MonsterLoader.getMonsterDefinitions("data/monsters.ecsv","data/monsters.exml"));
 	}
 
 

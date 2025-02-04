@@ -8,7 +8,7 @@ import crl.game.Game;
 import crl.game.STMusicManagerNew;
 import crl.level.Level;
 import crl.monster.Monster;
-import crl.monster.MonsterFactory;
+import crl.monster.MonsterData;
 
 public class Intro3 extends Unleasher {
 
@@ -23,7 +23,7 @@ public class Intro3 extends Unleasher {
 				int ypos = Util.rand(3,5) * (Util.chance(50) ? 1 : -1);
 				Position wargPosition = Position.add(playerFloor, new Position(xpos, ypos));
 				if (level.isWalkable(wargPosition)){
-					Monster warg = MonsterFactory.getFactory().buildMonster("WARG");
+					Monster warg = MonsterData.buildMonster("WARG");
 					warg.setPosition(wargPosition);
 					level.addMonster(warg);
 					break;
