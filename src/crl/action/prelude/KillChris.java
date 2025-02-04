@@ -20,7 +20,7 @@ public class KillChris extends Action{
 	public void execute(){
 		
 		Monster aMonster = (Monster) performer;
-        Level aLevel = performer.getLevel();
+        Level aLevel = performer.level;
         Player aPlayer = aLevel.getPlayer();
         aLevel.addMessage("Dracula invokes a deadly beam of chaos energy!!!");
         drawEffect(EffectFactory.getSingleton().createLocatedEffect(new Position(aPlayer.getPosition().x, aPlayer.getPosition().y), "SFX_KILL_CHRIS"));

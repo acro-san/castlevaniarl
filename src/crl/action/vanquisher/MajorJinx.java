@@ -29,7 +29,7 @@ public class MajorJinx extends Action{
 	
 	public boolean canPerform(Actor a){
 		Player aPlayer = (Player) a;
-        Level aLevel = performer.getLevel();
+        Level aLevel = performer.level;
         if (aPlayer.getHits() <= 5){
             aLevel.addMessage("That would be suicidal!");
             return false;

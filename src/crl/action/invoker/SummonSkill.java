@@ -8,12 +8,13 @@ import crl.monster.Monster;
 import crl.monster.MonsterData;
 import crl.player.Consts;
 
-public abstract class SummonSkill extends HeartAction{
+public abstract class SummonSkill extends HeartAction {
+
 	public abstract String getMonsterID();
 	
-	public void execute(){
+	public void execute() {
 		super.execute();
-		Level aLevel = performer.getLevel();
+		Level aLevel = performer.level;
 		Position randPos = null;
 		if (Util.chance(100)){ //TODO: This is related to soul
 			int count = 20;

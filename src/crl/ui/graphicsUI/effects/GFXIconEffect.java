@@ -20,8 +20,8 @@ public class GFXIconEffect extends GFXEffect{
 		si.saveBuffer();
 		//si.setAutoRefresh(false);
 		int height = 0;
-		if (ui.getPlayer().getLevel().getMapCell(getPosition()) != null)
-			height = ui.getPlayer().getLevel().getMapCell(getPosition()).getHeight();
+		if (ui.getPlayer().level.getMapCell(getPosition()) != null)
+			height = ui.getPlayer().level.getMapCell(getPosition()).getHeight();
 		Position relative = Position.subs(getPosition(), ui.getPlayer().getPosition());
 		Position center = Position.add(ui.PC_POS, relative);
 		if (ui.insideViewPort(center))

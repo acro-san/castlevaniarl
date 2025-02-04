@@ -10,14 +10,14 @@ public class Drop extends Action{
 	
 	public boolean needsItem(){
 		return true;
-    }
+	}
 
-    public String getPromptItem(){
-    	return "What do you want to drop?";
+	public String getPromptItem() {
+		return "What do you want to drop?";
 	}
 
 	public void execute(){
-		Level aLevel = performer.getLevel();
+		Level aLevel = performer.level;
 		aLevel.addMessage("You drop a "+targetItem.getDescription());
 		((Player)performer).reduceQuantityOf(targetItem);
 		aLevel.addItem(performer.getPosition(), targetItem);			

@@ -2,18 +2,21 @@ package sz.util;
 
 import java.io.Serializable;
 
-public class Counter implements Serializable{
+@Deprecated
+public class Counter implements Serializable {
 
+	// It's a frickin int.
 	private int value;
-	public Counter(int initialCoun){
-		value = initialCoun;
+	
+	public Counter(int initialValue){
+		value = initialValue;
 	}
 
-	public void reduce(){
+	public void reduce() {
 		value--;
 	}
 
-	public boolean isOver(){
+	public boolean isOver() {
 		return value < 0;
 	}
 	
@@ -21,11 +24,11 @@ public class Counter implements Serializable{
 		value++;
 	}
 	
-	public int getCount(){
+	public int getCount() {
 		return value;
 	}
 	
-	public void reset(){
+	public void reset() {
 		value = 0;
 	}
 }

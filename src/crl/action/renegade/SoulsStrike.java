@@ -18,8 +18,8 @@ public class SoulsStrike extends HeartAction{
 	
 	public void execute(){
 		super.execute();
-		Level aLevel = performer.getLevel();
-        Player aPlayer = aLevel.getPlayer();
+		Level aLevel = performer.level;
+		Player aPlayer = aLevel.getPlayer();
 		aLevel.addMessage("Three souls come from under your cape");
 		
 		for (int i = 0; i < 3; i++){

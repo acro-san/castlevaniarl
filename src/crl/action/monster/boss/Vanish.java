@@ -11,7 +11,7 @@ public class Vanish extends Action{
 	}
 	
 	public void execute(){
-        Level aLevel = performer.getLevel();
+        Level aLevel = performer.level;
         aLevel.addMessage("Dracula disappears!");
         Monster mon = (Monster)performer;
         mon.setVisible(false);

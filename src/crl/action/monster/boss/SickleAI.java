@@ -16,13 +16,13 @@ public class SickleAI extends MonsterAI{
 		if (directionToPlayer == -1){
 	     	return null;
 		} else {
-			int distanceToPlayer = Position.flatDistance(aMonster.getPosition(), aMonster.getLevel().getPlayer().getPosition());
+			int distanceToPlayer = Position.flatDistance(aMonster.getPosition(), aMonster.level.getPlayer().getPosition());
 			if (distanceToPlayer > 20)
 				return null;
         	Action ret = new MonsterWalk();
             ret.setDirection(directionToPlayer);
-            Cell currentCell = aMonster.getLevel().getMapCell(aMonster.getPosition());
-            Cell destinationCell = aMonster.getLevel().getMapCell(
+            Cell currentCell = aMonster.level.getMapCell(aMonster.getPosition());
+            Cell destinationCell = aMonster.level.getMapCell(
 				Position.add(
 					aMonster.getPosition(),
 					Action.directionToVariation(directionToPlayer)

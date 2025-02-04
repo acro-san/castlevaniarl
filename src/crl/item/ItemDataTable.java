@@ -129,16 +129,20 @@ public class ItemDataTable {
 		int i = 0;
 		ItemDefinition def = null;
 		out: while (i < tries) {
+			
 			int pin = Util.rand(0, 100);
-			if (pin > 15)
-				def = (ItemDefinition)Util.randomPick(generalItemDefinitions);
-			else if (pin > 5)
-				def = (ItemDefinition)Util.randomPick(weaponDefinitions);
-			else
-				def = (ItemDefinition)Util.randomPick(armorDefinitions);
+			if (pin > 15) {		// 85%
+				def = Util.pick(generalItemDefinitions);
+			} else if (pin > 5) {	//10%
+				def = Util.pick(weaponDefinitions);
+			} else {		// 5%
+				def = Util.pick(armorDefinitions);
+			}
+			
 			int pinLevel = def.pinLevel;
-			if (pinLevel == 0)
+			if (pinLevel == 0) {
 				continue;
+			}
 			int diff = Math.abs(level.levelNumber - pinLevel);
 			if (diff > 5) {
 				i++;
@@ -206,50 +210,55 @@ public class ItemDataTable {
 
 	}
 
-	public final static Modifier[] MOD_ARMOR_STRENGTH = new Modifier[] {
+	public static final Modifier[]
+		MOD_ARMOR_STRENGTH = {
 			new Modifier("WEAKENED", "Weakened ", 10),
-			new Modifier("REINFORCED", "Reinforced ", 20), };
-
-	public final static Modifier[] MOD_ARMOR_MAGIC = new Modifier[] {
+			new Modifier("REINFORCED", "Reinforced ", 20),
+		},
+		MOD_ARMOR_MAGIC = {
 			new Modifier("HOLY", "Holy ", 5),
 			new Modifier("SHIELDING", "Shielding ", 10),
-			new Modifier("DARK", "Dark ", 5), new Modifier("STAR", "Star ", 5), };
-
-	public final static Modifier[] MOD_ARMOR_MATERIAL = new Modifier[] {
+			new Modifier("DARK", "Dark ", 5),
+			new Modifier("STAR", "Star ", 5),
+		},
+		MOD_ARMOR_MATERIAL = {
 			new Modifier("BRONZE", "Bronze ", 80),
 			new Modifier("STEEL", "Steel ", 10),
 			new Modifier("IRON", "Iron ", 5),
-			new Modifier("SILVER", "Silver ", 2), };
-
-	public final static Modifier[] MOD_ARMOR_ADDITIONAL = new Modifier[] {
+			new Modifier("SILVER", "Silver ", 2),
+		},
+		MOD_ARMOR_ADDITIONAL = {
 			new Modifier("OFTHEMOON", " of the Moon", 5),
-			new Modifier("OFTHESUN", " of the Sun", 5), };
-
-	public final static Modifier[] MOD_STRENGTH = new Modifier[] {
+			new Modifier("OFTHESUN", " of the Sun", 5),
+		},
+		MOD_STRENGTH = {
 			new Modifier("WEAKENED", "Weakened ", 20),
 			new Modifier("REINFORCED", "Reinforced ", 20),
 			new Modifier("ENHANCED", "Enhanced ", 15),
-			new Modifier("DEADLY", "Deadly ", 10), };
-
-	public final static Modifier[] MOD_MAGIC = new Modifier[] {
+			new Modifier("DEADLY", "Deadly ", 10),
+		},
+		MOD_MAGIC = {
 			new Modifier("PULSATING", "Pulsating ", 5),
 			new Modifier("HOLY", "Holy ", 5),
 			new Modifier("SHIELDING", "Shielding ", 5),
-			new Modifier("DARK", "Dark ", 5), new Modifier("STAR", "Star ", 5), };
-
-	public final static Modifier[] MOD_MATERIAL = new Modifier[] {
+			new Modifier("DARK", "Dark ", 5),
+			new Modifier("STAR", "Star ", 5),
+		},
+		MOD_MATERIAL = {
 			new Modifier("STEEL", "Steel ", 80),
 			new Modifier("WOODEN", "Wooden ", 5),
 			new Modifier("IRON", "Iron ", 5),
 			new Modifier("SILVER", "Silver ", 2),
-			new Modifier("OBSIDIAN", "Obsidian ", 2), };
-
-	public final static Modifier[] MOD_ADDITIONAL = new Modifier[] {
+			new Modifier("OBSIDIAN", "Obsidian ", 2),
+		},
+		MOD_ADDITIONAL = {
 			new Modifier("OFHUNTING", " of Hunting", 2),
 			new Modifier("OFDESTRUCTION", " of Destruction", 2),
 			new Modifier("OFPUNISHMENT", " of Punishment", 2),
-			new Modifier("OFTHEMOON", "  of the Moon", 2), };
+			new Modifier("OFTHEMOON", "  of the Moon", 2),
+		};
 
+	// FIXME data-as-code. Could load from csv, xml or whatever format datatable
 	static {
 		MOD_ARMOR_STRENGTH[0].setDefenseBonus(-1);
 		MOD_ARMOR_STRENGTH[1].setDefenseBonus(1);
@@ -312,11 +321,11 @@ public class ItemDataTable {
 
 	}
 
-	public void setMaterial(Item weapon, int levelNumber, Modifier[] MATERIALS) {
-		Modifier material = MATERIALS[0];
+	public void setMaterial(Item weapon, int levelNumber, Modifier[] materials) {
+		Modifier material = materials[0];
 		int tries = 3;
 		while (tries > 0) {
-			Modifier rand = (Modifier) Util.randomElementOf(MATERIALS);
+			Modifier rand = Util.pick(materials);
 			int chance = rand.getChance() + levelNumber;
 			if (Util.chance(chance)) {
 				material = rand;
@@ -333,17 +342,17 @@ public class ItemDataTable {
 		Modifier magic = null;
 		Modifier additional = null;
 
-		Modifier rand = (Modifier) Util.randomElementOf(MOD_STRENGTH);
+		Modifier rand = Util.pick(MOD_STRENGTH);
 		int chance = rand.getChance() + levelNumber;
 		if (Util.chance(chance)) {
 			strength = rand;
 		}
-		rand = (Modifier) Util.randomElementOf(MOD_MAGIC);
+		rand = (Modifier) Util.pick(MOD_MAGIC);
 		chance = rand.getChance() + levelNumber;
 		if (Util.chance(chance)) {
 			magic = rand;
 		}
-		rand = (Modifier) Util.randomElementOf(MOD_ADDITIONAL);
+		rand = (Modifier) Util.pick(MOD_ADDITIONAL);
 		chance = rand.getChance() + levelNumber;
 		if (Util.chance(chance)) {
 			additional = rand;
@@ -361,17 +370,17 @@ public class ItemDataTable {
 		Modifier strength = null;
 		Modifier magic = null;
 		Modifier additional = null;
-		Modifier rand = (Modifier) Util.randomElementOf(MOD_ARMOR_STRENGTH);
+		Modifier rand = (Modifier) Util.pick(MOD_ARMOR_STRENGTH);
 		int chance = rand.getChance() + levelNumber;
 		if (Util.chance(chance)) {
 			strength = rand;
 		}
-		rand = (Modifier) Util.randomElementOf(MOD_ARMOR_MAGIC);
+		rand = (Modifier) Util.pick(MOD_ARMOR_MAGIC);
 		chance = rand.getChance() + levelNumber;
 		if (Util.chance(chance)) {
 			magic = rand;
 		}
-		rand = (Modifier) Util.randomElementOf(MOD_ARMOR_ADDITIONAL);
+		rand = (Modifier) Util.pick(MOD_ARMOR_ADDITIONAL);
 		chance = rand.getChance() + levelNumber;
 		if (Util.chance(chance)) {
 			additional = rand;

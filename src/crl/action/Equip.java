@@ -31,7 +31,7 @@ public class Equip extends Action{
 		ItemDefinition def = targetItem.getDefinition();
 		Player player = (Player)performer;
 		if (!player.canWield()){
-			performer.getLevel().addMessage("You can't wear anything!");
+			performer.level.addMessage("You can't wear anything!");
 			return;
 		}
 		
@@ -39,7 +39,7 @@ public class Equip extends Action{
 			case ItemDefinition.EQUIPTYPE_ARMOR:
 				for (int i = 0 ; i < player.getBannedArmors().length; i++) {
 					if (player.getBannedArmors()[i].equals(def.getID())) {
-						performer.getLevel().addMessage("You can't wear that kind of armor!");
+						performer.level.addMessage("You can't wear that kind of armor!");
 						return;
 					}
 				}
@@ -48,13 +48,13 @@ public class Equip extends Action{
 				if (currentArmor != null) {
 					player.addItem(currentArmor);
 				}
-				performer.getLevel().addMessage("You wear the "+def.description);
+				performer.level.addMessage("You wear the "+def.description);
 				player.setArmor(targetItem);
 				break;
 				
 			case ItemDefinition.EQUIPTYPE_WEAPON:
 				if (player.getPlayerClass() == Player.CLASS_VAMPIREKILLER && player.getFlag("ONLY_VK")){
-					performer.getLevel().addMessage("You can't abandon the mystic whip");
+					performer.level.addMessage("You can't abandon the mystic whip");
 					return;
 				}
 				Item currentWeapon = player.getWeapon();
@@ -63,10 +63,10 @@ public class Equip extends Action{
 					Item currentShield = player.getShield();
 					if (currentShield != null){
 						if (!player.canCarry()){
-							performer.getLevel().addMessage("You can't store your "+currentShield.getDescription()+" to wear this two handed weapon.");
+							performer.level.addMessage("You can't store your "+currentShield.getDescription()+" to wear this two handed weapon.");
 							return;
 						} else {
-							performer.getLevel().addMessage("You remove your "+currentShield.getDescription());
+							performer.level.addMessage("You remove your "+currentShield.getDescription());
 							player.addItem(currentShield);
 							player.setShield(null);
 						}
@@ -76,20 +76,20 @@ public class Equip extends Action{
 				if (currentWeapon != null){
 					if (currentSecondaryWeapon != null){
 						if (!player.canCarry()){
-							performer.getLevel().addMessage("You are unable to store your "+currentSecondaryWeapon.getDescription());
+							performer.level.addMessage("You are unable to store your "+currentSecondaryWeapon.getDescription());
 							return;
 						} else {
 							player.setSecondaryWeapon(currentWeapon);
-							performer.getLevel().addMessage("You put your "+currentWeapon.getDescription()+" in your belt.");
+							performer.level.addMessage("You put your "+currentWeapon.getDescription()+" in your belt.");
 							player.addItem(currentSecondaryWeapon);
-							performer.getLevel().addMessage("You store your "+currentSecondaryWeapon.getDescription());
+							performer.level.addMessage("You store your "+currentSecondaryWeapon.getDescription());
 						}
 					} else {
 						player.setSecondaryWeapon(currentWeapon);
-						performer.getLevel().addMessage("You put your "+currentWeapon.getDescription()+" in your belt.");
+						performer.level.addMessage("You put your "+currentWeapon.getDescription()+" in your belt.");
 					}
 				}
-				performer.getLevel().addMessage("You wield the "+def.description);
+				performer.level.addMessage("You wield the "+def.description);
 				player.setWeapon(targetItem);
 				player.reduceQuantityOf(targetItem);
 				
@@ -102,7 +102,7 @@ public class Equip extends Action{
 				if (currentWeapon != null && currentWeapon.isTwoHanded()){
 					//Must remove weapon to use shield
 					if (!player.canCarry()){
-						performer.getLevel().addMessage("You are unable to store your current weapon to wear the shield.");
+						performer.level.addMessage("You are unable to store your current weapon to wear the shield.");
 						return;
 					} else {
 						player.setWeapon(null);
@@ -112,7 +112,7 @@ public class Equip extends Action{
 				if (currentShield != null){
 					//Remove the current shield
 					if (!player.canCarry()){
-						performer.getLevel().addMessage("You are unable to store your current shiled to wear the new one.");
+						performer.level.addMessage("You are unable to store your current shiled to wear the new one.");
 						return;
 					} else {
 						player.setShield(null);
@@ -122,7 +122,7 @@ public class Equip extends Action{
 				
 				player.setShield(targetItem);
 				player.reduceQuantityOf(targetItem);
-				performer.getLevel().addMessage("You wear the "+def.description);
+				performer.level.addMessage("You wear the "+def.description);
 				break;
 		}
 	}

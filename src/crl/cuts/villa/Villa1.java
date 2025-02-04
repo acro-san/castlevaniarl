@@ -2,10 +2,8 @@ package crl.cuts.villa;
 
 import sz.util.Position;
 import crl.ai.npc.VillagerAI;
-import crl.conf.console.data.CharCuts;
 import crl.cuts.Unleasher;
 import crl.game.Game;
-import crl.item.ItemDataTable;
 import crl.level.Level;
 import crl.monster.Monster;
 import crl.ui.Display;
@@ -17,12 +15,13 @@ public class Villa1 extends Unleasher {
 		if (maiden == null)
 			return;
 		int distance = Position.distance(maiden.getPosition(), game.getPlayer().getPosition());
-		if (((VillagerAI)maiden.getSelector()).isHostile()){
+		if (((VillagerAI)maiden.selector).isHostile()) {
 			enabled = false;
 			return;
 		}
-		if (distance > 2)
+		if (distance > 2) {
 			return;
+		}
 		Display.thus.showChat("MAIDEN1", game);
 		level.getPlayer().addKeys(1);
 		//level.removeMonster(level.getNPCByID("MAIDEN"));

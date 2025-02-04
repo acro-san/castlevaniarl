@@ -5,12 +5,13 @@ import sz.csi.ConsoleSystemInterface;
 import sz.csi.textcomponents.TextBox;
 import sz.util.TxtTpl;
 import crl.Main;
+import crl.data.Text;
 import crl.game.PlayerGenerator;
 import crl.player.Player;
 import crl.ui.Display;
 
-public class CharPlayerGenerator extends PlayerGenerator{
-	public CharPlayerGenerator(ConsoleSystemInterface si){
+public class CharPlayerGenerator extends PlayerGenerator {
+	public CharPlayerGenerator(ConsoleSystemInterface si) {
 		this.si = si;
 	}
 	private ConsoleSystemInterface si;
@@ -67,9 +68,9 @@ public class CharPlayerGenerator extends PlayerGenerator{
         txtClassDescription.setBounds(22,10,30,7);
     	x = new CharKey(CharKey.NONE);
     	int choice = 0;
-    	while (true){
+    	while (true) {
     		txtClassDescription.clear();
-    		txtClassDescription.setText(TxtTpl.t(name,sex,CLASS_DESCRIPTIONS[choice]));
+    		txtClassDescription.setText(TxtTpl.t(name,sex,Text.CLASS_DESCRIPTIONS[choice]));
     		txtClassDescription.draw();
     		si.print(2,6+choice,"*", ConsoleSystemInterface.RED);
     		si.print(35,7,apps[choice].getChar(), apps[choice].getColor());

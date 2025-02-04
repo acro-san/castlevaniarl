@@ -149,7 +149,7 @@ public class CharDisplay extends Display {
 		tb.setHeight(3);
 		tb.setWidth(70);
 		tb.setForeColor(ConsoleSystemInterface.RED);
-		tb.setText("  ...And so it was that "+player.getDescription() + ", "+gsi.getDeathString()+" on the "+player.getLevel().getDescription()+"...");
+		tb.setText("  ...And so it was that "+player.getDescription() + ", "+gsi.getDeathString()+" on the "+player.level.getDescription()+"...");
 		tb.draw();
 		
 		si.print(2,9, heshe+ " scored "+ player.getScore() +" points and earned "+ player.getGold() +" gold", ConsoleSystemInterface.RED);

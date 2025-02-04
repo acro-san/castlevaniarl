@@ -38,7 +38,7 @@ public class MonsterCharge extends Action{
 		Monster aMonster = (Monster) performer;
 		targetDirection = aMonster.starePlayer();
         Position var = directionToVariation(targetDirection);
-        Level aLevel = performer.getLevel();
+        Level aLevel = performer.level;
         Player aPlayer = aLevel.getPlayer();
         aLevel.addMessage("The "+aMonster.getDescription()+" "+message+".");
         Cell currentCell = aLevel.getMapCell(performer.getPosition());
@@ -53,7 +53,7 @@ public class MonsterCharge extends Action{
 			if (deepPoint == null){
 				aLevel.addMessage("The "+aMonster.getDescription()+ " falls into an endless pit!");
 				performer.die();
-				performer.getLevel().removeMonster(aMonster);
+				performer.level.removeMonster(aMonster);
 				break;
 			}
 			Cell destinationCell = aLevel.getMapCell(deepPoint);
@@ -68,7 +68,7 @@ public class MonsterCharge extends Action{
 			if (!aMonster.isEthereal() && !aMonster.canSwim() && destinationCell.isShallowWater()){
 				aLevel.addMessage("The "+aMonster.getDescription()+ " falls into the "+ destinationCell.getShortDescription() + "!");
 				performer.die();
-				performer.getLevel().removeMonster(aMonster);
+				performer.level.removeMonster(aMonster);
 				break;
 			}
 			if (aPlayer.getPosition().equals(destinationPoint)){

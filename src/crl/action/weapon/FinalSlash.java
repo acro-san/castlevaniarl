@@ -23,7 +23,7 @@ public class FinalSlash extends Action{
 
 	public void execute(){
 		Player aPlayer = (Player)performer;
-		Level aLevel = aPlayer.getLevel();
+		Level aLevel = aPlayer.level;
 		if (!checkHearts(10)){
 	        aLevel.addMessage("You need more power!");
 	        return;
@@ -69,7 +69,7 @@ public class FinalSlash extends Action{
 		Position runner2 = Position.add(performer.getPosition(), Action.directionToVariation(targetDirection));
 		Position runner3 = Position.add(performer.getPosition(), Action.directionToVariation(otherDir2));
 		for (int i = 0; i < 15; i++){
-			if (!performer.getLevel().isWalkable(runner2)){
+			if (!performer.level.isWalkable(runner2)){
 				runner2.add(Position.mul(directionVar, -1));
 				break;
 			}
@@ -80,7 +80,7 @@ public class FinalSlash extends Action{
 			runner2.add(directionVar);
 			runner3.add(directionVar);
 		}
-		if (!performer.getLevel().isWalkable(runner2)){
+		if (!performer.level.isWalkable(runner2)){
 			runner2.add(Position.mul(directionVar, -1));
 		}
 		performer.setPosition(runner2);
@@ -88,7 +88,7 @@ public class FinalSlash extends Action{
 
 	private boolean hit (Position destinationPoint){
 		StringBuffer message = new StringBuffer();
-		Level aLevel = performer.getLevel();
+		Level aLevel = performer.level;
         Player aPlayer = aLevel.getPlayer();
         //UserInterface.getUI().drawEffect(new TileEffect(destinationPoint, 'o', Appearance.GREEN, 100));
 		//aLevel.addBlood(destinationPoint, 8);
@@ -98,7 +98,7 @@ public class FinalSlash extends Action{
 			aLevel.addMessage(message.toString());
         	return true;
 		}
-        Monster targetMonster = performer.getLevel().getMonsterAt(destinationPoint);
+        Monster targetMonster = performer.level.getMonsterAt(destinationPoint);
         if (
 			targetMonster != null &&
 			!(targetMonster.isInWater() && targetMonster.canSwim())
@@ -115,13 +115,15 @@ public class FinalSlash extends Action{
 		return false;
 	}
 	
-	public boolean canPerform(Actor a){
+	// WHY! this is NOT unique logic. Same in most of these classes! is a DATA FIELD!!
+	@Override
+	public boolean canPerform(Actor a) {
 		Player aPlayer = (Player) a;
-        Level aLevel = performer.getLevel();
-        if (aPlayer.getHearts() < 10){
-        	invalidationMessage = "You need more energy!";
-            return false;
+		//Level aLevel = performer.level;
+		if (aPlayer.getHearts() < 10) {
+			invalidationMessage = "You need more energy!";
+			return false;
 		}
-        return true;
+		return true;
 	}
 }

@@ -23,7 +23,7 @@ public class EnergyShield extends HeartAction{
 	public void execute(){
 		super.execute();
 		Player aPlayer = (Player)performer;
-		Level aLevel = aPlayer.getLevel();
+		Level aLevel = aPlayer.level;
 		aLevel.addMessage("You are covered with a shimmering shield!!");
 		aPlayer.setCounter(Consts.C_ENERGYSHIELD, 50+aPlayer.getSoulPower()*2);
 	}

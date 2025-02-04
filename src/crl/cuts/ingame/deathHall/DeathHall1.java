@@ -10,7 +10,7 @@ public class DeathHall1 extends Unleasher {
 
 	public void unleash(Level level, Game game) {
 		Monster death = level.getMonsterByID("DEATH");
-		death.setSelector(Main.selectors.get("NULL_SELECTOR"));
+		death.selector = Main.selectors.get("NULL_SELECTOR");
 		level.addCounter("COUNTBACK_DEATHHALL", 2);
 		level.setFlag("DEATH_HALL", true);
 		enabled = false;

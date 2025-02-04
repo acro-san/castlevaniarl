@@ -16,7 +16,7 @@ public class Prelude4 extends Unleasher {
 		Display.thus.showChat("PRELUDE_DRACULA2", game);
 		STMusicManagerNew.thus.playKey("CHRIS_DEAD");
 		level.setMusicKeyMorning("CHRIS_DEAD");
-		((DraculaAI)level.getMonsterByID("PRELUDE_DRACULA").getSelector()).setOnBattle(true);
+		((DraculaAI)level.getMonsterByID("PRELUDE_DRACULA").selector).setOnBattle(true);
 		enabled = false;
 	}
 

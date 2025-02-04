@@ -26,7 +26,7 @@ public class CrossBack extends Action{
 	}
 
 	public void execute(){
-		Level aLevel = performer.getLevel();
+		Level aLevel = performer.level;
 		aLevel.addMessage("The cross comes back!");
 		int damage = 3 + aLevel.getPlayer().getShotLevel() + aLevel.getPlayer().getSoulPower();
 		
@@ -42,26 +42,26 @@ public class CrossBack extends Action{
 		
 		Line crossLine = new Line(performer.getPosition(), targetPosition);
 		
-		int startHeight = ((SmartFeature)performer).getHeight();
+		int startHeight = ((SmartFeature)performer).height;
 		
 		crossLine.next();
 		Position destinationPoint = null;
 		int i = 0;
-        for (i=0; i<20; i++){
+		for (i=0; i<20; i++) {
 			destinationPoint = crossLine.next();
 			if (destinationPoint.equals(aLevel.getPlayer().getPosition())){
 				aLevel.addMessage("You catch the cross");
 				break;
 			}
 
-        	Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-        	if (destinationFeature != null && destinationFeature.isDestroyable()){
-        		aLevel.addMessage("The cross cuts the "+destinationFeature.getDescription());
+			Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
+			if (destinationFeature != null && destinationFeature.isDestroyable()) {
+				aLevel.addMessage("The cross cuts the "+destinationFeature.getDescription());
 				destinationFeature.damage(aLevel.getPlayer(), damage);
 			}
-
-			Monster targetMonster = performer.getLevel().getMonsterAt(destinationPoint);
-			Cell destinationCell = performer.getLevel().getMapCell(destinationPoint);
+			
+			Monster targetMonster = performer.level.getMonsterAt(destinationPoint);
+			Cell destinationCell = performer.level.getMapCell(destinationPoint);
 			
 			if (targetMonster != null) {
 				if ((targetMonster.isInWater() && targetMonster.canSwim()) || destinationCell.getHeight() < startHeight-1){
@@ -76,42 +76,45 @@ public class CrossBack extends Action{
 						buff.append("The cross slashes the "+targetMonster.getDescription());
 					targetMonster.damage(buff, damage);
 					aLevel.addMessage(buff.toString());
-		        	if (targetMonster.isDead()){
-						performer.getLevel().removeMonster(targetMonster);
+					if (targetMonster.isDead()) {
+						performer.level.removeMonster(targetMonster);
 					}
 				}
 			}
 		}
 
-		Effect crossEffect =EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(), targetPosition, "SFX_CROSS", i);
-		crossEffect.setPosition(performer.getLevel().getPlayer().getPosition());
+		Effect crossEffect = EffectFactory.getSingleton().
+			createDirectedEffect(performer.getPosition(), targetPosition, "SFX_CROSS", i);
+		crossEffect.setPosition(performer.level.getPlayer().getPosition());
 		drawEffect(crossEffect);
-    	
 	}
 
-	public String getPromptPosition(){
+
+	public String getPromptPosition() {
 		return "Where do you want to throw the Cross?";
 	}
-	public int getCost(){
-		if (performer instanceof Player){
+	
+	public int getCost() {
+		if (performer instanceof Player) {
 			Player p = (Player) performer;
 			return (int)(25 / (p.getShotLevel()+1));
-		} else
+		} else {
 			return 40;
+		}
 	}
 	
-	public String getSFX(){
+	public String getSFX() {
 		return "wav/misswipe.wav";
 	}
 
-	public boolean canPerform(Actor a){
-		if (a instanceof Player){
+	public boolean canPerform(Actor a) {
+		if (a instanceof Player) {
 			Player aPlayer = (Player) a;
-	        if (aPlayer.getHearts() < 1){
-	        	invalidationMessage = "You don't have enough hearts";
-	            return false;
+			if (aPlayer.getHearts() < 1) {
+				invalidationMessage = "You don't have enough hearts";
+				return false;
 			}
 		}
-        return true;
+		return true;
 	}
 }

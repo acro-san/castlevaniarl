@@ -22,7 +22,7 @@ public class PowerBlow extends HeartAction{
 	public void execute(){
 		super.execute();
 		Player aPlayer = (Player)performer;
-		Level aLevel = aPlayer.getLevel();
+		Level aLevel = aPlayer.level;
 		aLevel.addMessage("WAARGH!!! You build up your power!");
 		aPlayer.setCounter(Consts.C_POWERBLOW, 5);
 	}

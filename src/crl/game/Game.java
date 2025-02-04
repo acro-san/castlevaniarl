@@ -11,6 +11,7 @@ import crl.level.*;
 import crl.levelgen.*;
 import crl.monster.VMonster;
 import crl.actor.*;
+import crl.data.Text;
 import crl.npc.*;
 import crl.item.*;
 import crl.player.*;
@@ -59,7 +60,7 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 	private void run() {
 		Debug.enterMethod(this, "run");
 		player.setFOV(new FOV());
-		player.getLevel().addMessage("Greetings "+player.getName()+", welcome to the game... Press '?' for Help");
+		player.level.addMessage("Greetings "+player.getName()+", welcome to the game... Press '?' for Help");
 		ui.refresh();
 		checkTimeSwitch();
 		while (!endGame) {
@@ -80,7 +81,7 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 				}
 				player.getGameSessionInfo().turns++;
 				player.checkDeath();
-				player.getLevel().checkUnleashers(this);
+				player.level.checkUnleashers(this);
 			}
 			if (endGame) {
 				break;
@@ -89,7 +90,7 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 			if (endGame) {
 				break;
 			}
-			actor.getLevel().getDispatcher().returnActor(actor);
+			actor.level.getDispatcher().returnActor(actor);
 			
 			if (actor == player){
 				if (currentLevel != null)
@@ -137,7 +138,7 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 				}
 			} else {
 				
-				if (currentLevel.hasNoonMusic()){
+				if (currentLevel.hasNoonMusic()) {
 					STMusicManagerNew.thus.stopMusic();
 					Display.thus.showTimeChange(!isDay, fog, rain, thunderstorm, sunnyDay);
 					STMusicManagerNew.thus.playKey(currentLevel.getMusicKeyMorning());
@@ -154,13 +155,13 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 	
 	public final static int DAY_LENGTH = 500;
 	
-	public void resume(){
-		player.setSelector(uiSelector);
+	public void resume() {
+		player.selector = uiSelector;
 		ui.setPlayer(player);
 		uiSelector.setPlayer(player);
 		ui.addCommandListener(this);
 		ui.setGameOver(false);
-		player.getLevel().addActor(player);
+		player.level.addActor(player);
 		player.setPlayerEventListener(this);
 		endGame = false;
 		turns = player.getGameSessionInfo().turns;
@@ -173,14 +174,14 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 		run();
 	}
 	
-	public void setPlayer(Player p){
+	public void setPlayer(Player p) {
 		player = p;
-		player.setLevel(currentLevel);
+		player.level = currentLevel;
 		player.setFOV(new FOV());
 		currentLevel.setPlayer(player);
 		if (player.getGameSessionInfo() == null)
 			player.setGameSessionInfo(new GameSessionInfo());
-		player.setSelector(uiSelector);
+		player.selector = uiSelector;
 		ui.setPlayer(player);
 		uiSelector.setPlayer(player);
 		player.setPlayerEventListener(this);
@@ -191,7 +192,7 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 		player = PlayerGenerator.thus.generatePlayer();
 		player.setGame(this);
 		player.setGameSessionInfo(new GameSessionInfo());
-		player.setSelector(uiSelector);
+		player.selector = uiSelector;
 		ui.setPlayer(player);
 		uiSelector.setPlayer(player);
 		ui.addCommandListener(this);
@@ -211,7 +212,7 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 		player = PlayerGenerator.thus.createSpecialPlayer("SOLEIYU_KID");
 		player.setGame(this);
 		player.setGameSessionInfo(new GameSessionInfo());
-		player.setSelector(uiSelector);
+		player.selector = uiSelector;
 		player.setDoNotRecordScore(true);
 		ui.setPlayer(player);
 		uiSelector.setPlayer(player);
@@ -234,7 +235,7 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 		player = PlayerGenerator.thus.createSpecialPlayer("CHRIS");
 		player.setGame(this);
 		player.setGameSessionInfo(new GameSessionInfo());
-		player.setSelector(uiSelector);
+		player.selector = uiSelector;
 		player.setDoNotRecordScore(true);
 		ui.setPlayer(player);
 		uiSelector.setPlayer(player);
@@ -253,11 +254,11 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 		run();
 	}
 	
-	public void arena(){
+	public void arena() {
 		player = PlayerGenerator.thus.createSpecialPlayer("SONIA");
 		player.setGame(this);
 		player.setGameSessionInfo(new GameSessionInfo());
-		player.setSelector(uiSelector);
+		player.selector = uiSelector;
 		player.setDoNotRecordScore(false);
 		ui.setPlayer(player);
 		uiSelector.setPlayer(player);
@@ -440,25 +441,17 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 		}
 	}
 	
-    public void informEvent(int code){
-    	informEvent(code, null);
-    }
+	public void informEvent(int code){
+		informEvent(code, null);
+	}
 
-	private static final String[] DEATHMESSAGES = {
-		"You are dead... and Dracula is still alive",
-		"All hopes are lost.",
-		"It's the end.",
-		"Let us enjoy this evening for pleasure, the night is still young...",
-		"Game Over",
-		"Better luck next time, Son of a Belmont"
-	};
-	
-	public void informEvent(int code, Object param){
+
+	public void informEvent(int code, Object param) {
 		Debug.enterMethod(this, "informEvent", code+","+param);
 		switch (code){
 			case Player.DEATH:
 				ui.refresh();
-				ui.showSystemMessage(Util.randPick(DEATHMESSAGES) +  " [Press Space to continue]");
+				ui.showSystemMessage(Util.pick(Text.DEATH_MESSAGES) +  " [Press Space to continue]");
 				finishGame();
 				break;
 			case Player.DROWNED:
@@ -491,7 +484,7 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 					if (player.getGold()>=200){
 						forwardTime();
 						forwardTime();
-						VMonster monsters = player.getLevel().getMonsters();
+						VMonster monsters = player.level.getMonsters();
 						for (int i = 0; i < monsters.size(); i++){
 							if (monsters.elementAt(i) instanceof Merchant){
 								((Merchant)monsters.elementAt(i)).refreshMerchandise(player);
@@ -605,7 +598,7 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 			}
 		}
 		//currentLevel.setLevelNumber(targetLevelNumber);
-		player.setLevel(currentLevel);
+		player.level = currentLevel;
 		
 		if(currentLevel.getExitFor(formerLevelID) != null){
 			player.setPosition(currentLevel.getExitFor(formerLevelID));
@@ -631,7 +624,7 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 					if (player.canCarry())
 						player.addItem(reward);
 					else
-						player.getLevel().addItem(player.getPosition(), reward);
+						player.level.addItem(player.getPosition(), reward);
 			}
 		}
 		dispatcher = currentLevel.getDispatcher();
@@ -658,7 +651,7 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 	
 	public void setLevel(Level level){
 		currentLevel = level;
-		player.setLevel(level);
+		player.level = level;
 		dispatcher = currentLevel.getDispatcher();
 		if (currentLevel.hasNoonMusic() && !currentLevel.isDay()){
 			STMusicManagerNew.thus.playKey(currentLevel.getMusicKeyNoon());

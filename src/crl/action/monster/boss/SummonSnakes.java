@@ -17,7 +17,7 @@ public class SummonSnakes extends Action{
 	}
 	
 	public void execute() {
-		Level aLevel = performer.getLevel();
+		Level aLevel = performer.level;
 		aLevel.addMessage("Medusa throws some snakes from her head!");
 		int sickles = Util.rand(5,10);
 		for (int i=0; i<sickles; i++) {

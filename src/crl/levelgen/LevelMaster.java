@@ -36,7 +36,7 @@ public class LevelMaster {
 		Level ret = null;
 		PatternGenerator.getGenerator().resetFeatures();
 		Respawner x = new Respawner(15, 90);
-		x.setSelector(new RespawnAI());
+		x.selector = new RespawnAI();
 		boolean hasHostage = false;
 		boolean isStatic = false;
 		StaticPattern pattern = null;
@@ -175,14 +175,14 @@ public class LevelMaster {
 		
 		if (levelID.startsWith("PRELUDE_ARENA")) {
 			x = new Respawner(6, 100);
-			x.setSelector(new RespawnAI());
+			x.selector = new RespawnAI();
 			ret.setRespawner(x);
 			overrideLevelNumber = true;
 			ret.levelNumber = 1;
 		}
-		if (levelID.startsWith("TOWN")){
+		if (levelID.startsWith("TOWN")) {
 			x = new Respawner(6, 100);
-			x.setSelector(new RespawnAI());
+			x.selector = new RespawnAI();
 			ret.setRespawner(x);
 		}
 		
@@ -542,47 +542,44 @@ public class LevelMaster {
 			}
 			//lightCandles(ret);
 			ret.setRutinary(true);
-		}else if (levelID.startsWith("DUNGEON")){
+		}else if (levelID.startsWith("DUNGEON")) {
 			FeatureCarveGenerator fcg = new FeatureCarveGenerator();
-			ArrayList rooms = getDungeonRooms();
+			ArrayList<Feature> rooms = getDungeonRooms();
 			fcg.initialize(rooms,
-					"DUNGEON_WALL",
-					Util.rand(80,100),
-					Util.rand(80,100),
-					"DUNGEON_PASSAGE", "DUNGEON_UP", "DUNGEON_DOWN");
+				"DUNGEON_WALL",
+				Util.rand(80,100),
+				Util.rand(80,100),
+				"DUNGEON_PASSAGE", "DUNGEON_UP", "DUNGEON_DOWN");
 			ret = fcg.generateLevel();
 			ret.setInhabitants(new MonsterSpawnInfo []{
-					new MonsterSpawnInfo("KILLER_PLANT", MonsterSpawnInfo.UNDERGROUND, 70),
-					new MonsterSpawnInfo("VAMPIRE_BAT", MonsterSpawnInfo.BORDER, 40),
-					new MonsterSpawnInfo("WIGHT", MonsterSpawnInfo.UNDERGROUND, 40),
-					new MonsterSpawnInfo("SPECTER", MonsterSpawnInfo.UNDERGROUND, 40)
-				});
+				new MonsterSpawnInfo("KILLER_PLANT", MonsterSpawnInfo.UNDERGROUND, 70),
+				new MonsterSpawnInfo("VAMPIRE_BAT", MonsterSpawnInfo.BORDER, 40),
+				new MonsterSpawnInfo("WIGHT", MonsterSpawnInfo.UNDERGROUND, 40),
+				new MonsterSpawnInfo("SPECTER", MonsterSpawnInfo.UNDERGROUND, 40)
+			});
 			ret.setDispatcher(new Dispatcher());
 			ret.setRespawner(x);
 			ret.setDescription("Castle Dungeon");
 			ret.setMusicKeyMorning("DUNGEON");
-			ret.setDwellersInfo(
-				new MonsterSpawnInfo[]{
-						new MonsterSpawnInfo("SKULL_LORD", MonsterSpawnInfo.UNDERGROUND, 20),
-						new MonsterSpawnInfo("BONE_ARCHER", MonsterSpawnInfo.UNDERGROUND, 80),
-						new MonsterSpawnInfo("AXE_KNIGHT", MonsterSpawnInfo.UNDERGROUND, 80),
-						new MonsterSpawnInfo("SALOME", MonsterSpawnInfo.UNDERGROUND, 50),
-				}
-			);
-			
+			ret.setDwellersInfo(new MonsterSpawnInfo[] {
+				new MonsterSpawnInfo("SKULL_LORD", MonsterSpawnInfo.UNDERGROUND, 20),
+				new MonsterSpawnInfo("BONE_ARCHER", MonsterSpawnInfo.UNDERGROUND, 80),
+				new MonsterSpawnInfo("AXE_KNIGHT", MonsterSpawnInfo.UNDERGROUND, 80),
+				new MonsterSpawnInfo("SALOME", MonsterSpawnInfo.UNDERGROUND, 50),
+			});
 			ret.setMapLocationKey("DUNGEON");
 			//ret.setIsCandled(true);
 			//lightCandles(ret);
 			ret.populate();
 			ret.setRutinary(true);
-		}else if (levelID.startsWith("CLOCK_BASE")){
+		} else if (levelID.startsWith("CLOCK_BASE")) {
 			FeatureCarveGenerator fcg = new FeatureCarveGenerator();
-			ArrayList rooms = getClockTowerRooms();
-			fcg.initialize(rooms, 
-					"TOWER_WALL", 
-					Util.rand(80,100),
-					Util.rand(80,100),
-					"TOWER_STAIRS", "MARBLE_STAIRSDOWN_FAKE", "MARBLE_STAIRSUP_FAKE");
+			ArrayList<Feature> rooms = getClockTowerRooms();
+			fcg.initialize(rooms,
+				"TOWER_WALL",
+				Util.rand(80,100),
+				Util.rand(80,100),
+				"TOWER_STAIRS", "MARBLE_STAIRSDOWN_FAKE", "MARBLE_STAIRSUP_FAKE");
 			ret = fcg.generateLevel();
 			ret.setInhabitants(new MonsterSpawnInfo[]{
 					new MonsterSpawnInfo("MEDUSA_HEAD", MonsterSpawnInfo.BORDER, 50)
@@ -591,16 +588,14 @@ public class LevelMaster {
 			ret.setRespawner(x);
 			ret.setDescription("Clock Tower");
 			ret.setMusicKeyMorning("TOWER");
-			ret.setDwellersInfo(
-				new MonsterSpawnInfo[]{
-						new MonsterSpawnInfo("CROW", MonsterSpawnInfo.UNDERGROUND, 90),
-						new MonsterSpawnInfo("DRAGON_SKULL_CANNON", MonsterSpawnInfo.UNDERGROUND, 20),
-						new MonsterSpawnInfo("BUER", MonsterSpawnInfo.UNDERGROUND, 50),
-						new MonsterSpawnInfo("HARPY", MonsterSpawnInfo.UNDERGROUND, 60),
-						new MonsterSpawnInfo("BONE_MUSKET", MonsterSpawnInfo.UNDERGROUND, 40),
-						new MonsterSpawnInfo("LILITH", MonsterSpawnInfo.UNDERGROUND, 50),
-				}
-				);
+			ret.setDwellersInfo(new MonsterSpawnInfo[] {
+				new MonsterSpawnInfo("CROW", MonsterSpawnInfo.UNDERGROUND, 90),
+				new MonsterSpawnInfo("DRAGON_SKULL_CANNON", MonsterSpawnInfo.UNDERGROUND, 20),
+				new MonsterSpawnInfo("BUER", MonsterSpawnInfo.UNDERGROUND, 50),
+				new MonsterSpawnInfo("HARPY", MonsterSpawnInfo.UNDERGROUND, 60),
+				new MonsterSpawnInfo("BONE_MUSKET", MonsterSpawnInfo.UNDERGROUND, 40),
+				new MonsterSpawnInfo("LILITH", MonsterSpawnInfo.UNDERGROUND, 50),
+			});
 			ret.setMapLocationKey("CLOCKTOWER");
 			//ret.setIsCandled(true);
 			//lightCandles(ret);
@@ -608,34 +603,32 @@ public class LevelMaster {
 			ret.setRutinary(true);
 		}else if (levelID.startsWith("SEWERS")){
 			FeatureCarveGenerator fcg = new FeatureCarveGenerator();
-			ArrayList rooms = getSewersRooms();
-			fcg.initialize(rooms, 
-					"SEWERS_WALL", 
-					Util.rand(50,70),
-					Util.rand(50,70),
-					"SEWERS_FLOOR", "SEWERS_UP", "SEWERS_DOWN");
+			ArrayList<Feature> rooms = getSewersRooms();
+			fcg.initialize(rooms,
+				"SEWERS_WALL",
+				Util.rand(50,70),
+				Util.rand(50,70),
+				"SEWERS_FLOOR", "SEWERS_UP", "SEWERS_DOWN");
 			fcg.setCheckCorridor(false);
 			ret = fcg.generateLevel();
-			ret.setInhabitants(new MonsterSpawnInfo []{
-					new MonsterSpawnInfo("MERMAN", MonsterSpawnInfo.UNDERGROUND, 100),
-					new MonsterSpawnInfo("KNIFE_MERMAN", MonsterSpawnInfo.UNDERGROUND, 100),
-				});
+			ret.setInhabitants(new MonsterSpawnInfo [] {
+				new MonsterSpawnInfo("MERMAN", MonsterSpawnInfo.UNDERGROUND, 100),
+				new MonsterSpawnInfo("KNIFE_MERMAN", MonsterSpawnInfo.UNDERGROUND, 100),
+			});
 			ret.setDispatcher(new Dispatcher());
 			ret.setRespawner(x);
 			ret.setDescription("Petra Sewers");
 			ret.setMusicKeyMorning("SEWERS");
-			ret.setDwellersInfo(
-					new MonsterSpawnInfo[]{
-							new MonsterSpawnInfo("MERMAN", MonsterSpawnInfo.WATER, 90),
-							new MonsterSpawnInfo("KNIFE_MERMAN", MonsterSpawnInfo.UNDERGROUND, 20),
-					}
-					);
+			ret.setDwellersInfo(new MonsterSpawnInfo[] {
+				new MonsterSpawnInfo("MERMAN", MonsterSpawnInfo.WATER, 90),
+				new MonsterSpawnInfo("KNIFE_MERMAN", MonsterSpawnInfo.UNDERGROUND, 20),
+			});
 			ret.setMapLocationKey("TOWN");
 			ret.populate();
 			ret.setRutinary(false);
-		}else if (levelID.startsWith("DEEP_SEWERS")){
+		} else if (levelID.startsWith("DEEP_SEWERS")) {
 			FeatureCarveGenerator fcg = new FeatureCarveGenerator();
-			ArrayList rooms = getDeepSewersRooms();
+			ArrayList<Feature> rooms = getDeepSewersRooms();
 			fcg.initialize(rooms,
 				"SEWERS_WALL_WATER",
 				Util.rand(50,70),
@@ -764,11 +757,12 @@ public class LevelMaster {
 		}
 	}
 	
-	private static ArrayList getInnerQuartersRooms(){
+	private static ArrayList<Feature> getInnerQuartersRooms(){
 		int rooms = Util.rand(12,15);
 		//rooms = 3;
-		crl.levelgen.featureCarve.Feature room = null;
-		ArrayList ret = new ArrayList();
+		//crl.levelgen.featureCarve.Feature
+		Feature room = null;
+		ArrayList<Feature> ret = new ArrayList<>();
 		String wall = "QUARTERS_WALL";
 		String floor = "QUARTERS_FLOOR";
 		String column = "MARBLE_COLUMN";
@@ -797,7 +791,7 @@ public class LevelMaster {
 		
 	}
 
-	private static ArrayList getDungeonRooms() {
+	private static ArrayList<Feature> getDungeonRooms() {
 		int rooms = Util.rand(12,15);
 		//rooms = 3;
 		crl.levelgen.featureCarve.Feature room = null;
@@ -820,14 +814,14 @@ public class LevelMaster {
 			ret.add(room);
 		}
 		return ret;
-		
 	}
+
 	
-	private static ArrayList getClockTowerRooms(){
-		int rooms = Util.rand(12,15);
+	private static ArrayList<Feature> getClockTowerRooms() {
+		int rooms = Util.rand(12, 15);
 		//rooms = 3;
-		crl.levelgen.featureCarve.Feature room = null;
-		ArrayList ret = new ArrayList();
+		Feature room = null;
+		ArrayList<Feature> ret = new ArrayList<>();
 		String wall = "TOWER_WALL";
 		String floor = "TOWER_FLOOR";
 		String candle = "F_TOWER_FLOOR CANDLE";
@@ -847,8 +841,8 @@ public class LevelMaster {
 			ret.add(room);
 		}
 		return ret;
-		
 	}
+	
 	
 	private static ArrayList<Feature> getWareHouseRooms(){
 		int rooms = Util.rand(12,15);
@@ -902,16 +896,16 @@ public class LevelMaster {
 		return ret;
 	}
 	
-	private static ArrayList getDeepSewersRooms(){
-		int rooms = Util.rand(4,6);
-		crl.levelgen.featureCarve.Feature room = null;
-		
-		ArrayList ret = new ArrayList();
+	private static ArrayList<Feature> getDeepSewersRooms() {
+		int rooms = Util.rand(4, 6);
+		//crl.levelgen.featureCarve.
+		Feature room = null;
+		ArrayList<Feature> ret = new ArrayList<>();
 		String floor = "SEWERS_FLOOR_WATER";
 		String column = "SEWERS_WALL_WATER";
 		
-		for (int i = 0; i < rooms; i++){
-			switch (Util.rand(1,2)){
+		for (int i = 0; i < rooms; i++) {
+			switch (Util.rand(1,2)) {
 			case 1:
 				room = new CircularRoom(Util.rand(5,12), Util.rand(5,12), floor, column);
 				break;
@@ -921,7 +915,6 @@ public class LevelMaster {
 			}
 			ret.add(room);
 		}
-		
 		return ret;
 	}
 }

@@ -3,8 +3,9 @@ package crl.item;
 import java.io.Serializable;
 
 public class Modifier implements Serializable {
-	private String description;
+
 	private String id;
+	private String description;
 	private double priceModifier;
 	private int atkBonus;
 	private int rangeBonus;

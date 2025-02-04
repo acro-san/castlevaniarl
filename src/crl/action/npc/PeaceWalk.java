@@ -20,7 +20,7 @@ public class PeaceWalk extends Action{
 
         Position var = directionToVariation(targetDirection);
         Position destinationPoint = Position.add(performer.getPosition(), var);
-        Level aLevel = performer.getLevel();
+        Level aLevel = performer.level;
         if (!aLevel.isValidCoordinate(destinationPoint))
         	return;
         Cell destinationCell = aLevel.getMapCell(destinationPoint);

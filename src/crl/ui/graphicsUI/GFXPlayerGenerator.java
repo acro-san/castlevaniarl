@@ -8,6 +8,7 @@ import sz.csi.CharKey;
 import sz.util.TxtTpl;
 import crl.Main;
 import crl.conf.gfx.data.GFXConfiguration;
+import crl.data.Text;
 import crl.game.PlayerGenerator;
 import crl.player.Player;
 
@@ -82,32 +83,33 @@ public class GFXPlayerGenerator extends PlayerGenerator{
         si.printAtPixel(350,420,"Sight       ", GFXDisplay.COLOR_BOLD);
         si.printAtPixel(350,440,"Wealth      ", GFXDisplay.COLOR_BOLD);
         txtClassDescription.setVisible(true);
-    	x = new CharKey(CharKey.NONE);
-    	int choice = 0;
-    	si.saveBuffer();
-    	while (true){
-    		si.restore();
-    		txtClassDescription.setText(TxtTpl.t(name,sex,CLASS_DESCRIPTIONS[choice]));
-    		si.drawImage(70,158+18*choice,IMG_FLAME);
-    		si.printAtPixel(80,173+18*choice, CLASS_NAMES[choice], Color.WHITE);
-    		si.printAtPixel(353 + 64 + 16,142, CLASS_NAMES[choice], Color.WHITE);
-    		si.drawImage(353,90,apps[choice].getImage());
-    		
-    		si.printAtPixel(440,260,"+"+CLASS_STATS[choice][0], Color.WHITE);
-    		si.printAtPixel(440,280,"+"+CLASS_STATS[choice][1], Color.WHITE);
-    		si.printAtPixel(440,300,CLASS_STATS[choice][2], Color.WHITE);
-    		si.printAtPixel(440,320,CLASS_STATS[choice][3]+"%", Color.WHITE);
-    		si.printAtPixel(440,340,CLASS_STATS[choice][4], Color.WHITE);
-    		si.printAtPixel(440,360,CLASS_STATS[choice][5], Color.WHITE);
-    		si.printAtPixel(440,380,CLASS_STATS[choice][6], Color.WHITE);
-    		si.printAtPixel(440,400,CLASS_STATS[choice][7], Color.WHITE);
-    		si.printAtPixel(440,420,CLASS_STATS[choice][8], Color.WHITE);
-    		si.printAtPixel(440,440,CLASS_STATS[choice][9], Color.WHITE);
-    		si.refresh();
-    		while ( x.code != CharKey.UARROW &&
-    				x.code != CharKey.DARROW &&
-    				x.code != CharKey.SPACE &&
-    				x.code != CharKey.ENTER) {
+		x = new CharKey(CharKey.NONE);
+		int choice = 0;
+		si.saveBuffer();
+		while (true) {
+			si.restore();
+			txtClassDescription.setText(TxtTpl.t(name,sex,Text.CLASS_DESCRIPTIONS[choice]));
+			si.drawImage(70,158+18*choice,IMG_FLAME);
+			si.printAtPixel(80,173+18*choice, CLASS_NAMES[choice], Color.WHITE);
+			si.printAtPixel(353 + 64 + 16,142, CLASS_NAMES[choice], Color.WHITE);
+			si.drawImage(353,90,apps[choice].getImage());
+			
+			si.printAtPixel(440,260,"+"+CLASS_STATS[choice][0], Color.WHITE);
+			si.printAtPixel(440,280,"+"+CLASS_STATS[choice][1], Color.WHITE);
+			si.printAtPixel(440,300,CLASS_STATS[choice][2], Color.WHITE);
+			si.printAtPixel(440,320,CLASS_STATS[choice][3]+"%", Color.WHITE);
+			si.printAtPixel(440,340,CLASS_STATS[choice][4], Color.WHITE);
+			si.printAtPixel(440,360,CLASS_STATS[choice][5], Color.WHITE);
+			si.printAtPixel(440,380,CLASS_STATS[choice][6], Color.WHITE);
+			si.printAtPixel(440,400,CLASS_STATS[choice][7], Color.WHITE);
+			si.printAtPixel(440,420,CLASS_STATS[choice][8], Color.WHITE);
+			si.printAtPixel(440,440,CLASS_STATS[choice][9], Color.WHITE);
+			si.refresh();
+			while ( x.code != CharKey.UARROW &&
+					x.code != CharKey.DARROW &&
+					x.code != CharKey.SPACE &&
+					x.code != CharKey.ENTER)
+			{
 				x = si.inkey();
 			}
 			if (x.code == CharKey.UARROW) {
@@ -122,9 +124,9 @@ public class GFXPlayerGenerator extends PlayerGenerator{
 				break;
 			}
 			x.code = CharKey.NONE;
-    	}
-    	//si.remove(txtClassDescription);
-    	txtClassDescription.setVisible(false);
-    	return getPlayer(name, sex, choice);
+		}
+		//si.remove(txtClassDescription);
+		txtClassDescription.setVisible(false);
+		return getPlayer(name, sex, choice);
 	}
 }

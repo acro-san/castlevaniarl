@@ -11,6 +11,7 @@ import crl.ui.UserInterface;
 import sz.util.*;
 
 public class CrossAI implements ActionSelector, Cloneable {
+	
 	public String getID() {
 		return "CROSS_SELECTOR";
 	}
@@ -22,7 +23,7 @@ public class CrossAI implements ActionSelector, Cloneable {
 		Action ret = new CrossBack();
 		ret.setPosition(targetPosition);
 		who.die();
-		who.getLevel().removeSmartFeature((SmartFeature)who);
+		who.level.removeSmartFeature((SmartFeature)who);
 		Main.ui.getPlayer().see();
 		Main.ui.refresh();
 		return ret;

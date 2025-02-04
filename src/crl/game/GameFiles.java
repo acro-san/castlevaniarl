@@ -18,6 +18,7 @@ import java.util.Vector;
 
 import crl.Main;
 import crl.actor.Message;
+import crl.data.Text;
 import crl.item.ItemDefinition;
 import crl.player.Equipment;
 import crl.player.GameSessionInfo;
@@ -313,7 +314,7 @@ public class GameFiles {
 			BufferedWriter fileWriter = new BufferedWriter(new FileWriter(bonesFile));
 			
 			GameSessionInfo gsi = player.getGameSessionInfo();
-			gsi.deathLevelDescription = player.getLevel().getDescription();
+			gsi.deathLevelDescription = player.level.getDescription();
 			String heshe = (player.getSex() == Player.MALE ? "He" : "She");
 			
 			fileWriter.write("/-----------------------------------");fileWriter.newLine();
@@ -334,22 +335,22 @@ public class GameFiles {
 			fileWriter.newLine();
 			fileWriter.write(heshe+" had the following proficiencies:");
 			fileWriter.newLine();
-			fileWriter.write("Hand to hand combat "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_UNARMED)]);
+			fileWriter.write("Hand to hand combat "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_UNARMED)]);
 			fileWriter.newLine();
-			fileWriter.write("Daggers             "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_DAGGERS)]);
+			fileWriter.write("Daggers             "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_DAGGERS)]);
 			fileWriter.newLine();
-			fileWriter.write("Swords              "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_SWORDS)]);
+			fileWriter.write("Swords              "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_SWORDS)]);
 			fileWriter.newLine();
-			fileWriter.write("Spears              "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_SPEARS)]);
+			fileWriter.write("Spears              "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_SPEARS)]);
 			fileWriter.newLine();
-			fileWriter.write("Whips               "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_WHIPS)]);fileWriter.newLine();
-			fileWriter.write("Maces and Flails    "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_MACES)]);fileWriter.newLine();
-			fileWriter.write("Pole Weapons        "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_STAVES)]);fileWriter.newLine();
-			fileWriter.write("Rings               "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_RINGS)]);fileWriter.newLine();
-			fileWriter.write("Hand thrown items   "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_PROJECTILES)]);fileWriter.newLine();
-			fileWriter.write("Bows / XBows        "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_BOWS)]);fileWriter.newLine();
-			fileWriter.write("Missile machinery   "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_PISTOLS)]);fileWriter.newLine();
-			fileWriter.write("Shields             "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_SHIELD)]);fileWriter.newLine();
+			fileWriter.write("Whips               "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_WHIPS)]);fileWriter.newLine();
+			fileWriter.write("Maces and Flails    "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_MACES)]);fileWriter.newLine();
+			fileWriter.write("Pole Weapons        "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_STAVES)]);fileWriter.newLine();
+			fileWriter.write("Rings               "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_RINGS)]);fileWriter.newLine();
+			fileWriter.write("Hand thrown items   "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_PROJECTILES)]);fileWriter.newLine();
+			fileWriter.write("Bows / XBows        "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_BOWS)]);fileWriter.newLine();
+			fileWriter.write("Missile machinery   "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_PISTOLS)]);fileWriter.newLine();
+			fileWriter.write("Shields             "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_SHIELD)]);fileWriter.newLine();
 			
 			fileWriter.newLine();
 			Vector<String> history = gsi.getHistory();
@@ -441,7 +442,7 @@ public class GameFiles {
 		
 		String filename = p.getName()+", a Lv"+p.getPlayerLevel()+" "+p.getClassString()+".sav";
 		File savef = new File(saveDir, filename);
-		p.setSelector(null);
+		p.selector = null;
 		try {
 			/*
 			SerializableChecker sc = new SerializableChecker();
@@ -482,7 +483,7 @@ public class GameFiles {
 			BufferedWriter fileWriter = new BufferedWriter(new FileWriter(bonesFile));
 			
 			GameSessionInfo gsi = player.getGameSessionInfo();
-			gsi.deathLevelDescription = player.getLevel().getDescription();
+			gsi.deathLevelDescription = player.level.getDescription();
 			String heshe = (player.getSex() == Player.MALE ? "He" : "She");
 			
 			fileWriter.write("/-----------------------------------");fileWriter.newLine();
@@ -491,7 +492,7 @@ public class GameFiles {
 			fileWriter.newLine();
 			fileWriter.newLine();
 			fileWriter.write(player.getPlot()+", "+player.getDescription()+" journeys to the cursed castle.");fileWriter.newLine();fileWriter.newLine();
-			fileWriter.write(player.getName()+ ", the "+player.getClassString()+", survives on the "+player.getLevel().getDescription()+" (Level "+player.getLevel().levelNumber+")...");fileWriter.newLine();
+			fileWriter.write(player.getName()+ ", the "+player.getClassString()+", survives on the "+player.level.getDescription()+" (Level "+player.level.levelNumber+")...");fileWriter.newLine();
 			fileWriter.write(heshe+" has survived for "+gsi.turns+" turns and has scored "+player.getScore()+" points, collecting a total of "+gsi.goldCount+" gold.");fileWriter.newLine();
 			fileWriter.newLine();
 			fileWriter.write(heshe +" is able to use the following skills:");fileWriter.newLine();
@@ -504,18 +505,18 @@ public class GameFiles {
 			fileWriter.newLine();
 			fileWriter.write(heshe+" has the following proficiencies:");
 			fileWriter.newLine();
-			fileWriter.write("Hand to hand combat "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_UNARMED)]);fileWriter.newLine();
-			fileWriter.write("Daggers             "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_DAGGERS)]);fileWriter.newLine();
-			fileWriter.write("Swords              "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_SWORDS)]);fileWriter.newLine();
-			fileWriter.write("Spears              "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_SPEARS)]);fileWriter.newLine();
-			fileWriter.write("Whips               "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_WHIPS)]);fileWriter.newLine();
-			fileWriter.write("Maces and Flails    "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_MACES)]);fileWriter.newLine();
-			fileWriter.write("Pole Weapons        "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_STAVES)]);fileWriter.newLine();
-			fileWriter.write("Rings               "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_RINGS)]);fileWriter.newLine();
-			fileWriter.write("Hand thrown items   "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_PROJECTILES)]);fileWriter.newLine();
-			fileWriter.write("Bows / XBows        "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_BOWS)]);fileWriter.newLine();
-			fileWriter.write("Missile machinery   "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_PISTOLS)]);fileWriter.newLine();
-			fileWriter.write("Shields             "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_SHIELD)]);fileWriter.newLine();
+			fileWriter.write("Hand to hand combat "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_UNARMED)]);fileWriter.newLine();
+			fileWriter.write("Daggers             "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_DAGGERS)]);fileWriter.newLine();
+			fileWriter.write("Swords              "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_SWORDS)]);fileWriter.newLine();
+			fileWriter.write("Spears              "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_SPEARS)]);fileWriter.newLine();
+			fileWriter.write("Whips               "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_WHIPS)]);fileWriter.newLine();
+			fileWriter.write("Maces and Flails    "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_MACES)]);fileWriter.newLine();
+			fileWriter.write("Pole Weapons        "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_STAVES)]);fileWriter.newLine();
+			fileWriter.write("Rings               "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_RINGS)]);fileWriter.newLine();
+			fileWriter.write("Hand thrown items   "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_PROJECTILES)]);fileWriter.newLine();
+			fileWriter.write("Bows / XBows        "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_BOWS)]);fileWriter.newLine();
+			fileWriter.write("Missile machinery   "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_PISTOLS)]);fileWriter.newLine();
+			fileWriter.write("Shields             "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_SHIELD)]);fileWriter.newLine();
 			
 			fileWriter.newLine();
 			Vector<String> history = gsi.getHistory();

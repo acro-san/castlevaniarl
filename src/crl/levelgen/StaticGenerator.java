@@ -98,7 +98,7 @@ public class StaticGenerator {
 				} else if (cmds[1].equals("NPC")) {
 					NPC toAdd = NPCFactory.getFactory().buildNPC(cmds[2]);
 					toAdd.setPosition(where.x+x,where.y+y,where.z);
-					toAdd.setLevel(l);
+					toAdd.level = l;
 					l.addActor(toAdd);
 				}
 			}
@@ -106,7 +106,8 @@ public class StaticGenerator {
 	}
 	
 	
-	public void renderOverLevel(Level l, String[][] map, Hashtable<String,String> table, Position where) throws CRLException {
+	public void renderOverLevel(Level l, String[][] map, 
+		Hashtable<String,String> table, Position where) throws CRLException {
 		Position runner = new Position(where);
 		runner.z = 0;
 		for (int i = 0; i < map.length; i++) {
@@ -164,11 +165,11 @@ public class StaticGenerator {
 						}else if (cmds[1].equals("NPC")){
 							NPC toAdd = NPCFactory.getFactory().buildNPC(cmds[2]);
 							toAdd.setPosition(x,y,z);
-							toAdd.setLevel(ret);
+							toAdd.level = ret;
 							ret.addActor(toAdd);
 						} else if (cmds[1].equals("MERCHANT")){
 							NPC toAdd = NPCFactory.getFactory().buildMerchant(Integer.parseInt(cmds[2]));
-							toAdd.setLevel(ret);
+							toAdd.level = ret;
 							toAdd.setPosition(x,y,z);
 							ret.addActor(toAdd);
 						}else if (cmds[1].equals("EXIT")){
@@ -210,18 +211,16 @@ public class StaticGenerator {
 						if (inhabitantsMap.get(inhabitants[z][y].charAt(x)+"") == null)
 							continue;
 						String[] cmds = (inhabitantsMap.get(inhabitants[z][y].charAt(x)+"")).split(" ");
-						if (cmds[0].equals("MONSTER")){
+						if (cmds[0].equals("MONSTER")) {
 							Monster toAdd = MonsterData.buildMonster(cmds[1]);
 							toAdd.setPosition(x,y,z);
 							ret.addMonster(toAdd);
-						}else
-						if (cmds[0].equals("NPC")){
+						}else if (cmds[0].equals("NPC")) {
 							NPC toAdd = NPCFactory.getFactory().buildNPC(cmds[1]);
 							toAdd.setPosition(x,y,z);
-							toAdd.setLevel(ret);
+							toAdd.level = ret;
 							ret.addActor(toAdd);
-						}
-						else if (cmds[0].equals("MERCHANT")){
+						} else if (cmds[0].equals("MERCHANT")) {
 							NPC toAdd = NPCFactory.getFactory().buildMerchant(Integer.parseInt(cmds[1]));
 							toAdd.setPosition(x,y,z);
 							ret.addActor(toAdd);

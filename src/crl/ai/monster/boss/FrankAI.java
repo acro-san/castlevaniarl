@@ -14,7 +14,7 @@ public class FrankAI extends MonsterAI{
 	public Action selectAction(Actor who){
 		Monster aMonster = (Monster) who;
 		if (powerCounter < 0){
-			who.getLevel().addMessage("Frank calms down");
+			who.level.addMessage("Frank calms down");
 			powerCounter = 25;
 		}
 		else
@@ -29,7 +29,7 @@ public class FrankAI extends MonsterAI{
 	     	return ret;
 		} else {
 			// Walk to the player
-			who.getLevel().addMessage("Frank is angry!,");
+			who.level.addMessage("Frank is angry!,");
 			Action ret = new MonsterWalk();
             ret.setDirection(directionToPlayer);
             return ret;

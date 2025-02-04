@@ -13,7 +13,7 @@ public class Dive extends Action{
 	
 	public void execute() {
 		Player aPlayer = (Player)performer;
-		Level aLevel = aPlayer.getLevel();
+		Level aLevel = aPlayer.level;
 		Cell currentCell = aLevel.getMapCell(aPlayer.getPosition());
 		if (currentCell.isShallowWater()){
 			if (aPlayer.getPosition().z != aLevel.getDepth()-1){
@@ -32,7 +32,7 @@ public class Dive extends Action{
 	
 	public boolean canPerform(Actor a) {
 		Player aPlayer = getPlayer(performer);		
-		Level aLevel = aPlayer.getLevel();
+		Level aLevel = aPlayer.level;
 		Cell currentCell = aLevel.getMapCell(aPlayer.getPosition());
 		if (currentCell.isShallowWater()){
 			if (aPlayer.getPosition().z == aLevel.getDepth()-1){

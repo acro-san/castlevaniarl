@@ -4,7 +4,7 @@ import crl.action.MorphAction;
 import crl.player.Consts;
 import crl.player.Player;
 
-public class BearMorph extends MorphAction{
+public class BearMorph extends MorphAction {
 	public int getHeartCost() {
 		return 15;
 	}
@@ -40,7 +40,9 @@ public class BearMorph extends MorphAction{
 	}
 
 	public int getMorphTime() {
-		return 50+getPlayer().getSoulPower()*4+(!getPlayer().getLevel().isDay()?50:0);
+		Player p = getPlayer();
+		
+		return 50 + p.getSoulPower()*4 + (!p.level.isDay() ? 50 : 0);
 	}
 
 	public boolean isBigMorph() {

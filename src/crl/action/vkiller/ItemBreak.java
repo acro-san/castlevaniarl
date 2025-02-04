@@ -6,7 +6,8 @@ import crl.player.Player;
 import crl.ui.ActionCancelException;
 import crl.ui.UserInterface;
 
-public class ItemBreak extends HeartAction{
+public class ItemBreak extends HeartAction {
+	
 	private HeartAction
 		AXEBREAK = new ItemBreakAxe(),
 		BIBLEBREAK = new ItemBreakBible(),
@@ -55,7 +56,7 @@ public class ItemBreak extends HeartAction{
 		super.execute();
 		HeartAction breakAction = getBreakAction();
 		if (breakAction == null){
-			getPlayer().getLevel().addMessage("??");
+			getPlayer().level.addMessage("??");
 			return;
 			
 		}
@@ -64,7 +65,7 @@ public class ItemBreak extends HeartAction{
 			if (breakAction.canPerform(performer))
 				breakAction.execute();
 		} catch (ActionCancelException ace){
-			getPlayer().getLevel().addMessage("Cancelled. ");
+			getPlayer().level.addMessage("Cancelled. ");
 		}
 	}
 }

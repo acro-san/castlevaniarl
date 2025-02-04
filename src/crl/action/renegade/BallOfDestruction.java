@@ -25,7 +25,7 @@ public class BallOfDestruction extends Action{
 
 	public void execute(){
         Position var = directionToVariation(targetDirection);
-        Level aLevel = performer.getLevel();
+        Level aLevel = performer.level;
         Player aPlayer = aLevel.getPlayer();
         if (aPlayer.getHearts() < 4){
 	        aLevel.addMessage("You need more hearts.");
@@ -117,7 +117,7 @@ public class BallOfDestruction extends Action{
 	
 	private boolean hit (Position destinationPoint, int i){
 		StringBuffer message = new StringBuffer();
-		Level aLevel = performer.getLevel();
+		Level aLevel = performer.level;
         Player aPlayer = aLevel.getPlayer();
 
 		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
@@ -132,8 +132,8 @@ public class BallOfDestruction extends Action{
 			aLevel.addMessage(message.toString());
         	return true;
 		}
-        Monster targetMonster = performer.getLevel().getMonsterAt(destinationPoint);
-		Cell destinationCell = performer.getLevel().getMapCell(destinationPoint);
+        Monster targetMonster = performer.level.getMonsterAt(destinationPoint);
+		Cell destinationCell = performer.level.getMapCell(destinationPoint);
         if (
 			targetMonster != null &&
 			!(targetMonster.isInWater() && targetMonster.canSwim()) &&
@@ -161,7 +161,7 @@ public class BallOfDestruction extends Action{
 	
 	public boolean canPerform(Actor a){
 		Player aPlayer = (Player) a;
-        Level aLevel = performer.getLevel();
+        Level aLevel = performer.level;
         if (aPlayer.getHearts() < 4){
         	invalidationMessage = "You need more energy!";
             return false;

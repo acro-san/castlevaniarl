@@ -390,7 +390,7 @@ public class Main {
 		}
 		
 		currentGame.setInterfaces(ui, uiSelector);
-		if (currentGame.getPlayer().getLevel() == null) {
+		if (currentGame.getPlayer().level == null) {
 			crash("Player wasnt loaded", new Exception("Player wasnt loaded"));
 		}
 		currentGame.setPlayer(currentGame.getPlayer());
@@ -677,7 +677,7 @@ public class Main {
 
 
 	private static void initializeSmartFeatures() {
-		SmartFeatureFactory.getFactory().init(SmartFeatures.getSmartFeatures(selectors));
+		SmartFeatureFactory.init(SmartFeatures.getSmartFeatures(selectors));
 	}
 
 

@@ -28,6 +28,6 @@ public class Recover extends HeartAction{
 		super.execute();
 		Player aPlayer = (Player)performer;
 		aPlayer.recoverHitsP(10+aPlayer.getSoulPower());
-		aPlayer.getLevel().addMessage("You feel relieved!");
+		aPlayer.level.addMessage("You feel relieved!");
 	}
 }

@@ -37,7 +37,7 @@ public class AirDash extends HeartAction{
 	public void execute(){
 		super.execute();
 		Player aPlayer = (Player) performer;
-		Level aLevel = aPlayer.getLevel();
+		Level aLevel = aPlayer.level;
 		aLevel.addMessage("You jump and dash forward!");
 		if (targetPosition.equals(performer.getPosition())){
 			aLevel.addMessage("You fall back.");
@@ -79,7 +79,7 @@ public class AirDash extends HeartAction{
 					return;
 				}
 			}
-			Monster targetMonster = performer.getLevel().getMonsterAt(destinationPoint);
+			Monster targetMonster = performer.level.getMonsterAt(destinationPoint);
 			
 			if (targetMonster != null){
 				//int monsterHeight = destinationHeight + (targetMonster.isFlying() ? 1 : 0);

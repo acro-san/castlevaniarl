@@ -20,7 +20,7 @@ public class CountDown implements ActionSelector, Cloneable{
 		turnsToDie--;
 		if (turnsToDie == 0){
 			who.die();
-			who.getLevel().removeSmartFeature((SmartFeature)who);
+			who.level.removeSmartFeature((SmartFeature)who);
 		}
 		return null;
  	}

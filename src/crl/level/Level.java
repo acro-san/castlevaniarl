@@ -121,7 +121,7 @@ public class Level implements FOVMap, Serializable {
 		return bloods.get(where.toString());
 	}
 
-	public int getFrostAt(Position where){
+	public int getFrostAt(Position where) {
 		Counter x = (Counter) frosts.get(where.toString());
 		if (x != null)
 			return 1;
@@ -131,7 +131,7 @@ public class Level implements FOVMap, Serializable {
 
 	//private VEffect effects;
 
-	public Level(){
+	public Level() {
 		monsters = new VMonster(20);
 		features = new VFeatures(20);
 		//effects = new VEffect(10);
@@ -139,31 +139,33 @@ public class Level implements FOVMap, Serializable {
 	}
 
 
-	public void addMessage(Message what){
+	public void addMessage(Message what) {
 		/*what = null;
 		what.getText();*/
 		Main.ui.addMessage(what);
 		//dispatcher.addActor(what, true, what);
 	}
 
+	// Why add these to the MAP, rather than the player,ui,or gamestate??
 	public void addMessage(String what){
 		addMessage(new Message(what, player.getPosition()));
 	}
 
-	public void addMessage(String what, Position where){
+	public void addMessage(String what, Position where) {
 		addMessage(new Message(what, where));
 	}
 
 
-	public void addActor (Actor what){
+	public void addActor(Actor what) {
 		Debug.doAssert(what != null, "Tried to add a null actor to the world");
 		dispatcher.addActor(what, true);
-		if (what instanceof Monster)
+		if (what instanceof Monster) {
 			monsters.addMonster((Monster)what);
-		what.setLevel(this);
+		}
+		what.level = this;
 	}
 	
-	public void removeActor (Actor what){
+	public void removeActor(Actor what) {
 		Debug.doAssert(what != null, "Tried to remove a null actor to the world");
 		dispatcher.removeActor(what);
 	}
@@ -295,9 +297,9 @@ public class Level implements FOVMap, Serializable {
 		if (respawner != null)
 			dispatcher.removeActor(respawner);
 		respawner = what;
-		if (respawner != null){
+		if (respawner != null) {
 			dispatcher.addActor(what);
-			what.setLevel(this);
+			what.level = this;
 		}
 		Debug.exitMethod();
 	}
@@ -319,7 +321,7 @@ public class Level implements FOVMap, Serializable {
 	public void addMonster(Monster what){
 		monsters.addMonster(what);
 		dispatcher.addActor(what);
-		what.setLevel(this);
+		what.level = this;
 	}
 	
 	public void removeBoss(){
@@ -331,7 +333,7 @@ public class Level implements FOVMap, Serializable {
 	public void removeMonster(Monster what){
 		monsters.remove(what);
 		dispatcher.removeActor(what);
-		what.setLevel(this);
+		what.level = this;
 	}
 
 	public void removeSmartFeature(SmartFeature what){
@@ -381,12 +383,12 @@ public class Level implements FOVMap, Serializable {
 
 	public void addSmartFeature(SmartFeature what) {
 		smartFeatures.put(what.getPosition().toString(), what);
-		what.setLevel(this);
+		what.level = this;
 		dispatcher.addActor(what);
 	}
 
 	public void addSmartFeature(String featureID, Position location) {
-		SmartFeature x = SmartFeatureFactory.getFactory().buildFeature(featureID);
+		SmartFeature x = SmartFeatureFactory.buildFeature(featureID);
 		x.setPosition(location.x, location.y, location.z);
 		addSmartFeature(x);
 	}
@@ -409,7 +411,7 @@ public class Level implements FOVMap, Serializable {
 		player = what;
 		if (!dispatcher.contains(what))
 			dispatcher.addActor(what, true);
-		player.setLevel(this);
+		player.level = this;
 	}
 
 
@@ -527,8 +529,8 @@ public class Level implements FOVMap, Serializable {
 		int enemies = Util.rand(10,15)*getDepth();
 		Position spawnPosition = new Position(0, 0);
 		for (int i = 0; i < enemies; i++){
-			MonsterSpawnInfo random = (MonsterSpawnInfo)Util.randomElementOf(getDwellersInfo());
-			if (!Util.chance(random.getFrequency())){
+			MonsterSpawnInfo random = Util.pick(getDwellersInfo());
+			if (!Util.chance(random.getFrequency())) {
 				i--;
 				continue;
 			}
@@ -610,8 +612,8 @@ public class Level implements FOVMap, Serializable {
 			addFeature(f);
 			Emerger em = new Emerger(monster, nearPlayer, Util.rand(2,5), f);
 			dispatcher.addActor(em);
-			em.setSelector(new EmergerAI());
-			em.setLevel(this);
+			em.selector = new EmergerAI();
+			em.level = this;
 		}
 	}
 

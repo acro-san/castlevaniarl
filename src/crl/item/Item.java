@@ -338,7 +338,7 @@ public class Item implements Serializable, MenuItem, GFXMenuItem {
 			Integer counter = hashCounters.get(key);
 			if (counter.intValue() == 0) {
 				if (key.equals(Consts.C_WEAPON_ENCHANTMENT)) {
-					p.getLevel().addMessage("Your "+getDescription()+" stops glowing.");
+					p.level.addMessage("Your "+getDescription()+" stops glowing.");
 				}
 				hashCounters.remove(key);
 			} else {

@@ -22,7 +22,7 @@ import crl.player.Consts;
  * @author Slash
  *
  */
-public class BasicMonsterAI extends MonsterAI{
+public class BasicMonsterAI extends MonsterAI {
 	// AI Parameters
 	/**
 	 * Defines if the monster never moves 
@@ -66,19 +66,17 @@ public class BasicMonsterAI extends MonsterAI{
 	 */
 	private boolean changeDirection;
 	
-	/**
-	 * Selects an action to perform
-	 */
-	public Action selectAction(Actor who){
-		Monster aMonster = (Monster) who;
+
+	public Action selectAction(Actor who) {
+		Monster aMonster = (Monster)who;
 		
-		if (chargeCounter > 0){
-			chargeCounter --;
+		if (chargeCounter > 0) {
+			chargeCounter--;
 		}
 		
 		// If monster has an enemy, check if he is still at the level
-		if (aMonster.getEnemy() != null){
-			if (!aMonster.getLevel().getMonsters().contains((Monster)aMonster.getEnemy())){
+		if (aMonster.getEnemy() != null) {
+			if (!aMonster.level.getMonsters().contains((Monster)aMonster.getEnemy())){
 				aMonster.setEnemy(null);
 			}
 		}
@@ -101,7 +99,7 @@ public class BasicMonsterAI extends MonsterAI{
 				} else {
 					// Ensure we are not bumping the player
 					Position targetPositionX = Position.add(who.getPosition(), Action.directionToVariation(directionToMonster));
-					if (who.getLevel().getPlayer().getPosition().equals(targetPositionX)){
+					if (who.level.getPlayer().getPosition().equals(targetPositionX)){
 						return null;
 					} else {
 						return tryWalking(aMonster, directionToMonster);
@@ -119,7 +117,7 @@ public class BasicMonsterAI extends MonsterAI{
 		// else, monster has no enemy, and is not charmed
 		// Stare to the player
 		int directionToPlayer = aMonster.starePlayer();
-		int playerDistance = Position.flatDistance(aMonster.getPosition(), aMonster.getLevel().getPlayer().getPosition());
+		int playerDistance = Position.flatDistance(aMonster.getPosition(), aMonster.level.getPlayer().getPosition());
 		// If monster is a patroller, and player distance is bigger than patrol range, continue patrolling 
 		if (patrolRange >0 && playerDistance > patrolRange){
 			if (lastDirection == -1 || changeDirection){
@@ -154,7 +152,7 @@ public class BasicMonsterAI extends MonsterAI{
 			} else {
 				// else, just attack the player
 				// If monster is on the water, swim to the player 
-				if (aMonster.canSwim() && aMonster.isInWater() && !aMonster.getLevel().getPlayer().isSwimming()){
+				if (aMonster.canSwim() && aMonster.isInWater() && !aMonster.level.getPlayer().isSwimming()){
 					return tryWalking(aMonster, directionToPlayer);
 				}
 				// If monster sees the player and has attacks, may be try attacking the player
@@ -167,7 +165,7 @@ public class BasicMonsterAI extends MonsterAI{
 								Util.chance(element.getFrequency()) &&
 								(
 									element.getAttackType() == MonsterMissile.TYPE_DIRECT ||
-									(element.getAttackType() != MonsterMissile.TYPE_DIRECT && aMonster.getStandingHeight() == aMonster.getLevel().getPlayer().getStandingHeight())
+									(element.getAttackType() != MonsterMissile.TYPE_DIRECT && aMonster.getStandingHeight() == aMonster.level.getPlayer().getStandingHeight())
 								)
 							){
 							Action ret = ActionFactory.getActionFactory().getAction(element.getAttackId());
@@ -199,7 +197,7 @@ public class BasicMonsterAI extends MonsterAI{
 								((SummonMonster)ret).set(element.getSummonMonsterId(), element.getAttackMessage());
 							}
 							// Set the player position as the attack target
-							ret.setPosition(who.getLevel().getPlayer().getPreviousPosition());
+							ret.setPosition(who.level.getPlayer().getPreviousPosition());
 							return ret;
 						}
 					}
@@ -286,53 +284,49 @@ public class BasicMonsterAI extends MonsterAI{
 	 * @param direction
 	 * @return
 	 */
-	private boolean canWalkTowards(Monster aMonster, int direction){
+	private boolean canWalkTowards(Monster aMonster, int direction) {
 		Position destination = Position.add(aMonster.getPosition(), Action.directionToVariation(direction));
-		if (!aMonster.getLevel().isValidCoordinate(destination))
-			return false;
-		if (aMonster.getLevel().getMonsterAt(destination) != null){
+		if (!aMonster.level.isValidCoordinate(destination)) {
 			return false;
 		}
-		if (aMonster.getLevel().isAir(destination)){
-			if (aMonster.isEthereal() || aMonster.isFlying())
-				return true;
-			else
-				return false;
+		if (aMonster.level.getMonsterAt(destination) != null) {
+			return false;
 		}
-		if (!aMonster.getLevel().isWalkable(destination)){
-			if (aMonster.isEthereal())
-				return true;
-			else
-				return false;
-		} else
+		if (aMonster.level.isAir(destination)) {
+			return (aMonster.isEthereal() || aMonster.isFlying());
+		}
+		if (!aMonster.level.isWalkable(destination)) {
+			return aMonster.isEthereal();
+		} else {
 			return true;
+		}
 	}
 
-	 public String getID(){
-		 return "BASIC_MONSTER_AI";
-	 }
+	public String getID(){
+		return "BASIC_MONSTER_AI";
+	}
 
-	 public ActionSelector derive(){
- 		try {
-	 		return (ActionSelector) clone();
-	 	} catch (CloneNotSupportedException cnse){
+	public ActionSelector derive(){
+		try {
+			return (ActionSelector)clone();
+		} catch (CloneNotSupportedException cnse) {
 			return null;
-	 	}
- 	}
+		}
+	}
 
-	public void setApproachLimit(int limit){
-		 approachLimit = limit;
+	public void setApproachLimit(int limit) {
+		approachLimit = limit;
 	}
 	
-	public void setWaitPlayerRange(int limit){
-		 waitPlayerRange = limit;
+	public void setWaitPlayerRange(int limit) {
+		waitPlayerRange = limit;
 	}
 	
-	public void setPatrolRange(int limit){
-		 patrolRange = limit;
+	public void setPatrolRange(int limit) {
+		patrolRange = limit;
 	}
 	
-	public int getPatrolRange(){
+	public int getPatrolRange() {
 		return patrolRange;
 	}
 
@@ -343,5 +337,5 @@ public class BasicMonsterAI extends MonsterAI{
 	public void setChangeDirection(boolean value) {
 		changeDirection = value;
 	}
-	 
+	
 }

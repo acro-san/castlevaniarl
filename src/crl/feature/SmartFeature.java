@@ -1,34 +1,26 @@
 package crl.feature;
 
-import sz.util.*;
 import crl.Main;
 import crl.actor.*;
 import crl.ui.*;
 
-public class SmartFeature extends Actor implements Cloneable{
-	private boolean destroyable;
-	private int damageOnStep;
+public class SmartFeature extends Actor implements Cloneable {
+	public int height;
+	public boolean destroyable;
+	public int damageOnStep;
+	
 	private transient Appearance appearance;
-	private String ID, description,appearanceID;
-	private int height;
+	private String ID, description, appearanceID;
 	
-	public void setHeight(int val){
-		height = val;
-	}
-	
-	public int getHeight(){
-		return height;
-	}
-
 	private String effectOnStep;
 
-	public SmartFeature (String pID, String pDescription, Appearance pAppearance){
+	public SmartFeature (String pID, String pDescription, Appearance pAppearance) {
 		ID = pID;
 		description = pDescription;
 		appearance = pAppearance;
 		appearanceID = pAppearance.getID();
 	}
-	
+	/*
 	public boolean isDestroyable() {
 		return destroyable;
 	}
@@ -36,7 +28,7 @@ public class SmartFeature extends Actor implements Cloneable{
 	public void setDestroyable(boolean value) {
 		destroyable = value;
 	}
-
+	
 	public int getDamageOnStep() {
 		return damageOnStep;
 	}
@@ -44,11 +36,13 @@ public class SmartFeature extends Actor implements Cloneable{
 	public void setDamageOnStep(int value) {
 		damageOnStep = value;
 	}
+	*/
 
-	public Object clone(){
+	public Object clone() {
 	//	try {
-			SmartFeature x = (SmartFeature) super.clone();
-			x.setSelector(selector.derive());
+			SmartFeature x = (SmartFeature)super.clone();
+			//x.setSelector(selector.derive());
+			x.selector = selector.derive();
 			return x;
 /*		} catch (CloneNotSupportedException cnse){
 			Debug.doAssert(false, "failed class cast, Feature.clone()");*/

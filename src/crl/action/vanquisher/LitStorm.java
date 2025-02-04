@@ -20,7 +20,7 @@ public class LitStorm extends HeartAction{
 	
 	public void execute(){
 		super.execute();
-		Level aLevel = performer.getLevel();
+		Level aLevel = performer.level;
         Player aPlayer = aLevel.getPlayer();
 		aLevel.addMessage("You invoke the spell of lighting!");
 

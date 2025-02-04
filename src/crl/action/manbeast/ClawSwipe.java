@@ -43,8 +43,8 @@ public class ClawSwipe extends HeartAction{
 		super.execute();
 		Player aPlayer = (Player)performer;
 		int damage = 4 + aPlayer.getPunchDamage();
-		Level aLevel = aPlayer.getLevel();
-   		int otherDir1 = 0;
+		Level aLevel = aPlayer.level;
+		int otherDir1 = 0;
 		int otherDir2 = 0;
 		switch (targetDirection){
 			case Action.UP:
@@ -91,7 +91,7 @@ public class ClawSwipe extends HeartAction{
 
 	private boolean hit (Position destinationPoint, int damage){
 		StringBuffer message = new StringBuffer();
-		Level aLevel = performer.getLevel();
+		Level aLevel = performer.level;
 		Player aPlayer = aLevel.getPlayer();
 		//UserInterface.getUI().drawEffect(new TileEffect(destinationPoint, '*', Appearance.RED, 100));
 		Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(destinationPoint, "SFX_RED_HIT"));
@@ -108,8 +108,8 @@ public class ClawSwipe extends HeartAction{
 			aLevel.addMessage(message.toString());
         	return true;
 		}
-        Monster targetMonster = performer.getLevel().getMonsterAt(destinationPoint);
-		Cell destinationCell = performer.getLevel().getMapCell(destinationPoint);
+        Monster targetMonster = performer.level.getMonsterAt(destinationPoint);
+		Cell destinationCell = performer.level.getMapCell(destinationPoint);
         if (
 			targetMonster != null &&
 			!(targetMonster.isInWater() && targetMonster.canSwim()) &&

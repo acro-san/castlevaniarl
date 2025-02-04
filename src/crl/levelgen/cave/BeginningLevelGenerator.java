@@ -12,8 +12,6 @@ import crl.cuts.Unleasher;
 import crl.cuts.intro.Intro1;
 import crl.cuts.intro.Intro2;
 import crl.cuts.intro.Intro3;
-import crl.feature.Feature;
-import crl.feature.FeatureFactory;
 import crl.game.CRLException;
 import crl.level.Cell;
 import crl.level.Dispatcher;
@@ -22,7 +20,7 @@ import crl.level.MapCellFactory;
 import crl.levelgen.LevelGenerator;
 import crl.levelgen.StaticGenerator;
 
-public class BeginningLevelGenerator extends LevelGenerator{
+public class BeginningLevelGenerator extends LevelGenerator {
 	private String baseWall, baseFloor, baseLava;
 	
 	public void init(String baseWall, String baseFloor, String baseLava){
@@ -99,7 +97,7 @@ public class BeginningLevelGenerator extends LevelGenerator{
 		ret.setCells(levelCells);
 		Position startUL = new Position(start.x - 10, start.y -7);
 		String[][] startingMap = pickStartingMap();
-		ret.setUnleashers((Unleasher[])Util.randomElementOf(STARTING_UNLEASHERS));
+		ret.setUnleashers(Util.pick(STARTING_UNLEASHERS));
 		ret.setDispatcher(new Dispatcher());
 		StaticGenerator.getGenerator().renderOverLevel(ret, startingMap, charMap, startUL);
 		
@@ -122,8 +120,8 @@ public class BeginningLevelGenerator extends LevelGenerator{
 		return ret;
 	}
 	
-	private Hashtable charMap = new Hashtable();
 	
+	private Hashtable<String, String> charMap = new Hashtable<>();
 	{
 		charMap.put("&", "FOREST_TREE");
 		charMap.put(".", "FOREST_GRASS");
@@ -142,75 +140,72 @@ public class BeginningLevelGenerator extends LevelGenerator{
 		charMap.put("+", "SIGNPOST");
 	}
 	
-	private String[][] pickStartingMap(){
-		return (String[][]) Util.randomElementOf(STARTING_MAPS);
+	
+	private String[][] pickStartingMap() {
+		return (String[][]) Util.pick(STARTING_MAPS);
 	}
 	
-	private String [][][] STARTING_MAPS = new String [][][]{
+	private String [][][] STARTING_MAPS = {
+		{
 			{
-				{
-					"                    ",
-					"             ---    ",
-					"  wwwwww     ->-    ",
-					"  w--b-w     ---    ",
-					"  w----w            ",
-					"  w----w     ---    ",
-					"  ---www     ---    ",
-					"         --  ---    ",
-					"   ---  --          ",
-					"            wwwwww  ",
-					"            w----w  ",
-					"            w----w  ",
-					"            w----w  ",
-					"            wwwwww  ",
-					"                    ",
-					
-				},{
-					"                    ",
-					"                    ",
-					"  --wwww      <     ",
-					"  w----w      -     ",
-					"  w------------     ",
-					"  w----w      -     ",
-					"  ---www      -     ",
-					"              -     ",
-					"              -     ",
-					"            ww-www  ",
-					"            w-----  ",
-					"            w----w  ",
-					"            --->-w  ",
-					"            ---www  ",
-					"                    ",
-				},{
-					".....%%%.........%%.",
-					"...&&&&.%%....&&&&.%",
-					"..w.wwww..&&&&w&&&&.",
-					"%...---%....&&&&....",
-					"%.%%---.....&&&&&&.%",
-					"..w.---w&...C..&&&&.",
-					"..w.%%ww..S..H.W.&&.",
-					"...&&.............W.",
-					"....W...............",
-					"....%.......w.ww.w&.",
-					"..&.........%-..-w.%",
-					"..........&&.----...",
-					"%.%...&&....w%-<-w&.",
-					".%&..%.&&...%%w.ww%%",
-					"%%%..%%%%.......%%%.",
-				}
-
+				"                    ",
+				"             ---    ",
+				"  wwwwww     ->-    ",
+				"  w--b-w     ---    ",
+				"  w----w            ",
+				"  w----w     ---    ",
+				"  ---www     ---    ",
+				"         --  ---    ",
+				"   ---  --          ",
+				"            wwwwww  ",
+				"            w----w  ",
+				"            w----w  ",
+				"            w----w  ",
+				"            wwwwww  ",
+				"                    ",
+				
+			},
+			{
+				"                    ",
+				"                    ",
+				"  --wwww      <     ",
+				"  w----w      -     ",
+				"  w------------     ",
+				"  w----w      -     ",
+				"  ---www      -     ",
+				"              -     ",
+				"              -     ",
+				"            ww-www  ",
+				"            w-----  ",
+				"            w----w  ",
+				"            --->-w  ",
+				"            ---www  ",
+				"                    ",
+			},
+			{
+				".....%%%.........%%.",
+				"...&&&&.%%....&&&&.%",
+				"..w.wwww..&&&&w&&&&.",
+				"%...---%....&&&&....",
+				"%.%%---.....&&&&&&.%",
+				"..w.---w&...C..&&&&.",
+				"..w.%%ww..S..H.W.&&.",
+				"...&&.............W.",
+				"....W...............",
+				"....%.......w.ww.w&.",
+				"..&.........%-..-w.%",
+				"..........&&.----...",
+				"%.%...&&....w%-<-w&.",
+				".%&..%.&&...%%w.ww%%",
+				"%%%..%%%%.......%%%.",
 			}
+		}
 	};
 	
-	private Unleasher[][] STARTING_UNLEASHERS = new Unleasher[][]{
-			{
-				new Intro1(),
-				new Intro2(),
-				new Intro3()
-			},
-			
+	private Unleasher[][] STARTING_UNLEASHERS = new Unleasher[][] {
+		{ new Intro1(), new Intro2(), new Intro3() },
+		// just the one option! Why randomly pick from these, then?
 	};
-
 	
 }
 

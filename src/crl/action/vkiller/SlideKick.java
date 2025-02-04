@@ -33,7 +33,7 @@ public class SlideKick extends HeartAction{
 	public void execute(){
 		super.execute();
 		Player aPlayer = (Player) performer;
-		Level aLevel = aPlayer.getLevel();
+		Level aLevel = aPlayer.level;
 		
 		if (targetPosition.equals(performer.getPosition())){
 			aLevel.addMessage("You fall back.");
@@ -71,7 +71,7 @@ public class SlideKick extends HeartAction{
 					return;
 				}
 			}
-			Monster targetMonster = performer.getLevel().getMonsterAt(destinationPoint);
+			Monster targetMonster = performer.level.getMonsterAt(destinationPoint);
 			
 			if (targetMonster != null){
 				int monsterHeight = destinationHeight + targetMonster.getHoverHeight();

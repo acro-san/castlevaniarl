@@ -215,7 +215,7 @@ public abstract class Action implements java.io.Serializable {
 		return null;
 	}
 	
-	public Player getPlayer(Actor a){
+	public Player getPlayer(Actor a) {
 		if (a instanceof Player)
 			return (Player) a;
 		else

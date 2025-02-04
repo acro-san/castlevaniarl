@@ -22,19 +22,19 @@ public class Reload extends Action{
 		weapon = aPlayer.getWeapon();
 		if (weapon != null){
 			if (weapon.getDefinition().isSingleUse){
-				aPlayer.getLevel().addMessage("You can't reload the " + weapon.getDescription());
+				aPlayer.level.addMessage("You can't reload the " + weapon.getDescription());
 			} else if (aPlayer.getGold() < weapon.getDefinition().reloadCostGold)
-				aPlayer.getLevel().addMessage("You can't reload the " + weapon.getDescription());
+				aPlayer.level.addMessage("You can't reload the " + weapon.getDescription());
 			else {
 				weapon.reload();
 				aPlayer.reduceGold(weapon.getDefinition().reloadCostGold);
 				aPlayer.reduceHearts(1);
-				aPlayer.getLevel().addMessage(
+				aPlayer.level.addMessage(
 					"You reload the " + weapon.getDescription()+
 					" ("+weapon.getDefinition().reloadCostGold+" gold)");
 			}
 		} else
-			aPlayer.getLevel().addMessage("You can't reload yourself");
+			aPlayer.level.addMessage("You can't reload yourself");
  	}
 	
 	public boolean canPerform(Actor a){

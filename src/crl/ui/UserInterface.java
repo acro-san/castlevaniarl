@@ -21,32 +21,17 @@ import crl.actor.*;
  * 	Must be listening to a System Interface
  */
 
-public abstract class UserInterface implements CommandListener/*, Runnable*/{
-	//Attributes
+public abstract class UserInterface implements CommandListener {
 
-	protected static final String[] quitMessages = {
-		"Do you really want to abandon Transylvania?",
-		"Quit now, and let the evil count roam the world free?",
-		"Leave now, and lose this unique chance to fight for freedom?",
-		"Abandon the people of Transylvania?",
-		"Deceive everybody who trusted you?",
-		"Throw your weapons away and live a 'peaceful' life?"
-		
-	};
-	
-	//Status
-	protected Vector monstersOnSight = new Vector();
+	protected Vector monstersOnSight = new Vector<>();
 	protected Vector <BasicListItem> featuresOnSight = new Vector<>();
-	protected Vector itemsOnSight = new Vector();
+	protected Vector itemsOnSight = new Vector<>();
 	protected Action actionSelectedByCommand;
-	
-	//Components
 	
 	protected boolean eraseOnArrival; // Erase the buffer upon the arrival of a new msg
 	
 	protected String lastMessage;
 	protected Level level;
-	// Relations
 	
 	protected Player player;
 
@@ -54,21 +39,15 @@ public abstract class UserInterface implements CommandListener/*, Runnable*/{
 		return player;
 	}
 
-
-	public final static String[] verboseSkills = {
-		"Unskilled",
-		"Mediocre(1)",
-		"Mediocre(2)",
-		"Mediocre(3)",
-		"Trained(1)",
-		"Trained(2)",
-		"Trained(3)",
-		"Skilled(1)",
-		"Skilled(2)",
-		"Skilled(3)",
-		"Master"
-	};
-
+	private boolean gameOver = false;
+	public void setGameOver(boolean b) {
+		gameOver = b;
+	}
+	
+	public boolean gameOver( ){
+		return gameOver;
+	}
+	
 	private boolean [][] FOVMask;
 	//Interactive Methods
 	public abstract void doLook();
@@ -77,7 +56,7 @@ public abstract class UserInterface implements CommandListener/*, Runnable*/{
 	
 	public abstract void chat(NPC who);
 	
-	public abstract boolean promptChat (NPC who);
+	public abstract boolean promptChat(NPC who);
 
 	// Drawing Methods
 	public abstract void drawEffect(Effect what);
@@ -89,41 +68,40 @@ public abstract class UserInterface implements CommandListener/*, Runnable*/{
 	public abstract void addMessage(Message message);
 	public abstract Vector<String> getMessageBuffer();
 
-	public void setPlayer(Player pPlayer){
+	// *WHY*!?
+	public void setPlayer(Player pPlayer) {
 		player = pPlayer;
-		level = player.getLevel();
+		level = player.level;
 	}
 
-	public void init(UserCommand[] gameCommands){
+	public void init(UserCommand[] gameCommands) {
 		//uiSelector = selector;
 		FOVMask = new boolean[80][25];
-		for (int i = 0; i < gameCommands.length; i++)
+		for (int i = 0; i < gameCommands.length; i++) {
 			this.gameCommands.put(gameCommands[i].getKeyCode()+"", gameCommands[i]);
+		}
 		addCommandListener(this);
 	}
 
-	protected int getRelatedCommand(int keyCode){
+	protected int getRelatedCommand(int keyCode) {
 		Debug.enterMethod(this, "getRelatedCommand", keyCode+"");
-    	UserCommand uc = (UserCommand ) gameCommands.get(keyCode+"");
-    	if (uc == null){
-    		Debug.exitMethod(CommandListener.NONE);
-    		return CommandListener.NONE;
-    	}
+		UserCommand uc = (UserCommand ) gameCommands.get(keyCode+"");
+		if (uc == null){
+			Debug.exitMethod(CommandListener.NONE);
+			return CommandListener.NONE;
+		}
 
-    	int ret = uc.getCommand();
-    	Debug.exitMethod(ret+"");
-    	return ret;
+		int ret = uc.getCommand();
+		Debug.exitMethod(ret+"");
+		return ret;
 	}
-	
-
-	
-
 	
 	
 	public abstract boolean isDisplaying(Actor who);
 
-	public void levelChange(){
-		level = player.getLevel();
+	
+	public void levelChange() {
+		level = player.level;
 	}
 	
 	protected void informPlayerCommand(int command) {
@@ -138,7 +116,7 @@ public abstract class UserInterface implements CommandListener/*, Runnable*/{
 		commandListeners.add(pCl);
 	}
 	
-	public void removeCommandListener(CommandListener pCl){
+	public void removeCommandListener(CommandListener pCl) {
 		commandListeners.remove(pCl);
 	}
 	
@@ -175,7 +153,7 @@ public abstract class UserInterface implements CommandListener/*, Runnable*/{
      */
 	public abstract void showSystemMessage(String x);
 	
-    /* Shows a level was won, lets pick a random spirit */
+	/* Shows a level was won, lets pick a random spirit */
 	public abstract void levelUp();
 	
 	public abstract void processQuit();
@@ -217,7 +195,7 @@ public abstract class UserInterface implements CommandListener/*, Runnable*/{
 					if (!player.isSwimming()){
 						actionSelectedByCommand = showSkills();
 					} else {
-						player.getLevel().addMessage("You can't do that!");
+						player.level.addMessage("You can't do that!");
 					}
 				} catch (ActionCancelException ace){
 
@@ -226,26 +204,6 @@ public abstract class UserInterface implements CommandListener/*, Runnable*/{
 		}
 	}
 	
-	private boolean gameOver;
-	
-	public void setGameOver(boolean bal){
-		
-		gameOver = bal;
-	}
-	
-	public boolean gameOver(){
-		return gameOver;
-	}
-	
-	//	 Singleton
-//	private static UserInterface singleton;
-	
-//	public static void setSingleton(UserInterface ui){
-//		singleton = ui;
-//	}
-//	public static UserInterface getUI (){
-//		return singleton;
-//	}
 	
 	public abstract void setTargets(Action a) throws ActionCancelException;
 	public abstract void showMessageHistory();

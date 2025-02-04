@@ -32,7 +32,7 @@ public class Teleport extends HeartAction{
 	public void execute(){
 		super.execute();
 		Player player = (Player) performer;
-		Level level = player.getLevel();
+		Level level = player.level;
 		level.addMessage("You dematerialize!");
 		if (targetPosition.equals(performer.getPosition())){
         	level.addMessage("You appear in the same place!");
@@ -48,7 +48,7 @@ public class Teleport extends HeartAction{
 			prerunner.y = runner.y;
 			prerunner.z = runner.z;
 			runner = line.next();
-        	Cell destinationCell = performer.getLevel().getMapCell(runner);
+        	Cell destinationCell = performer.level.getMapCell(runner);
 			if (level.isWalkable(runner) &&	
 				destinationCell.getHeight() == level.getMapCell(player.getPosition()).getHeight() 
 			)

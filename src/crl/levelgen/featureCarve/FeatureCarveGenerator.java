@@ -78,7 +78,7 @@ public class FeatureCarveGenerator extends LevelGenerator {
 			boolean finished = false;
 			
 			while (!placed){
- 				room = (Feature) Util.randomElementOf(pendingFeatures);
+ 				room = Util.pick(pendingFeatures);
  				switch (Util.rand(1,4)){
 					case 1:
 						
@@ -104,11 +104,11 @@ public class FeatureCarveGenerator extends LevelGenerator {
 					placed = true;
 				} else {
 					i++;
-					if (i > 50000){
-		 				i = 0;
-		 				//System.exit(0);
-		 				continue go;
-		 			}
+					if (i > 50000) {
+						i = 0;
+						//System.exit(0);
+						continue go;
+					}
 				}
 			}
 			
@@ -117,14 +117,14 @@ public class FeatureCarveGenerator extends LevelGenerator {
 			//boolean placeRoom = true;
 			boolean letsRollBack = false;
 			while (!finished){
-				pos = (Position) Util.randomElementOf(hotspots);
+				pos = Util.pick(hotspots);
 				// Try to make a branch (corridor + room)
 				int corridors = Util.rand(1,3);
 				int j = 0;
 				//corridors = 1; //TEST
 				while (j<corridors && !letsRollBack){
 					CorridotFeature corridorF = new CorridotFeature(Util.rand(4,5), corridor);
-					switch (Util.rand(1,4)){
+					switch (Util.rand(1,4)) {
  					case 1:
  						direction = Action.UP;
  						break;
@@ -138,7 +138,7 @@ public class FeatureCarveGenerator extends LevelGenerator {
  						direction = Action.RIGHT;
  						break;
  					}
-					if (corridorF.drawOverCanvas(preLevel, pos, direction, mask, roomHotspots)){
+					if (corridorF.drawOverCanvas(preLevel, pos, direction, mask, roomHotspots)) {
 						j++;
 						pos = corridorF.getTip();
 					} else {
@@ -151,7 +151,7 @@ public class FeatureCarveGenerator extends LevelGenerator {
 					continue;
 				}
 				
- 				room = (Feature) Util.randomElementOf(pendingFeatures);
+ 				room = Util.pick(pendingFeatures);
  				// direction is kept from the last corridor
 				if (room.drawOverCanvas(preLevel, pos, direction, mask, hotspots)){
 					pendingFeatures.remove(room);

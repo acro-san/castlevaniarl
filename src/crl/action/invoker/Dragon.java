@@ -4,15 +4,13 @@ import sz.util.Position;
 import crl.Main;
 import crl.action.Action;
 import crl.action.HeartAction;
-import crl.actor.Actor;
 import crl.feature.Feature;
-import crl.level.Cell;
 import crl.level.Level;
 import crl.monster.Monster;
 import crl.player.Player;
 import crl.ui.effects.EffectFactory;
 
-public class Dragon extends HeartAction{
+public class Dragon extends HeartAction {
 	public int getHeartCost() {
 		return 8;
 	}
@@ -39,12 +37,13 @@ public class Dragon extends HeartAction{
 	public void execute(){
 		super.execute();
 		Player aPlayer = (Player)performer;
-		Level aLevel = aPlayer.getLevel();
-	    aLevel.addMessage("You invoke a dragonfire!");
-	    int damage = 15 + 3 * aPlayer.getSoulPower();
-   		int otherDir1 = 0;
+		Level aLevel = aPlayer.level;
+		aLevel.addMessage("You invoke a dragonfire!");
+		int damage = 15 + 3 * aPlayer.getSoulPower();
+		int otherDir1 = 0;
 		int otherDir2 = 0;
-		switch (targetDirection){
+		final Position pp = performer.getPosition();
+		switch (targetDirection) {
 			case Action.UP:
 				otherDir1 = Action.UPLEFT;
 				otherDir2 = Action.UPRIGHT;
@@ -79,20 +78,20 @@ public class Dragon extends HeartAction{
 				break;
 			case Action.SELF:
 				aLevel.addMessage("The dragonfire rises as a flaming column!");
-				hit (Position.add(performer.getPosition(), Action.directionToVariation(Action.UP)), damage);
-				hit (Position.add(performer.getPosition(), Action.directionToVariation(Action.UPLEFT)), damage);
-				hit (Position.add(performer.getPosition(), Action.directionToVariation(Action.LEFT)), damage);
-				hit (Position.add(performer.getPosition(), Action.directionToVariation(Action.DOWNLEFT)), damage);
-				hit (Position.add(performer.getPosition(), Action.directionToVariation(Action.DOWN)), damage);
-				hit (Position.add(performer.getPosition(), Action.directionToVariation(Action.DOWNRIGHT)), damage);
-				hit (Position.add(performer.getPosition(), Action.directionToVariation(Action.RIGHT)), damage);
-				hit (Position.add(performer.getPosition(), Action.directionToVariation(Action.UPRIGHT)), damage);
-	        	return;
+				hit (Position.add(pp, Action.directionToVariation(Action.UP)), damage);
+				hit (Position.add(pp, Action.directionToVariation(Action.UPLEFT)), damage);
+				hit (Position.add(pp, Action.directionToVariation(Action.LEFT)), damage);
+				hit (Position.add(pp, Action.directionToVariation(Action.DOWNLEFT)), damage);
+				hit (Position.add(pp, Action.directionToVariation(Action.DOWN)), damage);
+				hit (Position.add(pp, Action.directionToVariation(Action.DOWNRIGHT)), damage);
+				hit (Position.add(pp, Action.directionToVariation(Action.RIGHT)), damage);
+				hit (Position.add(pp, Action.directionToVariation(Action.UPRIGHT)), damage);
+				return;
 		}
 		Position directionVar = Action.directionToVariation(targetDirection);
-		Position runner1 = Position.add(performer.getPosition(), Action.directionToVariation(otherDir1));
-		Position runner2 = Position.add(performer.getPosition(), Action.directionToVariation(targetDirection));
-		Position runner3 = Position.add(performer.getPosition(), Action.directionToVariation(otherDir2));
+		Position runner1 = Position.add(pp, Action.directionToVariation(otherDir1));
+		Position runner2 = Position.add(pp, Action.directionToVariation(targetDirection));
+		Position runner3 = Position.add(pp, Action.directionToVariation(otherDir2));
 		for (int i = 0; i < 10; i++){
 			hit (runner1, damage);
 			hit (runner2, damage);
@@ -103,39 +102,38 @@ public class Dragon extends HeartAction{
 		}
 	}
 
-	private boolean hit (Position destinationPoint, int damage){
+	private boolean hit (Position destinationPoint, int damage) {
 		StringBuffer message = new StringBuffer();
-		Level aLevel = performer.getLevel();
-        Player aPlayer = aLevel.getPlayer();
-        //UserInterface.getUI().drawEffect(new TileEffect(destinationPoint, 'o', Appearance.GREEN, 150));
-        Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(destinationPoint, "SFX_DRAGONFIRE"));
+		Level aLevel = performer.level;
+		Player aPlayer = aLevel.getPlayer();
+		//UserInterface.getUI().drawEffect(new TileEffect(destinationPoint, 'o', Appearance.GREEN, 150));
+		Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(destinationPoint, "SFX_DRAGONFIRE"));
 		//aLevel.addBlood(destinationPoint, 8);
 		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-        if (destinationFeature != null && destinationFeature.isDestroyable()){
-	       	message.append("The dragon crushes the "+destinationFeature.getDescription());
-
+		if (destinationFeature != null && destinationFeature.isDestroyable()) {
+			message.append("The dragon crushes the "+destinationFeature.getDescription());
 			Feature prize = destinationFeature.damage(aPlayer, damage);
-	       	if (prize != null){
-		       	message.append(", breaking it apart!");
+			if (prize != null) {
+				message.append(", breaking it apart!");
 			}
 			aLevel.addMessage(message.toString());
-        	return true;
+			return true;
 		}
-        Monster targetMonster = performer.getLevel().getMonsterAt(destinationPoint);
-        if (
-			targetMonster != null &&
+		Monster targetMonster = performer.level.getMonsterAt(destinationPoint);
+		if (targetMonster != null &&
 			!(targetMonster.isInWater() && targetMonster.canSwim())
-			){
-        		if (targetMonster.wasSeen())
-        			message.append("The dragon slashes the "+targetMonster.getDescription());
-				targetMonster.damage(message, damage);
-	        	if (targetMonster.isDead()){
-		        	message.append(", finishing it!");
-				}
-				aLevel.addMessage(message.toString());
-
-				return true;
+			)
+		{
+			if (targetMonster.wasSeen()) {
+				message.append("The dragon slashes the "+targetMonster.getDescription());
 			}
+			targetMonster.damage(message, damage);
+			if (targetMonster.isDead()) {
+				message.append(", finishing it!");
+			}
+			aLevel.addMessage(message.toString());
+			return true;
+		}
 		return false;
 	}
 

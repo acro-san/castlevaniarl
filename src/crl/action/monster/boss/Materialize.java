@@ -13,7 +13,7 @@ public class Materialize extends Action{
 	}
 	
 	public void execute(){
-        Level aLevel = performer.getLevel();
+        Level aLevel = performer.level;
         aLevel.addMessage("Dracula materializes!");
         Monster mon = (Monster)performer;
         mon.setVisible(true);

@@ -144,10 +144,10 @@ public class Monster extends Actor implements Cloneable {
 	}
 	
 	public void damage(StringBuffer message, int dam){
-		if (getSelector() instanceof DraculaAI){
-			((DraculaAI)getSelector()).setOnBattle(true);
+		if (selector instanceof DraculaAI) {
+			((DraculaAI)selector).setOnBattle(true);
 		}
-		if (Util.chance(getEvadeChance())){
+		if (Util.chance(getEvadeChance())) {
 			if (wasSeen())
 				level.addMessage("The "+getDescription()+" "+getEvadeMessage());
 			return;
@@ -164,15 +164,15 @@ public class Monster extends Actor implements Cloneable {
 				level.addMessage("You drink some of the "+getDefinition().getDescription()+" blood! (+"+recover+")");
 				level.getPlayer().recoverHits(recover);
 			}
-			if (Util.chance(40)){
-				getLevel().addBlood(getPosition(), Util.rand(0,1));
+			if (Util.chance(40)) {
+				level.addBlood(getPosition(), Util.rand(0,1));
 			}
 		}
-		if (level.getPlayer().getFlag("HEALTH_REGENERATION") && Util.chance(30)){
+		if (level.getPlayer().getFlag("HEALTH_REGENERATION") && Util.chance(30)) {
 			level.getPlayer().recoverHits(1);
 		}
 
-		if (isDead()){
+		if (isDead()) {
 			if (this == level.getBoss()){
 				//if (!level.isWalkable(getPosition())){
 					//level.addMessage("You get a castle key!");
@@ -199,14 +199,17 @@ public class Monster extends Actor implements Cloneable {
 				else
 					level.addFeature(featurePrize, getPosition());
 			
-			if (getDefinition().isBleedable()){
+			if (getDefinition().isBleedable()) {
 				Position runner = new Position(-1,-1,getPosition().z);
-		    	for (runner.x = -1; runner.x <= 1; runner.x++)
-		    		for (runner.y = -1; runner.y <= 1; runner.y++)
-		    			if (Util.chance(70))
-							getLevel().addBlood(Position.add(getPosition(), runner), Util.rand(0,1));
+				for (runner.x = -1; runner.x <= 1; runner.x++) {
+					for (runner.y = -1; runner.y <= 1; runner.y++) {
+						if (Util.chance(70)) {
+							level.addBlood(Position.add(getPosition(), runner), Util.rand(0,1));
+						}
+					}
+				}
 			}
-
+			
 			die();
 			level.getPlayer().addScore(getDefinition().getScore());
 			level.getPlayer().addXP(getDefinition().getScore());
@@ -215,22 +218,21 @@ public class Monster extends Actor implements Cloneable {
 		}
 	}
 
-	public int getScore(){
+	public int getScore() {
 		return getDefinition().getScore();
 		
 	}
-	public boolean isDead(){
+	public boolean isDead() {
 		return hits <= 0;
 	}
 
-	public String getDescription(){
-	//This may be flavored with specific monster daya
-		
+	public String getDescription() {
+		// This may be flavored with specific monster daya
 		return getDefinition().getDescription() + (hasCounter(Consts.C_MONSTER_CHARM) ? " C ":"");
 	}
 
-	private MonsterDefinition getDefinition(){
-		if (definition == null){
+	private MonsterDefinition getDefinition() {
+		if (definition == null) {
 			if (this instanceof NPC)
 				definition = NPC.NPC_MONSTER_DEFINITION;
 			else
@@ -296,7 +298,7 @@ public class Monster extends Actor implements Cloneable {
 		return definition.getSightListItem();
 	}*/
 
-	private void setPrize(){
+	private void setPrize() {
 		Player p = level.getPlayer();
 		String [] prizeList = null;
 		
@@ -363,21 +365,21 @@ public class Monster extends Actor implements Cloneable {
 			else
 				prizeList = new String[]{"BIGHEART"};
 			else
-				prizeList = new String[]{"SMALLHEART", "COIN"};    	
+				prizeList = new String[]{"SMALLHEART", "COIN"};
     	}
 
 		if (prizeList != null)
-			setFeaturePrize(Util.randPick(prizeList));
+			setFeaturePrize(Util.pick(prizeList));
 	}
 	
-	public void die(){
+	public void die() {
 		super.die();
 		level.removeMonster(this);
 		if (getAutorespawncount() > 0) {
 			Emerger em = new Emerger(MonsterData.buildMonster(getDefinition().getID()), getPosition(), getAutorespawncount());
 			level.addActor(em);
-			em.setSelector(new EmergerAI());
-			em.setLevel(getLevel());
+			em.selector = new EmergerAI();
+			em.level = level;
 		}
 	}
 	

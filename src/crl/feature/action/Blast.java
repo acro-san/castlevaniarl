@@ -14,7 +14,7 @@ public class Blast extends Action{
 	}
 		
 	public void execute(){
-		Level aLevel = performer.getLevel();
+		Level aLevel = performer.level;
 		int damage = 20 + aLevel.getPlayer().getShotLevel() + aLevel.getPlayer().getSoulPower();
 
 		aLevel.addMessage("The crystal emits a holy blast!");
@@ -28,7 +28,7 @@ public class Blast extends Action{
 			for (int y = blastPosition.y -3; y <= blastPosition.y+3; y++){
 				destinationPoint.x = x;
 				destinationPoint.y = y;
-				Monster targetMonster = performer.getLevel().getMonsterAt(destinationPoint);
+				Monster targetMonster = performer.level.getMonsterAt(destinationPoint);
 				if (targetMonster != null){
 					if (targetMonster.wasSeen())
 						aLevel.addMessage("The "+targetMonster.getDescription()+" is hit by the holy wave!");

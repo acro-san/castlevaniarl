@@ -16,7 +16,7 @@ public class MedusaAI extends MonsterAI{
 	
 	public Action selectAction(Actor who){
 		Monster aMonster = (Monster) who;
-		int playerDistance = Position.flatDistance(aMonster.getPosition(), aMonster.getLevel().getPlayer().getPosition());
+		int playerDistance = Position.flatDistance(aMonster.getPosition(), aMonster.level.getPlayer().getPosition());
 		if (playerDistance > 20){
 			powerActive = false;
 			powerCounter = 15;

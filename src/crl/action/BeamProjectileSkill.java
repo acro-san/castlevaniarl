@@ -25,7 +25,7 @@ public abstract class BeamProjectileSkill extends ProjectileSkill{
 		if (targetPosition.equals(performer.getPosition()))
 			return;
 		reduceHearts();
-        Level aLevel = performer.getLevel();
+        Level aLevel = performer.level;
         Player aPlayer = aLevel.getPlayer();
         int attackHeight = aLevel.getMapCell(aPlayer.getPosition()).getHeight();
 	    if (showThrowMessage())
@@ -112,7 +112,7 @@ public abstract class BeamProjectileSkill extends ProjectileSkill{
 						}
 					}
 				}
-				Monster targetMonster = performer.getLevel().getMonsterAt(destinationPoint);
+				Monster targetMonster = performer.level.getMonsterAt(destinationPoint);
 				
 				if (targetMonster != null){
 					//int monsterHeight = destinationHeight + (targetMonster.isFlying() ? 1 : 0);

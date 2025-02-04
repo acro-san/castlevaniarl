@@ -550,8 +550,8 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		}
 		
 		si.print(0,2,"ENEMY    ");
-		if (player.getLevel().getBoss() != null) {	// TODO && bossSeen!
-			int sixthiedBossHits =  (int)Math.ceil((player.getLevel().getBoss().getHits() * 60.0)/(double)player.getLevel().getBoss().getMaxHits());
+		if (player.level.getBoss() != null) {	// TODO && bossSeen!
+			int sixthiedBossHits =  (int)Math.ceil((player.level.getBoss().getHits() * 60.0)/(double)player.level.getBoss().getMaxHits());
 			int foreColorB = 0;
 			int backColorB = 0;
 			switch (((sixthiedBossHits-1) / 20) + 1) {
@@ -584,10 +584,10 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		
 		si.print(31,2,fill(player.getWeaponDescription()+" "+shot,40));
 
-		if (player.getLevel().levelNumber == -1) {
-			si.print(43,0,fill(player.getLevel().getDescription(), 35));
+		if (player.level.levelNumber == -1) {
+			si.print(43,0,fill(player.level.getDescription(), 35));
 		} else {
-			si.print(43,0,fill("STAGE   "+player.getLevel().levelNumber+" "+player.getLevel().getDescription(), 35));
+			si.print(43,0,fill("STAGE   "+player.level.levelNumber+" "+player.level.getDescription(), 35));
 		}
 		
 		//si.print(43+"STAGE ".length(),0);
@@ -972,7 +972,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 
 	public void processQuit(){
 		messageBox.setForeColor(ConsoleSystemInterface.RED);
-		messageBox.setText(quitMessages[Util.rand(0, quitMessages.length-1)]+" (y/n)");
+		messageBox.setText(Util.pick(Text.QUIT_MESSAGES)+" (y/n)");
 		messageBox.draw();
 		si.refresh();
 		if (prompt()){
@@ -1342,10 +1342,13 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 
 		String[] wskills = ItemDefinition.CATS;
 		int cont = 0;
-		for (int i = 0; i < wskills.length; i++){
-			if (i % 4 == 0)
+		for (int i = 0; i < wskills.length; i++) {
+			if (i % 4 == 0) {
 				cont++;
-			si.print((cont-1) * 25 + 14, 14 + i - ((cont-1) * 4), verboseSkills[player.weaponSkill(wskills[i])]);
+			}
+			si.print((cont-1) * 25 + 14,
+					14 + i - ((cont-1) * 4),
+					Text.VERBOSE_SKILLS[player.weaponSkill(wskills[i])]);
 		}
 
 		si.print(1,19, "Attack Damage  ", ConsoleSystemInterface.RED);
@@ -1436,7 +1439,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
     	if (player.canCarry()){
     		player.addItem(soul);
     	} else {
-    		player.getLevel().addItem(player.getPosition(), soul);
+    		player.level.addItem(player.getPosition(), soul);
     	}
     	showMessage("You acquired a "+soul.getDescription());*/
     }
@@ -1482,7 +1485,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 					if (!player.isSwimming()){
 						actionSelectedByCommand = showSkills();
 					} else {
-						player.getLevel().addMessage("You can't do that!");
+						player.level.addMessage("You can't do that!");
 						throw new ActionCancelException();
 					}
 				} catch (ActionCancelException ace){
@@ -1541,11 +1544,11 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 			player.heal();
 			break;
 		case CharKey.F6:
-			if (player.getLevel().getBoss() != null)
-				player.getLevel().getBoss().damage(15);
+			if (player.level.getBoss() != null)
+				player.level.getBoss().damage(15);
 			break;
 		case CharKey.F7:
-			player.getLevel().setIsDay(!player.getLevel().isDay());
+			player.level.setIsDay(!player.level.isDay());
 			break;
 		case CharKey.F8:
 			//player.informPlayerEvent(Player.EVT_BACK_LEVEL);

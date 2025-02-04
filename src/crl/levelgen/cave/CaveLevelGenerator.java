@@ -9,14 +9,14 @@ import crl.feature.FeatureFactory;
 import crl.game.*;
 
 public class CaveLevelGenerator extends LevelGenerator{
-	private String baseWall, baseFloor, baseWater;
-	public void init(String baseWall, String baseFloor, String baseWater){
+	private String baseWall, baseFloor;//, baseWater;
+	public void init(String baseWall, String baseFloor) {	//, String baseWater
 		this.baseWall = baseWall;
 		this.baseFloor = baseFloor;
-		this.baseWater = baseWater;
+	///	this.baseWater = baseWater;
 	}
 	
-	public Level generateLevel(int xdim, int ydim, boolean water) throws CRLException{
+	public Level generateLevel(int xdim, int ydim, boolean water) throws CRLException {
 		/** Uses Cave Cellular automata, by SZ
 		 * Init (1) 30%
 		 * If 0 and more than 3 1 around, 1

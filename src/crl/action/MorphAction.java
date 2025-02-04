@@ -1,14 +1,14 @@
 package crl.action;
 
-import crl.action.HeartAction;
 import crl.actor.Actor;
 import crl.player.Player;
 
-public abstract class MorphAction extends HeartAction{
-	public final void execute(){
+public abstract class MorphAction extends HeartAction {
+	
+	public final void execute() {
 		super.execute();
-        Player aPlayer = (Player)performer;
-		aPlayer.getLevel().addMessage(getMorphMessage());
+		Player aPlayer = (Player)performer;
+		aPlayer.level.addMessage(getMorphMessage());
 		aPlayer.morph(getMorphID(), getMorphTime(), isSmallMorph(), isBigMorph(), getMorphStrength(), getMadChance());
 	}
 	

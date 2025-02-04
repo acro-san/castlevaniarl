@@ -7,7 +7,7 @@ import crl.feature.SmartFeatureFactory;
 import crl.feature.ai.CrossAI;
 import crl.player.Player;
 
-public class Cross extends ProjectileSkill{
+public class Cross extends ProjectileSkill {
 	public int getDamage() {
 		return 5 + 
 			getPlayer().getShotLevel() + 
@@ -52,24 +52,24 @@ public class Cross extends ProjectileSkill{
 	
 	public void execute(){
 		super.execute();
-		if (targetPosition.equals(performer.getPosition())){
-        	if (Util.chance(50)){
-        		performer.getLevel().addMessage("The cross falls heads! You catch the cross.");
-        	} else {
-        		performer.getLevel().addMessage("The cross falls tails! You catch the cross.");
-        	}
-        	return;
-        }
-		if (performer instanceof Player){
-        	SmartFeature cross = SmartFeatureFactory.getFactory().buildFeature("CROSS");
-			((CrossAI)cross.getSelector()).setTargetPosition(getPlayer().getPosition());
+		if (targetPosition.equals(performer.getPosition())) {
+			if (Util.chance(50)) {
+				performer.level.addMessage("The cross falls heads! You catch the cross.");
+			} else {
+				performer.level.addMessage("The cross falls tails! You catch the cross.");
+			}
+			return;
+		}
+		if (performer instanceof Player) {
+			SmartFeature cross = SmartFeatureFactory.buildFeature("CROSS");
+			((CrossAI)cross.selector).setTargetPosition(getPlayer().getPosition());
 			cross.setPosition(finalPoint);
-			getPlayer().getLevel().addSmartFeature(cross);
-    	} else {
-    		/*Effect crossEffect =EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(), targetPosition, "SFX_CROSS", i);
-    		crossEffect.setPosition(performer.getLevel().getPlayer().getPosition());
-    		drawEffect(crossEffect);*/
-    	}
+			getPlayer().level.addSmartFeature(cross);
+		} else {
+			/*Effect crossEffect =EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(), targetPosition, "SFX_CROSS", i);
+			crossEffect.setPosition(performer.level.getPlayer().getPosition());
+			drawEffect(crossEffect);*/
+		}
 	}
 
 	public String getPromptPosition(){

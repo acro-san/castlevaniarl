@@ -21,7 +21,7 @@ public class ItemBreakHoly extends HeartAction {
 	
 	public void execute(){
 		Player aPlayer = (Player) performer;
-        Level aLevel = performer.getLevel();
+        Level aLevel = performer.level;
 		aLevel.addMessage("You jump! You unleash a rain of holy water!");
 		Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(aPlayer.getPosition(), "SFX_HOLY_RAINSPLASH"));
 		int damage = 6 + getPlayer().getShotLevel() + getPlayer().getSoulPower();
@@ -58,16 +58,16 @@ public class ItemBreakHoly extends HeartAction {
 						aLevel.addMessage ("The "+destinationFeature.getDescription()+" burns.");
 					}
 				}
-				Monster targetMonster = performer.getLevel().getMonsterAt(destinationPoint);
+				Monster targetMonster = performer.level.getMonsterAt(destinationPoint);
 				if (targetMonster != null){
 					StringBuffer buff = new StringBuffer();
 					buff.append("The "+monsters.elementAt(i).getDescription()+" is splashed with holy rain!");
 					targetMonster.damage(buff, damage);
 					aLevel.addMessage (buff.toString());
-		        	if (targetMonster.isDead()){
-		        		if (targetMonster.wasSeen())
+					if (targetMonster.isDead()) {
+						if (targetMonster.wasSeen())
 							aLevel.addMessage ("The "+targetMonster.getDescription()+" catches in flame and is roasted!");
-						performer.getLevel().removeMonster(targetMonster);
+						performer.level.removeMonster(targetMonster);
 					} else {
 						if (targetMonster.wasSeen())
 							aLevel.addMessage ("The "+targetMonster.getDescription()+" catches in flame.");

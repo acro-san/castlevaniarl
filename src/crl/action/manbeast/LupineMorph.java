@@ -39,7 +39,7 @@ public class LupineMorph extends MorphAction{
 	}
 
 	public int getMorphTime() {
-		return 50+getPlayer().getSoulPower()*4+(!getPlayer().getLevel().isDay()?50:0);
+		return 50+getPlayer().getSoulPower()*4+(!getPlayer().level.isDay()?50:0);
 	}
 
 	public boolean isBigMorph() {

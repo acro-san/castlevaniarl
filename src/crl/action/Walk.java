@@ -31,47 +31,48 @@ public class Walk extends Action{
 		Debug.enterMethod(this, "execute");
 		aPlayer = (Player) performer;
 		if (targetDirection == Action.SELF){
-			aPlayer.getLevel().addMessage("You stand alert.");
+			aPlayer.level.addMessage("You stand alert.");
 			return;
 		}
-        Position var = directionToVariation(targetDirection);
-        Position destinationPoint = Position.add(performer.getPosition(), var);
-        Level aLevel = performer.getLevel();
-        Cell destinationCell = aLevel.getMapCell(destinationPoint);
-        Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-        Cell currentCell = aLevel.getMapCell(performer.getPosition());
+		Position var = directionToVariation(targetDirection);
+		Position destinationPoint = Position.add(performer.getPosition(), var);
+		Level aLevel = performer.level;
+		Cell destinationCell = aLevel.getMapCell(destinationPoint);
+		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
+		Cell currentCell = aLevel.getMapCell(performer.getPosition());
 
-        if (destinationCell == null || destinationCell.isEthereal()){
-        	if (!aLevel.isValidCoordinate(destinationPoint)){
-        		aPlayer.land();
-        		Debug.exitMethod();
-            	return;
-        	}
-        	if (!aPlayer.isFlying()){
-	        	destinationPoint = aLevel.getDeepPosition(destinationPoint);
-	        	if (destinationPoint == null) {
-	       			aPlayer.land();
-	        		Debug.exitMethod();
-	            	return;
-	        	} else {
-	        		aLevel.addMessage("You fall!");
-	        		destinationCell = aLevel.getMapCell(destinationPoint);
-	        		currentCell = aLevel.getMapCell(destinationPoint);
-	        	}
-	        } else {
-	        	aPlayer.setPosition(destinationPoint);
-	        	Debug.exitMethod();
-            	return;
-	        }
-        }
+		if (destinationCell == null || destinationCell.isEthereal()) {
+			if (!aLevel.isValidCoordinate(destinationPoint)) {
+				aPlayer.land();
+				Debug.exitMethod();
+				return;
+			}
+			if (!aPlayer.isFlying()){
+				destinationPoint = aLevel.getDeepPosition(destinationPoint);
+				if (destinationPoint == null) {
+					aPlayer.land();
+					Debug.exitMethod();
+					return;
+				} else {
+					aLevel.addMessage("You fall!");
+					destinationCell = aLevel.getMapCell(destinationPoint);
+					currentCell = aLevel.getMapCell(destinationPoint);
+				}
+			} else {
+				aPlayer.setPosition(destinationPoint);
+				Debug.exitMethod();
+				return;
+			}
+		}
 
-       	if (destinationCell.getHeight() > currentCell.getHeight()+2  && !aPlayer.isEthereal() &&!aPlayer.isFlying())
+		if (destinationCell.getHeight() > currentCell.getHeight()+2  && !aPlayer.isEthereal() &&!aPlayer.isFlying()) {
 			aLevel.addMessage("You can't climb it.");
-		else {
-			if (destinationCell.getHeight() < currentCell.getHeight())
+		} else {
+			if (destinationCell.getHeight() < currentCell.getHeight()) {
 				aLevel.addMessage("You descend");
-			if (destinationCell.isSolid() && !aPlayer.isEthereal()){
-				if (destinationCell.getID().startsWith("SIGNPOST")){
+			}
+			if (destinationCell.isSolid() && !aPlayer.isEthereal()) {
+				if (destinationCell.getID().startsWith("SIGNPOST")) {
 					//aLevel.addMessage("The signpost reads : "+destinationCell.getDescription());
 					Main.ui.setPersistantMessage(destinationCell.getDescription());
 				}else{

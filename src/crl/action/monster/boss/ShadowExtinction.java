@@ -16,7 +16,7 @@ public class ShadowExtinction  extends Action{
 	}
 	
 	public void execute(){
-        Level aLevel = performer.getLevel();
+        Level aLevel = performer.level;
         aLevel.addMessage("Dracula Yells: 'Shadow Extinction!'");
         int sickles = Util.rand(2,5);
         for (int i=0; i<sickles; i++){
@@ -38,7 +38,7 @@ public class ShadowExtinction  extends Action{
 	
 	private void hit(int x, int y, int z){
 		String message = "";
-		Level aLevel = performer.getLevel();
+		Level aLevel = performer.level;
         Player aPlayer = aLevel.getPlayer();
         Position destinationPoint = new Position(x,y,z);
 		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);

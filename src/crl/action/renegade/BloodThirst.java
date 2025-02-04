@@ -19,8 +19,8 @@ public class BloodThirst extends HeartAction{
 	
 	public void execute(){
 		super.execute();
-        Player aPlayer = (Player)performer;
-		aPlayer.getLevel().addMessage("Your vampire instinct awakes!");
+		Player aPlayer = (Player)performer;
+		aPlayer.level.addMessage("Your vampire instinct awakes!");
 		aPlayer.setCounter(Consts.C_BLOOD_THIRST, 10+aPlayer.getSoulPower()*4);
 	}
 	

@@ -12,7 +12,7 @@ public class MummyTeleport extends Action{
 	}
 	
 	public void execute(){
-        Level aLevel = performer.getLevel();
+        Level aLevel = performer.level;
         aLevel.addMessage("Akmodan dematerializes! Akmodan flies to you!");
         Monster mon = (Monster)performer;
         do {

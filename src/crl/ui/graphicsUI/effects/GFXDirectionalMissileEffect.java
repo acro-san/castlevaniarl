@@ -81,8 +81,8 @@ public class GFXDirectionalMissileEffect extends GFXDirectedEffect {
 					break;
 			}
 			int height = 0;
-			if (ui.getPlayer().getLevel().getMapCell(next) != null)
-				height = ui.getPlayer().getLevel().getMapCell(next).getHeight();
+			if (ui.getPlayer().level.getMapCell(next) != null)
+				height = ui.getPlayer().level.getMapCell(next).getHeight();
 			Position relative = Position.subs(next, ui.getPlayer().getPosition());
 			Position toPrint = Position.add(ui.PC_POS, relative);
 			if (!ui.insideViewPort(toPrint))

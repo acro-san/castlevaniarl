@@ -22,7 +22,7 @@ public class PowerBlow3 extends HeartAction{
 	public void execute(){
 		super.execute();
 		Player aPlayer = (Player)performer;
-		Level aLevel = aPlayer.getLevel();
+		Level aLevel = aPlayer.level;
 		aLevel.addMessage("WAAAAARGHHHH!!!! Your eyes go numb!");
 		aPlayer.setCounter(Consts.C_POWERBLOW3, 5);
 	}

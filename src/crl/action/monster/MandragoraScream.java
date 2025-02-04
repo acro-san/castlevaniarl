@@ -28,10 +28,10 @@ public class MandragoraScream extends Action {
 	public void execute() {
 		if (performer.getFlag("MANDRAGORA_PULLED")){
 			SFXManager.play(SCREAM_WAV);
-			performer.getLevel().addMessage("* The Mandragora emits an earth-shattering scream!!! *");
+			performer.level.addMessage("* The Mandragora emits an earth-shattering scream!!! *");
 			Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(performer.getPosition(), "SFX_MANDRAGORA_SCREAM"));
 			
-			VMonster monsters = performer.getLevel().getMonsters();
+			VMonster monsters = performer.level.getMonsters();
 			Vector<Monster> removables = new Vector<Monster>();
 			for (int i = 0; i < monsters.size(); i++){
 				Monster monster = monsters.elementAt(i);
@@ -45,11 +45,11 @@ public class MandragoraScream extends Action {
 						//targetMonster.damage(player.getWhipLevel());
 						monster.damage(messages, SCREAM_DAMAGE);
 						if (monster.wasSeen()){
-							performer.getLevel().addMessage(messages.toString());
+							performer.level.addMessage(messages.toString());
 						}
 			        	if (monster.isDead()){
 			        		if (monster.wasSeen()){
-			        			performer.getLevel().addMessage("The "+monster.getDescription()+" explodes in pain!");
+			        			performer.level.addMessage("The "+monster.getDescription()+" explodes in pain!");
 			        		}
 				        	removables.add(monster);
 						}
@@ -58,15 +58,15 @@ public class MandragoraScream extends Action {
 			}
 			monsters.removeAll(removables);
 			
-			if (Position.flatDistance(performer.getPosition(), performer.getLevel().getPlayer().getPosition()) < SCREAM_RANGE){
-				performer.getLevel().getPlayer().damage("You hear the mandragora scream!", (Monster)performer, new Damage(SCREAM_DAMAGE, true));
+			if (Position.flatDistance(performer.getPosition(), performer.level.getPlayer().getPosition()) < SCREAM_RANGE){
+				performer.level.getPlayer().damage("You hear the mandragora scream!", (Monster)performer, new Damage(SCREAM_DAMAGE, true));
 			}
 			
 			performer.die();
 
 
 		} else {
-			performer.getLevel().addMessage("* A skeleton pulls out a mandragora root!!! *");
+			performer.level.addMessage("* A skeleton pulls out a mandragora root!!! *");
 			performer.setFlag("MANDRAGORA_PULLED", true);
 		}
 		

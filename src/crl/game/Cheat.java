@@ -5,9 +5,10 @@ import crl.player.Player;
 
 public class Cheat {
 	private final static boolean enabled = false;
-	public static boolean cheatConsole(Player player, int charCode){
-		if (!enabled)
+	public static boolean cheatConsole(Player player, int charCode) {
+		if (!enabled) {
 			return false;
+		}
 		switch (charCode){
 		case CharKey.F2:
 			player.increaseWhip();
@@ -21,7 +22,7 @@ public class Cheat {
 			//player.increaseWeaponSkill(ItemDefinition.CAT_WHIPS);
 			break;
 		case CharKey.F4:
-			String nextLevel = player.getLevel().getMetaData().getExit("_NEXT");
+			String nextLevel = player.level.getMetaData().getExit("_NEXT");
 			player.informPlayerEvent(Player.EVT_GOTO_LEVEL, nextLevel);
 			
 			break;
@@ -29,11 +30,11 @@ public class Cheat {
 			player.heal();
 			break;
 		case CharKey.F6:
-			if (player.getLevel().getBoss() != null)
-				player.getLevel().getBoss().damage(new StringBuffer(), 15);
+			if (player.level.getBoss() != null)
+				player.level.getBoss().damage(new StringBuffer(), 15);
 			break;
 		case CharKey.F7:
-			player.getLevel().setIsDay(!player.getLevel().isDay());
+			player.level.setIsDay(!player.level.isDay());
 			break;
 		case CharKey.F8:
 			//player.informPlayerEvent(Player.EVT_BACK_LEVEL);

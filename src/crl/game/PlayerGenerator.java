@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 
 import crl.Main;
+import crl.data.Text;
 import sz.util.TxtTpl;
 import sz.util.Util;
 import crl.item.ItemDefinition;
@@ -14,162 +15,170 @@ import crl.player.Player;
 import crl.ui.Appearance;
 
 public abstract class PlayerGenerator {
+	
 	public static PlayerGenerator thus;
+	
 	public abstract Player generatePlayer();
 	
-	private Hashtable SPECIAL_PLAYERS = new Hashtable();
-	private void initSpecialPlayers(){
+	private Hashtable<String, Player> SPECIAL_PLAYERS = new Hashtable<>();	// FIXME actually just an array?
+	
+	//static?
+	private void initSpecialPlayers() {
 		SPECIAL_PLAYERS.clear();
 		ItemDataTable it = Main.itemData;
 		HashMap<String, Appearance> aps = Main.appearances;
 		
-		Player christopher = new Player();
-		christopher.setSex(Player.MALE);
-		christopher.setDoNotRecordScore(true);
-		christopher.setName("Christopher");
-		christopher.setPlayerClass(Player.CLASS_VAMPIREKILLER);
-		christopher.setPlayerLevel(38);
-		christopher.setBaseSightRange(6);
-		christopher.setGold(Util.rand(30,70) * 100);
-		christopher.setAttack(20);
-		christopher.setWalkCost(15);
-		christopher.setAttackCost(20);
-		christopher.setBaseEvadeChance(25);
-		christopher.setCastCost(15);
-		christopher.setCarryMax(35);
-		christopher.setSoulPower(15);
-		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_WHIPS);
-		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_WHIPS);
-		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_WHIPS);
-		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_UNARMED);
-		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_UNARMED);
-		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_WHIPS);
-		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_WHIPS);
-		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_WHIPS);
-		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_UNARMED);
-		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_UNARMED);
-		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_WHIPS);
-		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_WHIPS);
-		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_WHIPS);
-		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_UNARMED);
-		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_UNARMED);
-		christopher.setAppearance(aps.get("CHRISTOPHER_B"));
-		christopher.setPlot("After defeating Dracula two times, he returns to the castle to fulfill his fate for a last time", "");
-		christopher.setDescription("The famous Vampire Killer, heir of the Belmont fate");
-		christopher.setWeapon(it.createWeapon("LEATHER_WHIP",""));
-		christopher.setArmor(it.createArmor("VARMOR",""));
-		christopher.setAdvancementLevels(ADVANCEMENT_LEVELS_HARDER);
-		SPECIAL_PLAYERS.put("CHRIS", christopher);
-		christopher = new Player();
-		christopher.setSex(Player.MALE);
-		christopher.setName("Soleiyu");
-		christopher.setDoNotRecordScore(true);
-		christopher.setAttack(15);
-		christopher.setPlayerLevel(35);
-		christopher.setPlayerClass(Player.CLASS_VANQUISHER);
-		christopher.setBaseSightRange(6);
-		christopher.setGold(Util.rand(30,70) * 100);
-		christopher.setWalkCost(25);
-		christopher.setAttackCost(25);
-		christopher.setBaseEvadeChance(20);
-		christopher.setCastCost(10);
-		christopher.setCarryMax(25);
-		christopher.setSoulPower(20);
-		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_SWORDS);
-		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_STAVES);
-		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_SWORDS);
-		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_RINGS);
-		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_RINGS);
-		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_SWORDS);
-		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_STAVES);
-		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_SWORDS);
-		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_RINGS);
-		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_RINGS);
-		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_RINGS);
-		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_SWORDS);
-		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_STAVES);
-		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_SWORDS);
-		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_RINGS);
-		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_RINGS);
-		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_SWORDS);
-		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_STAVES);
-		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_SWORDS);
-		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_RINGS);
-		christopher.setAppearance(aps.get("SOLEIYU_B"));
-		christopher.setPlot("Finally deciding to face his own fate, he travels to the cursed Castlevania", "");
-		christopher.setDescription("The son of Christopher Belmont");
-		christopher.setWeapon(it.createWeapon("HARPER",""));
-		christopher.setArmor(it.createArmor("PLATE", "STEEL"));
-		christopher.setAdvancementLevels(ADVANCEMENT_LEVELS_HARDER);
-		SPECIAL_PLAYERS.put("SOLEIYU", christopher);
-		christopher = new Player();
-		christopher.setSex(Player.MALE);
-		christopher.setName("Child Soleiyu");
-		christopher.setDoNotRecordScore(true);
-		christopher.setAttack(1);
-		christopher.setPlayerLevel(1);
-		christopher.setPlayerClass(Player.CLASS_VAMPIREKILLER);
-		christopher.setBaseSightRange(5);
-		christopher.setGold(200);
-		christopher.setWalkCost(60);
-		christopher.setHearts(15);
-		christopher.setAttackCost(80);
-		christopher.setBaseEvadeChance(5);
-		christopher.setCastCost(40);
-		christopher.setCarryMax(5);
-		christopher.setSoulPower(0);
+		Player chris = new Player();
+		chris.setSex(Player.MALE);
+		chris.setDoNotRecordScore(true);
+		chris.setName("Christopher");
+		chris.setPlayerClass(Player.CLASS_VAMPIREKILLER);
+		chris.setPlayerLevel(38);
+		chris.setBaseSightRange(6);
+		chris.setGold(Util.rand(30,70) * 100);
+		chris.setAttack(20);
+		chris.setWalkCost(15);
+		chris.setAttackCost(20);
+		chris.setBaseEvadeChance(25);
+		chris.setCastCost(15);
+		chris.setCarryMax(35);
+		chris.setSoulPower(15);
+		// *WTF*!?? :-
+		chris.increaseWeaponSkillLevel(ItemDefinition.CAT_WHIPS);
+		chris.increaseWeaponSkillLevel(ItemDefinition.CAT_WHIPS);
+		chris.increaseWeaponSkillLevel(ItemDefinition.CAT_WHIPS);
+		chris.increaseWeaponSkillLevel(ItemDefinition.CAT_UNARMED);
+		chris.increaseWeaponSkillLevel(ItemDefinition.CAT_UNARMED);
+		chris.increaseWeaponSkillLevel(ItemDefinition.CAT_WHIPS);
+		chris.increaseWeaponSkillLevel(ItemDefinition.CAT_WHIPS);
+		chris.increaseWeaponSkillLevel(ItemDefinition.CAT_WHIPS);
+		chris.increaseWeaponSkillLevel(ItemDefinition.CAT_UNARMED);
+		chris.increaseWeaponSkillLevel(ItemDefinition.CAT_UNARMED);
+		chris.increaseWeaponSkillLevel(ItemDefinition.CAT_WHIPS);
+		chris.increaseWeaponSkillLevel(ItemDefinition.CAT_WHIPS);
+		chris.increaseWeaponSkillLevel(ItemDefinition.CAT_WHIPS);
+		chris.increaseWeaponSkillLevel(ItemDefinition.CAT_UNARMED);
+		chris.increaseWeaponSkillLevel(ItemDefinition.CAT_UNARMED);
+		chris.setAppearance(aps.get("CHRISTOPHER_B"));
+		chris.setPlot("After defeating Dracula two times, he returns to the castle to fulfill his fate for a last time", "");
+		chris.setDescription("The famous Vampire Killer, heir of the Belmont fate");
+		chris.setWeapon(it.createWeapon("LEATHER_WHIP",""));
+		chris.setArmor(it.createArmor("VARMOR",""));
+		chris.setAdvancementLevels(ADVANCEMENT_LEVELS_HARDER);
+		SPECIAL_PLAYERS.put("CHRIS", chris);
 		
-		christopher.setAppearance(aps.get("SOLEIYU_B_KID"));
-		christopher.setPlot("Trains to become the next vampire killer", "");
-		christopher.setDescription("The son of Christopher Belmont");
-		christopher.setAdvancementLevels(ADVANCEMENT_LEVELS_HARDER);
-		SPECIAL_PLAYERS.put("SOLEIYU_KID", christopher);
+		Player solei = new Player();
+		solei.setSex(Player.MALE);
+		solei.setName("Soleiyu");
+		solei.setDoNotRecordScore(true);
+		solei.setAttack(15);
+		solei.setPlayerLevel(35);
+		solei.setPlayerClass(Player.CLASS_VANQUISHER);
+		solei.setBaseSightRange(6);
+		solei.setGold(Util.rand(30,70) * 100);
+		solei.setWalkCost(25);
+		solei.setAttackCost(25);
+		solei.setBaseEvadeChance(20);
+		solei.setCastCost(10);
+		solei.setCarryMax(25);
+		solei.setSoulPower(20);
+		solei.increaseWeaponSkillLevel(ItemDefinition.CAT_SWORDS);
+		solei.increaseWeaponSkillLevel(ItemDefinition.CAT_STAVES);
+		solei.increaseWeaponSkillLevel(ItemDefinition.CAT_SWORDS);
+		solei.increaseWeaponSkillLevel(ItemDefinition.CAT_RINGS);
+		solei.increaseWeaponSkillLevel(ItemDefinition.CAT_RINGS);
+		solei.increaseWeaponSkillLevel(ItemDefinition.CAT_SWORDS);
+		solei.increaseWeaponSkillLevel(ItemDefinition.CAT_STAVES);
+		solei.increaseWeaponSkillLevel(ItemDefinition.CAT_SWORDS);
+		solei.increaseWeaponSkillLevel(ItemDefinition.CAT_RINGS);
+		solei.increaseWeaponSkillLevel(ItemDefinition.CAT_RINGS);
+		solei.increaseWeaponSkillLevel(ItemDefinition.CAT_RINGS);
+		solei.increaseWeaponSkillLevel(ItemDefinition.CAT_SWORDS);
+		solei.increaseWeaponSkillLevel(ItemDefinition.CAT_STAVES);
+		solei.increaseWeaponSkillLevel(ItemDefinition.CAT_SWORDS);
+		solei.increaseWeaponSkillLevel(ItemDefinition.CAT_RINGS);
+		solei.increaseWeaponSkillLevel(ItemDefinition.CAT_RINGS);
+		solei.increaseWeaponSkillLevel(ItemDefinition.CAT_SWORDS);
+		solei.increaseWeaponSkillLevel(ItemDefinition.CAT_STAVES);
+		solei.increaseWeaponSkillLevel(ItemDefinition.CAT_SWORDS);
+		solei.increaseWeaponSkillLevel(ItemDefinition.CAT_RINGS);
+		solei.setAppearance(aps.get("SOLEIYU_B"));
+		solei.setPlot("Finally deciding to face his own fate, he travels to the cursed Castlevania", "");
+		solei.setDescription("The son of Christopher Belmont");
+		solei.setWeapon(it.createWeapon("HARPER",""));
+		solei.setArmor(it.createArmor("PLATE", "STEEL"));
+		solei.setAdvancementLevels(ADVANCEMENT_LEVELS_HARDER);
+		SPECIAL_PLAYERS.put("SOLEIYU", solei);
 		
-		christopher = new Player();
-		christopher.setSex(Player.FEMALE);
-		christopher.setDoNotRecordScore(false);
-		christopher.setName("Sonia");
-		christopher.setPlayerClass(Player.CLASS_VAMPIREKILLER);
-		christopher.setPlayerLevel(1);
-		christopher.setBaseSightRange(7);
-		christopher.setGold(Util.rand(30,70) * 100);
-		christopher.setAttack(7);
-		christopher.setWalkCost(40);
-		christopher.setAttackCost(50);
-		christopher.setBaseEvadeChance(5);
-		christopher.setCastCost(30);
-		christopher.setCarryMax(10);
-		christopher.setSoulPower(4);
-		christopher.setSoulPower(1);
-		christopher.setFlag("ARENA_FIGHTER", true);
-		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_WHIPS);
-		christopher.increaseWeaponSkillLevel(ItemDefinition.CAT_PROJECTILES);
-		int items = Util.rand(10,15);
-		for (int i = 0; i < items; i++){
-			christopher.addItem(it.createItem(Util.randPick(SONIA_ITEMS)));
+		Player kidso = new Player();
+		kidso.setSex(Player.MALE);
+		kidso.setName("Child Soleiyu");
+		kidso.setDoNotRecordScore(true);
+		kidso.setAttack(1);
+		kidso.setPlayerLevel(1);
+		kidso.setPlayerClass(Player.CLASS_VAMPIREKILLER);
+		kidso.setBaseSightRange(5);
+		kidso.setGold(200);
+		kidso.setWalkCost(60);
+		kidso.setHearts(15);
+		kidso.setAttackCost(80);
+		kidso.setBaseEvadeChance(5);
+		kidso.setCastCost(40);
+		kidso.setCarryMax(5);
+		kidso.setSoulPower(0);
+		kidso.setAppearance(aps.get("SOLEIYU_B_KID"));
+		kidso.setPlot("Trains to become the next vampire killer", "");
+		kidso.setDescription("The son of Christopher Belmont");
+		kidso.setAdvancementLevels(ADVANCEMENT_LEVELS_HARDER);
+		SPECIAL_PLAYERS.put("SOLEIYU_KID", kidso);
+		
+		Player sonia = new Player();
+		sonia.setSex(Player.FEMALE);
+		sonia.setDoNotRecordScore(false);
+		sonia.setName("Sonia");
+		sonia.setPlayerClass(Player.CLASS_VAMPIREKILLER);
+		sonia.setPlayerLevel(1);
+		sonia.setBaseSightRange(7);
+		sonia.setGold(Util.rand(30,70) * 100);
+		sonia.setAttack(7);
+		sonia.setWalkCost(40);
+		sonia.setAttackCost(50);
+		sonia.setBaseEvadeChance(5);
+		sonia.setCastCost(30);
+		sonia.setCarryMax(10);
+		sonia.setSoulPower(4);
+		sonia.setSoulPower(1);
+		sonia.setFlag("ARENA_FIGHTER", true);
+		sonia.increaseWeaponSkillLevel(ItemDefinition.CAT_WHIPS);
+		sonia.increaseWeaponSkillLevel(ItemDefinition.CAT_PROJECTILES);
+		int items = Util.rand(10, 15);
+		for (int i = 0; i < items; i++) {
+			sonia.addItem(it.createItem(Util.pick(SONIA_ITEMS)));
 		}
-		christopher.setAppearance(aps.get("SONIA_B"));
-		christopher.setPlot("Came to the castle as the first Belmont ever", "");
-		christopher.setDescription("Sonia Belmont, a mysterious girl");
-		christopher.setWeapon(it.createWeapon("LEATHER_WHIP",""));
-		christopher.setArmor(it.createArmor("VARMOR",""));
-		christopher.setAdvancementLevels(ADVANCEMENT_LEVELS_NORMAL);
-		SPECIAL_PLAYERS.put("SONIA", christopher);
-
-	}
-	public Player createSpecialPlayer(String playerID){
-		initSpecialPlayers();
-		return (Player) SPECIAL_PLAYERS.get(playerID);
+		sonia.setAppearance(aps.get("SONIA_B"));
+		sonia.setPlot("Came to the castle as the first Belmont ever", "");
+		sonia.setDescription("Sonia Belmont, a mysterious girl");
+		sonia.setWeapon(it.createWeapon("LEATHER_WHIP",""));
+		sonia.setArmor(it.createArmor("VARMOR",""));
+		sonia.setAdvancementLevels(ADVANCEMENT_LEVELS_NORMAL);
+		SPECIAL_PLAYERS.put("SONIA", sonia);
 	}
 	
-	public Player getPlayer(String name, int sex, int choice){
+	public Player createSpecialPlayer(String playerID) {
+		initSpecialPlayers();
+		return SPECIAL_PLAYERS.get(playerID);
+	}
+	
+	
+	public Player getPlayer(String name, int sex, int choice) {
 		Player player = new Player();
 		player.setSex(sex);
-		if (name.trim().equals("")){
-			if (sex == Player.MALE)
-				player.setName(Util.randPick(MALE_NAMES));
-			else
-				player.setName(Util.randPick(FEMALE_NAMES));
+		if (name.trim().equals("")) {
+			if (sex == Player.MALE) {
+				player.setName(Util.pick(Text.RANDOM_PLAYER_MALE_NAMES));
+			} else {
+				player.setName(Util.pick(Text.RANDOM_PLAYER_FEMALE_NAMES));
+			}
 		} else {
 			player.setName(name);
 		}
@@ -205,8 +214,8 @@ public abstract class PlayerGenerator {
 			case Player.CLASS_VAMPIREKILLER:
 				classID = "VKILLER";
 				player.setGold(Util.rand(3,7) * 100);
-				plots = VKILLER_PLOTS;
-				descriptions = VKILLER_DESCRIPTIONS;
+				plots = Text.VKILLER_PLOTS;
+				descriptions = Text.VKILLER_DESCRIPTIONS;
 				initWeapons = VKILLER_WEAPONS;
 				initArmors = VKILLER_ARMORS;
 				initItems = VKILLER_ITEMS;
@@ -231,8 +240,8 @@ public abstract class PlayerGenerator {
 				player.setGold(Util.rand(5,15) * 100);
 				player.setHitsMax(17);
 				player.heal();
-				plots = VANQUISHER_PLOTS;
-				descriptions = VANQUISHER_DESCRIPTIONS;
+				plots = Text.VANQUISHER_PLOTS;
+				descriptions = Text.VANQUISHER_DESCRIPTIONS;
 				initWeapons = VANQUISHER_WEAPONS;
 				initArmors = VANQUISHER_ARMORS;
 				initItems = VANQUISHER_ITEMS;
@@ -254,8 +263,8 @@ public abstract class PlayerGenerator {
 			case Player.CLASS_RENEGADE:
 				classID = "RENEGADE";
 				player.setGold(Util.rand(2,10) * 100);
-				plots = RENEGADE_PLOTS;
-				descriptions = RENEGADE_DESCRIPTIONS;
+				plots = Text.RENEGADE_PLOTS;
+				descriptions = Text.RENEGADE_DESCRIPTIONS;
 				initWeapons = RENEGADE_WEAPONS;
 				initArmors = RENEGADE_ARMORS;
 				initItems = RENEGADE_ITEMS;
@@ -273,9 +282,8 @@ public abstract class PlayerGenerator {
 				player.setBannedArmors(RENEGADE_BANNED_ARMOR);
 				player.setAdvancementLevels(ADVANCEMENT_LEVELS_NORMAL);
 				
-				
-				player.setShield(Main.itemData.createShield(Util.randPick(RENEGADE_SHIELDS), Util.randPick(ARMOR_MATERIALS)));
-				player.setSecondaryWeapon(Main.itemData.createWeapon("BASELARD", Util.randPick(WEAPON_MATERIALS)));
+				player.setShield(Main.itemData.createShield(Util.pick(RENEGADE_SHIELDS), Util.pick(ARMOR_MATERIALS)));
+				player.setSecondaryWeapon(Main.itemData.createWeapon("BASELARD", Util.pick(WEAPON_MATERIALS)));
 				
 				player.putCustomMessage("INTRO_1", "I can almost breathe the chaos that invades every tree and animal in this forest. It is time to return to the castle.");
 				player.putCustomMessage("CLARA1", "Commonner? . . . Ignorant human... get out of my way.");
@@ -285,8 +293,8 @@ public abstract class PlayerGenerator {
 				player.setGold(Util.rand(2,10) * 100);
 				player.setHitsMax(17);
 				player.heal();
-				plots = INVOKER_PLOTS;
-				descriptions = INVOKER_DESCRIPTIONS;
+				plots = Text.INVOKER_PLOTS;
+				descriptions = Text.INVOKER_DESCRIPTIONS;
 				initWeapons = INVOKER_WEAPONS;
 				initArmors = INVOKER_ARMORS;
 				initItems = INVOKER_ITEMS;
@@ -312,8 +320,8 @@ public abstract class PlayerGenerator {
 				player.setBaseSightRange(6);
 				player.heal();
 				classID = "MANBEAST";
-				plots = MANBEAST_PLOTS;
-				descriptions = MANBEAST_DESCRIPTIONS;
+				plots = Text.MANBEAST_PLOTS;
+				descriptions = Text.MANBEAST_DESCRIPTIONS;
 				initWeapons = null;
 				initArmors = MANBEAST_ARMORS;
 				initItems = MANBEAST_ITEMS;
@@ -342,7 +350,7 @@ public abstract class PlayerGenerator {
 				player.setBreathing(15);
 				player.heal();
 				int skilleds = Util.rand(4,5);
-				String[] randoms = {
+				String[] randWpnSkillUp = {
 					ItemDefinition.CAT_UNARMED,
 					ItemDefinition.CAT_DAGGERS,
 					ItemDefinition.CAT_SWORDS,
@@ -356,11 +364,11 @@ public abstract class PlayerGenerator {
 					ItemDefinition.CAT_PISTOLS,
 					ItemDefinition.CAT_SHIELD
 				};
-				for (int i = 0; i < skilleds; i++){
-					player.increaseWeaponSkillLevel(Util.randPick(randoms));
+				for (int i = 0; i < skilleds; i++) {
+					player.increaseWeaponSkillLevel(Util.pick(randWpnSkillUp));
 				}
-				plots = KNIGHT_PLOTS;
-				descriptions = KNIGHT_DESCRIPTIONS;
+				plots = Text.KNIGHT_PLOTS;
+				descriptions = Text.KNIGHT_DESCRIPTIONS;
 				initWeapons = KNIGHT_WEAPONS;
 				initArmors = KNIGHT_ARMORS;
 				initItems = KNIGHT_ITEMS;
@@ -375,7 +383,7 @@ public abstract class PlayerGenerator {
 				player.increaseWeaponSkillLevel(ItemDefinition.CAT_SHIELD);
 				player.setBannedArmors(KNIGHT_BANNED_ARMOR);
 				player.setAdvancementLevels(ADVANCEMENT_LEVELS_NORMAL);
-				player.setShield(Main.itemData.createShield(Util.randPick(KNIGHT_SHIELDS), Util.randPick(ARMOR_MATERIALS)));
+				player.setShield(Main.itemData.createShield(Util.pick(KNIGHT_SHIELDS), Util.pick(ARMOR_MATERIALS)));
 				player.putCustomMessage("INTRO_1", "Indeed, those seem to be Wargs: demonic wolf-like creatures summoned by the Count of Darkness to protect his castle. We better get to the castle quickly.");
 				player.putCustomMessage("CLARA1", "Can you not see the mark of heavens? I am a Knight of the Sacred Order, and I came to cleanse this place from darkness.");
 			break;
@@ -389,193 +397,96 @@ public abstract class PlayerGenerator {
 			player.setAppearance(aps.get(classID+"_W"));
 
 		player.setPlot(
-			TxtTpl.t(player, Util.randPick(plots)),
+			TxtTpl.t(player, Util.pick(plots)),
 			TxtTpl.t(player, getClassStartEquipmentDescription(player.getPlayerClass())));
 		player.setDescription(
-			TxtTpl.t(player, Util.randPick(descriptions)));
+			TxtTpl.t(player, Util.pick(descriptions)));
 		if (initWeapons != null) {
-			player.setWeapon(itf.createWeapon(Util.randPick(initWeapons), Util.randPick(WEAPON_MATERIALS)));
+			player.setWeapon(itf.createWeapon(Util.pick(initWeapons), Util.pick(WEAPON_MATERIALS)));
 		}
-		player.setArmor(itf.createArmor(Util.randPick(initArmors), Util.randPick(ARMOR_MATERIALS)));
+		player.setArmor(itf.createArmor(Util.pick(initArmors), Util.pick(ARMOR_MATERIALS)));
 		int items = Util.rand(5,7);
 		for (int i = 0; i < items; i++){
-			player.addItem(itf.createItem(Util.randPick(initItems)));
+			player.addItem(itf.createItem(Util.pick(initItems)));
 		}
 		player.coolness += 10;
 		return player;
 	}
+
+
+	static final String[]
+		CLASS_EQUIP_DESCRIPTIONS = {
+			"the vampire killer whip, %%SEX sacred charm",	// 0: vampirekiller
+			"%%SEX dark powers",	// 1: renegade
+			"%%SEX abilities to conjure the forces of light",	// 2: vanquisher
+			"%%SEX power to invoke souls unto aid",	// 3: invoker
+			"%%SEX martial art and shapeshifting skills",	// 4: manbeast
+			"the weapons of the sacred church"	// 5: knight
+		},
+		CLASS_ID_STRINGS = {
+			"VKILLER",	// 0: vampirekiller
+			"RENEGADE",	// 1: renegade
+			"VANQUISHER",	// 2: vanquisher
+			"INVOKER",	// 3: invoker
+			"MANBEAST",	// 4: manbeast
+			"KNIGHT"	// 5: knight
+		};
 	
-	
-	private String getClassStartEquipmentDescription(int classID){
-		switch (classID){
-		case Player.CLASS_VANQUISHER:
-			return "%%SEX abilities to conjure the forces of light";
-		case Player.CLASS_INVOKER:
-			return "%%SEX power to invoke souls unto aid";
-		case Player.CLASS_KNIGHT:
-			return "the weapons of the sacred church";
-		case Player.CLASS_MANBEAST:
-			return "%%SEX martial art and shapeshifting skills";
-		case Player.CLASS_RENEGADE:
-			return "%%SEX dark powers";
-		case Player.CLASS_VAMPIREKILLER:
-			return "the vampire killer whip, %%SEX sacred charm";
+	private String getClassStartEquipmentDescription(int classID) {
+		if (classID < 0 || classID > Player.CLASS_KNIGHT) {
+			// But is there even reason to be checking for this to occur!?
+			System.err.println("Invalid character class!: "+classID);
+			return null;
 		}
-		return null;
+		return CLASS_EQUIP_DESCRIPTIONS[classID];
 	}
 	
-	private static final String[]
-	VANQUISHER_PLOTS = {
-		"After being taken to the castle by a group of skeletons, ",
-		"After discovering %%SEX powers when %%SEX friends were killed by the armies of the count",
-		"Interpreting the latest events as a call of destiny for a need to be fulfilled with %%SEX powers",
-		"After being brought to the castle door by a mysterious cartman",
-		"After being chased as a witch on %%SEX home town"
-	},
+	public static String getClassID(int classID) {
+		if (classID < 0 || classID > Player.CLASS_KNIGHT) {
+			// But is there even reason to be checking for this to occur!?
+			System.err.println("Invalid character class!: "+classID);
+			return "";
+		}
+		return CLASS_ID_STRINGS[classID];
+	}
 	
-	VKILLER_PLOTS = {
-		"On a last attempt to rescue %%SEX loved one, which was taken by an evil daemon last night",
-		"Seeking to bring an end to the problem as %%SEX grandfather did, about 100 years ago",
-		"After seeing %%SEX home town leveled, and all of %%SEX friends slain by the dark armies of the count",
-		"Finally seeing an opportunity to drop some vampire blood",
-		"After a long trip around all transylvannia, becoming stronger"
-	},
-	
-	RENEGADE_PLOTS = {
-		"Coming back to the castle which once was %%SEX home",
-		"Looking for a way to redeem the evil brought by the vampire race to the mankind",
-		"After being mysteriously awaken from %%SEX self imposed eternal slumber",
-		"Looking forward to give this 'Dark Count' a lesson about true power",
-		"After being told about a powerful vampire breaking the sacred pact of peace made with mankind",
-		"After rebelling against %%SEX father and being shunned by the vampire race"
-	},
-	
-	INVOKER_PLOTS = {
-		"Feeling the call of destiny to make use of %%SEX powers",
-		"After taking monsters out of %%SEX village, using %%SEX supernatural powers",
-		"Finally seeing an oportunity to show off %%SEX powers to battle evil",
-		"Going after a secret tome, told to be hidden inside the castle",
-		"After years of study and preparation, reading ancient tomes and discovering %%SEX true powers"
-	},
-	
-	MANBEAST_PLOTS = {
-		"After seeing %%SEX village burned by Dracula's minions, and looking forward to avenge the death of %%SEX loved ones",
-		"As one of the few survivors from the raids of the legion of the undead, and looking forward to avenge the death of %%SEX loved ones",
-		"After being taken captive by a group of careless skeletons, smashed when %%SEX power awoke",
-		"After having learned of the destruction of the manbeast race, and abandoning %%SEX secret hideout in the caverns"
-	},
-	
-	KNIGHT_PLOTS = {
-		"After seeing %%SEX village burned by Dracula's minions, and looking forward to avenge the death of %%SEX father",
-		"As the sole survivor of the company sent to battle the count Dracula on his castle",
-		"On a last effort to rid the world from the influence of the darkness that rose again",
-		"After years of preparation on %%SEX order, anticipating the return of the Dark Count"
-	};
-	
-	private static final String[]
-	VKILLER_DESCRIPTIONS = {
-		"%%NAME, last member on the lineage of vampire hunters, the Belmonts",
-		"%%NAME, the wielder of the vampire hunter fate",
-		"%%NAME",
-		"%%NAME the Vampire Hunter"
-	},
-	
-	VANQUISHER_DESCRIPTIONS = {
-		"%%NAME, heir of the powers of Sypha",
-		"%%NAME, a witch for some, the last hope for anothers,",
-		"%%NAME",
-		"%%NAME the slayer"
-	},
-	
-	RENEGADE_DESCRIPTIONS = {
-		"%%NAME, heir to the throne of darkness",
-		"%%NAME, a vampire turned to the light side",
-		"%%NAME",
-		"%%NAME the renegade"
-	},
-	
-	INVOKER_DESCRIPTIONS = {
-		"%%NAME, a mysterious resident of the woods of Transylvannia",
-		"%%NAME, the human who discovered %%SEX fate was to battle evil using %%SEX powers",
-		"%%NAME",
-		"%%NAME the monster summoner"
-	},
-	
-	MANBEAST_DESCRIPTIONS = {
-		"%%NAME, the powerful beast morpher from the mountains",
-		"%%NAME, the only survivor of the manbeast race",
-		"%%NAME",
-		"%%NAME the half-beast"
-	},
-	
-	KNIGHT_DESCRIPTIONS = {
-		"%%NAME, knight of the Order of Light",
-		"%%NAME, the knight of light",
-		"%%NAME",
-		"%%NAME the sacred knight"
-	};
-	
-	private String[] VKILLER_BANNED_ARMOR = new String[] {"DIAMOND_PLATE", "LEATHER_ARMOR", "CLOTH_TUNIC", "VEST", "CUIRASS", "SUIT", "PLATE"};
-	private String[] VKILLER_WEAPONS = new String[] {"LEATHER_WHIP"};
-	private String[] VKILLER_ARMORS = new String[] {"VARMOR"};
-	private String[] VKILLER_ITEMS = new String[] {"HEAL_HERB", "GARLIC"};
-
-	private String[] RENEGADE_BANNED_ARMOR = new String[] {"DIAMOND_PLATE", "SUIT", "PLATE"};
-	private String[] RENEGADE_WEAPONS = new String[] {"SHORT_SWORD", "BOW"};
-	private String[] RENEGADE_ARMORS = new String[] {"FINE_GARMENT"};
-	private String[] RENEGADE_ITEMS = new String[] {"HEAL_HERB", "BIBUTI"}; 
-	private String[] RENEGADE_SHIELDS = new String[] {"BUCKLER"};
-	
-	private String[] VANQUISHER_BANNED_ARMOR = new String[] {"DIAMOND_PLATE", "VEST", "CUIRASS", "SUIT", "PLATE"};
-	private String[] VANQUISHER_WEAPONS = new String[] {"RINGS", "STAFF"};
-	private String[] VANQUISHER_ARMORS = new String[] {"CLOTH_TUNIC"};
-	private String[] VANQUISHER_ITEMS = new String[] {"HEAL_POTION", "BIBUTI"};
-	
-	private String[] INVOKER_BANNED_ARMOR = new String[] {"DIAMOND_PLATE", "VEST", "CUIRASS", "SUIT", "PLATE"};
-	private String[] INVOKER_WEAPONS = new String[] {"BASELARD", "STAFF"};
-	private String[] INVOKER_ARMORS = new String[] {"CLOTH_TUNIC"};
-	private String[] INVOKER_ITEMS = new String[] {"HEAL_POTION", "GARLIC"};
-	
-	private String[] MANBEAST_BANNED_ARMOR = new String[] {"DIAMOND_PLATE", "VEST", "CUIRASS", "SUIT", "PLATE"};
-	private String[] MANBEAST_ARMORS = new String[] {"CLOTH_TUNIC"};
-	private String[] MANBEAST_ITEMS = new String[] {"HEAL_HERB"};
-	
-	private String[] KNIGHT_BANNED_ARMOR = new String[] {};
-	private String[] KNIGHT_WEAPONS = new String[] {"SHORT_SPEAR", "FLAIL", "SABRE"};
-	private String[] KNIGHT_ARMORS = new String[] {"CUIRASS"};
-	private String[] KNIGHT_ITEMS = new String[] {"HEAL_POTION", "BIBUTI", "GARLIC"};
-	
-
-	private String[] KNIGHT_SHIELDS = new String[] {"BUCKLER", "WOODEN_SHIELD"};
-	
-	private String[] WEAPON_MATERIALS = new String[]{"STEEL"};
-	private String[] ARMOR_MATERIALS = new String[]{"BRONZE"};
-	
-	protected String [] MALE_NAMES = new String [] {"Slash", "Simon", "Trevor", "Alan", "Reinhart", "Juste", "Alucard", "Daniel"};
-	protected String [] FEMALE_NAMES = new String [] {"Eliann","Sonia", "Valentina", "Carrie", "Sypha", "Mina"};
-
-	protected String[] CLASS_DESCRIPTIONS = {
-		"Heir of the Belmont fate, destined to confront the dark Count or die "+
-		"trying. Master in the use of the mystic Vampire Killer whip and the "+
-		"only human able to use mystic weapons",
+	// static??!! final? was just private String[] before.
+	private String[]
+		VKILLER_BANNED_ARMOR = {"DIAMOND_PLATE", "LEATHER_ARMOR", "CLOTH_TUNIC", "VEST", "CUIRASS", "SUIT", "PLATE"},
+		VKILLER_WEAPONS = {"LEATHER_WHIP"},
+		VKILLER_ARMORS = {"VARMOR"},
+		VKILLER_ITEMS = {"HEAL_HERB", "GARLIC"},
 		
-		"A Vampire turned to the side of light, %%his will is to cleanse the world "+
-		"of the Count's dark influence. Adept with weapons and wielder of "+
-		"vampiric skills.",
+		RENEGADE_BANNED_ARMOR = {"DIAMOND_PLATE", "SUIT", "PLATE"},
+		RENEGADE_WEAPONS = {"SHORT_SWORD", "BOW"},
+		RENEGADE_ARMORS = {"FINE_GARMENT"},
+		RENEGADE_ITEMS = {"HEAL_HERB", "BIBUTI"},
+		RENEGADE_SHIELDS = {"BUCKLER"},
+	
+		VANQUISHER_BANNED_ARMOR = {"DIAMOND_PLATE", "VEST", "CUIRASS", "SUIT", "PLATE"},
+		VANQUISHER_WEAPONS = {"RINGS", "STAFF"},
+		VANQUISHER_ARMORS = {"CLOTH_TUNIC"},
+		VANQUISHER_ITEMS = {"HEAL_POTION", "BIBUTI"},
 		
-		"A human envowed since childhood with mystical powers to fight darkness, %%he is able "+
-		"to enchant weapons, and learn spells from the dark tomes hidden within the castle",
+		INVOKER_BANNED_ARMOR = {"DIAMOND_PLATE", "VEST", "CUIRASS", "SUIT", "PLATE"},
+		INVOKER_WEAPONS = {"BASELARD", "STAFF"},
+		INVOKER_ARMORS = {"CLOTH_TUNIC"},
+		INVOKER_ITEMS = {"HEAL_POTION", "GARLIC"},
 		
-		"Able to manipulate spirits and bestow them a physical form, to bring "+
-		"havoc upon its enemies.",	// could be clearer/better. 'its'? the spirit?
+		MANBEAST_BANNED_ARMOR = {"DIAMOND_PLATE", "VEST", "CUIRASS", "SUIT", "PLATE"},
+		MANBEAST_ARMORS = {"CLOTH_TUNIC"},
+		MANBEAST_ITEMS = {"HEAL_HERB"},
 		
-		"Fighting with an ancient martial style, %%his racial powers allow %%him"+
-		" to transform into a powerful bestial creature. Can withstand more "+
-		"damage than common humans.",
-		
-		"An agent from the church, trained to defend the world from chaos and "+
-		"armed with the most advanced human weaponry"
-	};
+		KNIGHT_BANNED_ARMOR = {},
+		KNIGHT_WEAPONS = {"SHORT_SPEAR", "FLAIL", "SABRE"},
+		KNIGHT_ARMORS = {"CUIRASS"},
+		KNIGHT_ITEMS = {"HEAL_POTION", "BIBUTI", "GARLIC"},
+		KNIGHT_SHIELDS = {"BUCKLER", "WOODEN_SHIELD"};
+	
+	private String[]
+		WEAPON_MATERIALS = {"STEEL"},
+		ARMOR_MATERIALS  = {"BRONZE"};
+	
 	
 	protected String[][] CLASS_STATS = {
 		{"5","1","Normal","5","Quick","Normal","Deadly","Normal","Normal","Poor"},
@@ -586,90 +497,71 @@ public abstract class PlayerGenerator {
 		{"7","0","Hardy","0","Normal","Deadly","Poor","Strong","Normal","Wealthy"}
 	};
 	
+	// TODO Move to Text. then deprecate ... use ints.
 	protected String[] CLASS_APPEARANCES = {
-		"VKILLER","RENEGADE","VANQUISHER","INVOKER","MANBEAST","KNIGHT"
+		"VKILLER", "RENEGADE", "VANQUISHER", "INVOKER", "MANBEAST", "KNIGHT"
 	};
-	
+	// TODO Move to Text.
 	protected String[] CLASS_NAMES = {
 		"Vampire Killer", "Darkness Renegade","Vanquisher Wizard","Souls' Master","Manbeast","Knight of the Order"
 	};
 	
-	public static String getClassID(int classId){
-		switch (classId){
-		case Player.CLASS_VAMPIREKILLER:
-			return "VKILLER";
-		case Player.CLASS_VANQUISHER:
-			return  "VANQUISHER";
-		case Player.CLASS_RENEGADE:
-			return  "RENEGADE";
-		case Player.CLASS_INVOKER:
-			return  "INVOKER";
-		case Player.CLASS_MANBEAST:
-			return  "MANBEAST";
-		case Player.CLASS_KNIGHT:
-			return  "KNIGHT";
-		}
-		return "";
-	}
 	
-	private int[] ADVANCEMENT_LEVELS_NORMAL = new int[]{
-			1,
-			4,
-			7,
-			10,
-			14,
-			18,
-			22,
-			27,
-			32,
-			37,
-			43,
-			49,
-			55,
-			62,
-			69,
-			76
-
+	private int[] ADVANCEMENT_LEVELS_NORMAL = {
+		1,
+		4,
+		7,
+		10,
+		14,
+		18,
+		22,
+		27,
+		32,
+		37,
+		43,
+		49,
+		55,
+		62,
+		69,
+		76
 	};
 	
-	private int[] ADVANCEMENT_LEVELS_HARD = new int[]{
-			1,
-			5,
-			9,
-			13,
-			18,
-			23,
-			28,
-			34,
-			40,
-			46,
-			53,
-			60,
-			67,
-			75,
-			83,
-			91
-
+	private int[] ADVANCEMENT_LEVELS_HARD = {
+		1,
+		5,
+		9,
+		13,
+		18,
+		23,
+		28,
+		34,
+		40,
+		46,
+		53,
+		60,
+		67,
+		75,
+		83,
+		91
 	};
 	
-	private int[] ADVANCEMENT_LEVELS_HARDER = new int[]{
-			1,
-			6,
-			11,
-			16,
-			22,
-			28,
-			34,
-			41,
-			48,
-			55,
-			63,
-			71,
-			79,
-			88,
-			97,
-			106
-
+	private int[] ADVANCEMENT_LEVELS_HARDER = {
+		1,
+		6,
+		11,
+		16,
+		22,
+		28,
+		34,
+		41,
+		48,
+		55,
+		63,
+		71,
+		79,
+		88,
+		97,
+		106
 	};
 
 	private String[] SONIA_ITEMS = {"HEAL_HERB", "GARLIC", "BIBUTI"};

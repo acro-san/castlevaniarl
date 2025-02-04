@@ -26,6 +26,6 @@ public class SoulSaint extends HeartAction{
 		super.execute();
 		Player aPlayer = (Player)performer;
 		aPlayer.setCounter(Consts.C_FIREBALL_WHIP, 50+3*aPlayer.getSoulPower());
-		aPlayer.getLevel().addMessage("Your whip glows!");
+		aPlayer.level.addMessage("Your whip glows!");
 	}
 }

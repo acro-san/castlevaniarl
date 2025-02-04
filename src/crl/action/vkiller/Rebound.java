@@ -22,7 +22,7 @@ public class Rebound extends Action{
 		Debug.doAssert(performer instanceof Player, "action.Rebound");
 		Player aPlayer = (Player) performer;
 
-        Level aLevel = performer.getLevel();
+        Level aLevel = performer.level;
         if (aPlayer.getHearts() < 1){
             aLevel.addMessage("You don't have enough hearts");
             return;
@@ -53,7 +53,7 @@ public class Rebound extends Action{
 				aLevel.addEffect(x);*/
 				break;
 			}
-			Monster targetMonster = performer.getLevel().getMonsterAt(runner);
+			Monster targetMonster = performer.level.getMonsterAt(runner);
 			message = new StringBuffer();
 			if (targetMonster != null && !targetMonster.isInWater()){
 				message.append("The crystal hits the "+targetMonster.getDescription());
@@ -61,7 +61,7 @@ public class Rebound extends Action{
 				targetMonster.damage(message, 1);
         		if (targetMonster.isDead()){
 	        		message.append(", destroying it!");
-					performer.getLevel().removeMonster(targetMonster);
+					performer.level.removeMonster(targetMonster);
 				}
         		if (targetMonster.wasSeen())
         			aLevel.addMessage(message.toString());
@@ -72,7 +72,7 @@ public class Rebound extends Action{
 				break;
 			}
 
-			Cell targetCell = performer.getLevel().getMapCell(runner);
+			Cell targetCell = performer.level.getMapCell(runner);
 			if (targetCell != null && (targetCell.isSolid() || targetCell.getHeight() > aLevel.getMapCell(performer.getPosition()).getHeight()+2)){
 				aLevel.addMessage("The crystal rebounds in the "+targetCell.getDescription());
 				/*x.setPosition(bouncePoint);

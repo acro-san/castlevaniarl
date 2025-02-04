@@ -38,6 +38,7 @@ public class GFXDisplay extends Display {
 	
 	private SwingSystemInterface si;
 	
+	
 	private String
 		IMG_TITLE,
 		IMG_PROLOGUE,
@@ -99,7 +100,7 @@ public class GFXDisplay extends Display {
 		}
 	}
 	
-	private AddornedBorderTextArea adornedTextArea;
+	private AdornedBorderTextArea adornedTextArea;
 
 	private GFXChatBox gfxChatBox;
 	
@@ -113,7 +114,7 @@ public class GFXDisplay extends Display {
 			BufferedImage b2 = ImageUtils.crearImagen(IMG_BORDERS, 1,1,32,32);
 			BufferedImage b3 = ImageUtils.crearImagen(IMG_BORDERS, 100, 1, 32,32);
 			BufferedImage b4 = ImageUtils.crearImagen(IMG_BORDERS, 67,1,32,32);
-			adornedTextArea = new AddornedBorderTextArea(
+			adornedTextArea = new AdornedBorderTextArea(
 					b1,
 					b2,
 					b3,
@@ -273,7 +274,9 @@ public class GFXDisplay extends Display {
 		si.print(2,3, "The chronicles of "+player.getName(), COLOR_BOLD);
 		JTextArea t1 = createTempArea(20,125,700,120);
 		t1.setForeground(Color.WHITE);
-		t1.setText("  ...And so it was that "+player.getDescription() + ", "+gsi.getDeathString()+" on the "+player.getLevel().getDescription()+"...\n\n"+
+		
+		// TODO use TxtTpl.t replacement here, perhaps? More keywords?
+		t1.setText("  ...And so it was that "+player.getDescription() + ", "+gsi.getDeathString()+" on the "+player.level.getDescription()+"...\n\n"+
 				heshe+ " scored "+ player.getScore() +" points and earned "+ player.getGold() +" gold \n\n"+
 				heshe + " survived for "+gsi.turns+" turns \n\n"+
 				heshe + " took "+gsi.getTotalDeathCount()+" monsters to the other world");

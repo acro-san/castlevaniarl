@@ -39,7 +39,7 @@ public class BeastMorph extends MorphAction{
 	}
 
 	public int getMorphTime() {
-		return 40+getPlayer().getSoulPower()*3+(!getPlayer().getLevel().isDay()?50:0);
+		return 40+getPlayer().getSoulPower()*3+(!getPlayer().level.isDay()?50:0);
 	}
 
 	public boolean isBigMorph() {

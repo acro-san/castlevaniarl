@@ -3,18 +3,16 @@ package crl.action.manbeast;
 import sz.util.Position;
 import crl.Main;
 import crl.action.Action;
-import crl.action.BeamProjectileSkill;
 import crl.action.HeartAction;
-import crl.actor.Actor;
 import crl.feature.Feature;
 import crl.level.Cell;
 import crl.level.Level;
 import crl.monster.Monster;
 import crl.player.Player;
-import crl.ui.UserInterface;
 import crl.ui.effects.EffectFactory;
 
-public class EnergyScythe extends HeartAction{
+public class EnergyScythe extends HeartAction {
+	
 	public int getHeartCost() {
 		return 5;
 	}
@@ -35,7 +33,7 @@ public class EnergyScythe extends HeartAction{
 		super.execute();
 		Player aPlayer = (Player)performer;
 		int damage = 10 + aPlayer.getAttack();
-		Level aLevel = aPlayer.getLevel();
+		Level aLevel = aPlayer.level;
 		int otherDir1 = 0;
 		int otherDir2 = 0;
 		switch (targetDirection){
@@ -75,16 +73,15 @@ public class EnergyScythe extends HeartAction{
 				aLevel.addMessage("Hitting yourself hard?");
 				return;
 		}
-		hit (Position.add(performer.getPosition(), Action.directionToVariation(otherDir1)), damage);
-		hit (Position.add(performer.getPosition(), Action.directionToVariation(targetDirection)), damage);
-		hit (Position.add(performer.getPosition(), Action.directionToVariation(otherDir2)), damage);
-		hit (Position.add(Position.add(performer.getPosition(), Action.directionToVariation(otherDir1)), Action.directionToVariation(targetDirection)), damage);
-		hit (Position.add(Position.add(performer.getPosition(), Action.directionToVariation(targetDirection)), Action.directionToVariation(targetDirection)), damage);
-		hit (Position.add(Position.add(performer.getPosition(), Action.directionToVariation(otherDir2)), Action.directionToVariation(targetDirection)), damage);
-
+		hit(Position.add(performer.getPosition(), Action.directionToVariation(otherDir1)), damage);
+		hit(Position.add(performer.getPosition(), Action.directionToVariation(targetDirection)), damage);
+		hit(Position.add(performer.getPosition(), Action.directionToVariation(otherDir2)), damage);
+		hit(Position.add(Position.add(performer.getPosition(), Action.directionToVariation(otherDir1)), Action.directionToVariation(targetDirection)), damage);
+		hit(Position.add(Position.add(performer.getPosition(), Action.directionToVariation(targetDirection)), Action.directionToVariation(targetDirection)), damage);
+		hit(Position.add(Position.add(performer.getPosition(), Action.directionToVariation(otherDir2)), Action.directionToVariation(targetDirection)), damage);
 	}
 
-	public String getSFX(){
+	public String getSFX() {
 		return "wav/swaashll.wav";
 	}
 
@@ -95,40 +92,39 @@ public class EnergyScythe extends HeartAction{
 	
 	private boolean hit (Position destinationPoint, int damage){
 		StringBuffer message = new StringBuffer();
-		Level aLevel = performer.getLevel();
+		Level aLevel = performer.level;
 		Player aPlayer = aLevel.getPlayer();
 		//UserInterface.getUI().drawEffect(new TileEffect(destinationPoint, '*', Appearance.RED, 100));
 		Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(destinationPoint, "SFX_RED_HIT"));
 		//aLevel.addBlood(destinationPoint, 8);
 		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-        if (destinationFeature != null && destinationFeature.isDestroyable()){
-	       	message.append("You crush the "+destinationFeature.getDescription());
+		if (destinationFeature != null && destinationFeature.isDestroyable()) {
+			message.append("You crush the "+destinationFeature.getDescription());
 
 			Feature prize = destinationFeature.damage(aPlayer, 4);
-	       	if (prize != null){
-		       	message.append(", breaking it apart!");
+			if (prize != null) {
+				message.append(", breaking it apart!");
 			}
 			aLevel.addMessage(message.toString());
-        	return true;
+			return true;
 		}
-        Monster targetMonster = performer.getLevel().getMonsterAt(destinationPoint);
-		Cell destinationCell = performer.getLevel().getMapCell(destinationPoint);
-        if (
-			targetMonster != null &&
+		Monster targetMonster = performer.level.getMonsterAt(destinationPoint);
+		Cell destinationCell = performer.level.getMapCell(destinationPoint);
+		if (targetMonster != null &&
 			!(targetMonster.isInWater() && targetMonster.canSwim()) &&
 				(destinationCell.getHeight() == aLevel.getMapCell(aPlayer.getPosition()).getHeight() ||
 				destinationCell.getHeight() -1  == aLevel.getMapCell(aPlayer.getPosition()).getHeight() ||
 				destinationCell.getHeight() == aLevel.getMapCell(aPlayer.getPosition()).getHeight()-1)
-			){
-        		if (targetMonster.wasSeen())
-        			message.append("You crush the "+targetMonster.getDescription());
-				//targetMonster.damage(player.getWhipLevel());
-				targetMonster.damage(message, 2*aPlayer.getPunchDamage());
-	        	
-				aLevel.addMessage(message.toString());
-
-				return true;
+			)
+		{
+			if (targetMonster.wasSeen()) {
+				message.append("You crush the "+targetMonster.getDescription());
 			}
+			//targetMonster.damage(player.getWhipLevel());
+			targetMonster.damage(message, 2*aPlayer.getPunchDamage());
+			aLevel.addMessage(message.toString());
+			return true;
+		}
 		return false;
 	}
 }

@@ -13,56 +13,59 @@ import crl.monster.Monster;
 import crl.player.Consts;
 import crl.player.Damage;
 
-public class MonsterWalk extends Action{
+public class MonsterWalk extends Action {
+	
 	public String getID(){
 		return "MonsterWalk";
 	}
 	
-	public boolean needsDirection(){
+	public boolean needsDirection() {
 		return true;
 	}
 
 	public void execute(){
 		Debug.doAssert(performer instanceof Monster, "The player tried to MonsterWalk...");
 		Monster aMonster = (Monster) performer;
-        Position var = directionToVariation(targetDirection);
-        Position destinationPoint = Position.add(performer.getPosition(), var);
-        Level aLevel = performer.getLevel();
-        if (!aLevel.isValidCoordinate(destinationPoint))
-        	return;
-        Cell destinationCell = aLevel.getMapCell(destinationPoint);
-        Cell currentCell = aLevel.getMapCell(performer.getPosition());
-        
-        Monster destinationMonster = aLevel.getMonsterAt(destinationPoint);
-        Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-        SmartFeature standing = aLevel.getSmartFeature(performer.getPosition());
-        if (standing != null)
-        	if (standing.getEffectOnStep() != null){
-		        String[] effects = standing.getEffectOnStep().split(" ");
-		        if (effects[0].equals("TRAP") && aMonster != aLevel.getBoss()){
-			        aLevel.addMessage("The "+aMonster.getDescription()+" is trapped!");
-		        	return;
-		        }
-		    }
-
-        if (destinationFeature != null && destinationFeature.isSolid()){
-        	//if (Util.chance(50)){
-        	if (aMonster.wasSeen())
-        		aLevel.addMessage("The "+aMonster.getDescription()+" hits the "+destinationFeature.getDescription());
-        	destinationFeature.damage(aMonster);
-        	//}
-        }
-        if (destinationCell == null || 
-        		destinationCell.isSolid() || 
-        		(destinationCell.isEthereal() && !aMonster.isFlying()) 
-        	) 
-        	if (aMonster.getSelector() instanceof BasicMonsterAI)
-        		if (((BasicMonsterAI)aMonster.getSelector()).getPatrolRange() > 0)
-        			((BasicMonsterAI)aMonster.getSelector()).setChangeDirection(true);
-        if (destinationCell != null && 
+		Position var = directionToVariation(targetDirection);
+		Position destinationPoint = Position.add(performer.getPosition(), var);
+		Level aLevel = performer.level;
+		if (!aLevel.isValidCoordinate(destinationPoint)) {
+			return;
+		}
+		Cell destinationCell = aLevel.getMapCell(destinationPoint);
+		Cell currentCell = aLevel.getMapCell(performer.getPosition());
+		
+		Monster destinationMonster = aLevel.getMonsterAt(destinationPoint);
+		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
+		SmartFeature standing = aLevel.getSmartFeature(performer.getPosition());
+		if (standing != null) {
+			if (standing.getEffectOnStep() != null) {
+				String[] effects = standing.getEffectOnStep().split(" ");
+				if (effects[0].equals("TRAP") && aMonster != aLevel.getBoss()){
+					aLevel.addMessage("The "+aMonster.getDescription()+" is trapped!");
+					return;
+				}
+			}
+		}
+		
+		if (destinationFeature != null && destinationFeature.isSolid()) {
+			//if (Util.chance(50)) {
+			if (aMonster.wasSeen())
+				aLevel.addMessage("The "+aMonster.getDescription()+" hits the "+destinationFeature.getDescription());
+			destinationFeature.damage(aMonster);
+			//}
+		}
+		if (destinationCell == null ||
+				destinationCell.isSolid() ||
+				(destinationCell.isEthereal() && !aMonster.isFlying())
+			)
+        	if (aMonster.selector instanceof BasicMonsterAI)
+        		if (((BasicMonsterAI)aMonster.selector).getPatrolRange() > 0)
+        			((BasicMonsterAI)aMonster.selector).setChangeDirection(true);
+        if (destinationCell != null &&
         		(!destinationCell.isEthereal() || (destinationCell.isEthereal() && (aMonster.isEthereal() || aMonster.isFlying())))
-        	){
-        	if (destinationFeature != null && destinationFeature.isSolid()){
+        	) {
+        	if (destinationFeature != null && destinationFeature.isSolid()) {
         		
         	}else {
 				if (aMonster.isEthereal() || !destinationCell.isSolid()){
@@ -88,9 +91,9 @@ public class MonsterWalk extends Action{
 										/*Esto deberia estar en un landing*/
 										if (aLevel.getSmartFeature(destinationPoint) != null){
 											SmartFeature sf = aLevel.getSmartFeature(destinationPoint);
-											if (sf.getDamageOnStep() > 0) {
+											if (sf.damageOnStep > 0) {
 												StringBuffer buff = new StringBuffer("The "+aMonster.getDescription()+" is injured by the " + sf.getDescription());
-												aMonster.damage(buff, sf.getDamageOnStep());
+												aMonster.damage(buff, sf.damageOnStep);
 												aLevel.addMessage(buff.toString());
 											}
 										}
@@ -99,9 +102,9 @@ public class MonsterWalk extends Action{
 										performer.setPosition(destinationPoint);
 										if (aLevel.getSmartFeature(destinationPoint) != null){
 											SmartFeature sf = aLevel.getSmartFeature(destinationPoint);
-											if (sf.getDamageOnStep() > 0) {
+											if (sf.damageOnStep > 0) {
 												StringBuffer buff = new StringBuffer("The "+aMonster.getDescription()+" is injured by the " + sf.getDescription());
-												aMonster.damage(buff, sf.getDamageOnStep());
+												aMonster.damage(buff, sf.damageOnStep);
 												aLevel.addMessage(buff.toString());
 											}
 										}
@@ -110,9 +113,9 @@ public class MonsterWalk extends Action{
 									performer.setPosition(destinationPoint);
 									if (aLevel.getSmartFeature(destinationPoint) != null){
 										SmartFeature sf = aLevel.getSmartFeature(destinationPoint);
-										if (sf.getDamageOnStep() > 0) {
+										if (sf.damageOnStep > 0) {
 											StringBuffer buff = new StringBuffer("The "+aMonster.getDescription()+" is injured by the " + sf.getDescription());
-											aMonster.damage(buff, sf.getDamageOnStep());
+											aMonster.damage(buff, sf.damageOnStep);
 											aLevel.addMessage(buff.toString());
 										}
 									}
@@ -126,8 +129,7 @@ public class MonsterWalk extends Action{
 					}
 				}
 			}
-        }
-
+		}
 	}
 
 	public int getCost(){

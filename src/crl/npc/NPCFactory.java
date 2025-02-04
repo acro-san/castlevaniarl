@@ -9,43 +9,45 @@ import sz.util.*;
 
 public class NPCFactory {
 	private final static NPCFactory singleton = new NPCFactory();
-	private Hashtable definitions;
-	private Vector hostages = new Vector();
+	private Hashtable<String,NPCDefinition> definitions;
+	private Vector<String> hostages = new Vector<>();
 
-	public static NPCFactory getFactory(){
+	@Deprecated
+	public static NPCFactory getFactory() {
 		return singleton;
 	}
 
-	public NPC buildNPC (String id){
-		return new NPC((NPCDefinition) definitions.get(id));
+	public NPC buildNPC(String id) {
+		return new NPC((NPCDefinition)definitions.get(id));
 	}
 	
 	public Merchant buildMerchant(int merchandiseType){
-		return new Merchant((NPCDefinition) definitions.get("MERCHANT"), merchandiseType);
+		return new Merchant(definitions.get("MERCHANT"), merchandiseType);
 	}
 	
 	public Hostage buildHostage() {
-		Hostage ret = new Hostage((NPCDefinition) definitions.get((String)Util.randomPick(hostages)));
+		Hostage ret = new Hostage((NPCDefinition)definitions.get( Util.pick(hostages) ));
 		Player p = Main.ui.getPlayer();	//FIXME: *SURELY* the UI isn't where the player's stored though?
 		if (p.getPlayerClass() != Player.CLASS_VAMPIREKILLER) {
 			int artifactCategory = ((int) (p.getPlayerLevel() / 6.0));
-			ret.setItemReward(Main.itemData.createWeapon(Util.randPick(hostageArtifacts[artifactCategory]),""));
+			ret.setItemReward(Main.itemData.createWeapon(Util.pick(hostageArtifacts[artifactCategory]),""));
 		}
 		return ret;
 	}
 
-	public NPCDefinition getDefinition (String id){
-		return (NPCDefinition) definitions.get(id);
+	public NPCDefinition getDefinition(String id) {
+		return (NPCDefinition)definitions.get(id);
 	}
 
 	public void addDefinition(NPCDefinition definition){
 		definitions.put(definition.getID(), definition);
-		if (definition.isHostage())
+		if (definition.isHostage()) {
 			hostages.add(definition.getID());
+		}
 	}
 
-	public NPCFactory(){
-		definitions = new Hashtable(40);
+	public NPCFactory() {
+		definitions = new Hashtable<>(40);
 	}
 	
 	private static String[][] hostageArtifacts = {

@@ -79,7 +79,7 @@ public class Bird extends ProjectileSkill{
 	public void execute(){
 		reduceHearts();
 		executing = true;
-		Level aLevel = performer.getLevel();
+		Level aLevel = performer.level;
 		Player aPlayer = aLevel.getPlayer();
 		aLevel.addMessage("You invoke two bird souls!");
 

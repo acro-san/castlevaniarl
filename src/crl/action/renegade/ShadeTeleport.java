@@ -32,7 +32,7 @@ public class ShadeTeleport extends HeartAction{
 	public void execute(){
 		super.execute();
 		Player player = (Player) performer;
-		Level level = player.getLevel();
+		Level level = player.level;
 		level.addMessage("You wrap in your cape and dissapear!");
 		if (targetPosition.equals(performer.getPosition())){
         	level.addMessage("You appear in the same place!");
@@ -45,7 +45,7 @@ public class ShadeTeleport extends HeartAction{
 		int i = 0;
 		for (; i < 8; i++){
 			runner = line.next();
-        	Cell destinationCell = performer.getLevel().getMapCell(runner);
+        	Cell destinationCell = performer.level.getMapCell(runner);
 			if (
 				level.isWalkable(runner) &&	
 				destinationCell.getHeight() == level.getMapCell(player.getPosition()).getHeight() 

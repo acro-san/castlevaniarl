@@ -20,7 +20,7 @@ public class WhirlwindWhip extends Action{
 	
 	public void execute(){
 		Player aPlayer = (Player)performer;
-		Level aLevel = aPlayer.getLevel();
+		Level aLevel = aPlayer.level;
 		if (!checkHearts(5)){
 	        aLevel.addMessage("You need more hearts");
 	        return;
@@ -42,7 +42,7 @@ public class WhirlwindWhip extends Action{
 	
 	private boolean hit (Position destinationPoint, int attack){
 		StringBuffer message = new StringBuffer();
-		Level aLevel = performer.getLevel();
+		Level aLevel = performer.level;
 		Player aPlayer = aLevel.getPlayer();
 		Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(destinationPoint, "SFX_WHITE_HIT"));
 		//aLevel.addBlood(destinationPoint, 8);
@@ -57,10 +57,9 @@ public class WhirlwindWhip extends Action{
 			aLevel.addMessage(message.toString());
         	return true;
 		}
-        Monster targetMonster = performer.getLevel().getMonsterAt(destinationPoint);
-		Cell destinationCell = performer.getLevel().getMapCell(destinationPoint);
-        if (
-			targetMonster != null &&
+		Monster targetMonster = performer.level.getMonsterAt(destinationPoint);
+		Cell destinationCell = performer.level.getMapCell(destinationPoint);
+		if (targetMonster != null &&
 			!(targetMonster.isInWater() && targetMonster.canSwim()) &&
 				(destinationCell.getHeight() == aLevel.getMapCell(aPlayer.getPosition()).getHeight() ||
 				destinationCell.getHeight() -1  == aLevel.getMapCell(aPlayer.getPosition()).getHeight() ||
@@ -68,24 +67,26 @@ public class WhirlwindWhip extends Action{
 				){
 				message.append("You whip the "+targetMonster.getDescription());
 				targetMonster.damageWithWeapon(message, attack);
-	        	if (targetMonster.isDead()){
-		        	message.append(", destroying it!");
-					//performer.getLevel().removeMonster(targetMonster);
+				if (targetMonster.isDead()) {
+					message.append(", destroying it!");
+					//performer.level.removeMonster(targetMonster);
 				}
-	        	if (targetMonster.wasSeen())
-	        		aLevel.addMessage(message.toString());
-
+				if (targetMonster.wasSeen()) {
+					aLevel.addMessage(message.toString());
+				}
 				return true;
 			}
 		return false;
 	}
 	
-	public boolean canPerform(Actor a){
+	
+	@Override
+	public boolean canPerform(Actor a) {
 		Player aPlayer = (Player) a;
-        if (aPlayer.getHearts() < 5){
-        	invalidationMessage = "You need more energy!";
-            return false;
+		if (aPlayer.getHearts() < 5) {
+			invalidationMessage = "You need more energy!";
+			return false;
 		}
-        return true;
+		return true;
 	}
 }

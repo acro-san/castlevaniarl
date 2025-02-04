@@ -23,21 +23,21 @@ import crl.ui.ActionCancelException;
 import crl.ui.UISelector;
 import crl.ui.UserAction;
 
-public class GFXUISelector extends UISelector implements ActionSelector, MouseListener, MouseMotionListener, Serializable {
+public class GFXUISelector extends UISelector
+	implements ActionSelector, MouseListener, MouseMotionListener, Serializable {
+	
 	private transient SwingSystemInterface si;
 	private boolean useMouse = false;
 	
-	
 	public void init(SwingSystemInterface psi, UserAction[] gameActions, Properties UIProperties,
-			Action advance, Action target, Action attack, Properties keyBindings){
+			Action advance, Action target, Action attack, Properties keyBindings) {
 		super.init(gameActions, advance, target, attack, keyBindings);
 		this.si = psi;
-		if (UIProperties.getProperty("useMouse").equals("true")){
+		if (UIProperties.getProperty("useMouse").equals("true")) {
 			psi.addMouseListener(this);
 			psi.addMouseMotionListener(this);
 			useMouse = true;
 		}
-		
 	}
 	
 	
@@ -47,11 +47,12 @@ public class GFXUISelector extends UISelector implements ActionSelector, MouseLi
 	
 	public Action selectAction(Actor who) {
 		Debug.enterMethod(this, "selectAction", who);
-	    CharKey input = null;
-	    Action ret = null;
-	    while (ret == null) {
-	    	if (ui().gameOver())
-	    		return null;
+		CharKey input = null;
+		Action ret = null;
+		while (ret == null) {
+			if (ui().gameOver()) {
+				return null;
+			}
 			input = si.inkey();
 			if (input.code == CharKey.NONE && !useMouse)
 				continue;
@@ -71,13 +72,13 @@ public class GFXUISelector extends UISelector implements ActionSelector, MouseLi
 				return null;
 			}
 			
-			if (Cheat.cheatConsole(player, input.code)){
+			if (Cheat.cheatConsole(player, input.code)) {
 				continue;
 			}
 			
-			if (useMouse && mousePosition != null){
+			if (useMouse && mousePosition != null) {
 				mouseDirection = -1;
-				if (level.isValidCoordinate(mousePosition)){
+				if (level.isValidCoordinate(mousePosition)) {
 					//if (level.getMonsterAt(mousePosition) != null){
 						if (player.getPlayerClass() == Player.CLASS_VAMPIREKILLER) {
 							ret = player.getMysticAction();
@@ -94,8 +95,7 @@ public class GFXUISelector extends UISelector implements ActionSelector, MouseLi
 		        	                mousePosition = null;
 		            	        	return ret;
 								}
-							}
-							catch (ActionCancelException ace){
+							} catch (ActionCancelException ace) {
 								ui().addMessage(new Message("- Cancelled", player.getPosition()));
 								si.refresh();
 								ret = null;
@@ -115,11 +115,10 @@ public class GFXUISelector extends UISelector implements ActionSelector, MouseLi
 		                    	return ret;
 							}
 							catch (ActionCancelException ace){
-				 				ui().addMessage(new Message("- Cancelled", player.getPosition()));
-				 				si.refresh();
+								ui().addMessage(new Message("- Cancelled", player.getPosition()));
+								si.refresh();
 								ret = null;
 							}
-
 						}
 					//}
 				}
@@ -135,10 +134,9 @@ public class GFXUISelector extends UISelector implements ActionSelector, MouseLi
 					direction = toIntDirection(input);
 				}
 				
-				
-				Monster vMonster = player.getLevel().getMonsterAt(Position.add(player.getPosition(), Action.directionToVariation(direction)));
+				Monster vMonster = player.level.getMonsterAt(Position.add(player.getPosition(), Action.directionToVariation(direction)));
 				if (vMonster != null && vMonster.getStandingHeight() == player.getStandingHeight() &&
-					(!(vMonster instanceof NPC) || (vMonster instanceof NPC && ((NPC)vMonster).isHostile()))){
+					(!(vMonster instanceof NPC) || (vMonster instanceof NPC && ((NPC)vMonster).isHostile()))) {
 					if (attack.canPerform(player)){
 						attack.setDirection(direction);
 						Debug.exitMethod(attack);
@@ -165,52 +163,49 @@ public class GFXUISelector extends UISelector implements ActionSelector, MouseLi
 					return advance;
 				}
 			} else
-			if (input.code == WEAPON_KEY){
+			if (input.code == WEAPON_KEY) {
 				if (player.getPlayerClass() == Player.CLASS_VAMPIREKILLER) {
 					ret = player.getMysticAction();
 					try {
-		            	if (ret != null){
-		                	ret.setPerformer(player);
-		                	if (ret.canPerform(player))
-		                		ui().setTargets(ret);
-		                	else {
-		                		level.addMessage(ret.getInvalidationMessage());
-		            			throw new ActionCancelException();
-		                	}
-        	                Debug.exitMethod(ret);
-            	        	return ret;
+						if (ret != null) {
+							ret.setPerformer(player);
+							if (ret.canPerform(player)) {
+								ui().setTargets(ret);
+							} else {
+								level.addMessage(ret.getInvalidationMessage());
+								throw new ActionCancelException();
+							}
+							Debug.exitMethod(ret);
+							return ret;
 						}
-					}
-					catch (ActionCancelException ace){
+					} catch (ActionCancelException ace) {
 						ui().addMessage(new Message("- Cancelled", player.getPosition()));
 						si.refresh();
 						//si.cls();
-		 				//refresh();
+						//refresh();
 						ret = null;
 					}
 				} else {
 					ret = target;
-	            	try {
-	            		ret.setPerformer(player);
-	            		if (ret.canPerform(player))
-	            			ui().setTargets(ret);
-	            		else {
-	            			level.addMessage(ret.getInvalidationMessage());
-	            			throw new ActionCancelException();
-	            		}
-                     	Debug.exitMethod(ret);
-                    	return ret;
-					}
-					catch (ActionCancelException ace){
-		 				ui().addMessage(new Message("- Cancelled", player.getPosition()));
-		 				si.refresh();
+					try {
+						ret.setPerformer(player);
+						if (ret.canPerform(player)) {
+							ui().setTargets(ret);
+						} else {
+							level.addMessage(ret.getInvalidationMessage());
+							throw new ActionCancelException();
+						}
+						Debug.exitMethod(ret);
+						return ret;
+					} catch (ActionCancelException ace) {
+						ui().addMessage(new Message("- Cancelled", player.getPosition()));
+						si.refresh();
 						ret = null;
 					}
-
 				}
-			}else{
-            	ret = getRelatedAction(input.code);
-            	/*if (ret == target){
+			} else {
+				ret = getRelatedAction(input.code);
+				/*if (ret == target) {
             		defaultTarget = player.getNearestMonsterPosition();
             	}*/
             	try {
@@ -225,12 +220,10 @@ public class GFXUISelector extends UISelector implements ActionSelector, MouseLi
                      	Debug.exitMethod(ret);
                     	return ret;
 					}
-
-				}
-				catch (ActionCancelException ace){
+				} catch (ActionCancelException ace) {
 					//si.cls();
-	 				//refresh();
-	 				ui().addMessage(new Message("- Cancelled", player.getPosition()));
+					//refresh();
+					ui().addMessage(new Message("- Cancelled", player.getPosition()));
 					ret = null;
 				}
 				//refresh();
@@ -368,10 +361,12 @@ public class GFXUISelector extends UISelector implements ActionSelector, MouseLi
 		tempRel.y = bigy-ui().PC_POS.y-1;
 		mousePosition = Position.add(player.getPosition(), tempRel);
 	}
+	
+	/*
 	private Position tempCursorPosition = new Position(0,0);
 	private Position tempCursorPositionScr = new Position(0,0);
-	
-	private boolean updateCursorPosition(int x, int y){
+	/*
+	private boolean updateCursorPosition(int x, int y) {
 		int bigx = (int)Math.ceil(x/32.0);
 		int bigy = (int)Math.ceil(y/32.0);
 		tempRel.x = bigx-ui().PC_POS.x-1;
@@ -390,8 +385,9 @@ public class GFXUISelector extends UISelector implements ActionSelector, MouseLi
 		}
 		return true;
 	}
+	*/
 	
-	public static int toIntDirection(Position what){
+	public static int toIntDirection(Position what) {
 		switch (what.x) {
 			case 1:
 				switch (what.y) {
@@ -419,7 +415,6 @@ public class GFXUISelector extends UISelector implements ActionSelector, MouseLi
 						return Action.UPLEFT;
 				}
 		}
-
 		return -1;
 	}
 	

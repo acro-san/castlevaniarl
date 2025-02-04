@@ -36,7 +36,7 @@ public class TestMinorJinx {
 		player.setHearts(50);
 		player.setHitsMax(30);
 		player.setHits(30);
-		player.setLevel(level);
+		player.level = level;
 		
 		jinx = new MinorJinx();
 		jinx.setPerformer(player);

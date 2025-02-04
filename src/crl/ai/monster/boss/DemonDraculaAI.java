@@ -24,7 +24,7 @@ public class DemonDraculaAI extends MonsterAI{
 	public Action selectAction(Actor who){
 		Monster aMonster = (Monster) who;
 		int directionToPlayer = aMonster.starePlayer();
-		int playerDistance = Position.flatDistance(aMonster.getPosition(), aMonster.getLevel().getPlayer().getPosition());
+		int playerDistance = Position.flatDistance(aMonster.getPosition(), aMonster.level.getPlayer().getPosition());
 		if (directionToPlayer == -1) {
 			int direction = Util.rand(0,7);
 	     	Action ret = new MonsterWalk();
@@ -76,7 +76,7 @@ public class DemonDraculaAI extends MonsterAI{
 						}else if (ret instanceof SummonMonster){
 							((SummonMonster)ret).set(element.getSummonMonsterId(), element.getAttackMessage());
 						}
-						ret.setPosition(who.getLevel().getPlayer().getPosition());
+						ret.setPosition(who.level.getPlayer().getPosition());
 						return ret;
 					}
 				}

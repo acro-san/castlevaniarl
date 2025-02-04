@@ -10,18 +10,18 @@ import crl.monster.VMonster;
 import crl.player.Player;
 import crl.ui.effects.EffectFactory;
 
-public class Mindblast extends HeartAction{
+public class Mindblast extends HeartAction {
 	public int getHeartCost() {
 		return 15;
 	}
-	public String getID(){
+	public String getID() {
 		return "Mindblast";
 	}
 	
-	public void execute(){
+	public void execute() {
 		super.execute();
-		Level aLevel = performer.getLevel();
-        Player aPlayer = aLevel.getPlayer();
+		Level aLevel = performer.level;
+		Player aPlayer = aLevel.getPlayer();
 		aLevel.addMessage("You cause great disruption!");
 
 		for (int i = 0; i < 5; i++){

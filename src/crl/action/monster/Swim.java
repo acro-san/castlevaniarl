@@ -22,7 +22,7 @@ public class Swim extends Action{
 		Monster aMonster = (Monster) performer;
         Position var = directionToVariation(targetDirection);
         Position destinationPoint = Position.add(performer.getPosition(), var);
-        Level aLevel = performer.getLevel();
+        Level aLevel = performer.level;
         Cell destinationCell = aLevel.getMapCell(destinationPoint);
         Monster destinationMonster = aLevel.getMonsterAt(destinationPoint);
         if (destinationCell != null && !destinationCell.isSolid()){

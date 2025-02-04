@@ -18,7 +18,7 @@ public class DeathAI extends MonsterAI{
 	
 	public Action selectAction(Actor who){
 		Monster aMonster = (Monster) who;
-		Player aPlayer = aMonster.getLevel().getPlayer();
+		Player aPlayer = aMonster.level.getPlayer();
 		int playerDistance = Position.flatDistance(aMonster.getPosition(), aPlayer.getPosition());
 		if (playerDistance > 20){
 			powerActive = false;
@@ -49,7 +49,7 @@ public class DeathAI extends MonsterAI{
 			Action ret = new MonsterWalk();
             int direction = Action.toIntDirection(Position.mul(Action.directionToVariation(directionToPlayer), -1));
             Position destPosition = Position.add(who.getPosition(),Action.directionToVariation(direction));
-            if (who.getLevel().getMonsterAt(destPosition) == null)
+            if (who.level.getMonsterAt(destPosition) == null)
 	            ret.setDirection(direction);
             else
             	ret.setDirection(Util.rand(0,7));

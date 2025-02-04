@@ -8,7 +8,7 @@ import crl.level.Level;
 import crl.monster.Monster;
 import crl.player.Player;
 
-public class DrakeSoul extends BeamProjectileSkill{
+public class DrakeSoul extends BeamProjectileSkill {
 	
 	public int getDamage() {
 		return 1+getPlayer().getSoulPower()*3;
@@ -68,48 +68,49 @@ public class DrakeSoul extends BeamProjectileSkill{
 	}
 	
 	public void execute() {
-		if (targetPosition.equals(getPlayer().getPosition())){
+		if (targetPosition.equals(getPlayer().getPosition())) {
 			reduceHearts();
-			getPlayer().getLevel().addMessage("The dragonfire rises as a flaming column!");
-			hit (Position.add(performer.getPosition(), Action.directionToVariation(Action.UP)), getDamage());
-			hit (Position.add(performer.getPosition(), Action.directionToVariation(Action.UPLEFT)), getDamage());
-			hit (Position.add(performer.getPosition(), Action.directionToVariation(Action.LEFT)), getDamage());
-			hit (Position.add(performer.getPosition(), Action.directionToVariation(Action.DOWNLEFT)), getDamage());
-			hit (Position.add(performer.getPosition(), Action.directionToVariation(Action.DOWN)), getDamage());
-			hit (Position.add(performer.getPosition(), Action.directionToVariation(Action.DOWNRIGHT)), getDamage());
-			hit (Position.add(performer.getPosition(), Action.directionToVariation(Action.RIGHT)), getDamage());
-			hit (Position.add(performer.getPosition(), Action.directionToVariation(Action.UPRIGHT)), getDamage());
-		}
-		else
+			getPlayer().level.addMessage("The dragonfire rises as a flaming column!");
+			final Position pp = performer.getPosition();
+			hit(Position.add(pp, Action.directionToVariation(Action.UP)), getDamage());
+			hit(Position.add(pp, Action.directionToVariation(Action.UPLEFT)), getDamage());
+			hit(Position.add(pp, Action.directionToVariation(Action.LEFT)), getDamage());
+			hit(Position.add(pp, Action.directionToVariation(Action.DOWNLEFT)), getDamage());
+			hit(Position.add(pp, Action.directionToVariation(Action.DOWN)), getDamage());
+			hit(Position.add(pp, Action.directionToVariation(Action.DOWNRIGHT)), getDamage());
+			hit(Position.add(pp, Action.directionToVariation(Action.RIGHT)), getDamage());
+			hit(Position.add(pp, Action.directionToVariation(Action.UPRIGHT)), getDamage());
+		} else {
 			super.execute();
+		}
 	}
 	
 	private boolean hit (Position destinationPoint, int damage){
 		StringBuffer message = new StringBuffer();
-		Level aLevel = performer.getLevel();
-        Player aPlayer = aLevel.getPlayer();
+		Level aLevel = performer.level;
+		Player aPlayer = aLevel.getPlayer();
 		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-        if (destinationFeature != null && destinationFeature.isDestroyable()){
-	       	message.append("The drakefire burns the "+destinationFeature.getDescription());
+		if (destinationFeature != null && destinationFeature.isDestroyable()) {
+			message.append("The drakefire burns the "+destinationFeature.getDescription());
 			destinationFeature.damage(aPlayer, damage);
 			aLevel.addMessage(message.toString());
-        	return true;
+			return true;
 		}
-        Monster targetMonster = performer.getLevel().getMonsterAt(destinationPoint);
-        if (
-			targetMonster != null &&
+		Monster targetMonster = performer.level.getMonsterAt(destinationPoint);
+		if (targetMonster != null &&
 			!(targetMonster.isInWater() && targetMonster.canSwim())
-			){
-        		if (targetMonster.wasSeen())
-        			message.append("The drakefire burns the "+targetMonster.getDescription());
-				targetMonster.damage(message, damage);
-	        	if (targetMonster.isDead()){
-		        	message.append(", finishing it!");
-				}
-				aLevel.addMessage(message.toString());
-
-				return true;
+			)
+		{
+			if (targetMonster.wasSeen()) {
+				message.append("The drakefire burns the "+targetMonster.getDescription());
 			}
+			targetMonster.damage(message, damage);
+			if (targetMonster.isDead()) {
+				message.append(", finishing it!");
+			}
+			aLevel.addMessage(message.toString());
+			return true;
+		}
 		return false;
 	}
 }

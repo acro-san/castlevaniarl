@@ -55,12 +55,12 @@ public class Jump extends Action{
 	public void execute(){
 		Debug.doAssert(performer instanceof Player, "Walk action, tried for not player");
 		aPlayer = (Player) performer;
-        Position var = directionToVariation(targetDirection);
-        Level aLevel = performer.getLevel();
-        if (aPlayer.isSwimming()){
-        	if (aLevel.getMapCell(aPlayer.getPosition()).isShallowWater()){
-        		aLevel.addMessage("You are already floating");
-        	} else {
+		Position var = directionToVariation(targetDirection);
+		Level aLevel = performer.level;
+		if (aPlayer.isSwimming()) {
+			if (aLevel.getMapCell(aPlayer.getPosition()).isShallowWater()){
+				aLevel.addMessage("You are already floating");
+			} else {
 				if (aPlayer.getPosition().z != 0){
 					Position deep = new Position(aPlayer.getPosition());
 					deep.z--;
@@ -73,41 +73,42 @@ public class Jump extends Action{
 				}else {
 					aLevel.addMessage("You can't float upward");
 				}
-        	}
-        	return;
-        }
-        if (aPlayer.hasCounter(Consts.C_BATMORPH) || aPlayer.hasCounter(Consts.C_BATMORPH2)){
-        	if (aPlayer.getStandingHeight() >3){
-        		if (aPlayer.getPosition().z != 0){
+			}
+			return;
+		}
+		if (aPlayer.hasCounter(Consts.C_BATMORPH) || aPlayer.hasCounter(Consts.C_BATMORPH2)) {
+			if (aPlayer.getStandingHeight() > 3) {
+				if (aPlayer.getPosition().z != 0) {
 					Position deep = new Position(aPlayer.getPosition());
 					deep.z--;
-					if (aLevel.getMapCell(deep).getID().equals("AIR")){
+					if (aLevel.getMapCell(deep).getID().equals("AIR")) {
 						aLevel.addMessage("You fly upward");
 						aPlayer.setPosition(deep);
 						aPlayer.setHoverHeight(0);
 					} else {
 						aLevel.addMessage("You can't fly upward");
 					}
-				}else {
+				} else {
 					aLevel.addMessage("You can't fly upward");
 				}
-        	} else {
-	        	aLevel.addMessage("You fly upward.");
-	        	aPlayer.setHoverHeight(aPlayer.getHoverHeight()+1);
-        	}
-	        return;
-        }
-        
-        if (targetDirection == Action.SELF){
+			} else {
+				aLevel.addMessage("You fly upward.");
+				aPlayer.setHoverHeight(aPlayer.getHoverHeight()+1);
+			}
+			return;
+		}
+		
+		if (targetDirection == Action.SELF) {
 			aLevel.addMessage("You jump upward");
 			return;
 		}
-        int startingHeight = aLevel.getMapCell(performer.getPosition()).getHeight();
-        Position startingPosition = new Position(aPlayer.getPosition());
-        int jumpingRange = 4;
-        if (aPlayer.hasIncreasedJumping())
-        	jumpingRange++;
-        aLevel.addMessage("You jump.");
+		int startingHeight = aLevel.getMapCell(performer.getPosition()).getHeight();
+		Position startingPosition = new Position(aPlayer.getPosition());
+		int jumpingRange = 4;
+		if (aPlayer.hasIncreasedJumping()) {
+			jumpingRange++;
+		}
+		aLevel.addMessage("You jump.");
 		boolean messaged = false;
 		aPlayer.setJustJumped(true);
 		Cell currentCell = aLevel.getMapCell(startingPosition);

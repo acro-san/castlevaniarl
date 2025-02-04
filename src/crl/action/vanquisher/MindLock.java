@@ -69,7 +69,7 @@ public class MindLock extends ProjectileSkill{
 		for (int i = 0; i < hitMonsters.size(); i++){
 			Monster targetMonster = (Monster) hitMonsters.elementAt(i);
 			if (targetMonster.wasSeen())
-				targetMonster.getLevel().addMessage("The "+targetMonster.getDescription()+ "'s mind is locked!");
+				targetMonster.level.addMessage("The "+targetMonster.getDescription()+ "'s mind is locked!");
 			targetMonster.setCounter(Consts.C_MONSTER_SLEEP, getPlayer().getSoulPower()*2+5);
 		}
 	}

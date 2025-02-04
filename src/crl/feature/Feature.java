@@ -100,18 +100,18 @@ public class Feature implements Cloneable, java.io.Serializable {
     	}
 		//return FeatureFactory.buildFeature("ROSARY");
 		//prizelist can't be null.
-		return FeatureFactory.buildFeature(Util.randPick(prizeList));
+		return FeatureFactory.buildFeature(Util.pick(prizeList));
 	}
 
 	public Feature damage(Player p, int damage){
 		currentResistance -= damage;
 		if (currentResistance < 0){
 			Feature pPrize = getPrizeFor(p);
-			p.getLevel().destroyFeature(this);
+			p.level.destroyFeature(this);
 			SFXManager.play("wav/breakpot.wav");
 			if (pPrize != null){
 				pPrize.setPosition(position.x, position.y, position.z);
-				p.getLevel().addFeature(pPrize);
+				p.level.addFeature(pPrize);
 			}
 			return pPrize;
 		}
@@ -305,7 +305,7 @@ public class Feature implements Cloneable, java.io.Serializable {
 	public void damage(Monster m){
 		currentResistance -= m.getAttack();
 		if (currentResistance < 0){
-			m.getLevel().destroyFeature(this);
+			m.level.destroyFeature(this);
 		}
 	}
 }

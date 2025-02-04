@@ -397,8 +397,8 @@ public class Player extends Actor {
 		}
 		dam.reduceDamage(getDefenseBonus());
 		
-		if (hasCounter("REGAIN_SHAPE")){
-			setSelector(originalSelector);
+		if (hasCounter("REGAIN_SHAPE")) {
+			selector = originalSelector;
 			setFlag("KEEPMESSAGES", false);
 			setCounter("REGAIN_SHAPE", 0);
 			level.addMessage("You recover your shape!");
@@ -478,21 +478,22 @@ public class Player extends Actor {
 		}
 	}
 
-	public void increaseWeaponSkillLevel(String category){
+	public void increaseWeaponSkillLevel(String category) {
 		Counter c = ((Counter)weaponSkillsCounters.get(category));
 		Counter s = ((Counter)weaponSkills.get(category));
 		c.reset();
-		if (s.getCount() < 10){
+		if (s.getCount() < 10) {
 			s.increase();
 		}
+		// else display/log 'Weapon Skill Cap hit for '+category ?
 	}
 	
-	public void resetWeaponSkillLevel(String category){
+	public void resetWeaponSkillLevel(String category) {
 		weaponSkills.put(category, new Counter(0));
 		weaponSkillsCounters.put(category, new Counter(0));
 	}
 
-	private int getBackFlipChance(){
+	private int getBackFlipChance() {
 		return 20 + getAttack();
 	}
 	
@@ -929,7 +930,7 @@ public class Player extends Actor {
 		}
 		
 		if (getCounter("REGAIN_SHAPE") == 1){
-			setSelector(originalSelector);
+			selector = originalSelector;
 			setFlag("KEEPMESSAGES", false);
 		}
 		
@@ -1181,8 +1182,8 @@ public class Player extends Actor {
 							}
 							SFXManager.play("wav/loutwarp.wav");
 							informPlayerEvent(Player.EVT_GOTO_LEVEL, "TOWN0");
-							getLevel().levelNumber = 0;
-							landOn(Position.add(getLevel().getExitFor("FOREST0"), new Position(-1,0,0)));
+							level.levelNumber = 0;
+							landOn(Position.add(level.getExitFor("FOREST0"), new Position(-1,0,0)));
 							reduceGold(1000);
 							
 							return;
@@ -1638,8 +1639,8 @@ public class Player extends Actor {
 		}
 	}
 
-    public Appearance getAppearance(){
-    	if (hasCounter(Consts.C_BATMORPH))
+	public Appearance getAppearance() {
+		if (hasCounter(Consts.C_BATMORPH))
 			return Main.appearances.get("MORPHED_BAT");
     	else if (hasCounter(Consts.C_BATMORPH2))
     		return Main.appearances.get("MORPHED_BAT2");
@@ -1662,12 +1663,13 @@ public class Player extends Actor {
 		else if (hasCounter(Consts.C_MYSTMORPH2))
 			return Main.appearances.get("MORPHED_MYST2");
 		else {
-			Appearance ret = super.getAppearance();
-			if (ret == null){
-				if (getSex()==Player.MALE)
+			Appearance ret = super.appearance;
+			if (ret == null) {
+				if (getSex() == Player.MALE) {
 					setAppearance(Main.appearances.get(PlayerGenerator.getClassID(getPlayerClass())));
-				else
+				} else {
 					setAppearance(Main.appearances.get(PlayerGenerator.getClassID(getPlayerClass())+"_W"));
+				}
 				ret = super.getAppearance();
 			}
 			return ret; 
@@ -2272,7 +2274,7 @@ public class Player extends Actor {
 	
 	public void see(){
 		//fov.startCircle(getLevel(), getPosition().x, getPosition().y, getSightRange());
-		fov.startCircle(getLevel(), getPosition().x, getPosition().y, getDarkSightRange());
+		fov.startCircle(level, getPosition().x, getPosition().y, getDarkSightRange());
 	}
 	
 	public void darken(){
@@ -2604,7 +2606,7 @@ public class Player extends Actor {
 		}
 		int rand = Util.rand(2,3);
 		for (int i = 0; i < rand; i++){
-			Advancement adv = (Advancement) Util.randomElementOf(ALL_ADVANCEMENTS);
+			Advancement adv = Util.pick(ALL_ADVANCEMENTS);
 			if (!tmpAvailableAdvancements.contains(adv))
 				tmpAvailableAdvancements.add(adv);
 		}
@@ -2675,21 +2677,23 @@ public class Player extends Actor {
 	}
 	public void morph(String morphID, int count, boolean smallMorph, boolean bigMorph, int morphStrength, int loseMindChance){
 		deMorph();
-		if (getFlag(Consts.F_SELFCONTROL))
+		if (getFlag(Consts.F_SELFCONTROL)) {
 			loseMindChance = (int) Math.floor(loseMindChance / 2.0D);
-		if (getFlag(Consts.F_COMPLETECONTROL))
+		}
+		if (getFlag(Consts.F_COMPLETECONTROL)) {
 			loseMindChance = 0;
+		}
 		
-		if (Util.chance(loseMindChance)){
+		if (Util.chance(loseMindChance)) {
 			level.addMessage("You lose your mind!");
 			setFlag("KEEPMESSAGES", true);
-			originalSelector = getSelector();
+			originalSelector = selector;
 			setCounter("REGAIN_SHAPE", count);
-			setSelector(Main.selectors.get("WILD_MORPH_AI"));
+			selector = Main.selectors.get("WILD_MORPH_AI");
 		}
 
 		
-		//Drop items
+		// Drop items
 		Item weapon = getWeapon();
 		if (weapon != null){
 			level.addMessage("You drop your "+weapon.getDescription());
@@ -3022,7 +3026,7 @@ public class Player extends Actor {
 	public void abandonHostage(){
 		getHostage().setPosition(getPosition());
 		level.addMonster(getHostage());
-		addHistoricEvent("abandoned "+getHostage().getDescription()+" at the "+getLevel().getDescription());
+		addHistoricEvent("abandoned "+getHostage().getDescription()+" at the "+level.getDescription());
 		setHostage(null);
 	}
 	

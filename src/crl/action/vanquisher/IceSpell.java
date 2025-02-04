@@ -66,11 +66,11 @@ public class IceSpell extends ProjectileSkill{
 			int friz = 10 +getPlayer().getSoulPower() - targetMonster.getFreezeResistance();
 			if (friz > 0){
 				if (targetMonster.wasSeen())
-					targetMonster.getLevel().addMessage("The "+targetMonster.getDescription()+ " is frozen!");
+					targetMonster.level.addMessage("The "+targetMonster.getDescription()+ " is frozen!");
 				targetMonster.freeze(friz);
 			} else
 				if (targetMonster.wasSeen())
-					targetMonster.getLevel().addMessage("The "+targetMonster.getDescription()+ " is too hot!");
+					targetMonster.level.addMessage("The "+targetMonster.getDescription()+ " is too hot!");
 			
 		}
 	}

@@ -14,11 +14,11 @@ public class Prelude2 extends Unleasher {
 	public void unleash(Level level, Game game) {
 		Monster dracula = level.getMonsterByID("PRELUDE_DRACULA");
 		int distance = Position.distance(dracula.getPosition(), game.getPlayer().getPosition()); 
-		if (distance > 3 && !((DraculaAI)dracula.getSelector()).isOnBattle())
+		if (distance > 3 && !((DraculaAI)dracula.selector).isOnBattle())
 			return;
 		Display.thus.showChat("PRELUDE_DRACULA1", game);
 		level.getMapCell(level.getExitFor("#DRACPOS")).setAppearance(Main.appearances.get("DRACULA_THRONE2_X"));
-		((DraculaAI)dracula.getSelector()).setOnBattle(true);
+		((DraculaAI)dracula.selector).setOnBattle(true);
 		dracula.setVisible(true);
 		enabled = false;
 	}

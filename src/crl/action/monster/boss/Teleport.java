@@ -12,7 +12,7 @@ public class Teleport extends Action{
 	}
 	
 	public void execute(){
-        Level aLevel = performer.getLevel();
+        Level aLevel = performer.level;
         Monster mon = (Monster)performer;
         do {
         	Position dest = Position.add(aLevel.getPlayer().getPosition(), new Position(Util.rand(-2,2),Util.rand(-2,2)));

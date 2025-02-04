@@ -64,7 +64,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 	private int yrange;
 	
 	public SwingInformBox messageBox;
-	public AddornedBorderTextArea persistantMessageBox;
+	public AdornedBorderTextArea persistantMessageBox;
 	private MerchantBox merchantBox;
 	
 	private MultiItemsBox multiItemsBox;
@@ -779,7 +779,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 	/*private void drawCursor(){
 		/*if (isCursorEnabled){
 			si.restore();
-			Cell underlying = player.getLevel().getMapCell(tempCursorPosition);
+			Cell underlying = player.level.getMapCell(tempCursorPosition);
 			drawImageVP((PC_POS.x+tempCursorPositionScr.x)*32,(PC_POS.y+tempCursorPositionScr.y)*32-4*underlying.getHeight(), TILE_SCAN);
 			si.refresh();
 		}
@@ -847,11 +847,11 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 			else
 				si.drawImage(41+ (i*6),40, backColor);
 		
-		if (player.getLevel().getBoss() != null) {
-			int sixthiedBossHits =  (int)Math.ceil((player.getLevel().getBoss().getHits() * 60.0)/(double)player.getLevel().getBoss().getMaxHits());
+		if (player.level.getBoss() != null) {
+			int sixthiedBossHits =  (int)Math.ceil((player.level.getBoss().getHits() * 60.0)/(double)player.level.getBoss().getMaxHits());
 			Image foreColorB;
 			Image backColorB;
-			//switch (((player.getLevel().getBoss().getHits()-1) / 20) + 1){
+			//switch (((player.level.getBoss().getHits()-1) / 20) + 1){
 			switch (((sixthiedBossHits-1) / 20) + 1) {
 			case 1:
 				foreColorB = HEALTH_YELLOW;
@@ -882,10 +882,10 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
     	if (player.getWeapon() != null) {
     		si.drawImage(18,38, ((GFXAppearance)player.getWeapon().getAppearance()).getIconImage());
     	}
-		if (player.getLevel().levelNumber != -1) {
-			si.printAtPixel(this.configuration.getScreenWidth() - 276,50,"STAGE  "+player.getLevel().levelNumber+" "+player.getLevel().getDescription(), Color.WHITE);
+		if (player.level.levelNumber != -1) {
+			si.printAtPixel(this.configuration.getScreenWidth() - 276,50,"STAGE  "+player.level.levelNumber+" "+player.level.getDescription(), Color.WHITE);
 		} else {
-			si.printAtPixel(this.configuration.getScreenWidth() - 276,50,player.getLevel().getDescription(), Color.WHITE);
+			si.printAtPixel(this.configuration.getScreenWidth() - 276,50,player.level.getDescription(), Color.WHITE);
 		}
 		
 		
@@ -1063,7 +1063,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		helpBox.setVisible(false);
 		psi.add(helpBox);
 		
-		persistantMessageBox = new AddornedBorderTextArea(BORDER1, BORDER2, BORDER3, BORDER4, COLOR_BORDER_IN, COLOR_BORDER_OUT, BORDERS_SIZE, BORDERS_SIZE);
+		persistantMessageBox = new AdornedBorderTextArea(BORDER1, BORDER2, BORDER3, BORDER4, COLOR_BORDER_IN, COLOR_BORDER_OUT, BORDERS_SIZE, BORDERS_SIZE);
 		persistantMessageBox.setBounds(this.configuration.getScreenWidth() - 280,90,260,400);
 		persistantMessageBox.setVisible(false);
 		persistantMessageBox.setFont(FNT_PERSISTANTMESSAGEBOX);
@@ -1356,7 +1356,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 
 	public void processQuit() {
 		messageBox.setForeground(COLOR_LAST_MESSAGE);
-		messageBox.setText(quitMessages[Util.rand(0, quitMessages.length-1)]+" (y/n)");
+		messageBox.setText(Util.pick(Text.QUIT_MESSAGES)+" (y/n)");
 		si.refresh();
 		if (prompt()){
 			messageBox.setText("Go away, and let the world flood in darkness... [Press Space to continue]");
@@ -1787,7 +1787,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		for (int i = 0; i < wskills.length; i++){
 			if (i % 4 == 0)
 				cont++;
-			si.print((cont-1) * 23 + 13, 15 + i - ((cont-1) * 4), verboseSkills[player.weaponSkill(wskills[i])], Color.WHITE);
+			si.print((cont-1) * 23 + 13, 15 + i - ((cont-1) * 4), Text.VERBOSE_SKILLS[player.weaponSkill(wskills[i])], Color.WHITE);
 		}
 
 		si.print(1,19, "Attack Damage  ", GFXDisplay.COLOR_BOLD);
@@ -1897,7 +1897,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
     	if (player.canCarry()){
     		player.addItem(soul);
     	} else {
-    		player.getLevel().addItem(player.getPosition(), soul);
+    		player.level.addItem(player.getPosition(), soul);
     	}
     	showMessage("You acquired a "+soul.getDescription());
     	*/
@@ -1945,7 +1945,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 					if (!player.isSwimming()){
 						actionSelectedByCommand = showSkills();
 					} else {
-						player.getLevel().addMessage("You can't do that!");
+						player.level.addMessage("You can't do that!");
 						throw new ActionCancelException();
 					}
 				} catch (ActionCancelException ace){
@@ -2015,7 +2015,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 	
 	
 	
-	class MerchantBox extends AddornedBorderPanel{
+	class MerchantBox extends AdornedBorderPanel{
 		private JList lstMerchandise;
 		private GFXButton btnBuy;
 		private GFXButton btnExit;
@@ -2267,7 +2267,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		}
 	}
 	
-	class MultiItemsBox extends AddornedBorderPanel{
+	class MultiItemsBox extends AdornedBorderPanel{
 		private JList lstInventory;
 		private GFXButton btnExit;
 		private GFXButton btnOk;
@@ -2432,7 +2432,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 	}
 
 
-	class HelpBox extends AddornedBorderPanel {
+	class HelpBox extends AdornedBorderPanel {
 		private GFXButton btnOk;
 		
 		public HelpBox(Image UPRIGHT, 

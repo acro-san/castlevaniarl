@@ -38,7 +38,7 @@ public class DraculaAI extends MonsterAI{
 					return new Materialize();
 				} else { 
 					if (Util.chance(70)){
-						aMonster.getLevel().addMessage("You hear a creepy voice booming around the place: 'HAHAHAHA!'");
+						aMonster.level.addMessage("You hear a creepy voice booming around the place: 'HAHAHAHA!'");
 						SFXManager.play("wav/dracula_laugh.wav");
 					}
 					appearCounter --;
@@ -92,13 +92,13 @@ public class DraculaAI extends MonsterAI{
 	 
 	 private boolean playerOnLine(Monster me){
 		 Position mePosition = me.getPosition();
-		 Position pPosition = me.getLevel().getPlayer().getPosition();
+		 Position pPosition = me.level.getPlayer().getPosition();
 		 return (pPosition.x == mePosition.x || pPosition.x == mePosition.x -1 || pPosition.x == mePosition.x + 1 ||
 				 pPosition.y == mePosition.y || pPosition.y == mePosition.y -1 || pPosition.y == mePosition.y + 1);
 	 }
 	 
 	 private int starePlayer(Monster me){
-		Player player = me.getLevel().getPlayer();
+		Player player = me.level.getPlayer();
 		Position mePosition = me.getPosition();
 		if (player.isInvisible() || player.getPosition().z != me.getPosition().z)
 			return -1;
@@ -117,6 +117,6 @@ public class DraculaAI extends MonsterAI{
 					return Action.LEFT;
 			else
 				return -1;
-	 }
-	 
+	}
+	
 }

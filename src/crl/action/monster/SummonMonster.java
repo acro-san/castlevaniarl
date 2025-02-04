@@ -24,7 +24,7 @@ public class SummonMonster extends Action{
 	public void execute(){
 		Debug.doAssert(performer instanceof Monster, "Someone not a monster tried to throw a bone");
 		Monster aMonster = (Monster) performer;
-		Level aLevel = performer.getLevel();
+		Level aLevel = performer.level;
 		aLevel.addMessage("The "+aMonster.getDescription()+" "+actionMessage+".");
 		int monsters = Util.rand(5,10);
 		for (int i=0; i<monsters; i++){

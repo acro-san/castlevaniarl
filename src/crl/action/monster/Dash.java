@@ -21,7 +21,7 @@ public class Dash extends Action{
 		Monster aMonster = (Monster) performer;
 		targetDirection = aMonster.starePlayer();
         Position var = directionToVariation(targetDirection);
-        Level aLevel = performer.getLevel();
+        Level aLevel = performer.level;
         Player aPlayer = aLevel.getPlayer();
         StringBuffer message = new StringBuffer("The "+aMonster.getDescription()+" dives to you!");
         //Cell currentCell = aLevel.getMapCell(performer.getPosition());

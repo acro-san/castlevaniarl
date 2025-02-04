@@ -40,6 +40,7 @@ public class Util {
 			return new Vector<>(source.subList(pageNumber*elementsOnPage, (pageNumber+1) * elementsOnPage));
 	}
 
+	/*
 	public static String randPick(String[] array) {
 		return array[rand(0, array.length -1)];
 	}
@@ -48,13 +49,30 @@ public class Util {
 		return collection.get(rand(0, collection.size() -1));
 	}
 	
-	public static Object randomPick(Vector<?> array) {
-		return array.elementAt(rand(0, array.size() -1));
+	public static <T> T randomPick(Vector<T> array) {
+		return array.elementAt(rand(0, array.size()-1));
 	}
 	
-	public static Object randomElementOf(Object [] array) {
-		return array[rand(0, array.length -1)];
+	public static <T> T randomElementOf(T[] array) {
+		return array[rand(0, array.length-1)];
 	}
+*/
+	public static <T> T pick(ArrayList<T> items) {
+		int i = rng.nextInt(items.size());	// Select the rng? For determinism?
+		return items.get(i);
+	}
+	
+	public static <T> T pick(Vector<T> items) {
+		int i = rng.nextInt(items.size());	// Select the rng? For determinism?
+		return items.get(i);
+	}
+
+	public static <T> T pick(T[] items) {
+		int i = rng.nextInt(items.length);	// Select the rng? For determinism?
+		return items[i];
+	}
+
+	
 	
 	public static int sign(int n) {
 		if (n > 0)
@@ -64,4 +82,5 @@ public class Util {
 		else
 			return 0;
 	}
+
 }

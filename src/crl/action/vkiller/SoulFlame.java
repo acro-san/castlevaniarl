@@ -20,7 +20,7 @@ public class SoulFlame extends HeartAction{
 	
 	public void execute(){
 		super.execute();
-        Level aLevel = performer.getLevel();
+        Level aLevel = performer.level;
         aLevel.addMessage("Soul Flame!");
         int damage = 16 + aLevel.getPlayer().getShotLevel() * 5 + aLevel.getPlayer().getSoulPower()*2;
 		Position blastPosition = performer.getPosition();

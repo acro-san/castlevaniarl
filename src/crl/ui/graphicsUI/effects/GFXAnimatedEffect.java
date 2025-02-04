@@ -7,7 +7,7 @@ import crl.conf.gfx.data.GFXConfiguration;
 import crl.ui.graphicsUI.GFXUserInterface;
 import crl.ui.graphicsUI.SwingSystemInterface;
 
-public class GFXAnimatedEffect extends GFXEffect{
+public class GFXAnimatedEffect extends GFXEffect {
 	private Image[] frames;
 	
 	private int xoff, yoff;
@@ -25,14 +25,14 @@ public class GFXAnimatedEffect extends GFXEffect{
 
 	public void drawEffect(GFXUserInterface ui, SwingSystemInterface si){
 		int height = 0;
-		if (ui.getPlayer().getLevel().getMapCell(getPosition()) != null)
-			height = ui.getPlayer().getLevel().getMapCell(getPosition()).getHeight();
+		if (ui.getPlayer().level.getMapCell(getPosition()) != null)
+			height = ui.getPlayer().level.getMapCell(getPosition()).getHeight();
 		Position relative = Position.subs(getPosition(), ui.getPlayer().getPosition());
 		Position absolute = Position.add(ui.PC_POS, relative);
 		if (!ui.insideViewPort(absolute))
 			return;
 		si.saveBuffer();
-		for (int j = 0; j<frames.length; j++){
+		for (int j = 0; j<frames.length; j++) {
 			ui.drawImageVP(
 				absolute.x * 32 + xoff,
 				absolute.y * 32 - 4 * height + yoff, frames[j]);

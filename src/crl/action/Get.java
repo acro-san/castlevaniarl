@@ -6,7 +6,7 @@ import crl.level.Level;
 import crl.player.Player;
 
 
-public class Get extends Action{
+public class Get extends Action {
 	public String getID(){
 		return "Get";
 	}
@@ -18,8 +18,8 @@ public class Get extends Action{
 		Debug.doAssert(performer instanceof Player, "An actor different from the player tried to execute Walk action");
 		Debug.enterMethod(this, "execute");
 		Player aPlayer = (Player) performer;
-		Level aLevel = performer.getLevel();
-        
+		Level aLevel = performer.level;
+		
 		Item destinationItem = targetItem;
 		if (destinationItem != null){
 		//while (destinationItem != null){
@@ -35,7 +35,7 @@ public class Get extends Action{
 		} else {
 			aLevel.addMessage("There is nothing to pick up here!");
 		}
-       	Debug.exitMethod();
+		Debug.exitMethod();
 	}
 
 }

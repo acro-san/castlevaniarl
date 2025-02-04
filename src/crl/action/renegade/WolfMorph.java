@@ -41,7 +41,7 @@ public class WolfMorph extends MorphAction{
 	}
 
 	public int getMorphTime() {
-		return 30+getPlayer().getSoulPower()*4+(!getPlayer().getLevel().isDay()?40:0);
+		return 30+getPlayer().getSoulPower()*4+(!getPlayer().level.isDay()?40:0);
 	}
 
 	public boolean isBigMorph() {

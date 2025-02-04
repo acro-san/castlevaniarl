@@ -9,35 +9,37 @@ import crl.monster.Monster;
 import crl.player.Player;
 import crl.ui.effects.EffectFactory;
 
-public class TargetPS extends ProjectileSkill{
+public class TargetPS extends ProjectileSkill {
+
 	private Player player;
 	private Item weapon;
 	private int reloadTime;
+	
 	public String getID(){
 		return "Target";
 	}
 
-	
-	public void execute(){
-        player = null;
-        reloadTime = 0;
+	public void execute() {
+		player = null;
+		reloadTime = 0;
 		try {
 			player = (Player) performer;
-		} catch (ClassCastException cce){
+		} catch (ClassCastException cce) {
 			return;
 		}
 		weapon = player.getWeapon();
 		
 		ItemDefinition weaponDef = weapon.getDefinition();
 
-		if (weapon.getReloadTurns() > 0)
-			if (weapon.getRemainingTurnsToReload() == 0){
+		if (weapon.getReloadTurns() > 0) {
+			if (weapon.getRemainingTurnsToReload() == 0) {
 				/*
 				aLevel.addMessage("You must reload the "+weapon.getDescription()+"!");
 				return;*/
 				if (!reload(weapon, player))
 					return;
 			}
+		}
 
 		super.execute();
 		
@@ -86,29 +88,29 @@ public class TargetPS extends ProjectileSkill{
 	private boolean reload(Item weapon, Player aPlayer){
 		if (weapon != null){
 			if (aPlayer.getGold() < weapon.getDefinition().reloadCostGold){
-				aPlayer.getLevel().addMessage("You can't reload the " + weapon.getDescription());
+				aPlayer.level.addMessage("You can't reload the " + weapon.getDescription());
 				return false;
 			}else if (aPlayer.getHearts() < 1){
-				aPlayer.getLevel().addMessage("You can't reload the " + weapon.getDescription());
+				aPlayer.level.addMessage("You can't reload the " + weapon.getDescription());
 				return false;
 			}
 			else {
 				weapon.reload();
 				aPlayer.reduceGold(weapon.getDefinition().reloadCostGold);
 				aPlayer.reduceHearts(1);
-				aPlayer.getLevel().addMessage("You reload the " + 
+				aPlayer.level.addMessage("You reload the " + 
 				weapon.getDescription()+" ("+
 					weapon.getDefinition().reloadCostGold+" gold)");
 				reloadTime = 10*weapon.getDefinition().reloadTurns;
 				return true;
 			}
 		} else
-			aPlayer.getLevel().addMessage("You can't reload yourself");
+			aPlayer.level.addMessage("You can't reload yourself");
 		return false;
 	}
 	
-	public boolean canPerform(Actor a){
-        player = null;
+	public boolean canPerform(Actor a) {
+		player = null;
 		try {
 			player = (Player) a;
 		} catch (ClassCastException cce){

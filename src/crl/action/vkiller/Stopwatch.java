@@ -15,7 +15,7 @@ public class Stopwatch extends HeartAction{
 	public void execute(){
 		super.execute();
 		Player aPlayer = (Player) performer;
-		Level x = performer.getLevel();
+		Level x = performer.level;
 		x.addMessage("You open the stopwatch! Time stops!");
 		x.stopTime(5 + aPlayer.getShotLevel()*2+ aPlayer.getSoulPower());
 	}

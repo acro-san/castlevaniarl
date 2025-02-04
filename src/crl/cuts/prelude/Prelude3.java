@@ -10,7 +10,7 @@ import crl.monster.Monster;
 import crl.player.Player;
 import crl.ui.effects.EffectFactory;
 
-public class Prelude3 extends Unleasher{
+public class Prelude3 extends Unleasher {
 
 	public void unleash(Level level, Game game) {
 		Monster dracula = level.getMonsterByID("PRELUDE_DRACULA"); 
@@ -28,7 +28,7 @@ public class Prelude3 extends Unleasher{
 		level.getPlayer().see();
 		Main.ui.refresh();
 		level.setFlag("CHRIS_DEAD", true);
-		((DraculaAI)level.getMonsterByID("PRELUDE_DRACULA").getSelector()).reset();
+		((DraculaAI)level.getMonsterByID("PRELUDE_DRACULA").selector).reset();
 		dracula.setPosition(level.getExitFor("#DRACPOS"));
 		dracula.setVisible(true);
 		enabled = false;

@@ -9,15 +9,16 @@ import crl.level.Level;
 import crl.monster.Monster;
 import crl.player.Player;
 
-public class SpinningSlice extends Action{
+public class SpinningSlice extends Action {
+	
 	public String getID(){
 		return "SpinningSlice";
 	}
 	
-	public void execute(){
+	public void execute() {
 		Player aPlayer = (Player) performer;
-        Level aLevel = performer.getLevel();
-        if (!checkHearts(8))
+		Level aLevel = performer.level;
+		if (!checkHearts(8))
         	return;
   		if (aPlayer.getWeapon() == null){
   			aLevel.addMessage("You can't slice without a proper weapon");
@@ -49,7 +50,7 @@ public class SpinningSlice extends Action{
 			aLevel.addMessage(message.toString());
 		}
 
-		Monster targetMonster = performer.getLevel().getMonsterAt(destinationPoint);
+		Monster targetMonster = performer.level.getMonsterAt(destinationPoint);
 		message = new StringBuffer();
 		if (
 			targetMonster != null &&
@@ -59,7 +60,7 @@ public class SpinningSlice extends Action{
 			targetMonster.damageWithWeapon(message, player.getWeaponAttack()+player.getAttack());
         	if (targetMonster.isDead()){
 	        	message.append(", and cut it apart!");
-				//performer.getLevel().removeMonster(targetMonster);
+				//performer.level.removeMonster(targetMonster);
 			}
         	if (targetMonster.wasSeen())
         		aLevel.addMessage(message.toString());
@@ -68,11 +69,12 @@ public class SpinningSlice extends Action{
 	
 	public boolean canPerform(Actor a){
 		Player aPlayer = (Player) a;
-        Level aLevel = performer.getLevel();
-        if (aPlayer.getHearts() < 8){
-        	invalidationMessage = "You need more energy!";
-            return false;
+		//Level aLevel = performer.level;
+		if (aPlayer.getHearts() < 8) {
+			invalidationMessage = "You need more energy!";
+			return false;
 		}
-        return true;
+		return true;
 	}
+	
 }

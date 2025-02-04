@@ -8,7 +8,7 @@ import crl.conf.gfx.data.GFXConfiguration;
 import crl.ui.graphicsUI.GFXUserInterface;
 import crl.ui.graphicsUI.SwingSystemInterface;
 
-public class GFXMeleeEffect extends GFXDirectionalEffect{
+public class GFXMeleeEffect extends GFXDirectionalEffect {
 	private Image[] missile;
 
 	
@@ -53,8 +53,8 @@ public class GFXMeleeEffect extends GFXDirectionalEffect{
 		for (int i = 0; i < depth; i++){
 			runner.add(var);
 			int height = 0;
-			if (ui.getPlayer().getLevel().getMapCell(runner) != null)
-				height = ui.getPlayer().getLevel().getMapCell(runner).getHeight();
+			if (ui.getPlayer().level.getMapCell(runner) != null)
+				height = ui.getPlayer().level.getMapCell(runner).getHeight();
 			Position relative = Position.subs(runner, ui.getPlayer().getPosition());
 			Position toPrint = Position.add(ui.PC_POS, relative);
 			/*if (!ui.insideViewPort(toPrint))

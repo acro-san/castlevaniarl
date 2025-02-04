@@ -12,14 +12,20 @@ import crl.game.SFXManager;
 import crl.level.Level;
 import crl.ui.Appearance;
 
-public class Actor implements Cloneable, java.io.Serializable, PriorityEnqueable{
+public class Actor implements Cloneable, java.io.Serializable, PriorityEnqueable {
 	protected /*transient*/ int positionx, positiony, positionz;
 	protected transient Appearance appearance;
 	
-	protected ActionSelector selector;
+	public ActionSelector selector;
 	private /*transient*/ Position position = new Position(0,0,0);
 	private int hoverHeight;
-	private /*transient*/ int nextTime=10;
+	private /*transient*/ int nextTime = 10;
+	
+	public Level level;
+	
+	private boolean isJumping;
+	private int startingJumpingHeight;
+
 	
 	public int getCost(){
 		//Debug.say("Cost of "+getDescription()+" "+ nextTime);
@@ -36,12 +42,11 @@ public class Actor implements Cloneable, java.io.Serializable, PriorityEnqueable
 		nextTime = value;
 	}
 
-	protected Level level;
 
-	public void updateStatus(){
-		Enumeration countersKeys = hashCounters.keys();
+	public void updateStatus() {
+		Enumeration<String> countersKeys = hashCounters.keys();
 		while (countersKeys.hasMoreElements()){
-			String key = (String) countersKeys.nextElement();
+			String key = countersKeys.nextElement();
 			Integer counter = (Integer)hashCounters.get(key);
 			if (counter.intValue() == 0){
 				hashCounters.remove(key);
@@ -51,79 +56,70 @@ public class Actor implements Cloneable, java.io.Serializable, PriorityEnqueable
 		}
 	}
 
-	public String getDescription(){
+	public String getDescription() {
 		return "";
 	}
 
 	public void execute(Action x){
 		if (x != null){
-        	x.setPerformer(this);
-        	if (x.canPerform(this)){
-	        	if (x.getSFX() != null)
-	        		SFXManager.play(x.getSFX());
+			x.setPerformer(this);
+			if (x.canPerform(this)){
+				if (x.getSFX() != null)
+					SFXManager.play(x.getSFX());
 				x.execute();
 				//Debug.say("("+x.getCost()+")");
 				setNextTime(x.getCost());
-        	}
+			}
 		} else {
 			setNextTime(50);
 		}
 		updateStatus();
 	}
-	public void act(){
-		Action x = getSelector().selectAction(this);
+	
+	public void act() {
+		Action x = selector.selectAction(this);
 		execute(x);
 	}
 
-	public void setPosition (int x, int y, int z){
+	public void setPosition(int x, int y, int z){
 		position.x = x;
 		position.y = y;
 		position.z = z;
 	}
 
-	public void die(){
+	public void die() {
 		/** Request to be removed from any dispatcher or structure */
 		aWannaDie = true;
 	}
 
-	public boolean wannaDie(){
+	public boolean wannaDie() {
 		return aWannaDie;
 	}
 
 	private boolean aWannaDie;
 
 
-	public void setPosition (Position p){
+	public void setPosition(Position p) {
 		position = p;
 	}
 
-	public Position getPosition(){
+	public Position getPosition() {
 		return position;
 	}
 
-	public void setLevel(Level what){
-		level = what;
-	}
-
-	public Level getLevel(){
-		return level;
-	}
-
-	public ActionSelector getSelector() {
-		return selector;
-	}
-
-	public void setSelector(ActionSelector value) {
-		selector = value;
-	}
-
-	public Appearance getAppearance() {
-		return appearance;
-	}
-
-	public void setAppearance(Appearance value) {
-		appearance = value;
-	}
+	/*
+	 * public void setLevel(Level what) { level = what; }
+	 * 
+	 * public Level getLevel() { return level; }
+	 * 
+	 * public ActionSelector getSelector() { return selector; }
+	 * 
+	 * public void setSelector(ActionSelector value) { selector = value; }
+	 */
+	
+	//Player has a complex override of getAppearance for form-changes etc!
+	public Appearance getAppearance() { return appearance; }
+	public void setAppearance(Appearance value) { appearance = value; }
 
 	public Object clone(){
 		try {
@@ -141,31 +137,32 @@ public class Actor implements Cloneable, java.io.Serializable, PriorityEnqueable
 	public void message(String mess){
 	}
 	
-	protected Hashtable hashCounters = new Hashtable();
-	public void setCounter(String counterID, int turns){
-		hashCounters.put(counterID, new Integer(turns));
+	protected Hashtable<String,Integer> hashCounters = new Hashtable<>();
+	public void setCounter(String counterID, int turns) {
+		hashCounters.put(counterID, Integer.valueOf(turns));
 	}
 	
-	public int getCounter(String counterID){
-		Integer val = (Integer)hashCounters.get(counterID);
-		if (val == null)
+	public int getCounter(String counterID) {
+		Integer val = hashCounters.get(counterID);
+		if (val == null) {
 			return -1;
-		else
+		} else {
 			return val.intValue();
+		}
 	}
 	
-	public boolean hasCounter(String counterID){
+	public boolean hasCounter(String counterID) {
 		return getCounter(counterID) > 0;
 	}
 
 	
-	private Hashtable<String, Boolean> hashFlags = new Hashtable<String, Boolean>();
+	private Hashtable<String, Boolean> hashFlags = new Hashtable<>();
 	public void setFlag(String flagID, boolean value){
-		hashFlags.put(flagID, new Boolean(value));
+		hashFlags.put(flagID, Boolean.valueOf(value));
 	}
 	
-	public boolean getFlag(String flagID){
-		Boolean val =(Boolean)hashFlags.get(flagID); 
+	public boolean getFlag(String flagID) {
+		Boolean val = hashFlags.get(flagID);
 		return val != null && val.booleanValue();
 	}
 
@@ -174,25 +171,24 @@ public class Actor implements Cloneable, java.io.Serializable, PriorityEnqueable
 	}
 
 	public void setHoverHeight(int hoverHeight) {
-		if (hoverHeight > 0)
+		if (hoverHeight > 0) {
 			this.hoverHeight = hoverHeight;
-		else
+		} else {
 			this.hoverHeight = 0;
+		}
 	}
 	
-	public int getStandingHeight(){
-		if (isJumping){
+	public int getStandingHeight() {
+		if (isJumping) {
 			return startingJumpingHeight+2;
 		}
-		if (level.getMapCell(getPosition()) != null)
+		if (level.getMapCell(getPosition()) != null) {
 			return level.getMapCell(getPosition()).getHeight()+getHoverHeight();
-		else
+		} else {
 			return getHoverHeight();
+		}
 	}
 	
-	private boolean isJumping;
-	
-	private int startingJumpingHeight;
 
 	public boolean isJumping() {
 		return isJumping;

@@ -17,7 +17,7 @@ public class ShadowFlare extends Action{
 	
 	public void execute(){
 		Monster aMonster = (Monster)performer;
-		Level aLevel = aMonster.getLevel();
+		Level aLevel = aMonster.level;
 		if (targetDirection == -1)
 			return;
 	    aLevel.addMessage("Dracula invokes shadow flares!");
@@ -54,7 +54,7 @@ public class ShadowFlare extends Action{
 	
 	private void hit(Position destinationPoint){
 		String message = "";
-		Level aLevel = performer.getLevel();
+		Level aLevel = performer.level;
         Player aPlayer = aLevel.getPlayer();
 		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
         if (destinationFeature != null && destinationFeature.isDestroyable()){

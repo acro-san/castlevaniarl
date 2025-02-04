@@ -24,7 +24,7 @@ public class WanderToPlayerAI extends MonsterAI{
 		Monster aMonster = (Monster) who;
 		
 		if (aMonster.getEnemy() != null){
-			if (!aMonster.getLevel().getMonsters().contains((Monster)aMonster.getEnemy())){
+			if (!aMonster.level.getMonsters().contains((Monster)aMonster.getEnemy())){
 				aMonster.setEnemy(null);
 			}
 		}
@@ -41,17 +41,16 @@ public class WanderToPlayerAI extends MonsterAI{
 			if (directionToMonster == -1) {
 				//Walk TO player except if will bump him
 				directionToMonster = aMonster.starePlayer();
-				if (directionToMonster == -1){
+				if (directionToMonster == -1) {
 					return null;
-				}
-				else {
+				} else {
 					Position targetPositionX = Position.add(who.getPosition(), Action.directionToVariation(directionToMonster));
-					if (!who.getLevel().isWalkable(targetPositionX)){
+					if (!who.level.isWalkable(targetPositionX)){
 						return null;
-					}else{
-						if (who.getLevel().getPlayer().getPosition().equals(targetPositionX)){
+					} else {
+						if (who.level.getPlayer().getPosition().equals(targetPositionX)) {
 							return null;
-						} else{
+						} else {
 							Action ret = new MonsterWalk();
 							ret.setDirection(directionToMonster);
 							return ret;
@@ -60,10 +59,10 @@ public class WanderToPlayerAI extends MonsterAI{
 				}
 			} else {
 				Action ret = new MonsterWalk();
-				if (!who.getLevel().isWalkable(Position.add(who.getPosition(), Action.directionToVariation(directionToMonster)))){
+				if (!who.level.isWalkable(Position.add(who.getPosition(), Action.directionToVariation(directionToMonster)))){
 					directionToMonster = Util.rand(0,7); 
 					while (true){
-						if (!Position.add(who.getPosition(), Action.directionToVariation(directionToMonster)).equals(who.getLevel().getPlayer().getPosition()))
+						if (!Position.add(who.getPosition(), Action.directionToVariation(directionToMonster)).equals(who.level.getPlayer().getPosition()))
 								break;
 					}
 					ret.setDirection(directionToMonster);
@@ -71,18 +70,18 @@ public class WanderToPlayerAI extends MonsterAI{
 					ret.setDirection(directionToMonster);
 				}
 				return ret;
-			} 
+			}
 		}
 		
 		int directionToPlayer = aMonster.starePlayer();
 		if (directionToPlayer == -1){
 			//Wander aimlessly 
-        	int direction = Util.rand(0,7);
-	     	Action ret = new MonsterWalk();
-	     	ret.setDirection(direction);
-	     	return ret;
+			int direction = Util.rand(0,7);
+			Action ret = new MonsterWalk();
+			ret.setDirection(direction);
+			return ret;
 		} else {
-			int distanceToPlayer = Position.flatDistance(aMonster.getPosition(), aMonster.getLevel().getPlayer().getPosition());
+			int distanceToPlayer = Position.flatDistance(aMonster.getPosition(), aMonster.level.getPlayer().getPosition());
 			//Decide if will attack the player or walk to him
 			if (Util.chance(50)){
 				//Will try to attack the player
@@ -100,10 +99,10 @@ public class WanderToPlayerAI extends MonsterAI{
 				}
 			}
 			// Couldnt attack the player, move to him
-        	Action ret = new MonsterWalk();
-            ret.setDirection(directionToPlayer);
-            Cell currentCell = aMonster.getLevel().getMapCell(aMonster.getPosition());
-            Cell destinationCell = aMonster.getLevel().getMapCell(
+			Action ret = new MonsterWalk();
+			ret.setDirection(directionToPlayer);
+			Cell currentCell = aMonster.level.getMapCell(aMonster.getPosition());
+			Cell destinationCell = aMonster.level.getMapCell(
 				Position.add(
 					aMonster.getPosition(),
 					Action.directionToVariation(directionToPlayer)
@@ -113,26 +112,26 @@ public class WanderToPlayerAI extends MonsterAI{
 				ret.setDirection(Util.rand(0,7));
 				return ret;
 			}
-            if ((destinationCell.isSolid() && !aMonster.isEthereal()) ||
+			if ((destinationCell.isSolid() && !aMonster.isEthereal()) ||
 				destinationCell.getHeight() > currentCell.getHeight()+aMonster.getLeaping() + 1 )
 				ret.setDirection(Util.rand(0,7));
-	     	return ret;
+			return ret;
 		}
+	}
 
-	 }
 
-	 public String getID(){
-		 return "WANDER";
-	 }
+	public String getID(){
+		return "WANDER";
+	}
 
-     public ActionSelector derive(){
-    	 
- 		try {
-	 		return (ActionSelector) clone();
-	 	} catch (CloneNotSupportedException cnse){
+
+	public ActionSelector derive() {
+		try {
+			return (ActionSelector)clone();
+		} catch (CloneNotSupportedException cnse) {
 			return null;
-	 	}
- 	}
+		}
+	}
 
-     
+
 }

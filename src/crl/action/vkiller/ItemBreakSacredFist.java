@@ -10,7 +10,7 @@ import crl.player.Player;
 import crl.ui.UserInterface;
 import crl.ui.effects.EffectFactory;
 
-public class ItemBreakSacredFist extends BeamProjectileSkill{
+public class ItemBreakSacredFist extends BeamProjectileSkill {
 	public String getID(){
 		return "ItemBreakSacredFist";
 	}
@@ -77,12 +77,12 @@ public class ItemBreakSacredFist extends BeamProjectileSkill{
 		super.execute();
 		Line line = new Line(getPlayer().getPosition(), targetPosition);
 		Player player = getPlayer();
-		Level level = getPlayer().getLevel();
+		Level level = getPlayer().level;
 		Position runner = line.next();
 		int i = 0;
 		for (; i < 5; i++){
 			runner = line.next();
-        	Cell destinationCell = performer.getLevel().getMapCell(runner);
+        	Cell destinationCell = performer.level.getMapCell(runner);
 			if (
 				level.isWalkable(runner) &&	
 				destinationCell.getHeight() == level.getMapCell(player.getPosition()).getHeight() 

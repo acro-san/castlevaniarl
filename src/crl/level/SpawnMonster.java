@@ -2,17 +2,18 @@ package crl.level;
 
 import sz.util.*;
 import crl.action.*;
-import crl.*;
 
-public class SpawnMonster extends Action{
+public class SpawnMonster extends Action {
+	
 	private static SpawnMonster singleton = new SpawnMonster();
+	
 	public String getID(){
 		return "SpawnMonster";
 	}
 
 	public void execute(){
-		Level level = performer.getLevel();
-		Respawner perf = (Respawner) performer;
+		Level level = performer.level;
+		Respawner perf = (Respawner)performer;
 		if (Util.chance(perf.getProb()))
 			level.respawn();
 	}

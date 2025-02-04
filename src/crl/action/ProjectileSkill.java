@@ -10,7 +10,7 @@ import crl.monster.Monster;
 import crl.player.Player;
 import crl.ui.effects.EffectFactory;
 
-public abstract class ProjectileSkill extends HeartAction{
+public abstract class ProjectileSkill extends HeartAction {
 	public abstract String getSelfTargettedMessage();
 	
 	public abstract String getShootMessage();
@@ -48,7 +48,7 @@ public abstract class ProjectileSkill extends HeartAction{
 	public void execute(){
 		super.execute();
 		hitMonsters.clear();
-        Level aLevel = performer.getLevel();
+        Level aLevel = performer.level;
         Player aPlayer = aLevel.getPlayer();
         int attackHeight = aLevel.getMapCell(aPlayer.getPosition()).getHeight();
         if (targetPosition.equals(performer.getPosition()) && allowsSelfTarget()){
@@ -64,7 +64,7 @@ public abstract class ProjectileSkill extends HeartAction{
 					aLevel.addMessage(message);
 				}
     			
-    			Monster targetMonster = performer.getLevel().getMonsterAt(getPlayer().getPosition());
+    			Monster targetMonster = performer.level.getMonsterAt(getPlayer().getPosition());
     			
     			if (targetMonster != null){
 					if (targetMonster.tryMagicHit(aPlayer,getDamage(), getHit(), targetMonster.wasSeen(), getSpellAttackDesc(), isWeaponAttack(), performer.getPosition())){
@@ -158,7 +158,7 @@ public abstract class ProjectileSkill extends HeartAction{
 						return;
 				}
 			}
-			Monster targetMonster = performer.getLevel().getMonsterAt(destinationPoint);
+			Monster targetMonster = performer.level.getMonsterAt(destinationPoint);
 			
 			if (targetMonster != null){
 				//int monsterHeight = destinationHeight + (targetMonster.isFlying() ? 1 : 0);

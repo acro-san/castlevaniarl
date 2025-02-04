@@ -25,11 +25,11 @@ public class Throw extends Action{
 		return true;
 	}
 
-	public void execute(){
-		Level aLevel = performer.getLevel();
-		performer.getLevel().addMessage("You throw the "+targetItem.getDescription());
+	public void execute() {
+		Level aLevel = performer.level;
+		performer.level.addMessage("You throw the "+targetItem.getDescription());
 
-        //aLevel.addEffect(new PCMissileEffect(performer.getPosition(), "+x", Appearance.CYAN, targetDirection, 10));
+		//aLevel.addEffect(new PCMissileEffect(performer.getPosition(), "+x", Appearance.CYAN, targetDirection, 10));
 		int distance = Position.flatDistance(performer.getPosition(), targetPosition);
 		Position destinationPoint = null;
 		if (distance > targetItem.getThrowRange()){
@@ -40,54 +40,53 @@ public class Throw extends Action{
 		Line line = new Line(performer.getPosition(), targetPosition);
 		int i = 0;
 		Position runner = line.next();
-        for (i=0; i<distance; i++){
-        	runner = line.next();
-			if (!aLevel.isValidCoordinate(runner) || (aLevel.getMapCell(runner)!= null && aLevel.getMapCell(runner).isSolid())){
+		for (i=0; i<distance; i++) {
+			runner = line.next();
+			if (!aLevel.isValidCoordinate(runner) || (aLevel.getMapCell(runner)!= null && aLevel.getMapCell(runner).isSolid())) {
 				break;
 			}
 		}
-        destinationPoint = runner;
-        if (aLevel.getMapCell(destinationPoint) == null){
+		destinationPoint = runner;
+		if (aLevel.getMapCell(destinationPoint) == null) {
 			destinationPoint = aLevel.getDeepPosition(destinationPoint);
 		}
-        
-        if (destinationPoint == null){
-			//The feature falls to the infinity
-		}else {
+		
+		if (destinationPoint == null) {
+			// The feature falls to the infinity
+		} else {
 			String placedSmartFeature = targetItem.getPlacedSmartFeature();
-			if (!placedSmartFeature.equals("")){
-				SmartFeature feature = SmartFeatureFactory.getFactory().buildFeature(placedSmartFeature);
+			if (!placedSmartFeature.equals("")) {
+				SmartFeature feature = SmartFeatureFactory.buildFeature(placedSmartFeature);
 				feature.setPosition(destinationPoint);
-				((CountDown)feature.getSelector()).setTurns(targetItem.getFeatureTurns());
+				((CountDown)feature.selector).setTurns(targetItem.getFeatureTurns());
 				aLevel.addSmartFeature(feature);
 				
-				feature = SmartFeatureFactory.getFactory().buildFeature(placedSmartFeature);
+				feature = SmartFeatureFactory.buildFeature(placedSmartFeature);
 				feature.setPosition(Position.add(destinationPoint, Action.directionToVariation(Action.UP)));
-				((CountDown)feature.getSelector()).setTurns(targetItem.getFeatureTurns());
+				((CountDown)feature.selector).setTurns(targetItem.getFeatureTurns());
 				aLevel.addSmartFeature(feature);
 				
-				feature = SmartFeatureFactory.getFactory().buildFeature(placedSmartFeature);
+				feature = SmartFeatureFactory.buildFeature(placedSmartFeature);
 				feature.setPosition(Position.add(destinationPoint, Action.directionToVariation(Action.DOWN)));
-				((CountDown)feature.getSelector()).setTurns(targetItem.getFeatureTurns());
+				((CountDown)feature.selector).setTurns(targetItem.getFeatureTurns());
 				aLevel.addSmartFeature(feature);
 				
-				feature = SmartFeatureFactory.getFactory().buildFeature(placedSmartFeature);
+				feature = SmartFeatureFactory.buildFeature(placedSmartFeature);
 				feature.setPosition(Position.add(destinationPoint, Action.directionToVariation(Action.LEFT)));
-				((CountDown)feature.getSelector()).setTurns(targetItem.getFeatureTurns());
+				((CountDown)feature.selector).setTurns(targetItem.getFeatureTurns());
 				aLevel.addSmartFeature(feature);
 				
-				feature = SmartFeatureFactory.getFactory().buildFeature(placedSmartFeature);
+				feature = SmartFeatureFactory.buildFeature(placedSmartFeature);
 				feature.setPosition(Position.add(destinationPoint, Action.directionToVariation(Action.RIGHT)));
-				((CountDown)feature.getSelector()).setTurns(targetItem.getFeatureTurns());
+				((CountDown)feature.selector).setTurns(targetItem.getFeatureTurns());
 				aLevel.addSmartFeature(feature);
 			}else
 				aLevel.addItem(destinationPoint, targetItem);
 		}
-		performer.getLevel().getPlayer().reduceQuantityOf(targetItem);
-
+		performer.level.getPlayer().reduceQuantityOf(targetItem);
 	}
 
-	public String getPromptPosition(){
+	public String getPromptPosition() {
 		return "Where do you want to throw the "+targetItem.getDefinition().description+"?";
 	}
 

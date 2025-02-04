@@ -40,7 +40,7 @@ public class WereWolfMorph extends MorphAction{
 	}
 
 	public int getMorphTime() {
-		return 40+getPlayer().getSoulPower()+(!getPlayer().getLevel().isDay()?60:0);
+		return 40+getPlayer().getSoulPower()+(!getPlayer().level.isDay()?60:0);
 	}
 
 	public boolean isBigMorph() {

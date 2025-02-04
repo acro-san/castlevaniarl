@@ -1,8 +1,6 @@
 package crl.action.vkiller;
 
-import crl.action.Action;
 import crl.action.HeartAction;
-import crl.actor.Actor;
 import crl.level.Level;
 import crl.player.Player;
 
@@ -17,7 +15,7 @@ public class BlastCrystal extends HeartAction{
 	public void execute(){
 		super.execute();
 		Player aPlayer = (Player) performer;
-        Level aLevel = performer.getLevel();
+        Level aLevel = performer.level;
         aLevel.addMessage("You release a mystic crystal!");
 		aLevel.addSmartFeature("BLAST_CRYSTAL", performer.getPosition());
 	}

@@ -1,12 +1,12 @@
 package crl.action.vkiller;
 
 import sz.util.Debug;
-import crl.action.Action;
+
 import crl.action.HeartAction;
-import crl.actor.Actor;
 import crl.level.Level;
 import crl.player.Player;
-public class ItemBreakStopwatch extends HeartAction{
+
+public class ItemBreakStopwatch extends HeartAction {
 	public String getID(){
 		return "Stopwatch";
 	}
@@ -15,7 +15,7 @@ public class ItemBreakStopwatch extends HeartAction{
 		super.execute();
 		Debug.doAssert(performer instanceof Player, "At action.Stopwatch");
 		Player aPlayer = (Player) performer;
-		Level x = performer.getLevel();
+		Level x = performer.level;
 		x.addMessage("You open the stopwatch! Time stops!");
 		x.stopTime(2*(5 + aPlayer.getShotLevel()*2+ aPlayer.getSoulPower()));
 	}

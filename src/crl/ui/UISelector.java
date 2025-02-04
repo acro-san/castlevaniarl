@@ -13,7 +13,7 @@ import crl.player.Player;
 
 public abstract class UISelector implements ActionSelector {
 	
-	protected Hashtable gameActions = new Hashtable();
+	protected Hashtable<String, UserAction> gameActions = new Hashtable<>();
 	
 	protected Action advance;
 	protected Action attack;
@@ -37,16 +37,16 @@ public abstract class UISelector implements ActionSelector {
 
 	public void setPlayer (Player p){
 		player = p;
-		level = player.getLevel();
+		level = player.level;
 	}
-	protected Action getRelatedAction(int keyCode){
-    	Debug.enterMethod(this, "getRelatedAction", keyCode+"");
-    	UserAction ua = (UserAction) gameActions.get(keyCode+"");
-    	if (ua == null){
-    		Debug.exitMethod("null");
-    		return null;
-    	}
-    	Action ret = ua.getAction();
+	protected Action getRelatedAction(int keyCode) {
+		Debug.enterMethod(this, "getRelatedAction", keyCode+"");
+		UserAction ua = gameActions.get(keyCode+"");
+		if (ua == null) {
+			Debug.exitMethod("null");
+			return null;
+		}
+		Action ret = ua.getAction();
 		Debug.exitMethod(ret);
 		return ret;
 	}

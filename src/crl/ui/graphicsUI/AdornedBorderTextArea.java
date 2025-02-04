@@ -8,10 +8,10 @@ import java.awt.Image;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
-public class AddornedBorderTextArea extends AddornedBorderPanel{
-	private JTextArea textArea; 
+public class AdornedBorderTextArea extends AdornedBorderPanel {
+	private JTextArea textArea;
 	
-	public AddornedBorderTextArea(Image UPRIGHT, 
+	public AdornedBorderTextArea(Image UPRIGHT,
 			Image UPLEFT, Image DOWNRIGHT, Image DOWNLEFT,
 			Color OUT_COLOR, Color IN_COLOR,
 			int borderWidth, int borderHeight) {

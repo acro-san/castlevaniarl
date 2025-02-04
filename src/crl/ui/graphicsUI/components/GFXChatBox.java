@@ -10,10 +10,10 @@ import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import crl.ui.graphicsUI.AddornedBorderPanel;
+import crl.ui.graphicsUI.AdornedBorderPanel;
 import crl.ui.graphicsUI.GFXDisplay;
 
-public class GFXChatBox extends AddornedBorderPanel{
+public class GFXChatBox extends AdornedBorderPanel{
 	private JLabel lblImageIcon;
 	private JLabel lblName;
 	private JTextArea txtText;

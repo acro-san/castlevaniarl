@@ -35,7 +35,7 @@ public class Holy extends HeartAction{
 	public void execute(){
 		super.execute();
 		Player aPlayer = (Player) performer;
-        Level aLevel = performer.getLevel();
+        Level aLevel = performer.level;
 		aLevel.addMessage("You throw a vial of holy water!");
 		
 		int damage = getDamage();
@@ -95,7 +95,7 @@ public class Holy extends HeartAction{
 					message.append(".");
 					aLevel.addMessage(message.toString());
 				}
-				Monster targetMonster = performer.getLevel().getMonsterAt(destinationPoint);
+				Monster targetMonster = performer.level.getMonsterAt(destinationPoint);
 				if (targetMonster != null){
 					StringBuffer message = new StringBuffer();
 					if (targetMonster.wasSeen())
@@ -105,7 +105,7 @@ public class Holy extends HeartAction{
 		        	if (targetMonster.isDead()){
 		        		if (targetMonster.wasSeen())
 		        			message.append(" and is roasted!");
-						performer.getLevel().removeMonster(targetMonster);
+						performer.level.removeMonster(targetMonster);
 					}
 					aLevel.addMessage(message.toString());
 				}

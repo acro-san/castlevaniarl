@@ -27,7 +27,7 @@ public class Light extends HeartAction{
 	public void execute(){
 		super.execute();
 		Player aPlayer = (Player)performer;
-		Level aLevel = aPlayer.getLevel();
+		Level aLevel = aPlayer.level;
 		aLevel.addMessage("Magical light illuminates the place.");
 		aPlayer.setCounter(Consts.C_MAGICLIGHT, 70+aPlayer.getSoulPower()*3);
 	}

@@ -1,7 +1,6 @@
 package crl.level;
 
 import crl.action.*;
-import crl.ui.*;
 import crl.ui.effects.*;
 
 
@@ -13,12 +12,12 @@ public class PreemergeEffects extends Action{
 	}
 
 	public void execute(){
-		Level aLevel = performer.getLevel();
+		Level aLevel = performer.level;
 		Emerger em = (Emerger) performer;
 		//aLevel.addMessage("You see something crawling out of the soil!", em.getPoint());
-        //aLevel.addEffect(new StaticAnimEffect(em.getPoint(), "^", Appearance.BROWN));
+		//aLevel.addEffect(new StaticAnimEffect(em.getPoint(), "^", Appearance.BROWN));
 		
-        drawEffect(EffectFactory.getSingleton().createLocatedEffect(em.getPoint(), "SFX_MONSTER_CRAWLING"));
+		drawEffect(EffectFactory.getSingleton().createLocatedEffect(em.getPoint(), "SFX_MONSTER_CRAWLING"));
 	}
 
 	public static PreemergeEffects getAction(){

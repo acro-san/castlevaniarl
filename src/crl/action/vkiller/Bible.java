@@ -12,7 +12,7 @@ import crl.monster.Monster;
 import crl.player.Player;
 import crl.ui.effects.EffectFactory;
 
-public class Bible extends HeartAction{
+public class Bible extends HeartAction {
 	public int getHeartCost() {
 		return 2;
 	}
@@ -29,10 +29,10 @@ public class Bible extends HeartAction{
 	
 	public void execute(){
 		super.execute();
-		Level aLevel = performer.getLevel();
+		Level aLevel = performer.level;
 		Player aPlayer = (Player) performer;
-		aPlayer.getLevel().addMessage("You open the bible!");
-		//drawEffect(new SequentialEffect(performer.getPosition(), steps, "?¿", Appearance.CYAN, 10));
+		aPlayer.level.addMessage("You open the bible!");
+		//drawEffect(new SequentialEffect(performer.getPosition(), steps, "?ï¿½", Appearance.CYAN, 10));
 		drawEffect(EffectFactory.getSingleton().createLocatedEffect(performer.getPosition(), "SFX_BIBLE"));
 
 		int damage = getDamage();
@@ -51,7 +51,7 @@ public class Bible extends HeartAction{
 				aLevel.addMessage(message.toString());
 			}
 
-			Monster targetMonster = performer.getLevel().getMonsterAt(destinationPoint);
+			Monster targetMonster = performer.level.getMonsterAt(destinationPoint);
 			message = new StringBuffer();
 			if (targetMonster != null){
 				message.append("The "+targetMonster.getDescription()+" is slashed");
@@ -59,7 +59,7 @@ public class Bible extends HeartAction{
 				targetMonster.damage(message, damage);
 	        	if (targetMonster.isDead()){
 		        	message.append(" apart!");
-					performer.getLevel().removeMonster(targetMonster);
+					performer.level.removeMonster(targetMonster);
 				} else {
 					message.append(".");
 				}
@@ -76,8 +76,7 @@ public class Bible extends HeartAction{
 		return "Where do you want to throw the Cross?";
 	}
 
-	private final static Vector steps = new Vector(10);
-
+	private final static Vector<Position> steps = new Vector<>(55);
 	static {
 		steps.add(new Position(1,0));
 		steps.add(new Position(2,-1));

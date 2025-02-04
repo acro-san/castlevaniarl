@@ -27,7 +27,7 @@ public class Charm extends HeartAction{
 	public void execute(){
 		super.execute();
 		Player aPlayer = (Player) performer;
-		Level x = performer.getLevel();
+		Level x = performer.level;
 		Monster m = x.getMonsterAt(targetPosition);
 		int chance = 40+2*aPlayer.getSoulPower();
 		if (aPlayer.getFlag("SKILL_CONFIDENCE"))

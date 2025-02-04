@@ -17,11 +17,11 @@ public class SwitchWeapons extends Action{
 		Player aPlayer = (Player) performer;
 		Item secondary = aPlayer.getSecondaryWeapon();
 		if (secondary == null){
-			/*aPlayer.getLevel().addMessage("You don't have a secondary weapon");
+			/*aPlayer.level.addMessage("You don't have a secondary weapon");
 			return;*/
 			Item primary = aPlayer.getWeapon();
 			aPlayer.setWeapon(null);
-			aPlayer.getLevel().addMessage("You attack unarmed");
+			aPlayer.level.addMessage("You attack unarmed");
 			if (primary != null){
 				aPlayer.setSecondaryWeapon(primary);
 			} 
@@ -31,10 +31,10 @@ public class SwitchWeapons extends Action{
 		aPlayer.setWeapon(secondary);
 		if (primary != null){
 			aPlayer.setSecondaryWeapon(primary);
-			aPlayer.getLevel().addMessage("You switch your "+primary.getDescription()+" for your "+secondary.getDescription());
+			aPlayer.level.addMessage("You switch your "+primary.getDescription()+" for your "+secondary.getDescription());
 		} else {
 			aPlayer.setSecondaryWeapon(null);
-			aPlayer.getLevel().addMessage("You equip your "+secondary.getDescription());
+			aPlayer.level.addMessage("You equip your "+secondary.getDescription());
 		}
  	}
 	

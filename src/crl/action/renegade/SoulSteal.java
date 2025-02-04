@@ -74,7 +74,7 @@ public class SoulSteal extends ProjectileSkill{
 			Monster m = (Monster)monsters.elementAt(i);
 			//TODO: Make this relative to the monster's soul or something
 			if (Util.chance(70)){
-				getPlayer().getLevel().addMessage("You steal the "+m.getDescription()+" soul!");
+				getPlayer().level.addMessage("You steal the "+m.getDescription()+" soul!");
 				getPlayer().recoverHitsP(5+getPlayer().getSoulPower());
 			}
 		}

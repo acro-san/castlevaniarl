@@ -37,7 +37,7 @@ public class Attack extends Action{
 		}
 		
 		weapon = player.getWeapon();
-		Level aLevel = performer.getLevel();
+		Level aLevel = performer.level;
 		if (!player.canAttack()){
 			aLevel.addMessage("You can't attack!");
 			return;
@@ -113,7 +113,7 @@ public class Attack extends Action{
 			        	Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
 	       	 			if (destinationFeature != null && destinationFeature.isDestroyable())
     	   	 				break;
-						Monster targetMonster = performer.getLevel().getMonsterAt(destinationPoint);
+						Monster targetMonster = performer.level.getMonsterAt(destinationPoint);
 						if (
 							targetMonster != null &&
 							!(targetMonster.isInWater() && targetMonster.canSwim()) &&
@@ -140,7 +140,7 @@ public class Attack extends Action{
 			String message = "";
         	
 
-			Monster targetMonster = performer.getLevel().getMonsterAt(destinationPoint);
+			Monster targetMonster = performer.level.getMonsterAt(destinationPoint);
 			message = "";
 
 			if (targetMonster != null){
@@ -245,23 +245,23 @@ public class Attack extends Action{
 
 	private boolean reload(Item weapon, Player aPlayer) {
 		if (weapon == null) {
-			aPlayer.getLevel().addMessage("You can't reload yourself");
+			aPlayer.level.addMessage("You can't reload yourself");
 			return false;
 		}
 		
 		if (aPlayer.getGold() < weapon.getDefinition().reloadCostGold) {
-			aPlayer.getLevel().addMessage("You can't afford to reload the " + weapon.getDescription());
+			aPlayer.level.addMessage("You can't afford to reload the " + weapon.getDescription());
 			return false;
 		}
 		if (aPlayer.getHearts() < 2) {
-			aPlayer.getLevel().addMessage("You can't reload the " + weapon.getDescription());
+			aPlayer.level.addMessage("You can't reload the " + weapon.getDescription());
 			return false;
 		}
 		
 		weapon.reload();
 		aPlayer.reduceGold(weapon.getDefinition().reloadCostGold);
 		aPlayer.reduceHearts(2);
-		aPlayer.getLevel().addMessage("You reload the " + weapon.getDescription()+" ("+weapon.getDefinition().reloadCostGold+" gold)");
+		aPlayer.level.addMessage("You reload the " + weapon.getDescription()+" ("+weapon.getDefinition().reloadCostGold+" gold)");
 		reloadTime = 10*weapon.getDefinition().reloadTurns;
 		return true;
 	}

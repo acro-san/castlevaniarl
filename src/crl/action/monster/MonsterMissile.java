@@ -59,7 +59,7 @@ public class MonsterMissile extends Action{
 	public void execute(){
 		Debug.doAssert(performer instanceof Monster, "Someone not a monster tried to throw a bone");
 		Monster aMonster = (Monster) performer;
-        Level aLevel = performer.getLevel();
+        Level aLevel = performer.level;
         Player aPlayer = aLevel.getPlayer();
         //Cell playerCell = aLevel.getMapCell(aPlayer.getPosition());
         //Cell monsterCell = aLevel.getMapCell(aMonster.getPosition());

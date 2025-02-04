@@ -26,7 +26,7 @@ public class Defend extends HeartAction {
 		if (targetDirection == Action.SELF){
 			return;
 		}
-		getPlayer().getLevel().addMessage("You defend yourself with your "+getPlayer().getShield().getDescription());
+		getPlayer().level.addMessage("You defend yourself with your "+getPlayer().getShield().getDescription());
 		getPlayer().setShieldGuard(targetDirection, 5);
 	}
 	

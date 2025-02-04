@@ -60,9 +60,9 @@ public class ConsoleUISelector extends UISelector {
 			}
 			if (isArrow(input)){
 				int direction = toIntDirection(input);
-				Monster vMonster = player.getLevel().getMonsterAt(Position.add(player.getPosition(), Action.directionToVariation(direction)));
+				Monster vMonster = player.level.getMonsterAt(Position.add(player.getPosition(), Action.directionToVariation(direction)));
 				if (vMonster != null && 
-					(!(vMonster instanceof NPC) || (vMonster instanceof NPC && ((NPC)vMonster).isHostile()))){
+					(!(vMonster instanceof NPC) || (vMonster instanceof NPC && ((NPC)vMonster).isHostile()))) {
 					if (attack.canPerform(player)){
 						attack.setDirection(direction);
 						Debug.exitMethod(attack);
@@ -81,40 +81,37 @@ public class ConsoleUISelector extends UISelector {
 				if (player.getPlayerClass() == Player.CLASS_VAMPIREKILLER) {
 					ret = player.getMysticAction();
 					try {
-		            	if (ret != null){
-		                	ret.setPerformer(player);
-		                	if (ret.canPerform(player))
-		                		ui().setTargets(ret);
-		                	else {
-		                		level.addMessage(ret.getInvalidationMessage());
-		                		throw new ActionCancelException();
-		                	}
-        	                Debug.exitMethod(ret);
-            	        	return ret;
+						if (ret != null) {
+							ret.setPerformer(player);
+							if (ret.canPerform(player)) {
+								ui().setTargets(ret);
+							} else {
+								level.addMessage(ret.getInvalidationMessage());
+								throw new ActionCancelException();
+							}
+							Debug.exitMethod(ret);
+							return ret;
 						}
-					}
-					catch (ActionCancelException ace){
+					} catch (ActionCancelException ace) {
 						ret = null;
 					}
-				} 
-			}else{
-            	ret = getRelatedAction(input.code);
-            	try {
-	            	if (ret != null){
-	            		ret.setPerformer(player);
-	            		if (ret.canPerform(player))
-	            			ui().setTargets(ret);
-	            		else {
-	            			level.addMessage(ret.getInvalidationMessage());
-	            			throw new ActionCancelException();
-	            		}
-	            		
-                     	Debug.exitMethod(ret);
-                    	return ret;
-					}
-
 				}
-				catch (ActionCancelException ace){
+			} else {
+				ret = getRelatedAction(input.code);
+				try {
+					if (ret != null) {
+						ret.setPerformer(player);
+						if (ret.canPerform(player)) {
+							ui().setTargets(ret);
+						} else {
+							level.addMessage(ret.getInvalidationMessage());
+							throw new ActionCancelException();
+						}
+						
+						Debug.exitMethod(ret);
+						return ret;
+					}
+				} catch (ActionCancelException ace) {
 					//si.cls();
 	 				//refresh();
 					ui().addMessage(new Message("Cancelled", player.getPosition()));
@@ -130,11 +127,9 @@ public class ConsoleUISelector extends UISelector {
 	public String getID(){
 		return "UI";
 	}
-    
-	public ActionSelector derive(){
- 		return null;
- 	}
 	
-	
+	public ActionSelector derive() {
+		return null;
+	}
 	
 }
