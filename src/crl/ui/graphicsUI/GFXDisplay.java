@@ -275,7 +275,7 @@ public class GFXDisplay extends Display {
 		t1.setForeground(Color.WHITE);
 		t1.setText("  ...And so it was that "+player.getDescription() + ", "+gsi.getDeathString()+" on the "+player.getLevel().getDescription()+"...\n\n"+
 				heshe+ " scored "+ player.getScore() +" points and earned "+ player.getGold() +" gold \n\n"+
-				heshe + " survived for "+gsi.getTurns()+" turns \n\n"+
+				heshe + " survived for "+gsi.turns+" turns \n\n"+
 				heshe + " took "+gsi.getTotalDeathCount()+" monsters to the other world");
 		si.add(t1);
 /*

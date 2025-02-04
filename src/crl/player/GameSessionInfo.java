@@ -5,29 +5,34 @@ import java.util.*;
 import crl.monster.*;
 
 
-public class GameSessionInfo implements Serializable{
+public class GameSessionInfo implements Serializable {
 	private Player player;
 	private Monster killerMonster;
 	private int deathCause = -1;
-	private int turns;
-	private long goldCount;
-	private int deathLevel;
-	private String deathLevelDescription;
+	public int turns;
 	
-	private Vector history = new Vector();
+	public long goldCount;	// LONG!?? In how many games are you likely to see > Integer.MAX_VALUE gold?!
 	
-	public void addHistoryItem(String desc){
+	public int deathLevel;
+	public String deathLevelDescription;
+	
+	private Vector<String> history = new Vector<>();
+	
+	private Hashtable<String, MonsterDeath> deathCount = new Hashtable<>();
+	
+	public void addHistoryItem(String desc) {
 		history.add(desc);
 	}
 
-	public int getTurns(){
+/*
+	public int getTurns() {
 		return turns;
+	}
 
-    }
-
-    public void increaseTurns(){
-    	turns ++;
-    }
+	public void increaseTurns() {
+		turns++;
+	}
+	*/
 
 	public final static int
 		KILLED = 0,
@@ -40,7 +45,7 @@ public class GameSessionInfo implements Serializable{
 		ENDLESS_PIT = 7,
 		POISONED_TO_DEATH = 8;
 
-	private Hashtable deathCount = new Hashtable();
+
 
 
 	public Player getPlayer() {
@@ -60,14 +65,15 @@ public class GameSessionInfo implements Serializable{
 	}
 
 	public void addDeath(MonsterDefinition who){
-		MonsterDeath md = (MonsterDeath) deathCount.get(who.getID());
-		if (md == null)
+		MonsterDeath md = deathCount.get(who.getID());
+		if (md == null) {
 			deathCount.put(who.getID(), new MonsterDeath(who.getDescription()));
-		else {
+		} else {
 			md.increaseDeaths();
 		}
-    }
+	}
 
+	/*
 	public void addGold (int val){
 		goldCount += val;
 	}
@@ -75,7 +81,8 @@ public class GameSessionInfo implements Serializable{
 	public long getGoldCount(){
 		return goldCount;
 	}
-	public Hashtable getDeathCount() {
+	*/
+	public Hashtable<String,MonsterDeath> getDeathCount() {
 		return deathCount;
 	}
 	
@@ -87,7 +94,7 @@ public class GameSessionInfo implements Serializable{
 			return md.getTimes();
 	}
 
-	public String getShortDeathString(){
+	public String getShortDeathString() {
 		switch (deathCause){
 			case KILLED:
 				return "Killed by a "+killerMonster.getDescription();
@@ -111,7 +118,7 @@ public class GameSessionInfo implements Serializable{
 		return "Perished...";
 	}
 
-	public String getDeathString(){
+	public String getDeathString() {
 		switch (deathCause){
 			case KILLED:
 				return "was killed by a "+killerMonster.getDescription();
@@ -137,13 +144,14 @@ public class GameSessionInfo implements Serializable{
 	}
 
 	public int getTotalDeathCount(){
-		Enumeration x = deathCount.elements();
+		Enumeration<MonsterDeath> x = deathCount.elements();
 		int acum = 0;
 		while (x.hasMoreElements())
-			acum+= ((MonsterDeath)x.nextElement()).getTimes();
+			acum += (x.nextElement()).getTimes();
 		return acum;
 	}
 
+	/*
 	public int getDeathLevel() {
 		return deathLevel;
 	}
@@ -159,8 +167,9 @@ public class GameSessionInfo implements Serializable{
 	public void setDeathLevelDescription(String deathLevelDescription) {
 		this.deathLevelDescription = deathLevelDescription;
 	}
+	*/
 	
-	public Vector getHistory(){
+	public Vector<String> getHistory() {
 		return history;
 	}
 

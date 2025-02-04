@@ -34,17 +34,18 @@ public class GirdLevelGenerator extends LevelGenerator {
 		this.baseWall = baseWall;
 		this.baseFloor = baseFloor;
 	}
-	
+	/*
 	private void printVisited(){
-		/*for (int y = 0; y < visitedRooms[0].length; y++){
+		for (int y = 0; y < visitedRooms[0].length; y++){
 			for (int x = 0; x < visitedRooms.length; x++)
 				if (visitedRooms[x][y])
 					System.out.print(".");
 				else
 					System.out.print("X");
 			Debug.say("");
-		}*/
+		}
 	}
+	*/
 
 	private void lightCandles(Level l){
 		for (int i = 0; i < candles; i++){
@@ -55,7 +56,7 @@ public class GirdLevelGenerator extends LevelGenerator {
 				continue;
 			}
 				
-			Feature vFeature = FeatureFactory.getFactory().buildFeature("CANDLE");
+			Feature vFeature = FeatureFactory.buildFeature("CANDLE");
 			vFeature.setPosition(xrnd,yrnd,0);
 			l.addFeature(vFeature);
 		}
@@ -93,7 +94,7 @@ public class GirdLevelGenerator extends LevelGenerator {
 		cells[0][entrancePosition.x][entrancePosition.y] = MapCellFactory.getMapCellFactory().getMapCell(baseFloor);
 
 		int keys = placeKeys(ret);
-		Feature door = FeatureFactory.getFactory().buildFeature("MAGIC_DOOR");
+		Feature door = FeatureFactory.buildFeature("MAGIC_DOOR");
 		cells[0][exitPosition.x][exitPosition.y] = MapCellFactory.getMapCellFactory().getMapCell(baseFloor);
 		door.setPosition(exitPosition.x, exitPosition.y, exitPosition.z);
 		door.setKeyCost(keys);
@@ -130,7 +131,7 @@ public class GirdLevelGenerator extends LevelGenerator {
 
 	private boolean connected(){
 		Debug.enterMethod(this, "connected");
-		Stack stack = new Stack();
+		Stack<Position> stack = new Stack<>();
 		Position now = new Position(0, startIndex);
 		Position end = new Position(visitedRooms.length -1, endIndex);
 		if (!horizontal){

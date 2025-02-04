@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.lang.reflect.Field;
 import java.util.Enumeration;
@@ -368,13 +369,27 @@ public class Main {
 			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(saves[index]));
 			currentGame = (Game)ois.readObject();
 			ois.close();
+		} catch (InvalidClassException ice) {
+			// java.io.InvalidClassException: sz.util.Position; local class incompatible:
+			//   stream classdesc serialVersionUID = -4833892013213657867,
+			//   local class serialVersionUID = -7564520053860342315
+			// Deserialisation failure (wrong version - game binary is more modern
+			// than the attempted-to-load savefile).
+			// beyond de/serialisation this can't be solved. Shouldn't auto-delete
+			// user's files without asking though, right?
+			// mark them in red / show 'outdated save file' msg on UI?
+			// This is an "error" but not exceptional. Deal with it gracefully
+			// and continue running. don't crash.
+			crash("Savefile no longer loadable (program version changed)", new CRLException("Savefile version obsolete"));
+			
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
-		} catch (ClassNotFoundException cnfe){
+		} catch (ClassNotFoundException cnfe) {
 			crash("Invalid savefile or wrong version", new CRLException("Invalid savefile or wrong version"));
 		}
+		
 		currentGame.setInterfaces(ui, uiSelector);
-		if (currentGame.getPlayer().getLevel() == null){
+		if (currentGame.getPlayer().getLevel() == null) {
 			crash("Player wasnt loaded", new Exception("Player wasnt loaded"));
 		}
 		currentGame.setPlayer(currentGame.getPlayer());
@@ -386,8 +401,8 @@ public class Main {
 		title();
 	}
 	
-	private static void newGame(){
-		if (currentGame != null){
+	private static void newGame() {
+		if (currentGame != null) {
 			ui.removeCommandListener(currentGame);
 		}
 		currentGame = new Game();
@@ -576,38 +591,6 @@ public class Main {
 		}
 	}
 
-	public static void main(String args[]){
-		uiMode = SWING_GFX;
-		//mode = SWING_CONSOLE;
-		uiFile = "slash-barrett.ui";
-		if (args!= null && args.length > 0){
-			if (args[0].equalsIgnoreCase("sgfx")){
-				uiMode = SWING_GFX;
-				if (args.length > 1)
-					uiFile = args[1];
-				else
-					uiFile = "slash-barrett.ui";
-			}
-			else if (args[0].equalsIgnoreCase("jc"))
-				uiMode = JCURSES_CONSOLE;
-			else if (args[0].equalsIgnoreCase("sc"))
-				uiMode = SWING_CONSOLE;
-		}
-		
-		init();
-		System.out.println("Launching game");
-		try {
-			title();
-		} catch (Exception e){
-			Game.crash("Unrecoverable Exception [Press Space]",e);
-			try {
-				System.in.read();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		}
-	}
 
 	private static void initializeGAppearances(GFXConfiguration gfx_configuration) {
 		Appearance[] definitions = new GFXAppearances(gfx_configuration).getAppearances();
@@ -646,7 +629,7 @@ public class Main {
 	}
 
 	private static void initializeFeatures() {
-		FeatureFactory.getFactory().init(Features.getFeatureDefinitions(appearances));
+		FeatureFactory.init(Features.getFeatureDefinitions(appearances));
 	}
 
 	private static void initializeSelectors() {
@@ -671,16 +654,17 @@ public class Main {
 		}
 	}
 
-	private static void initializeMonsters() throws CRLException{
-		
+
+	private static void initializeMonsters() throws CRLException {
 		MonsterFactory.getFactory().init(MonsterLoader.getMonsterDefinitions("data/monsters.ecsv","data/monsters.exml"));
 	}
+
 
 	private static void initializeNPCs(){
 		NPCDefinition[] definitions = NPCs.getNPCDefinitions();
 		NPCFactory npcf = NPCFactory.getFactory();
-		for (int i=0; i<definitions.length; i++){
-        	npcf.addDefinition(definitions[i]);
+		for (int i=0; i<definitions.length; i++) {
+			npcf.addDefinition(definitions[i]);
 		}
 	}
 
@@ -690,37 +674,73 @@ public class Main {
 		itemData.init(Items.defs);
 	}
 
-	private static void initializeSmartFeatures (){
+
+	private static void initializeSmartFeatures() {
 		SmartFeatureFactory.getFactory().init(SmartFeatures.getSmartFeatures(selectors));
 	}
 
 
-    public static void crash(String message, Throwable exception){
-    	System.out.println("CastlevaniaRL "+Game.getVersion()+": Error");
-        System.out.println("");
-        System.out.println("Unrecoverable error: "+message);
-        exception.printStackTrace();
-        if (currentGame != null){
-        	System.out.println("Trying to save game");
-        	GameFiles.saveGame(currentGame, currentGame.getPlayer());
-        }
-        ui.showCriticalError("Error: " + message);
-        System.exit(-1);
-    }
-    
-    private static Hashtable monsterRecord;
-    
-    public static MonsterRecord getMonsterRecordFor(String monsterID){
-		return (MonsterRecord) monsterRecord.get(monsterID);
+	public static void crash(String message, Throwable exception) {
+		System.out.println("CastlevaniaRL "+Game.getVersion()+": Error");
+		System.out.println("");
+		System.out.println("Unrecoverable error: "+message);
+		exception.printStackTrace();
+		if (currentGame != null) {
+			System.out.println("Trying to save game");
+			GameFiles.saveGame(currentGame, currentGame.getPlayer());
+		}
+		ui.showCriticalError("Error: " + message);
+		System.exit(-1);
 	}
 
-	public static void setMonsterRecord(Hashtable monsterRecord) {
+
+	private static Hashtable<String,MonsterRecord> monsterRecord;
+
+	public static MonsterRecord getMonsterRecordFor(String monsterID){
+		return monsterRecord.get(monsterID);
+	}
+
+	public static void setMonsterRecord(Hashtable<String, MonsterRecord> monsterRecord) {
 		Main.monsterRecord = monsterRecord;
 	}
 
-	public static Hashtable getMonsterRecord() {
+	public static Hashtable<String, MonsterRecord> getMonsterRecord() {
 		return monsterRecord;
 	}
 	
+	
+	public static void main(String args[]) {
+		uiMode = SWING_GFX;
+		// mode = SWING_CONSOLE;
+		uiFile = "slash-barrett.ui";
+		if (args!= null && args.length > 0) {
+			if (args[0].equalsIgnoreCase("sgfx")) {
+				uiMode = SWING_GFX;
+				if (args.length > 1) {
+					uiFile = args[1];
+				} else {
+					uiFile = "slash-barrett.ui";
+				}
+			} else if (args[0].equalsIgnoreCase("jc")) {
+				uiMode = JCURSES_CONSOLE;
+			} else if (args[0].equalsIgnoreCase("sc")) {
+				uiMode = SWING_CONSOLE;
+			}
+		}
+		
+		init();
+		System.out.println("Launching game");
+		try {
+			title();
+		} catch (Exception e) {
+			Game.crash("Unrecoverable Exception [Press Space]", e);
+			try {
+				System.in.read();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
+	}
+	
+	
 }
-

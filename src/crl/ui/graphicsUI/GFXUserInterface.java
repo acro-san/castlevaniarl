@@ -25,6 +25,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import sz.csi.CharKey;
+import sz.csi.textcomponents.MenuItem;
 import sz.gadgets.*;
 import sz.util.*;
 import crl.Main;
@@ -58,11 +59,10 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 	private static final int BORDERS_SIZE = 32; //TODO: Move to GFXConfiguration
 
 	private int STANDARD_WIDTH;
-	//Attributes
+
 	private int xrange;
 	private int yrange;
 	
-	//Components
 	public SwingInformBox messageBox;
 	public AddornedBorderTextArea persistantMessageBox;
 	private MerchantBox merchantBox;
@@ -74,7 +74,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 	
 	private boolean eraseOnArrival; // Erase the buffer upon the arrival of a new msg
 	private boolean flipFacing;
-	private Vector messageHistory = new Vector(10);
+	private Vector<String> messageHistory = new Vector<>(10);
 	
 	// Relations
 
@@ -149,6 +149,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 	private static final Color
 		WATERCOLOR_BLOCKED = new Color(0,50, 100, 200),
 		WATERCOLOR = new Color(0,70, 120, 200),
+		
 		RAINCOLOR = new Color(180,200, 250, 100),
 		THUNDERCOLOR = new Color(180,200, 200, 150),
 		FOGCOLOR = new Color(200,200, 200, 200),
@@ -276,7 +277,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		
 	}
 
-	private static long mmRedrawCount = 0;
+	//private static long mmRedrawCount = 0;
 	/*
 	 * Expensively render the minimap as part of the HUD instead of
 	 * being a separate mode.
@@ -332,24 +333,24 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 				g.fillRect(mapX + x * 3, mapY + y * 3, 3,3);	// *Oh*? would an imgbuffer matter for perf?
 			}
 		}
-		mmRedrawCount++;
+		//mmRedrawCount++;
 		//long mmdrawTNanos = System.nanoTime() - t0;
 		//double dtimeMicros = (double)mmdrawTNanos / 1000;
 		//System.out.format("mmdraw[%05d]: %3.3fus\n", mmRedrawCount, dtimeMicros);
 	}
 	
-    private void enterScreen(){
-    	messageBox.setVisible(false);
-    	isCursorEnabled = false;
-    }
-    
-    private void leaveScreen(){
-    	messageBox.setVisible(true);
-    	isCursorEnabled = true;
-    }
-    
-    public void showMessageHistory(){
-    	enterScreen();
+	private void enterScreen() {
+		messageBox.setVisible(false);
+		isCursorEnabled = false;
+	}
+
+	private void leaveScreen() {
+		messageBox.setVisible(true);
+		isCursorEnabled = true;
+	}
+
+	public void showMessageHistory() {
+		enterScreen();
 		si.saveBuffer();
 		si.drawImage(IMG_STATUSSCR_BGROUND);
 		si.print(1, 1, "Message Buffer", GFXDisplay.COLOR_BOLD);
@@ -366,9 +367,9 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		si.refresh();
 		leaveScreen();
 	}
-    
-    //Interactive Methods
-    public void doLook(){
+	
+	//Interactive Methods
+	public void doLook() {
 		Position offset = new Position (0,0);
 		
 		messageBox.setForeground(COLOR_LAST_MESSAGE);
@@ -394,7 +395,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 				if (choosen != null)
 					looked += choosen.getDescription();
 				if (level.getBloodAt(browser) != null)
-				    looked += "{bloody}";
+					looked += "{bloody}";
 				if (feat != null)
 					looked += ", "+ feat.getDescription();
 				if (item != null)
@@ -419,14 +420,18 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 			);
 			si.refresh();
 			CharKey x = new CharKey(CharKey.NONE);
-			while (x.code != CharKey.SPACE && x.code != CharKey.m && x.code != CharKey.ESC &&
-				   ! x.isArrow())
+			while (	x.code != CharKey.SPACE &&
+					x.code != CharKey.m &&
+					x.code != CharKey.ESC &&
+					!x.isArrow())
+			{
 				x = si.inkey();
-			if (x.code == CharKey.SPACE || x.code == CharKey.ESC){
+			}
+			if (x.code == CharKey.SPACE || x.code == CharKey.ESC) {
 				si.restore();
 				break;
 			}
-			if (x.code == CharKey.m){
+			if (x.code == CharKey.m) {
 				if (lookedMonster != null)
 					Display.thus.showMonsterScreen(lookedMonster, player);
 			} else {
@@ -444,7 +449,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 	}
 
 
-	public synchronized void launchMerchant(Merchant who){
+	public synchronized void launchMerchant(Merchant who) {
 		Debug.enterMethod(this, "launchMerchant", who);
 		Equipment.eqMode = true;
 		Item.shopMode = true;
@@ -759,14 +764,14 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 			messageBox.setForeground(COLOR_LAST_MESSAGE);
 			eraseOnArrival = false;
 		}
-		if (message.getLocation().z != player.getPosition().z || !insideViewPort(getAbsolutePosition(message.getLocation()))){
+		if (message.location.z != player.getPosition().z || !insideViewPort(getAbsolutePosition(message.location))) {
 			Debug.exitMethod();
 			return;
 		}
-		messageHistory.add(message.getText());
+		messageHistory.add(message.text);
 		if (messageHistory.size()>500)
 			messageHistory.removeElementAt(0);
-		messageBox.addText(message.getText());
+		messageBox.addText(message.text);
 		dimMsg = 0;
 		Debug.exitMethod();
 	}
@@ -1244,33 +1249,33 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 
 	private Item pickEquipedItem(String prompt) throws ActionCancelException{
 		enterScreen();
-		
-  		Vector equipped = new Vector();
-  		if (player.getArmor() != null)
-  			equipped.add(player.getArmor());
-  		if (player.getWeapon() != null)
-  			equipped.add(player.getWeapon());
-  		if (player.getShield() != null)
-  			equipped.add(player.getShield());
-  		if (player.getSecondaryWeapon() != null)
-  			equipped.add(player.getSecondaryWeapon());
-  		
-  		if (equipped.size() == 0){
-  			level.addMessage("Nothing equipped");
-  			ActionCancelException ret = new ActionCancelException();
+
+		Vector<Item> equipped = new Vector<>();
+		if (player.getArmor() != null)
+			equipped.add(player.getArmor());
+		if (player.getWeapon() != null)
+			equipped.add(player.getWeapon());
+		if (player.getShield() != null)
+			equipped.add(player.getShield());
+		if (player.getSecondaryWeapon() != null)
+			equipped.add(player.getSecondaryWeapon());
+
+		if (equipped.size() == 0) {
+			level.addMessage("Nothing equipped");
+			ActionCancelException ret = new ActionCancelException();
 			Debug.exitExceptionally(ret);
 			throw ret;
-  		}
-  		
-  		BorderedMenuBox menuBox = GetMenuBox();
-  		menuBox.setGap(35);
-  		
-  		//menuBox.setBounds(26,6,30,11);
-  		menuBox.setBounds(6,4,70,12);
-  		menuBox.setMenuItems(equipped);
-  		menuBox.setTitle(prompt);
-  		si.saveBuffer();
-  		//menuBox.draw();
+		}
+
+		BorderedMenuBox menuBox = GetMenuBox();
+		menuBox.setGap(35);
+
+		//menuBox.setBounds(26,6,30,11);
+		menuBox.setBounds(6,4,70,12);
+		menuBox.setMenuItems(equipped);
+		menuBox.setTitle(prompt);
+		si.saveBuffer();
+		//menuBox.draw();
 		Item equiped = (Item)menuBox.getSelection();
 		if (equiped == null){
 			ActionCancelException ret = new ActionCancelException();
@@ -1314,9 +1319,9 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 	}
 	
 	
-	private Vector<Item> pickMultiItems(String prompt) throws ActionCancelException{
+	private Vector pickMultiItems(String prompt) throws ActionCancelException {
 		//Equipment.eqMode = true;
-		Vector<Equipment> inventory = player.getInventory();
+		Vector inventory = player.getInventory();
 		BorderedMenuBox menuBox = GetMenuBox();
 		menuBox.setBounds(25,3,40,18);
 		//menuBox.setPromptSize(2);
@@ -1324,7 +1329,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		menuBox.setTitle(prompt);
 		//menuBox.setForeColor(ConsoleSystemInterface.RED);
 		//menuBox.setBorder(true);
-		Vector ret = new Vector();
+		Vector<MenuItem> ret = new Vector<>();
 		BorderedMenuBox selectedBox = GetMenuBox();
 		selectedBox.setBounds(5,3,20,18);
 		//selectedBox.setPromptSize(2);
@@ -1387,7 +1392,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 	}
 
 
-	public boolean prompt () {
+	public boolean prompt() {
 		CharKey x = new CharKey(CharKey.NONE);
 		while (x.code != CharKey.Y && x.code != CharKey.y && x.code != CharKey.N && x.code != CharKey.n)
 			x = si.inkey();
@@ -1410,8 +1415,8 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		//messageBox.setVisible(true);
 		/*if (useMouse)
 			drawCursor();*/
-	 	drawLevel();
-	 	drawPlayerStatus();
+		drawLevel();
+		drawPlayerStatus();
 		si.refresh();
 		leaveScreen();
 		if (dimMsg == 3){
@@ -1419,21 +1424,22 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 			dimMsg = 0;
 		}
 		dimMsg++;
-	  	if (!player.getFlag("KEEPMESSAGES"))
-	  		eraseOnArrival = true;
-	  	si.saveBuffer(); //sz040507
-	  	
-    }
+		if (!player.getFlag("KEEPMESSAGES"))
+			eraseOnArrival = true;
+		si.saveBuffer(); //sz040507
+	
+	}
 	
 	
 
-	public void setTargets(Action a) throws ActionCancelException{
-		if (a.needsItem())
+	public void setTargets(Action a) throws ActionCancelException {
+		if (a.needsItem()) {
 			a.setItem(pickItem(a.getPromptItem()));
-		if (a.needsDirection()){
+		}
+		if (a.needsDirection()) {
 			a.setDirection(pickDirection(a.getPromptDirection()));
 		}
-		if (a.needsPosition()){
+		if (a.needsPosition()) {
 			if (a == target)
 				a.setPosition(pickPosition(a.getPromptPosition(), CharKey.f));
 			else
@@ -1455,18 +1461,18 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 	
 	private Item pickUnderlyingItem(String prompt) throws ActionCancelException{
 		enterScreen();
-  		Vector items = level.getItemsAt(player.getPosition());
-  		if (items == null)
-  			return null;
-  		if (items.size() == 1)
-  			return (Item) items.elementAt(0);
-  		BorderedMenuBox menuBox = GetMenuBox();
-  		menuBox.setGap(35);
-  		menuBox.setBounds(6,4,70,12);
-  		menuBox.setMenuItems(items);
-  		menuBox.setTitle(prompt);
-  		si.saveBuffer();
-  		//menuBox.draw();
+		Vector<Item> items = level.getItemsAt(player.getPosition());
+		if (items == null)
+			return null;
+		if (items.size() == 1)
+			return (Item) items.elementAt(0);
+		BorderedMenuBox menuBox = GetMenuBox();
+		menuBox.setGap(35);
+		menuBox.setBounds(6,4,70,12);
+		menuBox.setMenuItems(items);
+		menuBox.setTitle(prompt);
+		si.saveBuffer();
+		//menuBox.draw();
 		Item item = (Item)menuBox.getSelection();
 		
 		if (item == null){
@@ -1483,7 +1489,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		return item;
 	}
 	
-	private Vector vecItemUsageChoices = new Vector();
+	private Vector<GFXMenuItem> vecItemUsageChoices = new Vector<>();
 	{
 		vecItemUsageChoices.add(new SimpleGFXMenuItem("[u]se", 1));
 		vecItemUsageChoices.add(new SimpleGFXMenuItem("[e]quip", 2));
@@ -1493,9 +1499,9 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		
 	}
 	
-	private int [] additionalKeys = new int[]{
-				CharKey.N1, CharKey.N2, CharKey.N3, CharKey.N4,
-		};
+	private int[] additionalKeys = {
+		CharKey.N1, CharKey.N2, CharKey.N3, CharKey.N4,
+	};
 	
 	private int [] itemUsageKeys = new int[]{
 				CharKey.u, CharKey.e, CharKey.d, CharKey.t,
@@ -1808,38 +1814,41 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 
 	private BorderedMenuBox GetMenuBox(boolean nullBox) {
 		BufferedImage box = nullBox ? null : TILE_WEAPON_BACK;
-		return new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, BORDERS_SIZE, box);
+		return new BorderedMenuBox(
+			BORDER1, BORDER2, BORDER3, BORDER4, 
+			si, COLOR_WINDOW_BACKGROUND, 
+			COLOR_BORDER_IN, COLOR_BORDER_OUT, BORDERS_SIZE, box);
 	}
 
-    public Action showSkills() throws ActionCancelException {
-    	Debug.enterMethod(this, "showSkills");
-    	enterScreen();
-    	si.saveBuffer();
+	public Action showSkills() throws ActionCancelException {
+		Debug.enterMethod(this, "showSkills");
+		enterScreen();
+		si.saveBuffer();
 		Vector skills = player.getAvailableSkills();
 		BorderedMenuBox menuBox = GetMenuBox(true);
-  		menuBox.setItemsPerPage(14);
-  		menuBox.setWidth(48);
-  		menuBox.setPosition(6,4);
-  		menuBox.setMenuItems(skills);
-  		menuBox.setTitle("Skills");
-  		//menuBox.draw();
+		menuBox.setItemsPerPage(14);
+		menuBox.setWidth(48);
+		menuBox.setPosition(6,4);
+		menuBox.setMenuItems(skills);
+		menuBox.setTitle("Skills");
+		//menuBox.draw();
 		si.refresh();
-        Skill selectedSkill = (Skill)menuBox.getSelection();
-        if (selectedSkill == null){
-        	si.restore();
-        	si.refresh();
-        	Debug.exitMethod("null");
-        	leaveScreen();
-        	return null;
-        }
-        si.restore();
-        si.refresh();
-        if (selectedSkill.isSymbolic()){
-        	Debug.exitMethod("null");
-        	leaveScreen();
-        	return null;
-        }
-        	
+		Skill selectedSkill = (Skill)menuBox.getSelection();
+		if (selectedSkill == null) {
+			si.restore();
+			si.refresh();
+			Debug.exitMethod("null");
+			leaveScreen();
+			return null;
+		}
+		si.restore();
+		si.refresh();
+		if (selectedSkill.isSymbolic()) {
+			Debug.exitMethod("null");
+			leaveScreen();
+			return null;
+		}
+		
 		Action selectedAction = selectedSkill.getAction();
 		selectedAction.setPerformer(player);
 		if (selectedAction.canPerform(player))
@@ -1853,12 +1862,12 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 		return selectedAction;
 	}
 
-   
-    public void levelUp(){
-    	
-    	showMessage("You gained a level!, [Press Space to continue]");
-    	
-    	si.waitKey(CharKey.SPACE);
+
+	public void levelUp() {
+		
+		showMessage("You gained a level!, [Press Space to continue]");
+		
+		si.waitKey(CharKey.SPACE);
     	enterScreen();
     	if (player.deservesAdvancement(player.getPlayerLevel())){
 	    	Vector advancements = player.getAvailableAdvancements();
@@ -1894,15 +1903,16 @@ public class GFXUserInterface extends UserInterface implements Runnable {
     	showMessage("You acquired a "+soul.getDescription());
     	*/
     }
+	
+	
 	public void setPlayer(Player pPlayer) {
 		super.setPlayer(pPlayer);
 		flipFacing = false;
 	}
 	
-    
 	
-	public void commandSelected (int commandCode){
-		switch (commandCode){
+	public void commandSelected(int commandCode) {
+		switch (commandCode) {
 			case CommandListener.PROMPTQUIT:
 				processQuit();
 				break;
@@ -1981,8 +1991,8 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 //	Runnable interface
 	public void run (){}
 	
-//	IO Utility    
-	public void waitKey (){
+//	IO Utility
+	public void waitKey() {
 		CharKey x = new CharKey(CharKey.NONE);
 		while (x.code == CharKey.NONE)
 			x = si.inkey();

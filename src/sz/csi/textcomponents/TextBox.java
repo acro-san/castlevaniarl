@@ -1,13 +1,6 @@
 package sz.csi.textcomponents;
 
-import sz.csi.CharKey;
 import sz.csi.ConsoleSystemInterface;
-import sz.util.*;
-
-import java.util.*;
-
-import crl.ui.*;
-import crl.*;
 
 public class TextBox extends TextComponent{
 	private StringBuffer [] lines;

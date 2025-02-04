@@ -19,7 +19,7 @@ import sz.fov.FOV;
 import sz.util.*;
 
 
-public class Game implements CommandListener, PlayerEventListener, java.io.Serializable{
+public class Game implements CommandListener, PlayerEventListener, java.io.Serializable {
 	//Configuration
 	private transient UserInterface ui;
 	private transient UISelector uiSelector;
@@ -37,13 +37,13 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 		return canSave;
 	}
 	
-	private Hashtable /*Level*/  storedLevels = new Hashtable();
+	private Hashtable<String, Level> storedLevels = new Hashtable<>();
 	private boolean endGame;
 	private long turns;
 	private boolean isDay = true;
 	private int timeSwitch;
-	private Hashtable levelMetadata = new Hashtable();
-	//private String[] levelPath;
+	private Hashtable<String,LevelMetaData> levelMetadata = new Hashtable<>();
+
 
 	public void commandSelected (int commandCode){
 		if (commandCode == CommandListener.QUIT){
@@ -76,7 +76,7 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 						}
 					});
 				}
-				player.getGameSessionInfo().increaseTurns();
+				player.getGameSessionInfo().turns++;
 				player.checkDeath();
 				player.getLevel().checkUnleashers(this);
 				
@@ -92,7 +92,7 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 				if (currentLevel != null)
 					currentLevel.updateLevelStatus();
 				//ui.refresh();
-				turns++;
+				turns++;				// FIXME why is this data duplicated (Game + player.getGameSessionInfo)
 				//player.addScore(1);
 				checkTimeSwitch();
 			}
@@ -161,7 +161,7 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 		player.getLevel().addActor(player);
 		player.setPlayerEventListener(this);
 		endGame = false;
-		turns = player.getGameSessionInfo().getTurns();
+		turns = player.getGameSessionInfo().turns;
 		syncUniqueRegister();
 		if (currentLevel.hasNoonMusic() && !currentLevel.isDay()){
 			STMusicManagerNew.thus.playKey(currentLevel.getMusicKeyNoon());
@@ -275,8 +275,8 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 	
 	
 	private void processLevelData(String[][] order, int startLevelNumber){
-		Vector levels = new Vector(5);
-		Vector numbered = new Vector(5);
+		Vector<String> levels = new Vector<>(5);
+		Vector<String> numbered = new Vector<>(5);
 		int levelCount = startLevelNumber;
 		for (int i = 0; i < order.length; i++){
 			int n = Util.rand(3,6);
@@ -308,94 +308,95 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 			levelMetadata.put(md.getLevelID(), md);
 		}
 	}
-	private void generateLevelPath(){
-		String [][] order = new String [][]{
-				{"TOWN", "ONE"},
-				{"FOREST", "ONE"},
-				{"CASTLE_BRIDGE", "ONE"},
-				{"GARDEN", "ONE"},
-				{"MAIN_HALLX", "ONE"},
-				{"QUARTERS_FORK", "ONE,NONUMBER"}, //Quarters Branch /*5+*/ /*unnumbered*/
-				{"MAIN_HALL", ""},
-				{"MOAT", "ONE"},
-				{"BAT_HALL","ONE"}, 
-				{"DEATH_HALL","ONE,NONUMBER"}, /*unnumbered*/
-				{"TELEPAD1", "ONE,NONUMBER"}, /*unnumbered*/
-				{"LABX", "ONE"},
-				{"VINDELITH_MEETING", "ONE,NONUMBER"},
-				{"LAB", ""},
-				{"MEDUSA_LAIR", "ONE, NONUMBER"}, /*unnumbered*/
-				{"CHAPEL", "ONE"}, 
-				{"TELEPAD2", "ONE, NONUMBER"}, /*unnumbered*/
-				{"RUINSX", "ONE"},
-				{"RUINSY", "ONE"},
-				{"CLARA_MEETING", "ONE, NONUMBER"}, /*unnumbered*/
-				{"RUINS", ""},
-				{"MUMMIES_LAIR", "ONE, NONUMBER"}, /*unnumbered*/
-				{"CAVESX", "ONE"},
-				{"CAVE_FORK", "ONE, NONUMBER"}, //Warehouse branch /*24+*/	/*unnumbered*/			
-				{"CAVES", ""},
-				{"DRAGON_KING_LAIR", "ONE, NONUMBER"}, /*unnumbered*/
-				{"TELEPAD3", "ONE, NONUMBER"}, /*unnumbered*/
-				{"COURTYARD", "ONE"},
-				{"DUNGEONX", "ONE"},
-				{"DUNGEONY", "ONE"},
-				{"BADBELMONT", "ONE, NONUMBER"}, /*unnumbered*/
-				{"DUNGEON", ""},
-				{"FRANK_LAIR", "ONE, NONUMBER"}, /*unnumbered*/
-				{"TELEPAD4", "ONE, NONUMBER"}, /*unnumbered*/
-				/*{"FINAL_BRIDGE", "*"},*/
-				{"CLOCK_BASE", ""},
-				{"TOWER", "ONE"},
-				{"TOWER_TOP", "ONE"}, /*unnumbered*/
-				{"KEEP", "ONE"}, 
-				{"VOID", "ONE"} 
+	
+	private void generateLevelPath() {
+		String [][] order = {
+			{"TOWN", "ONE"},
+			{"FOREST", "ONE"},
+			{"CASTLE_BRIDGE", "ONE"},
+			{"GARDEN", "ONE"},
+			{"MAIN_HALLX", "ONE"},
+			{"QUARTERS_FORK", "ONE,NONUMBER"}, //Quarters Branch /*5+*/ /*unnumbered*/
+			{"MAIN_HALL", ""},
+			{"MOAT", "ONE"},
+			{"BAT_HALL","ONE"}, 
+			{"DEATH_HALL","ONE,NONUMBER"}, /*unnumbered*/
+			{"TELEPAD1", "ONE,NONUMBER"}, /*unnumbered*/
+			{"LABX", "ONE"},
+			{"VINDELITH_MEETING", "ONE,NONUMBER"},
+			{"LAB", ""},
+			{"MEDUSA_LAIR", "ONE, NONUMBER"}, /*unnumbered*/
+			{"CHAPEL", "ONE"}, 
+			{"TELEPAD2", "ONE, NONUMBER"}, /*unnumbered*/
+			{"RUINSX", "ONE"},
+			{"RUINSY", "ONE"},
+			{"CLARA_MEETING", "ONE, NONUMBER"}, /*unnumbered*/
+			{"RUINS", ""},
+			{"MUMMIES_LAIR", "ONE, NONUMBER"}, /*unnumbered*/
+			{"CAVESX", "ONE"},
+			{"CAVE_FORK", "ONE, NONUMBER"}, //Warehouse branch /*24+*/	/*unnumbered*/			
+			{"CAVES", ""},
+			{"DRAGON_KING_LAIR", "ONE, NONUMBER"}, /*unnumbered*/
+			{"TELEPAD3", "ONE, NONUMBER"}, /*unnumbered*/
+			{"COURTYARD", "ONE"},
+			{"DUNGEONX", "ONE"},
+			{"DUNGEONY", "ONE"},
+			{"BADBELMONT", "ONE, NONUMBER"}, /*unnumbered*/
+			{"DUNGEON", ""},
+			{"FRANK_LAIR", "ONE, NONUMBER"}, /*unnumbered*/
+			{"TELEPAD4", "ONE, NONUMBER"}, /*unnumbered*/
+			/*{"FINAL_BRIDGE", "*"},*/
+			{"CLOCK_BASE", ""},
+			{"TOWER", "ONE"},
+			{"TOWER_TOP", "ONE"}, /*unnumbered*/
+			{"KEEP", "ONE"}, 
+			{"VOID", "ONE"} 
 		};
-		processLevelData(order,0);
+		processLevelData(order, 0);
 		
 		// Warehouse Branch
-		order = new String [][]{
-				{"WAREHOUSEX", "ONE, NONUMBER"}, /*Starts in 6*/
-				{"DEEP_FORK", "ONE, NONUMBER"}, /*6+*/
-				{"WAREHOUSE", ""},
-				{"TELEPADX1", "ONE, NONUMBER"},
-				{"CATACOMBS", ""},
-				{"LEGION_LAIR", "ONE, NONUMBER"},
-				{"TELEPADX2", "ONE, NONUMBER"},
-				{"PRIZE_CATACOMBS", "ONE, NONUMBER"},
+		order = new String [][] {
+			{"WAREHOUSEX", "ONE, NONUMBER"}, /*Starts in 6*/
+			{"DEEP_FORK", "ONE, NONUMBER"}, /*6+*/
+			{"WAREHOUSE", ""},
+			{"TELEPADX1", "ONE, NONUMBER"},
+			{"CATACOMBS", ""},
+			{"LEGION_LAIR", "ONE, NONUMBER"},
+			{"TELEPADX2", "ONE, NONUMBER"},
+			{"PRIZE_CATACOMBS", "ONE, NONUMBER"},
 		};
 		processLevelData(order, 8);
 		
 		// Underground reservoir branch
-		order = new String [][]{
-				{"RESERVOIR", ""}, /*Start in 7*/
-				{"RESERVOIR", ""}, 
-				{"WATER_DRAGON_LAIR", "ONE, NONUMBER"},
-				{"SPECIAL_RESERVOIR_TELEPAD", "ONE, NONUMBER"},
-				{"PRIZE_RESERVOIR", "ONE, NONUMBER"},
+		order = new String [][] {
+			{"RESERVOIR", ""}, /*Start in 7*/
+			{"RESERVOIR", ""}, 
+			{"WATER_DRAGON_LAIR", "ONE, NONUMBER"},
+			{"SPECIAL_RESERVOIR_TELEPAD", "ONE, NONUMBER"},
+			{"PRIZE_RESERVOIR", "ONE, NONUMBER"},
 		};
 		
 		processLevelData(order,10);
 		
 		// Quarters Branch
 		order = new String [][]{
-				{"INNER_QUARTERS", ""},
-				{"INNER_QUARTERS", ""},
-				{"INNER_QUARTERS", ""},
-				{"TELEPADZ1", "ONE, NONUMBER"},
-				{"QUARTERS_PRIZE", "ONE, NONUMBER"},
+			{"INNER_QUARTERS", ""},
+			{"INNER_QUARTERS", ""},
+			{"INNER_QUARTERS", ""},
+			{"TELEPADZ1", "ONE, NONUMBER"},
+			{"QUARTERS_PRIZE", "ONE, NONUMBER"},
 		};
 		
 		processLevelData(order,7);
 		
 		//Sewers Branch
 		order = new String [][]{
-				{"SPECIAL_SEWERS_ENTRANCE", "ONE, NONUMBER"},
-				{"SEWERS", "NONUMBER"},
-				{"SEWERSY", "NONUMBER"},
-				{"SEWERSZ", "NONUMBER"},
-				{"DEEP_SEWERS", "ONE, NONUMBER"},
-				{"PRIZE_SEWERS", "ONE, NONUMBER"},
+			{"SPECIAL_SEWERS_ENTRANCE", "ONE, NONUMBER"},
+			{"SEWERS", "NONUMBER"},
+			{"SEWERSY", "NONUMBER"},
+			{"SEWERSZ", "NONUMBER"},
+			{"DEEP_SEWERS", "ONE, NONUMBER"},
+			{"PRIZE_SEWERS", "ONE, NONUMBER"},
 		};
 		processLevelData(order, 1);
 		
@@ -426,7 +427,7 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 		levelMetadata.put("VILLA", md);
 		
 		//levelPath = (String[]) levels.toArray(new String[levels.size()]);
-		storedLevels = new Hashtable();
+		storedLevels = new Hashtable<>();
 	}
 	
 	private void resumeScreen(){
@@ -567,15 +568,15 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 			if (currentLevel.getBoss() != null && !currentLevel.getBoss().isDead())
 				return false;
 			formerLevelID = currentLevel.getID();
-			Level storedLevel = (Level) storedLevels.get(formerLevelID);
+			Level storedLevel = storedLevels.get(formerLevelID);
 			if (storedLevel == null){
 				storedLevels.put(formerLevelID, currentLevel);
-			}  
+			}
 		} else {
 			formerLevelID = "_BACK";
 		}
 		boolean newLevel = false;
-		Level storedLevel = (Level)storedLevels.get(levelID);
+		Level storedLevel = storedLevels.get(levelID);
 		if (storedLevel != null) {
 			currentLevel = storedLevel;
 			player.setPosition(currentLevel.getExitFor(formerLevelID));
@@ -676,52 +677,52 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 		return GameVersion.getCurrentVersion().getCode();
 	}
 	
-	public void setInterfaces(UserInterface pui, UISelector ps){
+	public void setInterfaces(UserInterface pui, UISelector ps) {
 		ui = pui;
 		uiSelector = ps;
 	}
 	
 	public static void crash(String message, Throwable exception){
-    	System.out.println("CastlevaniaRL "+Game.getVersion()+": Error");
-        System.out.println("");
-        System.out.println("Unrecoverable error: "+message);
-        System.out.println(exception.getMessage());
-        exception.printStackTrace();
-        System.exit(-1);
-    }
-	
+		System.out.println("CastlevaniaRL "+Game.getVersion()+": Error");
+		System.out.println("");
+		System.out.println("Unrecoverable error: "+message);
+		System.out.println(exception.getMessage());
+		exception.printStackTrace();
+		System.exit(-1);
+	}
+
 	public static void crash(String message){
-    	System.out.println("CastlevaniaRL "+Game.getVersion()+": Error");
-        System.out.println("");
-        System.out.println("Unrecoverable error: "+message);
-        System.exit(-1);
-    }
-	
-	private static Vector reports = new Vector(20);
-	public static void addReport(String report){
+		System.out.println("CastlevaniaRL "+Game.getVersion()+": Error");
+		System.out.println("");
+		System.out.println("Unrecoverable error: "+message);
+		System.exit(-1);
+	}
+
+	private static Vector<String> reports = new Vector<>(20);
+	public static void addReport(String report) {
 		reports.add(report);
 	}
 	
-	public static Vector getReports(){
+	public static Vector<String> getReports() {
 		return reports;
 	}
 
 	private static Vector uniqueRegister = new Vector();
 	private Vector uniqueRegisterObjectCopy = new Vector();
 	
-	public void syncUniqueRegister(){
+	public void syncUniqueRegister() {
 		uniqueRegister = uniqueRegisterObjectCopy;
 	}
 	
-	public void freezeUniqueRegister(){
+	public void freezeUniqueRegister() {
 		uniqueRegisterObjectCopy = uniqueRegister;
 	}
 	
-	public static boolean wasUniqueGenerated(String itemID){
+	public static boolean wasUniqueGenerated(String itemID) {
 		return uniqueRegister.contains(itemID);
 	}
 	
-	public static void registerUniqueGenerated (String itemID){
+	public static void registerUniqueGenerated(String itemID) {
 		uniqueRegister.add(itemID);
 	}
 	

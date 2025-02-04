@@ -15,7 +15,7 @@ import crl.player.Consts;
 import crl.player.Player;
 import crl.actor.*;
 
-public class Monster extends Actor implements Cloneable{
+public class Monster extends Actor implements Cloneable {
 	//Attributes
 	private transient MonsterDefinition definition;
 	private String defID;
@@ -193,7 +193,7 @@ public class Monster extends Actor implements Cloneable{
 			}
 			if (featurePrize != null && !level.getMapCell(getPosition()).isSolid())
 				if (level.getMapCell(getPosition()).isShallowWater()){
-					level.addMessage("A "+FeatureFactory.getFactory().getDescriptionForID(featurePrize) +" falls into the " + level.getMapCell(getPosition()).getDescription());
+					level.addMessage("A "+FeatureFactory.getDescriptionForID(featurePrize) +" falls into the " + level.getMapCell(getPosition()).getDescription());
 					level.addFeature(featurePrize, getPosition());
 				}
 				else

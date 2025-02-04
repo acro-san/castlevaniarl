@@ -390,7 +390,7 @@ public class Level implements FOVMap, Serializable {
 
 	public void addFeature(String featureID, Position location){
 		//Debug.say("Add"+featureID);
-		Feature x = FeatureFactory.getFactory().buildFeature(featureID);
+		Feature x = FeatureFactory.buildFeature(featureID);
 		x.setPosition(location.x, location.y, location.z);
 		addFeature(x);
 		if (x.getFaint() > 0){
@@ -600,7 +600,7 @@ public class Level implements FOVMap, Serializable {
 		}
 			
 		if (ok) {
-			Feature f = FeatureFactory.getFactory().buildFeature("MOUND");
+			Feature f = FeatureFactory.buildFeature("MOUND");
 			f.setPosition(nearPlayer.x, nearPlayer.y, nearPlayer.z);
 			addFeature(f);
 			Emerger em = new Emerger(monster, nearPlayer, Util.rand(2,5), f);

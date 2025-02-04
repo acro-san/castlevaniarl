@@ -11,19 +11,20 @@ import crl.level.Level;
 import crl.level.MapCellFactory;
 import crl.levelgen.LevelGenerator;
 
-public class FeatureCarveGenerator extends LevelGenerator{
+public class FeatureCarveGenerator extends LevelGenerator {
 	private String[][] preLevel;
 	private boolean[][] mask;
 	private String[][] preLevelB;
 	private boolean[][] maskB;
-	private ArrayList hotspots = new ArrayList();
-	private ArrayList roomHotspots = new ArrayList();
+	private ArrayList<Position> hotspots = new ArrayList<>();
+	private ArrayList<Position> roomHotspots = new ArrayList<>();
 	private String solidCell;
 	private String corridor;
-	private ArrayList levelFeatures;
+	private ArrayList<Feature> levelFeatures;
 	private String backExit,nextExit;
 	
-	public void initialize(ArrayList levelFeatures, String solidCell, int xdim, int ydim, String corridor, String backExit, String nextExit){
+	public void initialize(ArrayList<Feature> levelFeatures, String solidCell, 
+		int xdim, int ydim, String corridor, String backExit, String nextExit) {
 		preLevel = new String[xdim][ydim];
 		mask = new boolean[xdim][ydim];
 		preLevelB = new String[xdim][ydim];
@@ -54,12 +55,12 @@ public class FeatureCarveGenerator extends LevelGenerator{
 		}
 	}
 	
-	public Level generateLevel() throws CRLException{
+	public Level generateLevel() throws CRLException {
 		boolean checked = false;
 		boolean placed = false;
 		int i = 0;
 		go: while (!checked) {
-			ArrayList pendingFeatures = new ArrayList(levelFeatures);
+			ArrayList<Feature> pendingFeatures = new ArrayList<>(levelFeatures);
 			hotspots.clear();
 			roomHotspots.clear();
 			//Fill the level with solid element

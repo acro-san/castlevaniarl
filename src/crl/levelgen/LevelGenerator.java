@@ -31,7 +31,7 @@ public abstract class LevelGenerator {
 		for (int x = 0; x < cellIds.length; x++)
 			for (int y = 0; y < cellIds[0].length; y++) {
 				if (cellIds[x][y].startsWith("F_")){
-					Feature f = FeatureFactory.getFactory().buildFeature(cellIds[x][y].substring(2).split(" ")[1]);
+					Feature f = FeatureFactory.buildFeature(cellIds[x][y].substring(2).split(" ")[1]);
 					f.setPosition(x,y,0);
 					level.addFeature(f);
 				}
@@ -51,7 +51,7 @@ public abstract class LevelGenerator {
 			tempPosition.y = keyy;
 			tempPosition.z = keyz;
 			if (ret.isWalkable(tempPosition) && ! ret.getMapCell(tempPosition).isWater()){
-				Feature keyf = FeatureFactory.getFactory().buildFeature("KEY");
+				Feature keyf = FeatureFactory.buildFeature("KEY");
 				keyf.setPosition(tempPosition.x, tempPosition.y, tempPosition.z);
 				ret.addFeature(keyf);
 			} else {

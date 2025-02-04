@@ -1,28 +1,28 @@
 package crl.levelgen.featureCarve;
 
 import java.util.ArrayList;
-import java.util.MissingResourceException;
 
 import crl.action.Action;
 
 import sz.util.Circle;
 import sz.util.Debug;
 import sz.util.Position;
-import sz.util.Util;
 
 public class CircularRoom extends Feature {
 	protected int width, height;
-	private String floor, wall;
+	private String floor;//, wall;
 	protected Position start;
 	public CircularRoom(int width, int height, String floor, String wall) {
 		start = new Position(0,0);
 		this.width = width;
 		this.height = height;
 		this.floor = floor;
-		this.wall = wall;
+		//this.wall = wall;
 	}
 	
-	public boolean drawOverCanvas(String[][] canvas, Position where, int direction, boolean [][] mask, ArrayList hotspots){
+	@Override
+	public boolean drawOverCanvas(String[][] canvas, Position where,
+			int direction, boolean [][] mask, ArrayList<Position> hotspots) {
 		Debug.say("Drawing a circular room");
 		int rndPin = 0;
 		if (width > height)
@@ -79,7 +79,7 @@ public class CircularRoom extends Feature {
 		
 		Debug.say("Check");
 		//Carve
-		ArrayList circlePoints = circle.getPoints();
+		ArrayList<Position> circlePoints = circle.getPoints();
 		for (int i = 0; i < circlePoints.size(); i++){
 			Position p = (Position)circlePoints.get(i);
 			//canvas[p.x][p.y]=floor;

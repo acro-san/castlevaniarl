@@ -14,7 +14,7 @@ public class FeaturesBorderRoom extends RoomFeature {
 		this.featureFloor = featureString.split(" ")[0];
 	}
 	
-	public boolean drawOverCanvas(String[][] canvas, Position where, int direction, boolean[][] mask, ArrayList hotspots){
+	public boolean drawOverCanvas(String[][] canvas, Position where, int direction, boolean[][] mask, ArrayList<Position> hotspots){
 		boolean ret = super.drawOverCanvas(canvas, where, direction, mask, hotspots);
 		int spacing= 0;
 		if (ret == true){

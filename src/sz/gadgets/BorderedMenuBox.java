@@ -1,6 +1,7 @@
 package sz.gadgets;
 
 import sz.csi.CharKey;
+import sz.csi.textcomponents.MenuItem;
 import sz.util.*;
 
 import java.awt.Color;
@@ -8,14 +9,14 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.*;
 
-import crl.player.Equipment;
+import crl.item.Item;
 import crl.ui.graphicsUI.GFXDisplay;
 import crl.ui.graphicsUI.SwingSystemInterface;
 
 
 public class BorderedMenuBox {
 	
-	private Vector<Equipment> items;
+	private Vector items;	// FIXME Vector <> ??? MenuItem? GfxMenuItem??
 	private String title = "";
 
 	//State Attributes
@@ -53,7 +54,8 @@ public class BorderedMenuBox {
 	public void setItemsPerPage(int ipp){
 		itemsPerPage = ipp;
 	}
-	public void setMenuItems(Vector<Equipment> items) {
+	
+	public void setMenuItems(Vector items) {
 		this.items = items;
 	}
 
@@ -140,12 +142,12 @@ public class BorderedMenuBox {
 		this.itemsPerPage = height;
 	}
 	
-	public Object getSelection (){
+	public Object getSelection() {
 		int pageElements = itemsPerPage;
 		while (true){
 			
 			draw();
-			Vector shownItems = Util.page(items, pageElements, currentPage);
+			Vector<Item> shownItems = (Vector<Item>)Util.page(items, pageElements, currentPage);
 			CharKey key = new CharKey(CharKey.NONE);
 			while (key.code != CharKey.SPACE &&
 				   key.code != CharKey.UARROW &&
@@ -180,7 +182,7 @@ public class BorderedMenuBox {
 		while (true){
 			
 			draw();
-			Vector shownItems = Util.page(items, pageElements, currentPage);
+			Vector<Item> shownItems = (Vector<Item>)Util.page(items, pageElements, currentPage);
 			CharKey key = new CharKey(CharKey.NONE);
 			while (key.code != CharKey.SPACE &&
 				   key.code != CharKey.UARROW &&

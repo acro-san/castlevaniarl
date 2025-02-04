@@ -153,7 +153,7 @@ public class CharDisplay extends Display {
 		tb.draw();
 		
 		si.print(2,9, heshe+ " scored "+ player.getScore() +" points and earned "+ player.getGold() +" gold", ConsoleSystemInterface.RED);
-		si.print(2,10, heshe + " survived for "+gsi.getTurns()+" turns ", ConsoleSystemInterface.RED);
+		si.print(2,10, heshe + " survived for "+gsi.turns+" turns ", ConsoleSystemInterface.RED);
 
 		si.print(2,11, heshe + " took "+gsi.getTotalDeathCount()+" monsters to the other world", ConsoleSystemInterface.RED);
 /*
@@ -411,20 +411,19 @@ public class CharDisplay extends Display {
 		si.waitKey(CharKey.SPACE);	
 	}
 	
-	public Advancement showLevelUp(Vector advancements){
-		
+	public Advancement showLevelUp(Vector<Advancement> advancements) {
 		si.saveBuffer();
 		si.cls();
 		si.print(1,1, "You have gained a chance to pick an advancement!", ConsoleSystemInterface.BLUE);
 		
-		for (int i = 0; i < advancements.size(); i++){
-			si.print(1,3+i*2, ((char)('a'+i))+". "+((Advancement)advancements.elementAt(i)).getName());
-			si.print(1,4+i*2, ((Advancement)advancements.elementAt(i)).getDescription());
+		for (int i = 0; i < advancements.size(); i++) {
+			si.print(1,3+i*2, ((char)('a'+i))+". "+(advancements.elementAt(i)).getName());
+			si.print(1,4+i*2, (advancements.elementAt(i)).getDescription());
 		}
 		si.refresh();
 		int choice = readAlphaToNumber(advancements.size());
-		si.restore();			
-		return (Advancement)advancements.elementAt(choice);
+		si.restore();
+		return advancements.elementAt(choice);
 		/*
 		ItemDefinition[] defs = new ItemDefinition[soulIds.size()];
 		for (int i = 0; i < defs.length; i++){
@@ -492,9 +491,9 @@ public class CharDisplay extends Display {
 		si.restore();
 	}
 	
-	private Hashtable locationKeys;
+	private Hashtable<String, Position> locationKeys;
 	{
-		locationKeys = new Hashtable();
+		locationKeys = new Hashtable<>();
 		locationKeys.put("TOWN", new Position(15,15));
 		locationKeys.put("FOREST", new Position(23,15));
 		locationKeys.put("BRIDGE", new Position(30,15));
@@ -512,32 +511,32 @@ public class CharDisplay extends Display {
 		locationKeys.put("KEEP", new Position(52,5));
 	}
 	
-	String[] mapImage = new String[]{
-			"                                                                                ",
-			" ''`.--..,''`_,''`.-''----.----..'     '`''''..,'''-'    `_,,'''`--- ./  ,'-.   ",
-			" '                                                 /\\                   |,. `.  ",
-			"  |                                               /  \\                    `.... ",
-			"  |                                              | /-\\|      /'\\              | ",
-			"  |                                               \\| |\\    .'   |             | ",
-			"  |                            O    /\\             \\-/ \\   . /-\\`             | ",
-			"  |                                |  |            `.===``/==| | \\           ,  ",
-			" .\"                                |/-\\_              `===== \\-/  `.          \\ ",
-			" |                                 `| |==.../-\\       .'      =    |          | ",
-			" |                                 /\\-/ ====| ||  ,-.'.       ==   /         /  ",
-			" \\.                                | =/-\\   \\-/| |   | '|     /-\\ /           \\ ",
-			"  |                               .' =| |=   = | |   '..'     | | |           / ",
-			"  |            ,-.     ..--.      |.  \\-/=   = |  |           \\-/  \\         |  ",
-			"  |          _/-\\|.  ,/-\\  `./-\\   /-\\  /-\\  =  \\ |            =   |.        <. ",
-			"  :|      ,,' | |=====| |====| |===| |==| |  ==  \\ `'\\.        =    `.        | ",
-			"  |    _,'    \\-/     \\-/    \\-/   \\-/  \\-/   =   |/-\\|        =     |        | ",
-			"   |.-'                                      /-\\ ==| |===  /-\\ =     `.      |  ",
-			" .-' ''`''-.    ,'`..,''''''`.               | |== \\-/  ===| |==       ``.   `. ",
-			" |.         ---'             `._,..,_        \\-/  ,..      \\-/   _  __   ___. | ",
-			"  '                                  `.     .-''''   \\.   _....'' `'  \\''    ./ ",
-			"  |                                    `_,.-          '`--'                  `. ",
-			"  | ..           _                      .                                     | ",
-			" |../'....,'-.../ ``...,''`--....''`..,' `\"-..,''`....,`...-'..''......'`...,-' ",
-			"                                                                                "
+	String[] mapImage = {
+		"                                                                                ",
+		" ''`.--..,''`_,''`.-''----.----..'     '`''''..,'''-'    `_,,'''`--- ./  ,'-.   ",
+		" '                                                 /\\                   |,. `.  ",
+		"  |                                               /  \\                    `.... ",
+		"  |                                              | /-\\|      /'\\              | ",
+		"  |                                               \\| |\\    .'   |             | ",
+		"  |                            O    /\\             \\-/ \\   . /-\\`             | ",
+		"  |                                |  |            `.===``/==| | \\           ,  ",
+		" .\"                                |/-\\_              `===== \\-/  `.          \\ ",
+		" |                                 `| |==.../-\\       .'      =    |          | ",
+		" |                                 /\\-/ ====| ||  ,-.'.       ==   /         /  ",
+		" \\.                                | =/-\\   \\-/| |   | '|     /-\\ /           \\ ",
+		"  |                               .' =| |=   = | |   '..'     | | |           / ",
+		"  |            ,-.     ..--.      |.  \\-/=   = |  |           \\-/  \\         |  ",
+		"  |          _/-\\|.  ,/-\\  `./-\\   /-\\  /-\\  =  \\ |            =   |.        <. ",
+		"  :|      ,,' | |=====| |====| |===| |==| |  ==  \\ `'\\.        =    `.        | ",
+		"  |    _,'    \\-/     \\-/    \\-/   \\-/  \\-/   =   |/-\\|        =     |        | ",
+		"   |.-'                                      /-\\ ==| |===  /-\\ =     `.      |  ",
+		" .-' ''`''-.    ,'`..,''''''`.               | |== \\-/  ===| |==       ``.   `. ",
+		" |.         ---'             `._,..,_        \\-/  ,..      \\-/   _  __   ___. | ",
+		"  '                                  `.     .-''''   \\.   _....'' `'  \\''    ./ ",
+		"  |                                    `_,.-          '`--'                  `. ",
+		"  | ..           _                      .                                     | ",
+		" |../'....,'-.../ ``...,''`--....''`..,' `\"-..,''`....,`...-'..''......'`...,-' ",
+		"                                                                                "
 	};
 
 	

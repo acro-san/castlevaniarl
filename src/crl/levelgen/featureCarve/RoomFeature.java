@@ -11,6 +11,7 @@ public class RoomFeature extends Feature {
 	protected int width, height;
 	private String floor;
 	protected Position start;
+	
 	public RoomFeature(int width, int height, String floor) {
 		start = new Position(0,0);
 		this.width = width;
@@ -18,7 +19,9 @@ public class RoomFeature extends Feature {
 		this.floor = floor;
 	}
 	
-	public boolean drawOverCanvas(String[][] canvas, Position where, int direction, boolean [][] mask, ArrayList hotspots){
+	@Override
+	public boolean drawOverCanvas(String[][] canvas, Position where,
+		int direction, boolean [][] mask, ArrayList<Position> hotspots) {
 		int rndPin = 0;
 		switch (direction){
 		case Action.UP:

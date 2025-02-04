@@ -50,6 +50,7 @@ public class Equipment implements MenuItem, GFXMenuItem {
 	}
 
 
+	
 	public int getQuantity() {
 		return quantity;
 	}
@@ -65,6 +66,7 @@ public class Equipment implements MenuItem, GFXMenuItem {
 	public void reduceQuantity(){
 		quantity--;
 	}
+
 
 
 	public String getMenuDetail() {

@@ -6,8 +6,8 @@ import crl.game.*;
 import crl.feature.*;
 
 public class TestLevelGenerator extends LevelGenerator {
-	public final static String [] descriptions = new String [] {
-    	"COURTYARDGRASS",
+	public final static String [] descriptions = {
+		"COURTYARDGRASS",
 		"COURTYARDDIRT",
 		"BRICKWALKWAY",
 		"COURTYARDDOOR",
@@ -28,7 +28,7 @@ public class TestLevelGenerator extends LevelGenerator {
 
 	public Level generateLevel(String param, Dispatcher dispa){
 		MapCellFactory mcf = MapCellFactory.getMapCellFactory();
-		FeatureFactory ff = FeatureFactory.getFactory();
+		//FeatureFactory ff = FeatureFactory.getFactory();
 		int [][] imap = new int [][]
 	{
 		{ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 8, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 5, 5, 5, 5},
@@ -111,46 +111,46 @@ public class TestLevelGenerator extends LevelGenerator {
 		}    */
 
 
-		Feature c1 = ff.buildFeature("CANDLE");
+		Feature c1 = FeatureFactory.buildFeature("CANDLE");
 		c1.setPosition(9,17,0);
 		ret.addFeature(c1);
 
-		c1 = ff.buildFeature("CANDLE");
+		c1 = FeatureFactory.buildFeature("CANDLE");
 		c1.setPosition(16,17,0);
 		ret.addFeature(c1);
-		c1 = ff.buildFeature("BIGCANDLE");
+		c1 = FeatureFactory.buildFeature("BIGCANDLE");
 		c1.setPosition(23,17,0);
 		ret.addFeature(c1);
-		c1 = ff.buildFeature("BIGCANDLE");
+		c1 = FeatureFactory.buildFeature("BIGCANDLE");
 		c1.setPosition(31,17,0);
 		ret.addFeature(c1);
-		c1 = ff.buildFeature("CANDLE");
+		c1 = FeatureFactory.buildFeature("CANDLE");
 		c1.setPosition(37,17,0);
 		ret.addFeature(c1);
-		c1 = ff.buildFeature("BIGCANDLE");
+		c1 = FeatureFactory.buildFeature("BIGCANDLE");
 		c1.setPosition(53,17,0);
 		ret.addFeature(c1);
-		c1 = ff.buildFeature("CANDLE");
+		c1 = FeatureFactory.buildFeature("CANDLE");
 		c1.setPosition(9,26,0);
 		ret.addFeature(c1);
 
-		c1 = ff.buildFeature("CANDLE");
+		c1 = FeatureFactory.buildFeature("CANDLE");
 		c1.setPosition(16,26,0);
 		ret.addFeature(c1);
-		c1 = ff.buildFeature("BIGCANDLE");
+		c1 = FeatureFactory.buildFeature("BIGCANDLE");
 		c1.setPosition(23,26,0);
 		ret.addFeature(c1);
-		c1 = ff.buildFeature("BIGCANDLE");
+		c1 = FeatureFactory.buildFeature("BIGCANDLE");
 		c1.setPosition(31,26,0);
 		ret.addFeature(c1);
-		c1 = ff.buildFeature("CANDLE");
+		c1 = FeatureFactory.buildFeature("CANDLE");
 		c1.setPosition(37,26,0);
 		ret.addFeature(c1);
-		c1 = ff.buildFeature("BIGCANDLE");
+		c1 = FeatureFactory.buildFeature("BIGCANDLE");
 		c1.setPosition(53,26,0);
 		ret.addFeature(c1);
 
-		c1 = ff.buildFeature("ENDFLOOR");
+		c1 = FeatureFactory.buildFeature("ENDFLOOR");
 		c1.setPosition(55,20,0);
 		ret.addFeature(c1);
 
@@ -187,27 +187,27 @@ public class TestLevelGenerator extends LevelGenerator {
 
 		  */
 
-		c1 = ff.buildFeature("DAGGERCANDLE");
+		c1 = FeatureFactory.buildFeature("DAGGERCANDLE");
 		c1.setPosition(5,5,0);
 		ret.addFeature(c1);
 
-		c1 = ff.buildFeature("AXECANDLE");
+		c1 = FeatureFactory.buildFeature("AXECANDLE");
 		c1.setPosition(9,18,0);
 		ret.addFeature(c1);
 
-		c1 = ff.buildFeature("HOLYCANDLE");
+		c1 = FeatureFactory.buildFeature("HOLYCANDLE");
 		c1.setPosition(5,30,0);
 		ret.addFeature(c1);
 
-		c1 = ff.buildFeature("STOPWATCHCANDLE");
+		c1 = FeatureFactory.buildFeature("STOPWATCHCANDLE");
 		c1.setPosition(60,30,0);
 		ret.addFeature(c1);
 
-		c1 = ff.buildFeature("STOPWATCHCANDLE");
+		c1 = FeatureFactory.buildFeature("STOPWATCHCANDLE");
 		c1.setPosition(60,30,0);
 		ret.addFeature(c1);
 
-		c1 = ff.buildFeature("CROSSCANDLE");
+		c1 = FeatureFactory.buildFeature("CROSSCANDLE");
 		c1.setPosition(30,10,0);
 		ret.addFeature(c1);
 		return ret;

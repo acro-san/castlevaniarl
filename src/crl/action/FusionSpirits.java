@@ -5,24 +5,25 @@ import java.util.Iterator;
 import crl.item.Item;
 import crl.player.Player;
 
-public class FusionSpirits extends Action{
-	public String getID(){
+public class FusionSpirits extends Action {
+	
+	public String getID() {
 		return "Fusion Spirits";
 	}
 	
 	public boolean needsSpirits(){
 		return true;
-    }
+	}
 
-	public void execute(){
-		Player aPlayer = (Player) performer;
+	public void execute() {
+		Player aPlayer = (Player)performer;
 		if (targetMultiItems.size() != 2){
 			performer.getLevel().addMessage("You can only fusion two spirits");
 			return;
 		}
 		/*Checks all the items to be spirits*/
-		for (Iterator item = targetMultiItems.iterator(); item.hasNext();) {
-			Item element = (Item) item.next();
+		for (Iterator<Item> item = targetMultiItems.iterator(); item.hasNext();) {
+			Item element = (Item)item.next();
 			if (!element.getDefinition().getID().endsWith("SPIRIT")) {
 				performer.getLevel().addMessage(element.getDescription() + " is not an spirit");
 				return;
@@ -34,8 +35,8 @@ public class FusionSpirits extends Action{
 		String principalDs = "";
 		String secondaryDs = "";
 
-		for (Iterator item = targetMultiItems.iterator(); item.hasNext();) {
-			Item element = (Item) item.next();
+		for (Iterator<Item> item = targetMultiItems.iterator(); item.hasNext();) {
+			Item element = (Item)item.next();
 			String fx =element.getDefinition().getID();
 			/*Looks for attribute spirits*/
 			if (fx.equals("VENUS_SPIRIT") || fx.equals("MERCURY_SPIRIT") || fx.equals("MARS_SPIRIT")){
@@ -88,9 +89,9 @@ public class FusionSpirits extends Action{
 				performer.getLevel().addMessage("You feel stronger!");
 			}
 		}
-					
-		for (Iterator item = targetMultiItems.iterator(); item.hasNext();) {
-			Item element = (Item) item.next();
+		
+		for (Iterator<Item> item = targetMultiItems.iterator(); item.hasNext();) {
+			Item element = (Item)item.next();
 			aPlayer.reduceQuantityOf(element);
 		}
 	}

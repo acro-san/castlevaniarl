@@ -313,35 +313,36 @@ public class Item implements Serializable, MenuItem, GFXMenuItem {
 		return getDefinition().weaponCategory;
 	}
 	
-	protected Hashtable hashCounters = new Hashtable();
-	public void setCounter(String counterID, int turns){
-		hashCounters.put(counterID, new Integer(turns));
+	protected Hashtable<String,Integer> hashCounters = new Hashtable<>();
+	public void setCounter(String counterID, int turns) {
+		hashCounters.put(counterID, Integer.valueOf(turns));
 	}
 	
-	public int getCounter(String counterID){
-		Integer val = (Integer)hashCounters.get(counterID);
-		if (val == null)
+	public int getCounter(String counterID) {
+		Integer val = hashCounters.get(counterID);
+		if (val == null) {
 			return -1;
-		else
+		} else {
 			return val.intValue();
+		}
 	}
 	
-	public boolean hasCounter(String counterID){
+	public boolean hasCounter(String counterID) {
 		return getCounter(counterID) > 0;
 	}
 	
 	public void reduceCounters(Player p){
-		Enumeration countersKeys = hashCounters.keys();
-		while (countersKeys.hasMoreElements()){
-			String key = (String) countersKeys.nextElement();
-			Integer counter = (Integer)hashCounters.get(key);
-			if (counter.intValue() == 0){
-				if (key.equals(Consts.C_WEAPON_ENCHANTMENT)){
+		Enumeration<String> countersKeys = hashCounters.keys();
+		while (countersKeys.hasMoreElements()) {
+			String key = countersKeys.nextElement();
+			Integer counter = hashCounters.get(key);
+			if (counter.intValue() == 0) {
+				if (key.equals(Consts.C_WEAPON_ENCHANTMENT)) {
 					p.getLevel().addMessage("Your "+getDescription()+" stops glowing.");
 				}
 				hashCounters.remove(key);
 			} else {
-				hashCounters.put(key, new Integer(counter.intValue()-1));
+				hashCounters.put(key, Integer.valueOf(counter.intValue()-1));
 			}
 		}
 	}

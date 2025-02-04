@@ -9,7 +9,6 @@ import crl.Main;
 import crl.actor.Actor;
 import crl.item.Item;
 import crl.player.Player;
-import crl.ui.UserInterface;
 import crl.ui.effects.Effect;
 
 public abstract class Action implements java.io.Serializable {
@@ -19,7 +18,7 @@ public abstract class Action implements java.io.Serializable {
 	protected Item targetEquipedItem;
 	protected Item targetItem;
 	protected Position targetPosition;
-	protected Vector targetMultiItems;
+	protected Vector<Item> targetMultiItems;
 
 	public final static int
 		UP = 0,
@@ -65,7 +64,7 @@ public abstract class Action implements java.io.Serializable {
 		targetItem = what;
 	}
 	
-	public void setMultiItems(Vector what) {
+	public void setMultiItems(Vector<Item> what) {
 		this.targetMultiItems = what;
 	}
 

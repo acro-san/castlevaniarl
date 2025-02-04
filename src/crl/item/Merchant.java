@@ -61,7 +61,7 @@ public class Merchant extends NPC {
 	}
 	
 	public Vector<Item> getMerchandiseFor(Player player) {
-		int gameTurns = player.getGameSessionInfo().getTurns();
+		int gameTurns = player.getGameSessionInfo().turns;
 		if (refreshTurns == -1 || gameTurns - refreshTurns > 1000) {
 			if (player.getPlayerClass() == Player.CLASS_VAMPIREKILLER && (
 					merchandiseType == ItemDefinition.SHOPTYPE_WEAPONS ||
@@ -112,12 +112,12 @@ public class Merchant extends NPC {
 		}
 		
 		inventory = new Vector<>();
-		Vector vectorIDs = new Vector();
+		Vector<String> vectorIDs = new Vector<>();
 		ItemDefinition[] defs = Items.defs;
 		int itemNumber = Util.rand(6,12);
 		int items = 0;
 		int tries = 0;
-		while (items < itemNumber){
+		while (items < itemNumber) {
 			tries++;
 			if (tries > 200)
 				break;

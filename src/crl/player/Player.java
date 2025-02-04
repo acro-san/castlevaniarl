@@ -95,7 +95,7 @@ public class Player extends Actor {
 	private int soulPower;
 	private Hashtable<String,Counter> weaponSkillsCounters = new Hashtable<>();
 	private Hashtable<String,Counter> weaponSkills = new Hashtable<>();
-	private Hashtable customMessages = new Hashtable(); 
+	private Hashtable<String,String> customMessages = new Hashtable<>(); 
 	/*private int[] weaponSkillsCounters = new int[13];
 	private int[] weaponSkills = new int[13];*/
 	private boolean justJumped = false;
@@ -106,6 +106,7 @@ public class Player extends Actor {
 	private int castCost = 50;
 	private int evadeChance;
 	private int attack;
+	// there's a 'defense' stat way further down but which was never read back/used anywhere!
 	public int coolness;
 	
 	//Vampire Killer
@@ -171,11 +172,11 @@ public class Player extends Actor {
 	public void addGold(int x) {
 		gold += x;
 		addScore(x);
-		gameSessionInfo.addGold(x);
+		gameSessionInfo.goldCount += x;	// why's it stored in 2 places though??
 	}
 	
 	
-	public void setGold(int x){
+	public void setGold(int x) {
 		gold = x;
 	}
 
@@ -604,7 +605,7 @@ public class Player extends Actor {
 				SFXManager.play("wav/die_female.wav");
 			gameSessionInfo.setDeathCause(GameSessionInfo.KILLED);
 			gameSessionInfo.setKillerMonster(who);
-			gameSessionInfo.setDeathLevel(level.getLevelNumber());
+			gameSessionInfo.deathLevel = level.getLevelNumber();
 		}
 		return true;
 	}
@@ -622,8 +623,8 @@ public class Player extends Actor {
 
 	private Hashtable<String, Equipment> inventory = new Hashtable<>();
 
-	public String getSecondaryWeaponDescription(){
-		if (getPlayerClass() == CLASS_VAMPIREKILLER){
+	public String getSecondaryWeaponDescription() {
+		if (getPlayerClass() == CLASS_VAMPIREKILLER) {
 			if (getMysticWeapon() != -1)
 				return weaponName(getMysticWeapon());
 			else
@@ -633,7 +634,7 @@ public class Player extends Actor {
 				return getSecondaryWeapon().getAttributesDescription();
 			else
 				return "";
-		}		
+		}
 	}
 	
 	public String getEquipedWeaponDescription(){
@@ -713,7 +714,7 @@ public class Player extends Actor {
 	private Item armor;
 	private Item shield;
 
-	public int getItemCount(){
+	public int getItemCount() {
 		int eqCount = 0;
 		Enumeration<Equipment> en = inventory.elements();
 		while (en.hasMoreElements()) {
@@ -725,11 +726,11 @@ public class Player extends Actor {
 		return getItemCount() < carryMax;
 	}
 	
-	public boolean canCarry(int quantity){
+	public boolean canCarry(int quantity) {
 		return getItemCount() + quantity <= carryMax;
 	}
 
-	private void removeItem(Equipment toRemove){
+	private void removeItem(Equipment toRemove) {
 		inventory.remove(toRemove.getItem().getFullID());
 	}
 	
@@ -1003,7 +1004,7 @@ public class Player extends Actor {
 			addLastIncrement(INCREMENT_ATTACK,1);
 		}
 		if (playerLevel % 5 == 0){
-			defense++;
+///			defense++;
 			addLastIncrement(INCREMENT_DEFENSE,1);
 		}
 		heartMax += 1;
@@ -1321,30 +1322,34 @@ public class Player extends Actor {
 
 	private void drown(){
 		gameSessionInfo.setDeathCause(GameSessionInfo.DROWNED);
-		gameSessionInfo.setDeathLevel(level.getLevelNumber());
+		gameSessionInfo.deathLevel =level.getLevelNumber();
 		this.hits = -1;
 		informPlayerEvent(Player.DROWNED);
 	}
 	
-	public boolean deservesUpgrade(){
-		if (getPlayerClass() != CLASS_VAMPIREKILLER )
+	public boolean deservesUpgrade() {
+		if (getPlayerClass() != CLASS_VAMPIREKILLER ) {
 			return false;
-		if (getWeapon() == VAMPIRE_WHIP)
+		}
+		if (getWeapon() == VAMPIRE_WHIP) {
 			return false;
-		if (minorHeartCount > 5){
+		}
+		if (minorHeartCount > 5) {
 			minorHeartCount = 0;
 			return true;
 		}
 		return false;
 	}
 	
-	public boolean deservesMUpgrade(){
-		if (getPlayerClass() != CLASS_VAMPIREKILLER )
+	public boolean deservesMUpgrade() {
+		if (getPlayerClass() != CLASS_VAMPIREKILLER ) {
 			return false;
+		}
 		//Debug.say(mUpgradeCount);
-		if (shotLevel > 1)
+		if (shotLevel > 1) {
 			return false;
-		if (mUpgradeCount > 50){
+		}
+		if (mUpgradeCount > 50) {
 			mUpgradeCount = 0;
 			return true;
 		}
@@ -1361,25 +1366,26 @@ public class Player extends Actor {
 		
 		String message = "";
 
-		Vector monsters = (Vector)level.getMonsters().getVector().clone();
-		Vector removables = new Vector();
+		Vector<Monster> monsters = (Vector<Monster>)level.getMonsters().getVector().clone();
+		Vector<Monster> removables = new Vector<>();
 		for (int i = 0; i < monsters.size(); i++) {
-			Monster monster = (Monster) monsters.elementAt(i);
+			Monster monster = monsters.elementAt(i);
 			if (Position.flatDistance(getPosition(), monster.getPosition()) < 16){
-				if (monster instanceof NPC || monster instanceof Hostage){
+				if (monster instanceof NPC || monster instanceof Hostage) {
 					
 				} else {
 					//targetMonster.damage(player.getWhipLevel());
 					
 					monster.damage(new StringBuffer(), 10);
-		        	if (monster.isDead()){
-		        		message = "The "+monster.getDescription()+" is shredded by the holy light!";
-			        	removables.add(monster);
+					if (monster.isDead()) {
+						message = "The "+monster.getDescription()+" is shredded by the holy light!";
+						removables.add(monster);
 					} else {
 						message = "The "+monster.getDescription()+" is purified by the holy light!";
 					}
-		        	if (monster.wasSeen())
-		        		level.addMessage(message);
+					if (monster.wasSeen()) {
+						level.addMessage(message);
+					}
 				}
 			}
 		}
@@ -1441,31 +1447,32 @@ public class Player extends Actor {
 
 	public void increaseJumping(int counter) {
 		jumpingCounter = counter;
-    }
+	}
 
-    public boolean hasIncreasedJumping(){
-    	return jumpingCounter > 0;
-    }
+	public boolean hasIncreasedJumping(){
+		return jumpingCounter > 0;
+	}
 
 	public boolean isThornWhip(){
 		return weapon == THORN_WHIP;
 	}
 
-    public boolean isFireWhip(){
-    	return weapon == FLAME_WHIP;
-    }
+	public boolean isFireWhip(){
+		return weapon == FLAME_WHIP;
+	}
 
-    public boolean isLightingWhip(){
-    	return weapon == LIT_WHIP;
-    }
+	public boolean isLightingWhip(){
+		return weapon == LIT_WHIP;
+	}
 
-    public void setFireWhip(){
-    	if (playerClass == CLASS_VAMPIREKILLER)
-    		weapon = FLAME_WHIP;
-    }
-    
-    public void setLitWhip(){
-    	if (playerClass == CLASS_VAMPIREKILLER)
+	public void setFireWhip(){
+		if (playerClass == CLASS_VAMPIREKILLER) {
+			weapon = FLAME_WHIP;
+		}
+	}
+	
+	public void setLitWhip() {
+		if (playerClass == CLASS_VAMPIREKILLER)
     		weapon = LIT_WHIP;
     }
     
@@ -1521,11 +1528,11 @@ public class Player extends Actor {
     	}
     }
 
-    private int defense; //Temporary stat
+	/// private int defense; //Temporary stat
 	private int defenseCounter;
 
-	public void increaseDefense(int counter){
-		defense++;
+	public void increaseDefense(int counter) {
+///		defense++;
 		defenseCounter = counter;
 	}
 
@@ -1665,12 +1672,12 @@ public class Player extends Actor {
 			}
 			return ret; 
 		}
-    }
+	}
 
 	private Vector<Skill> availableSkills = new Vector<>(10);
 
 	
-	public Vector<Skill> getAvailableSkills(){
+	public Vector<Skill> getAvailableSkills() {
 		availableSkills.removeAllElements();
 		if (getFlag("PASIVE_DODGE"))
 			availableSkills.add(skills.get("DODGE"));
@@ -1876,8 +1883,8 @@ public class Player extends Actor {
 	}
 
 	// SkillDEFINITIONS.
-	private final static Hashtable<String, Skill> skills = new Hashtable();
-	static{
+	private final static Hashtable<String, Skill> skills = new Hashtable<>();
+	static {
 		skills.put("DIVING_SLIDE", new Skill("Diving Slide", new DivingSlide(), 8));
 		skills.put("SPINNING_SLICE", new Skill("Spinning Slice", new SpinningSlice(), 8));
 		skills.put("WHIRLWIND_WHIP", new Skill("Whirlwind Whip", new WhirlwindWhip(), 5));
@@ -2465,30 +2472,17 @@ public class Player extends Actor {
 	}
 	
 	public static Advancement[][] STATADVANCEMENTS = new Advancement[][]{
-		{
-			ADV_VENUS, ADV_PLUTO, ADV_SATURN
-		},
-		{
-			ADV_MARS, ADV_MERCURY, ADV_URANUS
-		},
-		{
-			ADV_TERRA, ADV_URANUS, ADV_SATURN
-		},
-		{
-			ADV_VENUS, ADV_TERRA, ADV_MERCURY
-		},
-		{
-			ADV_JUPITER, ADV_NEPTUNE, ADV_PLUTO
-		},
-		{
-			ADV_JUPITER, ADV_NEPTUNE, ADV_MARS
-		}
-		
+		{ ADV_VENUS, ADV_PLUTO, ADV_SATURN },
+		{ ADV_MARS, ADV_MERCURY, ADV_URANUS },
+		{ ADV_TERRA, ADV_URANUS, ADV_SATURN },
+		{ ADV_VENUS, ADV_TERRA, ADV_MERCURY },
+		{ ADV_JUPITER, ADV_NEPTUNE, ADV_PLUTO },
+		{ ADV_JUPITER, ADV_NEPTUNE, ADV_MARS }
 	};
 	
 	public static Advancement[][] ADVANCEMENTS;
 	static {
-		ADVANCEMENTS = new Advancement[][]{
+		ADVANCEMENTS = new Advancement[][] {
 			{ // Vampire Killer
 				new AdvDodge(),
 				new AdvDodge2(),
@@ -2575,8 +2569,8 @@ public class Player extends Actor {
 		};
 	};
 	
-	private Vector tmpAvailableAdvancements = new Vector();
-	public Vector getAvailableAdvancements(){
+	private Vector<Advancement> tmpAvailableAdvancements = new Vector<>();
+	public Vector<Advancement> getAvailableAdvancements() {
 		tmpAvailableAdvancements.clear();
 		out: for (int i = 0; i < ADVANCEMENTS[getPlayerClass()].length; i++){
 			if (getFlag(ADVANCEMENTS[getPlayerClass()][i].getID())){
@@ -2603,7 +2597,7 @@ public class Player extends Actor {
 	}
 	
 	
-	public Vector getAvailableStatAdvancements(){
+	public Vector<Advancement> getAvailableStatAdvancements() {
 		tmpAvailableAdvancements.clear();
 		for (int i = 0; i < STATADVANCEMENTS[getPlayerClass()].length; i++){
 			tmpAvailableAdvancements.add(STATADVANCEMENTS[getPlayerClass()][i]);
@@ -2718,13 +2712,13 @@ public class Player extends Actor {
 		Item armor = getArmor();
 		if (armor != null){
 			if (bigMorph){
-				if (armor.getDefense() > morphStrength){
+				if (armor.getDefense() > morphStrength) {
 					selfDamage("Your armor is too strong! You feel trapped! You are injured!", Player.DAMAGE_MORPHED_WITH_STRONG_ARMOR, new Damage(10, true));
 					return;
 				}
 				level.addMessage("You destroy your "+armor.getDescription()+"!");
 				setArmor(null);
-			} else if (smallMorph){
+			} else if (smallMorph) {
 				level.addMessage("Your "+armor.getDescription()+" falls.");
 				carryOrDrop(armor);
 				setArmor(null);
@@ -2754,6 +2748,7 @@ public class Player extends Actor {
 			hasCounter(Consts.C_MYSTMORPH2);
 	}
 	
+	/*
 	private boolean standsOnPlace(){
 		return 
 			hasCounter(Consts.C_LUPINEMORPH) ||
@@ -2764,39 +2759,42 @@ public class Player extends Actor {
 			hasCounter(Consts.C_MYSTMORPH) ||
 			hasCounter(Consts.C_MYSTMORPH2);
 	}
+	*/
 	
 	public int stareMonster(Monster who){
-		if (who.getPosition().z != getPosition().z)
+		if (who.getPosition().z != getPosition().z) {
 			return -1;
-		if (who.wasSeen()){
-			Position pp = who.getPosition();
-			if (pp.x == getPosition().x){
-				if (pp.y > getPosition().y){
-					return Action.DOWN;
-				} else {
-                     return Action.UP;
-				}
-			} else
-			if (pp.y == getPosition().y){
-				if (pp.x > getPosition().x){
-					return Action.RIGHT;
-				} else {
-					return Action.LEFT;
-				}
-			} else
-			if (pp.x < getPosition().x){
-				if (pp.y > getPosition().y)
-					return Action.DOWNLEFT;
-				else
-					return Action.UPLEFT;
-			} else {
-                if (pp.y > getPosition().y)
-					return Action.DOWNRIGHT;
-				else
-					return Action.UPRIGHT;
-			}
 		}
-		return -1;
+		if (!who.wasSeen()) {
+			return -1;
+		}
+		Position pp = who.getPosition();
+		if (pp.x == getPosition().x){
+			if (pp.y > getPosition().y){
+				return Action.DOWN;
+			} else {
+				return Action.UP;
+			}
+		} else
+		if (pp.y == getPosition().y){
+			if (pp.x > getPosition().x){
+				return Action.RIGHT;
+			} else {
+				return Action.LEFT;
+			}
+		} else
+		if (pp.x < getPosition().x){
+			if (pp.y > getPosition().y)
+				return Action.DOWNLEFT;
+			else
+				return Action.UPLEFT;
+		} else {
+			if (pp.y > getPosition().y)
+				return Action.DOWNRIGHT;
+			else
+				return Action.UPRIGHT;
+		}
+		//return -1;
 	}
 	
 	public int stareMonster(){
@@ -2817,14 +2815,15 @@ public class Player extends Actor {
 		this.bannedArmors = bannedArmors;
 	}
 
-	private Hashtable lastIncrements = new Hashtable();
+
+	private Hashtable<String, Integer> lastIncrements = new Hashtable<>();
 	
 	public void addLastIncrement(String key, int value){
 		Integer current = (Integer) lastIncrements.get(key);
 		if (current == null){
-			current = new Integer(value);
+			current = Integer.valueOf(value);
 		} else {
-			current = new Integer(current.intValue()+value);
+			current = Integer.valueOf(current.intValue()+value);
 		}
 		lastIncrements.put(key, current);
 	}
@@ -2850,8 +2849,8 @@ public class Player extends Actor {
 		this.breathing = breathing;
 	}
 	
-	private Vector counteredItems = new Vector();
-	public void addCounteredItem(Item i){
+	private Vector<Item> counteredItems = new Vector<>();
+	public void addCounteredItem(Item i) {
 		counteredItems.add(i);
 	}
 	

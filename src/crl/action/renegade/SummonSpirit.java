@@ -1,16 +1,9 @@
 package crl.action.renegade;
 
-import sz.util.Position;
-import crl.action.Action;
 import crl.action.ProjectileSkill;
-import crl.actor.Actor;
-import crl.level.Level;
-import crl.monster.Monster;
-import crl.monster.VMonster;
 import crl.player.Player;
-import crl.ui.effects.EffectFactory;
 
-public class SummonSpirit extends ProjectileSkill{
+public class SummonSpirit extends ProjectileSkill {
 	public int getDamage() {
 		return 10+getPlayer().getSoulPower()*2;
 	}

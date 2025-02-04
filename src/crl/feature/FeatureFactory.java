@@ -5,21 +5,20 @@ import java.util.*;
 import sz.util.*;
 
 public class FeatureFactory {
-	private static FeatureFactory singleton = new FeatureFactory();
 
-
-	private Hashtable definitions;
+	private static Hashtable<String,Feature> definitions = new Hashtable<>(40);
 	
-	public Feature buildFeature (String id) {
-		Feature x = (Feature) definitions.get(id);
-		if (x != null)
+	public static Feature buildFeature(String id) {
+		Feature x = (Feature)definitions.get(id);
+		if (x != null) {
 			return (Feature) x.clone();
+		}
 		Debug.byebye("Feature "+id+" not found");
 		return null;
 	}
 
-	public String getDescriptionForID(String id){
-		Feature x = (Feature) definitions.get(id);
+	public static String getDescriptionForID(String id) {
+		Feature x = definitions.get(id);
 		if (x != null)
 			return x.getDescription();
 		else
@@ -30,16 +29,12 @@ public class FeatureFactory {
 		definitions.put(definition.getID(), definition);
 	}
 	
-	public void init(Feature[] defs) {
-		for (int i = 0; i < defs.length; i++)
+	public static void init(Feature[] defs) {
+		//definitions.clear();	//? If it gets reinited??
+		assert(definitions.size() == 0);
+		for (int i = 0; i < defs.length; i++) {
 			definitions.put(defs[i].getID(), defs[i]);
+		}
 	}
 
-	public FeatureFactory(){
-		definitions = new Hashtable(40);
-	}
-
-	public static FeatureFactory getFactory(){
-		return singleton;
-	}
 }

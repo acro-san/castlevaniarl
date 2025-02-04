@@ -3,18 +3,16 @@ package crl.levelgen;
 import java.util.*;
 
 import sz.util.*;
-import crl.player.*;
 import crl.level.*;
 import crl.monster.*;
 import crl.game.*;
 import crl.feature.*;
 
-
-public class PatternGenerator extends LevelGenerator{
+public class PatternGenerator extends LevelGenerator {
 	private static PatternGenerator singleton = new PatternGenerator();
 
-	private Hashtable charMap;
-	private Vector assignedFeatures = new Vector();
+	private Hashtable<String,String> charMap;	// string id -> space separated string of chars??
+	private Vector<AssignedFeature> assignedFeatures = new Vector<>();
 	private LevelFeature baseFeature;
 	private boolean hasBoss;
 
@@ -36,7 +34,7 @@ public class PatternGenerator extends LevelGenerator{
 		return singleton;
     }
 
-	public Level createLevel() throws CRLException{
+	public Level createLevel() throws CRLException {
 		Debug.enterMethod(this, "createLevel");
 		//draw the base feature
 		StaticGenerator sg = StaticGenerator.getGenerator();
@@ -47,9 +45,9 @@ public class PatternGenerator extends LevelGenerator{
 		Level ret = sg.createLevel();
 		
 		Cell[][][] cmap = ret.getCells();
-		Enumeration en = assignedFeatures.elements();
+		Enumeration<AssignedFeature> en = assignedFeatures.elements();
 		while (en.hasMoreElements()){
-			AssignedFeature af = (AssignedFeature) en.nextElement();
+			AssignedFeature af = en.nextElement();
 			drawFeature (af.getFeature(), af.getPosition(), ret);
 		}
 
@@ -77,17 +75,17 @@ public class PatternGenerator extends LevelGenerator{
 					if (map[z][y].charAt(x) == ' ')
 						continue;
  					//Debug.say(map[z][y].charAt(x));
-					String[] cmds = ((String)charMap.get(map[z][y].charAt(x)+"")).split(" ");
+					String[] cmds = (charMap.get(map[z][y].charAt(x)+"")).split(" ");
 					if (!cmds[0].equals("NOTHING"))
 						try {
 							canvas[where.z+z][x+where.x][y+where.y] = MapCellFactory.getMapCellFactory().getMapCell(cmds[0]);
 						} catch (CRLException crle){
 							Debug.byebye("Exception creating the level "+crle);
 						}
-					if (cmds.length > 1){
-						if (cmds[1].equals("FEATURE")){
-							if (cmds.length < 4 || Util.chance(Integer.parseInt(cmds[3]))){
-								Feature vFeature = FeatureFactory.getFactory().buildFeature(cmds[2]);
+					if (cmds.length > 1) {
+						if (cmds[1].equals("FEATURE")) {
+							if (cmds.length < 4 || Util.chance(Integer.parseInt(cmds[3]))) {
+								Feature vFeature = FeatureFactory.buildFeature(cmds[2]);
 								vFeature.setPosition(x+where.x,y+where.y,where.z+z);
 								if (cmds.length > 4){
 									//Debug.say("Hi... i will set the cost");
@@ -117,7 +115,7 @@ public class PatternGenerator extends LevelGenerator{
 						} else
 						if (cmds[1].equals("EOL")){
 							level.addExit(new Position(x+where.x,y+where.y,z+where.z), "_NEXT");
-							endFeature = FeatureFactory.getFactory().buildFeature(cmds[2]);
+							endFeature = FeatureFactory.buildFeature(cmds[2]);
 							endFeature.setPosition(x+where.x,y+where.y,where.z+z);
 							if (cmds.length > 3){
 								//Debug.say("Hi... i will set the cost");
@@ -133,7 +131,7 @@ public class PatternGenerator extends LevelGenerator{
 			}
 	}
 
-	public void setCharMap(Hashtable value) {
+	public void setCharMap(Hashtable<String,String> value) {
 		charMap = value;
 	}
 

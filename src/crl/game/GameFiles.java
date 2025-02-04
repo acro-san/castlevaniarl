@@ -16,19 +16,17 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
 
-import sz.util.Debug;
-import sz.util.FileUtil;
 import crl.Main;
+import crl.actor.Message;
 import crl.item.ItemDefinition;
-import crl.monster.MonsterDefinition;
 import crl.player.Equipment;
 import crl.player.GameSessionInfo;
 import crl.player.HiScore;
 import crl.player.MonsterDeath;
 import crl.player.Player;
 import crl.player.Skill;
-import crl.ui.Appearance;
 import crl.ui.UserInterface;
+import sz.util.Debug;
 
 public class GameFiles {
 	
@@ -188,8 +186,9 @@ public class GameFiles {
 			
 			for (int i = 0; i < 10; i++) {
 				String line = br.readLine();
-				String [] regs = line.split(";");
+				String[] regs = line.split(";");
 				if (regs == null) {
+					br.close();
 					Game.crash("Invalid or corrupt hiscore table");
 					// TODO Resilience!: Recover/keep going by creating a new
 					// hiscore file after archiving (rename) the corrupt one.
@@ -204,6 +203,7 @@ public class GameFiles {
 				x.setDeathLevel(Integer.parseInt(regs[6]));
 				ret[i] = x;
 			}
+			br.close();
 			Debug.exitMethod(ret);
 			return ret;
 		} catch (IOException ioe) {
@@ -285,7 +285,7 @@ public class GameFiles {
 			BufferedWriter bw = new BufferedWriter(new FileWriter(scoreFile));
 			for (int i = 0; i < 10; i++) {
 				if (score > scores[i].getScore()) {
-					bw.write(name+";"+playerClass+";"+score+";"+now+";"+player.getGameSessionInfo().getTurns()+";"+player.getGameSessionInfo().getShortDeathString()+";"+player.getGameSessionInfo().getDeathLevel());
+					bw.write(name+";"+playerClass+";"+score+";"+now+";"+player.getGameSessionInfo().turns+";"+player.getGameSessionInfo().getShortDeathString()+";"+player.getGameSessionInfo().deathLevel);
 					bw.newLine();
 					score = -1;
 					if (i == 9) {
@@ -313,7 +313,7 @@ public class GameFiles {
 			BufferedWriter fileWriter = new BufferedWriter(new FileWriter(bonesFile));
 			
 			GameSessionInfo gsi = player.getGameSessionInfo();
-			gsi.setDeathLevelDescription(player.getLevel().getDescription());
+			gsi.deathLevelDescription = player.getLevel().getDescription();
 			String heshe = (player.getSex() == Player.MALE ? "He" : "She");
 			
 			fileWriter.write("/-----------------------------------");fileWriter.newLine();
@@ -321,21 +321,27 @@ public class GameFiles {
 			fileWriter.write(" -----------------------------------/");fileWriter.newLine();
 			fileWriter.newLine();fileWriter.newLine();
 			fileWriter.write(player.getPlot()+", "+player.getDescription()+" journeys to the cursed castle.");fileWriter.newLine();fileWriter.newLine();
-			fileWriter.write(player.getName()+ ", the "+player.getClassString()+", "+gsi.getDeathString()+" on the "+gsi.getDeathLevelDescription()+" (Level "+gsi.getDeathLevel()+")...");fileWriter.newLine();
-			fileWriter.write(heshe+" survived for "+gsi.getTurns()+" turns and scored "+player.getScore()+" points, collecting a total of "+gsi.getGoldCount()+" gold.");fileWriter.newLine();
+			fileWriter.write(player.getName()+ ", the "+player.getClassString()+", "+gsi.getDeathString()+" on the "+gsi.deathLevelDescription+" (Level "+gsi.deathLevel+")...");fileWriter.newLine();
+			fileWriter.write(heshe+" survived for "+gsi.turns+" turns and scored "+player.getScore()+" points, collecting a total of "+gsi.goldCount+" gold.");fileWriter.newLine();
 			fileWriter.newLine();
-			fileWriter.write(heshe +" was able to use the following skills:");fileWriter.newLine();
-			Vector skills = player.getAvailableSkills();
+			fileWriter.write(heshe +" was able to use the following skills:");
+			fileWriter.newLine();
+			Vector<Skill> skills = player.getAvailableSkills();
 			for (int i = 0; i < skills.size(); i++){
 				fileWriter.write(((Skill)skills.elementAt(i)).getMenuDescription());fileWriter.newLine();
 			}
 			
 			fileWriter.newLine();
-			fileWriter.write(heshe+" had the following proficiencies:");fileWriter.newLine();
-			fileWriter.write("Hand to hand combat "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_UNARMED)]);fileWriter.newLine();
-			fileWriter.write("Daggers             "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_DAGGERS)]);fileWriter.newLine();
-			fileWriter.write("Swords              "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_SWORDS)]);fileWriter.newLine();
-			fileWriter.write("Spears              "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_SPEARS)]);fileWriter.newLine();
+			fileWriter.write(heshe+" had the following proficiencies:");
+			fileWriter.newLine();
+			fileWriter.write("Hand to hand combat "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_UNARMED)]);
+			fileWriter.newLine();
+			fileWriter.write("Daggers             "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_DAGGERS)]);
+			fileWriter.newLine();
+			fileWriter.write("Swords              "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_SWORDS)]);
+			fileWriter.newLine();
+			fileWriter.write("Spears              "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_SPEARS)]);
+			fileWriter.newLine();
 			fileWriter.write("Whips               "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_WHIPS)]);fileWriter.newLine();
 			fileWriter.write("Maces and Flails    "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_MACES)]);fileWriter.newLine();
 			fileWriter.write("Pole Weapons        "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_STAVES)]);fileWriter.newLine();
@@ -346,7 +352,7 @@ public class GameFiles {
 			fileWriter.write("Shields             "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_SHIELD)]);fileWriter.newLine();
 			
 			fileWriter.newLine();
-			Vector history = gsi.getHistory();
+			Vector<String> history = gsi.getHistory();
 			for (int i = 0; i < history.size(); i++){
 				fileWriter.write(heshe + " " + history.elementAt(i));
 				fileWriter.newLine();
@@ -354,13 +360,12 @@ public class GameFiles {
 			fileWriter.newLine();
 			fileWriter.write(heshe +" took "+gsi.getTotalDeathCount()+" souls to the other world");fileWriter.newLine();
 			
-			int i = 0;
-			Enumeration monsters = gsi.getDeathCount().elements();
-			while (monsters.hasMoreElements()){
-				MonsterDeath mons = (MonsterDeath) monsters.nextElement();
+			//int i = 0;
+			Enumeration<MonsterDeath> monsters = gsi.getDeathCount().elements();
+			while (monsters.hasMoreElements()) {
+				MonsterDeath mons = monsters.nextElement();
 				fileWriter.write(mons.getTimes() +" "+mons.getMonsterDescription());fileWriter.newLine();
-				
-				i++;
+				//i++;
 			}
 			fileWriter.newLine();
 			fileWriter.write("-- Final Stats --");fileWriter.newLine();
@@ -383,7 +388,7 @@ public class GameFiles {
 			fileWriter.newLine();
 			fileWriter.newLine();
 			
-			Vector inventory = player.getInventory();
+			Vector<Equipment> inventory = player.getInventory();
 			fileWriter.newLine();
 			fileWriter.write("-- Inventory --");fileWriter.newLine();
 			fileWriter.write("Weapon    "+player.getEquipedWeaponDescription());fileWriter.newLine();
@@ -391,15 +396,18 @@ public class GameFiles {
 			fileWriter.write("Armor     "+player.getArmorDescription());fileWriter.newLine();
 			fileWriter.write("Shield    "+player.getAccDescription());fileWriter.newLine();fileWriter.newLine();
 			
-			for (Iterator iter = inventory.iterator(); iter.hasNext();) {
-				Equipment element = (Equipment) iter.next();
-				fileWriter.write(element.getQuantity()+ " - "+ element.getMenuDescription());fileWriter.newLine();
+			for (Iterator<Equipment> iter = inventory.iterator(); iter.hasNext();) {
+				Equipment element = iter.next();
+				fileWriter.write(element.getQuantity()+ " - "+ element.getMenuDescription());
+				fileWriter.newLine();
 			}
 			fileWriter.newLine();
-			fileWriter.write("-- Last Messages --");fileWriter.newLine();
-			Vector messages = Main.ui.getMessageBuffer();
-			for (int j = 0; j < messages.size(); j++){
-				fileWriter.write(messages.elementAt(j).toString());fileWriter.newLine();
+			fileWriter.write("-- Last Messages --");
+			fileWriter.newLine();
+			Vector<Message> messages = Main.ui.getMessageBuffer();
+			for (int j = 0; j < messages.size(); j++) {
+				fileWriter.write(messages.elementAt(j).toString());
+				fileWriter.newLine();
 			}
 			
 			fileWriter.close();
@@ -474,21 +482,23 @@ public class GameFiles {
 			BufferedWriter fileWriter = new BufferedWriter(new FileWriter(bonesFile));
 			
 			GameSessionInfo gsi = player.getGameSessionInfo();
-			gsi.setDeathLevelDescription(player.getLevel().getDescription());
+			gsi.deathLevelDescription = player.getLevel().getDescription();
 			String heshe = (player.getSex() == Player.MALE ? "He" : "She");
 			
 			fileWriter.write("/-----------------------------------");fileWriter.newLine();
 			fileWriter.write(" CastlevaniaRL"+Game.getVersion()+ " Post Mortem");fileWriter.newLine();
 			fileWriter.write(" -----------------------------------/");fileWriter.newLine();
-			fileWriter.newLine();fileWriter.newLine();
+			fileWriter.newLine();
+			fileWriter.newLine();
 			fileWriter.write(player.getPlot()+", "+player.getDescription()+" journeys to the cursed castle.");fileWriter.newLine();fileWriter.newLine();
 			fileWriter.write(player.getName()+ ", the "+player.getClassString()+", survives on the "+player.getLevel().getDescription()+" (Level "+player.getLevel().getLevelNumber()+")...");fileWriter.newLine();
-			fileWriter.write(heshe+" has survived for "+gsi.getTurns()+" turns and has scored "+player.getScore()+" points, collecting a total of "+gsi.getGoldCount()+" gold.");fileWriter.newLine();
+			fileWriter.write(heshe+" has survived for "+gsi.turns+" turns and has scored "+player.getScore()+" points, collecting a total of "+gsi.goldCount+" gold.");fileWriter.newLine();
 			fileWriter.newLine();
 			fileWriter.write(heshe +" is able to use the following skills:");fileWriter.newLine();
-			Vector skills = player.getAvailableSkills();
+			Vector<Skill> skills = player.getAvailableSkills();
 			for (int i = 0; i < skills.size(); i++){
-				fileWriter.write(((Skill)skills.elementAt(i)).getMenuDescription());fileWriter.newLine();
+				fileWriter.write(skills.elementAt(i).getMenuDescription());
+				fileWriter.newLine();
 			}
 			
 			fileWriter.newLine();
@@ -508,21 +518,22 @@ public class GameFiles {
 			fileWriter.write("Shields             "+UserInterface.verboseSkills[player.weaponSkill(ItemDefinition.CAT_SHIELD)]);fileWriter.newLine();
 			
 			fileWriter.newLine();
-			Vector history = gsi.getHistory();
+			Vector<String> history = gsi.getHistory();
 			for (int i = 0; i < history.size(); i++){
 				fileWriter.write(heshe + " " + history.elementAt(i));
 				fileWriter.newLine();
 			}
 			fileWriter.newLine();
-			fileWriter.write(heshe +" has taken "+gsi.getTotalDeathCount()+" souls to the other world");fileWriter.newLine();
+			fileWriter.write(heshe +" has taken "+gsi.getTotalDeathCount()+" souls to the other world");
+			fileWriter.newLine();
 			
-			int i = 0;
-			Enumeration monsters = gsi.getDeathCount().elements();
-			while (monsters.hasMoreElements()){
-				MonsterDeath mons = (MonsterDeath) monsters.nextElement();
-				fileWriter.write(mons.getTimes() +" "+mons.getMonsterDescription());fileWriter.newLine();
-				
-				i++;
+		///	int i = 0;
+			Enumeration<MonsterDeath> monsters = gsi.getDeathCount().elements();
+			while (monsters.hasMoreElements()) {
+				MonsterDeath mons = monsters.nextElement();
+				fileWriter.write(mons.getTimes() +" "+mons.getMonsterDescription());
+				fileWriter.newLine();
+		///		i++;
 			}
 			fileWriter.newLine();
 			fileWriter.write("-- Current Stats --");fileWriter.newLine();fileWriter.newLine();
@@ -538,25 +549,28 @@ public class GameFiles {
 			fileWriter.write("Invokation: "+(50-player.getCastCost()));fileWriter.newLine();
 			fileWriter.write("Movement: "+(50-player.getWalkCost()));fileWriter.newLine();
 			
-			fileWriter.write("Experience: "+player.getXp()+"/"+player.getNextXP());fileWriter.newLine();fileWriter.newLine();
-						    
-			Vector inventory = player.getInventory();
+			fileWriter.write("Experience: "+player.getXp()+"/"+player.getNextXP());fileWriter.newLine();
 			fileWriter.newLine();
-			fileWriter.write("-- Inventory --");fileWriter.newLine();
+			
+			Vector<Equipment> inventory = player.getInventory();
+			fileWriter.newLine();
+			fileWriter.write("-- Inventory --");
+			fileWriter.newLine();
 			fileWriter.write("Weapon "+player.getEquipedWeaponDescription());fileWriter.newLine();
 			fileWriter.write("Secondary "+player.getSecondaryWeaponDescription());fileWriter.newLine();
 			fileWriter.write("Armor     "+player.getArmorDescription());fileWriter.newLine();
 			fileWriter.write("Shield    "+player.getAccDescription());fileWriter.newLine();fileWriter.newLine();
 			
-			for (Iterator iter = inventory.iterator(); iter.hasNext();) {
-				Equipment element = (Equipment) iter.next();
+			for (Iterator<Equipment> iter = inventory.iterator(); iter.hasNext();) {
+				Equipment element = iter.next();
 				fileWriter.write(element.getQuantity()+ " - "+ element.getMenuDescription());fileWriter.newLine();
 			}
 			fileWriter.newLine();
 			fileWriter.write("-- Latest Messages --");fileWriter.newLine();
-			Vector messages = Main.ui.getMessageBuffer();
+			Vector<Message> messages = Main.ui.getMessageBuffer();
 			for (int j = 0; j < messages.size(); j++){
-				fileWriter.write(messages.elementAt(j).toString());fileWriter.newLine();
+				fileWriter.write(messages.elementAt(j).toString());
+				fileWriter.newLine();
 			}
 			
 			fileWriter.close();
@@ -580,7 +594,8 @@ public class GameFiles {
 		String bonesName = getMemorialFileName(player, playerWon);
 		File bonesFile = new File(bonesDir, bonesName);
 		try {
-			boolean createdOK = bonesFile.createNewFile();
+			//boolean createdOK = 
+			bonesFile.createNewFile();
 		} catch (IOException e) {
 			return null;
 		}
@@ -620,14 +635,14 @@ public class GameFiles {
 	}
 	
 	
-	public static void updateGraveyard(Hashtable graveyard, GameSessionInfo gsi) {
-		Hashtable session = gsi.getDeathCount();
-		Enumeration keys = session.keys();
+	public static void updateGraveyard(Hashtable<String,MonsterRecord> graveyard, GameSessionInfo gsi) {
+		Hashtable<String,MonsterDeath> session = gsi.getDeathCount();
+		Enumeration<String> keys = session.keys();
 		while (keys.hasMoreElements()) {
-			String monsterID = (String) keys.nextElement();
-			MonsterDeath deaths = (MonsterDeath)gsi.getDeathCount().get(monsterID);
-			MonsterRecord record = (MonsterRecord)graveyard.get(monsterID);
-			if (record == null){
+			String monsterID = keys.nextElement();
+			MonsterDeath deaths = session.get(monsterID);
+			MonsterRecord record = graveyard.get(monsterID);
+			if (record == null) {
 				record = new MonsterRecord();
 				record.setMonsterID(monsterID);
 				record.setKilled(deaths.getTimes());
@@ -636,9 +651,9 @@ public class GameFiles {
 				record.setKilled(record.getKilled()+deaths.getTimes());
 			}
 		}
-		if (gsi.getKillerMonster() != null){
-			MonsterRecord record = (MonsterRecord) graveyard.get(gsi.getKillerMonster().getID());
-			if (record == null){
+		if (gsi.getKillerMonster() != null) {
+			MonsterRecord record = graveyard.get(gsi.getKillerMonster().getID());
+			if (record == null) {
 				record = new MonsterRecord();
 				record.setMonsterID(gsi.getKillerMonster().getID());
 				record.setKillers(1);
@@ -652,9 +667,9 @@ public class GameFiles {
 		File huntRecordFile = getUserFile(HUNTRECORD_FILE);
 		try {
 			BufferedWriter bw = new BufferedWriter(new FileWriter(huntRecordFile));
-			Enumeration wKeys = graveyard.keys();
+			Enumeration<String> wKeys = graveyard.keys();
 			while (wKeys.hasMoreElements()){
-				MonsterRecord record = (MonsterRecord)graveyard.get(wKeys.nextElement());
+				MonsterRecord record = graveyard.get(wKeys.nextElement());
 				bw.write(record.getMonsterID()+","+record.getKilled()+","+record.getKillers());
 				bw.newLine();
 			}
@@ -663,6 +678,5 @@ public class GameFiles {
 			ioe.printStackTrace(System.out);
 			Game.crash("Invalid or corrupt graveyard", ioe);
 		}
-		
 	}
 }

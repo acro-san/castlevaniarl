@@ -15,13 +15,17 @@ public class Feature implements Cloneable, java.io.Serializable {
 	private int resistance; // How many blows til it gives the prize (max)
 	private int currentResistance; // How many blows til it gives the prize
 	private boolean destroyable, isSolid;
-	private int heartPrize,
-			mysticWeaponPrize = -1,
-			keyPrize,
-			upgradePrize;
+	private int
+		heartPrize,
+		mysticWeaponPrize = -1,
+		keyPrize,
+		upgradePrize;
 	private Position position;
 	private transient Appearance appearance;
-	private String ID, description,appearanceID;
+	private String
+		ID,
+		description,
+		appearanceID;
 	private String trigger;
 	private int heightMod;
 	private int keyCost;
@@ -38,7 +42,7 @@ public class Feature implements Cloneable, java.io.Serializable {
 
 	private Feature getPrizeFor(Player p) {
 		if (p.deservesUpgrade()) {
-			return FeatureFactory.getFactory().buildFeature("UPGRADE");
+			return FeatureFactory.buildFeature("UPGRADE");
 		}
 		String[] prizeList = null;
 
@@ -94,9 +98,9 @@ public class Feature implements Cloneable, java.io.Serializable {
     		else
     			prizeList = new String[]{"SMALLHEART"};    	
     	}
-        //return FeatureFactory.getFactory().buildFeature("ROSARY");
+		//return FeatureFactory.buildFeature("ROSARY");
 		//prizelist can't be null.
-        return FeatureFactory.getFactory().buildFeature(Util.randPick(prizeList));
+		return FeatureFactory.buildFeature(Util.randPick(prizeList));
 	}
 
 	public Feature damage(Player p, int damage){

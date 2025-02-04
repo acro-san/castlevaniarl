@@ -1,18 +1,17 @@
 package crl.levelgen.featureCarve;
 
 import java.util.ArrayList;
-import java.util.MissingResourceException;
 
 import crl.action.Action;
 
 import sz.util.Circle;
 import sz.util.Position;
-import sz.util.Util;
 
 public class RingRoom extends Feature {
 	protected int width, height;
 	private String floor, wall;
 	protected Position start;
+	
 	public RingRoom(int width, int height, String floor, String wall) {
 		start = new Position(0,0);
 		this.width = width;
@@ -21,7 +20,8 @@ public class RingRoom extends Feature {
 		this.wall = wall;
 	}
 	
-	public boolean drawOverCanvas(String[][] canvas, Position where, int direction, boolean [][] mask, ArrayList hotspots){
+	@Override
+	public boolean drawOverCanvas(String[][] canvas, Position where, int direction, boolean [][] mask, ArrayList<Position> hotspots){
 		int rndPin = 0;
 		if (width > height)
 			height = width;

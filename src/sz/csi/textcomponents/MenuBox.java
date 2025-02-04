@@ -4,7 +4,7 @@ import sz.csi.CharKey;
 import sz.csi.ConsoleSystemInterface;
 import sz.util.*;
 import java.util.*;
-import crl.*;
+import crl.item.Item;
 import crl.ui.consoleUI.AdditionalKeysSignal;
 
 public class MenuBox extends TextComponent {
@@ -53,7 +53,8 @@ public class MenuBox extends TextComponent {
 		promptBox.setText(prompt);
 	}
 	
-	public void setMenuItems(Vector items){
+	// FIXME Vector <> ??? something extends MenuItem or GfxMenuItem? Equipment? Item?
+	public void setMenuItems(Vector items) {
 		this.items = items;
 	}
 
@@ -103,7 +104,7 @@ public class MenuBox extends TextComponent {
 		while (true){
 			clearBox();
 			draw();
-			Vector shownItems = Util.page(items, pageElements, currentPage);
+			Vector<Item> shownItems = (Vector<Item>)Util.page(items, pageElements, currentPage);
 			CharKey key = new CharKey(CharKey.NONE);
 			while (key.code != CharKey.SPACE &&
 				   key.code != CharKey.UARROW &&

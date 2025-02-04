@@ -3,6 +3,7 @@ package crl.levelgen;
 import java.util.ArrayList;
 
 import crl.levelgen.cave.*;
+import crl.levelgen.featureCarve.Feature;
 import crl.levelgen.featureCarve.CircularRoom;
 import crl.levelgen.featureCarve.ColumnsRoom;
 import crl.levelgen.featureCarve.FeatureCarveGenerator;
@@ -19,7 +20,7 @@ import crl.player.Player;
 import crl.Main;
 import crl.cuts.CaveEntranceSeal;
 import crl.cuts.Unleasher;
-import crl.feature.Feature;
+//import crl.feature.Feature;
 import crl.feature.FeatureFactory;
 import crl.game.*;
 
@@ -370,16 +371,16 @@ public class LevelMaster {
 			ret.setDescription("Underground Caverns");
 			ret.setMusicKeyMorning("CAVES");
 			ret.setDwellersInfo(
-					new MonsterSpawnInfo[]{
-							new MonsterSpawnInfo("BLOOD_SKELETON", MonsterSpawnInfo.UNDERGROUND, 50),
-							new MonsterSpawnInfo("COOPER_ARMOR", MonsterSpawnInfo.UNDERGROUND, 40),
-							new MonsterSpawnInfo("DEATH_MANTIS", MonsterSpawnInfo.UNDERGROUND, 40),
-							new MonsterSpawnInfo("BEAST_DEMON", MonsterSpawnInfo.UNDERGROUND, 20),
-							new MonsterSpawnInfo("GOLEM", MonsterSpawnInfo.UNDERGROUND, 20),
-							new MonsterSpawnInfo("KILLER_PLANT", MonsterSpawnInfo.UNDERGROUND, 80),
-							new MonsterSpawnInfo("MERMAN", MonsterSpawnInfo.WATER, 90)
-						}
-					);
+				new MonsterSpawnInfo[] {
+						new MonsterSpawnInfo("BLOOD_SKELETON", MonsterSpawnInfo.UNDERGROUND, 50),
+						new MonsterSpawnInfo("COOPER_ARMOR", MonsterSpawnInfo.UNDERGROUND, 40),
+						new MonsterSpawnInfo("DEATH_MANTIS", MonsterSpawnInfo.UNDERGROUND, 40),
+						new MonsterSpawnInfo("BEAST_DEMON", MonsterSpawnInfo.UNDERGROUND, 20),
+						new MonsterSpawnInfo("GOLEM", MonsterSpawnInfo.UNDERGROUND, 20),
+						new MonsterSpawnInfo("KILLER_PLANT", MonsterSpawnInfo.UNDERGROUND, 80),
+						new MonsterSpawnInfo("MERMAN", MonsterSpawnInfo.WATER, 90)
+					}
+				);
 			ret.setMapLocationKey("CAVES");
 			if (firstCave){
 				ret.setUnleashers(new Unleasher[]{new CaveEntranceSeal()});
@@ -391,7 +392,7 @@ public class LevelMaster {
 			LavaCaveLevelGenerator clg = new LavaCaveLevelGenerator();
 			clg.init("CAVE_WALL", "CAVE_FLOOR", "CAVE_WATER");
 			ret = clg.generateLevel(30,30, false, false);
-			Feature door = FeatureFactory.getFactory().buildFeature("MAGIC_DOOR");
+			crl.feature.Feature door = FeatureFactory.buildFeature("MAGIC_DOOR");
 			Position exit = ret.getExitFor("_NEXT");
 			door.setPosition(exit.x, exit.y, exit.z);
 			door.setKeyCost(1);
@@ -409,7 +410,7 @@ public class LevelMaster {
 			ret.setMapLocationKey("CAVES");
 		} else if (levelID.startsWith("WAREHOUSE")){
 			FeatureCarveGenerator fcg = new FeatureCarveGenerator();
-			ArrayList rooms = getWareHouseRooms();
+			ArrayList<Feature> rooms = getWareHouseRooms();
 			fcg.initialize(rooms, 
 					"WAREHOUSE_WALL", 
 					Util.rand(80,100),
@@ -519,7 +520,7 @@ public class LevelMaster {
 			}
 		}else if (levelID.startsWith("INNER_QUARTERS")){
 			FeatureCarveGenerator fcg = new FeatureCarveGenerator();
-			ArrayList rooms = getInnerQuartersRooms();
+			ArrayList<Feature> rooms = getInnerQuartersRooms();
 			fcg.initialize(rooms, 
 					"QUARTERS_WALL", 
 					Util.rand(80,100),
@@ -706,14 +707,10 @@ public class LevelMaster {
 		}
 		Debug.exitMethod(ret);
 		return ret;
-
 	}
 
-	/*public static Dispatcher getCurrentDispatcher() {
-		return currentDispatcher;
-	}*/
 
-	protected int placeKeys(Level ret){
+	protected int placeKeys(Level ret) {
 		Debug.enterMethod(this, "placeKeys");
 		//Place the magic Keys
 		int keys = Util.rand(1,4);
@@ -726,7 +723,7 @@ public class LevelMaster {
 			tempPosition.y = keyy;
 			tempPosition.z = keyz;
 			if (ret.isItemPlaceable(tempPosition)){
-				Feature keyf = FeatureFactory.getFactory().buildFeature("KEY");
+				crl.feature.Feature keyf = FeatureFactory.buildFeature("KEY");
 				keyf.setPosition(tempPosition.x, tempPosition.y, tempPosition.z);
 				ret.addFeature(keyf);
 			} else {
@@ -737,7 +734,7 @@ public class LevelMaster {
 		return keys;
 		
 	}
-	public static void placeItems(Level ret, Player player){
+	public static void placeItems(Level ret, Player player) {
 		int items = Util.rand(8,12);
 		//int items = 300;
 		for (int i = 0; i < items; i++){
@@ -766,8 +763,8 @@ public class LevelMaster {
 				i--;
 				continue;
 			}
-				
-			Feature vFeature = FeatureFactory.getFactory().buildFeature("CANDLE");
+			
+			crl.feature.Feature vFeature = FeatureFactory.buildFeature("CANDLE");
 			vFeature.setPosition(temp.x, temp.y, temp.z);
 			l.addFeature(vFeature);
 		}
@@ -859,12 +856,12 @@ public class LevelMaster {
 		
 	}
 	
-	private static ArrayList getWareHouseRooms(){
+	private static ArrayList<Feature> getWareHouseRooms(){
 		int rooms = Util.rand(12,15);
 		//rooms = 3;
-		crl.levelgen.featureCarve.Feature room = null;
+		RoomFeature room = null;
 		
-		ArrayList ret = new ArrayList();
+		ArrayList<Feature> ret = new ArrayList<>();
 		String floor = "WAREHOUSE_FLOOR";
 		String column = "WAREHOUSE_WALL";
 		String candle = "F_WAREHOUSE_FLOOR CANDLE";
@@ -888,11 +885,11 @@ public class LevelMaster {
 		
 	}
 	
-	private static ArrayList getSewersRooms(){
+	private static ArrayList<Feature> getSewersRooms() {
 		int rooms = Util.rand(4,6);
-		crl.levelgen.featureCarve.Feature room = null;
+		Feature room = null;
 		
-		ArrayList ret = new ArrayList();
+		ArrayList<Feature> ret = new ArrayList<>();
 		String floor = "SEWERS_FLOOR";
 		String column = "SEWERS_WALL";
 		

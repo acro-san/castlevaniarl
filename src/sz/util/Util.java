@@ -29,17 +29,18 @@ public class Util {
 		return Util.rand(1,100) <= p;
 	}
 
-	public static Vector page(Vector source, int elementsOnPage, int pageNumber){
+	public static Vector<?> page(Vector<?> source, int elementsOnPage, int pageNumber) {
 		//System.out.println("elements on page"+elementsOnPage+" page Number"+pageNumber);
-		if (source.size() == 0)
+		if (source.size() == 0) {
 			return source;
+		}
 		if ((pageNumber+1) * elementsOnPage > source.size() )
-			return new Vector(source.subList(pageNumber*elementsOnPage, source.size()));
+			return new Vector<>(source.subList(pageNumber*elementsOnPage, source.size()));
 		else
-			return new Vector(source.subList(pageNumber*elementsOnPage, (pageNumber+1) * elementsOnPage));
+			return new Vector<>(source.subList(pageNumber*elementsOnPage, (pageNumber+1) * elementsOnPage));
 	}
 
-	public static String randPick(String[] array){
+	public static String randPick(String[] array) {
 		return array[rand(0, array.length -1)];
 	}
 	
@@ -47,11 +48,11 @@ public class Util {
 		return collection.get(rand(0, collection.size() -1));
 	}
 	
-	public static Object randomPick(Vector array){
+	public static Object randomPick(Vector<?> array) {
 		return array.elementAt(rand(0, array.size() -1));
 	}
 	
-	public static Object randomElementOf(Object [] array){
+	public static Object randomElementOf(Object [] array) {
 		return array[rand(0, array.length -1)];
 	}
 	

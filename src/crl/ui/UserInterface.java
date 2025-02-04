@@ -70,17 +70,17 @@ public abstract class UserInterface implements CommandListener/*, Runnable*/{
 	};
 
 
-    private boolean [][] FOVMask;
-    //Interactive Methods
-    public abstract void doLook();
-    
-    public abstract void launchMerchant(Merchant who);
-    
-    public abstract void chat(NPC who);
-    
-    public abstract boolean promptChat (NPC who);
+	private boolean [][] FOVMask;
+	//Interactive Methods
+	public abstract void doLook();
+	
+	public abstract void launchMerchant(Merchant who);
+	
+	public abstract void chat(NPC who);
+	
+	public abstract boolean promptChat (NPC who);
 
-    // Drawing Methods
+	// Drawing Methods
 	public abstract void drawEffect(Effect what);
 	
 	public boolean isOnFOVMask(int x, int y){
@@ -88,7 +88,7 @@ public abstract class UserInterface implements CommandListener/*, Runnable*/{
 	}
 
 	public abstract void addMessage(Message message);
-	public abstract Vector getMessageBuffer();
+	public abstract Vector<Message> getMessageBuffer();
 
 	public void setPlayer(Player pPlayer){
 		player = pPlayer;
@@ -143,7 +143,7 @@ public abstract class UserInterface implements CommandListener/*, Runnable*/{
 		commandListeners.remove(pCl);
 	}
 	
-	protected Hashtable gameCommands = new Hashtable(); 
+	protected Hashtable<String,UserCommand> gameCommands = new Hashtable<>();
 	private Vector<CommandListener> commandListeners = new Vector<>(5);
 
 	

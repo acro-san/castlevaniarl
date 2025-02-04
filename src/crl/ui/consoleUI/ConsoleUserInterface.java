@@ -456,22 +456,26 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		showPersistantMessageBox = true;
 	}
 	
-	private Vector messageHistory = new Vector(20,10);
-	public void addMessage(Message message){
+	private Vector<String> messageHistory = new Vector<>(20,10);
+	public void addMessage(Message message) {
 		Debug.enterMethod(this, "addMessage", message);
-		if (eraseOnArrival){
-	 		messageBox.clear();
-	 		messageBox.setForeColor(ConsoleSystemInterface.RED);
-	 		eraseOnArrival = false;
+		if (eraseOnArrival) {
+			messageBox.clear();
+			messageBox.setForeColor(ConsoleSystemInterface.RED);
+			eraseOnArrival = false;
 		}
-		if ((player != null && player.getPosition() != null && message.getLocation().z != player.getPosition().z) || (message.getLocation() != null && !insideViewPort(getAbsolutePosition(message.getLocation())))){
+		if ((player != null &&
+			player.getPosition() != null &&
+			message.location.z != player.getPosition().z) || 
+			(message.location != null && !insideViewPort(getAbsolutePosition(message.location))))
+		{
 			Debug.exitMethod();
 			return;
 		}
-		messageHistory.add(message.getText());
+		messageHistory.add(message.text);
 		if (messageHistory.size()>100)
 			messageHistory.removeElementAt(0);
-		messageBox.addText(message.getText());
+		messageBox.addText(message.text);
 		
 		messageBox.draw();
 		Debug.exitMethod();
@@ -878,32 +882,32 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		return item;
 	}
 	
-	private Vector pickMultiItems(String prompt) {
+	private Vector<Item> pickMultiItems(String prompt) {
 		Equipment.eqMode = true;
-		Vector inventory = player.getInventory();
-  		MenuBox menuBox = new MenuBox(si);
-  		menuBox.setBounds(25,3,40,18);
-  		menuBox.setPromptSize(2);
-  		menuBox.setMenuItems(inventory);
-  		menuBox.setPrompt(prompt);
-  		menuBox.setForeColor(ConsoleSystemInterface.RED);
-  		menuBox.setBorder(true);
-  		Vector ret = new Vector();
-  		MenuBox selectedBox = new MenuBox(si);
-  		selectedBox.setBounds(5,3,20,18);
-  		selectedBox.setPromptSize(2);
-  		selectedBox.setPrompt("Selected Items");
-  		selectedBox.setMenuItems(ret);
-  		selectedBox.setForeColor(ConsoleSystemInterface.RED);
-  		selectedBox.setBorder(true);
-  		
-  		si.saveBuffer();
-  		
+		Vector<Equipment> inventory = player.getInventory();
+		MenuBox menuBox = new MenuBox(si);
+		menuBox.setBounds(25,3,40,18);
+		menuBox.setPromptSize(2);
+		menuBox.setMenuItems(inventory);
+		menuBox.setPrompt(prompt);
+		menuBox.setForeColor(ConsoleSystemInterface.RED);
+		menuBox.setBorder(true);
+		Vector<Item> ret = new Vector<>();
+		MenuBox selectedBox = new MenuBox(si);
+		selectedBox.setBounds(5,3,20,18);
+		selectedBox.setPromptSize(2);
+		selectedBox.setPrompt("Selected Items");
+		selectedBox.setMenuItems(ret);
+		selectedBox.setForeColor(ConsoleSystemInterface.RED);
+		selectedBox.setBorder(true);
+		
+		si.saveBuffer();
+		
 		while (true){
 			selectedBox.draw();
 			menuBox.draw();
 			
-	  		
+			
 			Equipment equipment = (Equipment)menuBox.getSelection();
 			if (equipment == null)
 				break;
@@ -915,39 +919,39 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		return ret;
 	}
 	
-	private Vector pickSpirits() {
-		Vector originalInventory = player.getInventory();
-		Vector inventory = new Vector();
-		for (int i = 0; i < originalInventory.size(); i++){
-			Equipment testEq = (Equipment) originalInventory.elementAt(i);
-			if (testEq.getItem().getDefinition().getID().endsWith("_SPIRIT")){
-				inventory.add(testEq);
+	private Vector<Item> pickSpirits() {
+		Vector<Equipment> originalInventory = player.getInventory();
+		Vector<Item> inventory = new Vector<>();
+		for (int i = 0; i < originalInventory.size(); i++) {
+			Equipment testEq = originalInventory.elementAt(i);
+			if (testEq.getItem().getDefinition().getID().endsWith("_SPIRIT")) {
+				inventory.add(testEq.getItem());
 			}
 		}
 		
-  		MenuBox menuBox = new MenuBox(si);
-  		menuBox.setBounds(25,3,40,18);
-  		menuBox.setPromptSize(2);
-  		menuBox.setMenuItems(inventory);
-  		menuBox.setPrompt("Select the spirits to fusion");
-  		menuBox.setForeColor(ConsoleSystemInterface.RED);
-  		menuBox.setBorder(true);
-  		
-  		Vector ret = new Vector();
-  		MenuBox selectedBox = new MenuBox(si);
-  		selectedBox.setBounds(5,3,20,18);
-  		selectedBox.setPromptSize(2);
-  		selectedBox.setPrompt("Selected Spirits");
-  		selectedBox.setMenuItems(ret);
-  		selectedBox.setForeColor(ConsoleSystemInterface.RED);
-  		selectedBox.setBorder(true);
-  		
-  		si.saveBuffer();
-  		
-		while (true){
+		MenuBox menuBox = new MenuBox(si);
+		menuBox.setBounds(25,3,40,18);
+		menuBox.setPromptSize(2);
+		menuBox.setMenuItems(inventory);
+		menuBox.setPrompt("Select the spirits to fusion");
+		menuBox.setForeColor(ConsoleSystemInterface.RED);
+		menuBox.setBorder(true);
+
+		Vector<Item> ret = new Vector<>();
+		MenuBox selectedBox = new MenuBox(si);
+		selectedBox.setBounds(5,3,20,18);
+		selectedBox.setPromptSize(2);
+		selectedBox.setPrompt("Selected Spirits");
+		selectedBox.setMenuItems(ret);
+		selectedBox.setForeColor(ConsoleSystemInterface.RED);
+		selectedBox.setBorder(true);
+
+		si.saveBuffer();
+
+		while (true) {
 			selectedBox.draw();
 			menuBox.draw();
-	  		
+			
 			Equipment equipment = (Equipment)menuBox.getSelection();
 			if (equipment == null)
 				break;
@@ -969,7 +973,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 			si.refresh();
 			si.waitKey(CharKey.SPACE);
 			player.getGameSessionInfo().setDeathCause(GameSessionInfo.QUIT);
-			player.getGameSessionInfo().setDeathLevel(level.getLevelNumber());
+			player.getGameSessionInfo().deathLevel = level.getLevelNumber();
 			informPlayerCommand(CommandListener.QUIT);
 		}
 		messageBox.draw();

@@ -12,7 +12,10 @@ public class ColumnsRoom extends RoomFeature {
 		this.column = column;
 	}
 	
-	public boolean drawOverCanvas(String[][] canvas, Position where, int direction, boolean[][] mask, ArrayList hotspots) {
+	@Override
+	public boolean drawOverCanvas(String[][] canvas, Position where,
+		int direction, boolean[][] mask, ArrayList<Position> hotspots)
+	{
 		boolean ret = super.drawOverCanvas(canvas, where, direction, mask, hotspots);
 		int spacing= 0;
 		if (ret == true){

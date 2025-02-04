@@ -2,7 +2,7 @@ package sz.gadgets;
 
 import java.awt.Image;
 
-public class SimpleGFXMenuItem implements GFXMenuItem{
+public class SimpleGFXMenuItem implements GFXMenuItem {
 	private String description;
 	private int value;
 	public SimpleGFXMenuItem(String description, int value){

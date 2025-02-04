@@ -1,7 +1,5 @@
 package crl.levelgen;
 
-import java.util.Stack;
-
 import sz.util.Debug;
 import sz.util.Position;
 import sz.util.Util;
@@ -18,7 +16,6 @@ import crl.game.*;
  * 
  * 
  * @author Slash
- *
  */
 public class RuinLevelGenerator extends LevelGenerator {
 	private String [][] preLevel;
@@ -64,7 +61,7 @@ public class RuinLevelGenerator extends LevelGenerator {
 		int keys = placeKeys(ret);
 		
 		//Place the magic door
-		Feature door = FeatureFactory.getFactory().buildFeature("MAGIC_DOOR");
+		Feature door = FeatureFactory.buildFeature("MAGIC_DOOR");
 		cells[0][getWidth()-1][yExit] = MapCellFactory.getMapCellFactory().getMapCell(baseFloor);
 		door.setPosition(getWidth()-1,yExit,0);
 		door.setKeyCost(keys);
@@ -149,7 +146,7 @@ public class RuinLevelGenerator extends LevelGenerator {
 				continue;
 			}
 				
-			Feature vFeature = FeatureFactory.getFactory().buildFeature("CANDLE");
+			Feature vFeature = FeatureFactory.buildFeature("CANDLE");
 			vFeature.setPosition(xrnd,yrnd,0);
 			l.addFeature(vFeature);
 		}

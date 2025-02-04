@@ -100,15 +100,15 @@ public class CaveLevelGenerator extends LevelGenerator{
 		levelCells[0] = cells;
 		ret.setCells(levelCells);
 		//Place the keys
-		Feature keyf = FeatureFactory.getFactory().buildFeature("KEY");
+		Feature keyf = FeatureFactory.buildFeature("KEY");
 		keyf.setPosition(key1.x, key1.y, key1.z);
 		ret.addFeature(keyf);
-		keyf = FeatureFactory.getFactory().buildFeature("KEY");
+		keyf = FeatureFactory.buildFeature("KEY");
 		keyf.setPosition(key2.x, key2.y, key2.z);
 		ret.addFeature(keyf);
 		
 		//Place the door
-		Feature door = FeatureFactory.getFactory().buildFeature("MAGIC_DOOR");
+		Feature door = FeatureFactory.buildFeature("MAGIC_DOOR");
 		door.setPosition(ret.getWidth()-1,yExit,0);
 		door.setKeyCost(2);
 		ret.addFeature(door);
@@ -132,7 +132,7 @@ public class CaveLevelGenerator extends LevelGenerator{
 				continue;
 			}
 				
-			Feature vFeature = FeatureFactory.getFactory().buildFeature("CANDLE");
+			Feature vFeature = FeatureFactory.buildFeature("CANDLE");
 			vFeature.setPosition(temp.x, temp.y, temp.z);
 			l.addFeature(vFeature);
 		}
