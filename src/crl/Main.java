@@ -379,7 +379,8 @@ public class Main {
 			// user's files without asking though, right?
 			// mark them in red / show 'outdated save file' msg on UI?
 			// This is an "error" but not exceptional. Deal with it gracefully
-			// and continue running. don't crash.
+			// and continue running. TODO don't crash. maybe offer option to
+			// erase the save, and otherwise just abort loading.
 			crash("Savefile no longer loadable (program version changed)", new CRLException("Savefile version obsolete"));
 			
 		} catch (IOException ioe) {
@@ -432,6 +433,7 @@ public class Main {
 		UserAction[] userActions = null;
 		UserCommand[] userCommands = null;
 		Properties keyBindings = null;
+		// loadUserKeyMap()
 		try {
 			Properties keyConfig = new Properties();
 			keyConfig.load(new FileInputStream("keys.cfg"));
@@ -486,23 +488,23 @@ public class Main {
 			keyBindings.put("EXAMINE_LEVEL_MAP_KEY", readKeyString(keyConfig, "EXAMINELEVELMAP"));
 			keyBindings.put("SWITCH_MUSIC_KEY", readKeyString(keyConfig, "SWITCHMUSIC"));
 			
-			Display.thus.setKeyBindings(keyBindings);
+			Display.keyBindings = keyBindings;
 			
 			userActions = new UserAction[] {
-			        new UserAction(attack, i(keyBindings.getProperty("ATTACK1_KEY"))),
-			        new UserAction(attack, i(keyBindings.getProperty("ATTACK2_KEY"))),
-			        new UserAction(jump, i(keyBindings.getProperty("JUMP_KEY"))),
-			        new UserAction(thrown, i(keyBindings.getProperty("THROW_KEY"))),
-			        new UserAction(equip, i(keyBindings.getProperty("EQUIP_KEY"))),
-			        new UserAction(unequip, i(keyBindings.getProperty("UNEQUIP_KEY"))),
-	  		        new UserAction(reload, i(keyBindings.getProperty("RELOAD_KEY"))),
-			        new UserAction(use, i(keyBindings.getProperty("USE_KEY"))),
-			        new UserAction(get, i(keyBindings.getProperty("GET_KEY"))),
-			        new UserAction(drop, i(keyBindings.getProperty("DROP_KEY"))),
-			        new UserAction(dive, i(keyBindings.getProperty("DIVE_KEY"))),
-			        new UserAction(target, i(keyBindings.getProperty("TARGET_KEY"))),
-			        new UserAction(switchWeapons, i(keyBindings.getProperty("SWITCH_WEAPONS_KEY"))),
-			        new UserAction(get, i(keyBindings.getProperty("GET2_KEY"))),
+				new UserAction(attack, i(keyBindings.getProperty("ATTACK1_KEY"))),
+				new UserAction(attack, i(keyBindings.getProperty("ATTACK2_KEY"))),
+				new UserAction(jump, i(keyBindings.getProperty("JUMP_KEY"))),
+				new UserAction(thrown, i(keyBindings.getProperty("THROW_KEY"))),
+				new UserAction(equip, i(keyBindings.getProperty("EQUIP_KEY"))),
+				new UserAction(unequip, i(keyBindings.getProperty("UNEQUIP_KEY"))),
+				new UserAction(reload, i(keyBindings.getProperty("RELOAD_KEY"))),
+				new UserAction(use, i(keyBindings.getProperty("USE_KEY"))),
+				new UserAction(get, i(keyBindings.getProperty("GET_KEY"))),
+				new UserAction(drop, i(keyBindings.getProperty("DROP_KEY"))),
+				new UserAction(dive, i(keyBindings.getProperty("DIVE_KEY"))),
+				new UserAction(target, i(keyBindings.getProperty("TARGET_KEY"))),
+				new UserAction(switchWeapons, i(keyBindings.getProperty("SWITCH_WEAPONS_KEY"))),
+				new UserAction(get, i(keyBindings.getProperty("GET2_KEY"))),
 			};
 
 			userCommands = new UserCommand[]{
@@ -525,26 +527,25 @@ public class Main {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			if (si instanceof SwingSystemInterface) {
-	        	((SwingSystemInterface)si).showAlert("Problem reading keys.cfg config file: " + e.getMessage());
-	        }
+				((SwingSystemInterface)si).showAlert("Problem reading keys.cfg config file: " + e.getMessage());
+			}
 			throw new RuntimeException("keys.cfg config file not found");
 		} catch (IOException e) {
 			e.printStackTrace();
-	        if (si instanceof SwingSystemInterface) {
-	        	((SwingSystemInterface)si).showAlert("Problem reading keys.cfg config file: " + e.getMessage());
-	        }
+			if (si instanceof SwingSystemInterface) {
+				((SwingSystemInterface)si).showAlert("Problem reading keys.cfg config file: " + e.getMessage());
+			}
 			throw new RuntimeException("Problem reading keys.cfg config file");
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (si instanceof SwingSystemInterface) {
-	        	((SwingSystemInterface)si).showAlert("Problem initializing UI: " + e.getMessage());
-	        }
+				((SwingSystemInterface)si).showAlert("Problem initializing UI: " + e.getMessage());
+			}
 			throw e;
 		}
 		
-
 		
-		switch (uiMode){
+		switch (uiMode) {
 		case SWING_GFX:
 			((GFXUserInterface)ui).init((SwingSystemInterface)si, userCommands, target);
 			uiSelector = new GFXUISelector();
@@ -569,7 +570,7 @@ public class Main {
 		return readKey(config, keyName)+"";
 	}
 
-	
+
 	private static int readKey(Properties config, String keyName) throws CRLException {
 		String fieldName = config.getProperty(keyName).trim();
 		if (fieldName == null)
@@ -606,19 +607,19 @@ public class Main {
 		}
 	}
 	
-	private static void initializeActions(){
+	private static void initializeActions() {
 		ActionFactory af = ActionFactory.getActionFactory();
-		Action[] definitions = new Action[]{
-				new Dash(),
-				new MonsterWalk(),
-				new Swim(),
-				new MonsterCharge(),
-				new MonsterMissile(),
-				new SummonMonster(),
-				new MummyStrangle(),
-				new MummyTeleport(),
-				new Teleport(),
-				new MandragoraScream()
+		Action[] definitions = {
+			new Dash(),
+			new MonsterWalk(),
+			new Swim(),
+			new MonsterCharge(),
+			new MonsterMissile(),
+			new SummonMonster(),
+			new MummyStrangle(),
+			new MummyTeleport(),
+			new Teleport(),
+			new MandragoraScream()
 		};
 		for (int i = 0; i < definitions.length; i++)
 			af.addDefinition(definitions[i]);
@@ -633,7 +634,7 @@ public class Main {
 	}
 
 	private static void initializeSelectors() {
-		ActionSelector[] definitions = new ActionSelector[] {
+		ActionSelector[] definitions = {
 			new WanderToPlayerAI(),	// defines ID of: "WANDER"... via METHOD 'getID' .. Data as Function. VERY P-OOP.
 			new UnderwaterAI(),
 			new RangedAI(),

@@ -3,28 +3,25 @@ package crl.level;
 import java.util.*;
 
 import sz.util.*;
-import crl.ui.effects.*;
 import crl.actor.*;
-import crl.player.*;
 
-import crl.monster.*;
-
-public class Dispatcher implements java.io.Serializable{
+public class Dispatcher implements java.io.Serializable {
+	
 	private SZPriorityQueue actors;
 	private int countdown;
 	private Actor fixed;
 
-	public Dispatcher(){
+	public Dispatcher() {
 		actors = new SZPriorityQueue();
 	}
 
-	public boolean contains (Actor what){
+	public boolean contains(Actor what) {
 		return actors.contains(what);
 	}
 
-	public Vector getActors(){
+	public Vector<PriorityEnqueable> getActors() {
 		return actors.getVector();
-    }
+	}
 
 	public static int ixx = 0;
 	public Actor getNextActor(){
@@ -51,12 +48,12 @@ public class Dispatcher implements java.io.Serializable{
 			actors.enqueue(what);
 	}
 
-    public void addActor(Actor what){
-    	if (!actors.contains(what))
-    		actors.enqueue(what);
+	public void addActor(Actor what) {
+		if (!actors.contains(what))
+			actors.enqueue(what);
 	}
 
-	public void addActor(Actor what, boolean high, Object classObj){
+	public void addActor(Actor what, boolean high, Object classObj) {
 		if (!actors.contains(what))
 			actors.forceToFront(what, classObj);
 	}

@@ -34,7 +34,7 @@ import crl.ui.*;
  * 	Must be listening to a System Interface
  */
 
-public class ConsoleUserInterface extends UserInterface implements CommandListener, Runnable{
+public class ConsoleUserInterface extends UserInterface implements CommandListener {//, Runnable{
 	//Attributes
 	private int xrange = 25;
 	private int yrange = 9;

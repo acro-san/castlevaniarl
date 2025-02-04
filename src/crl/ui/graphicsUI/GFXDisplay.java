@@ -99,7 +99,7 @@ public class GFXDisplay extends Display {
 		}
 	}
 	
-	private AddornedBorderTextArea addornedTextArea;
+	private AddornedBorderTextArea adornedTextArea;
 
 	private GFXChatBox gfxChatBox;
 	
@@ -113,7 +113,7 @@ public class GFXDisplay extends Display {
 			BufferedImage b2 = ImageUtils.crearImagen(IMG_BORDERS, 1,1,32,32);
 			BufferedImage b3 = ImageUtils.crearImagen(IMG_BORDERS, 100, 1, 32,32);
 			BufferedImage b4 = ImageUtils.crearImagen(IMG_BORDERS, 67,1,32,32);
-			addornedTextArea = new AddornedBorderTextArea(
+			adornedTextArea = new AddornedBorderTextArea(
 					b1,
 					b2,
 					b3,
@@ -121,12 +121,12 @@ public class GFXDisplay extends Display {
 					new Color(187,161,80),
 					new Color(92,78,36),
 					32, 32);
-			addornedTextArea.setVisible(false);
-			addornedTextArea.setEnabled(false);
-			addornedTextArea.setForeground(Color.WHITE);
-			addornedTextArea.setBackground(Color.BLACK);
-			addornedTextArea.setFont(FNT_DIALOGUEIN);
-			addornedTextArea.setOpaque(false);
+			adornedTextArea.setVisible(false);
+			adornedTextArea.setEnabled(false);
+			adornedTextArea.setForeground(Color.WHITE);
+			adornedTextArea.setBackground(Color.BLACK);
+			adornedTextArea.setFont(FNT_DIALOGUEIN);
+			adornedTextArea.setOpaque(false);
 			
 			gfxChatBox = new GFXChatBox(b1,b2,b3,b4,
 					new Color(187,161,80),
@@ -138,7 +138,7 @@ public class GFXDisplay extends Display {
 		} catch (Exception e) {
 			Game.crash("Error loading UI data", e);
 		}
-		si.add(addornedTextArea);
+		si.add(adornedTextArea);
 		si.add(gfxChatBox);
 	}
 	
@@ -334,8 +334,8 @@ public class GFXDisplay extends Display {
 			widthAdjustment = 0;
 		}
 		si.drawImage(IMG_HISCORES);
-		addornedTextArea.setBounds(8, 110, 782, 395);
-		addornedTextArea.paintAt(si.getGraphics2D(), 8 + widthAdjustment,110);
+		adornedTextArea.setBounds(8, 110, 782, 395);
+		adornedTextArea.paintAt(si.getGraphics2D(), 8 + widthAdjustment,110);
 		si.setFont(FNT_TITLE);
 		si.printAtPixelCentered(configuration.getScreenWidth() / 2,160, "The most brave of Belmonts", Color.WHITE);
 		si.setFont(FNT_TEXT);
@@ -354,29 +354,30 @@ public class GFXDisplay extends Display {
 		}
 		si.print(7 + leftMargin,20, "[space] to continue", GFXDisplay.COLOR_BOLD);
 		si.refresh();
-		si.waitKey(CharKey.SPACE);		
+		si.waitKey(CharKey.SPACE);
 	}
 	
 	
-	public void showHelp(){
-		//Delegated to GFXUserInterface.HelpBox
+	public void showHelp() {
+		// Delegated to GFXUserInterface.HelpBox
 	}
 	
-	public void init(SwingSystemInterface syst){
+	public void init(SwingSystemInterface syst) {
 		si = syst;
 	}
 	
-	public void showDraculaSequence(){
+	public void showDraculaSequence() {
 		showTextBox("Ahhh... a human... the first one to get this far. HAHAHAHA! Now it is time to die!",3,4,40,10);
-		
 	}
 	
-	public void showTimeChange(boolean day, boolean fog, boolean rain, boolean thunderstorm, boolean sunnyDay){
-		String baseMessage = getTimeChangeMessage(day, fog, rain, thunderstorm, sunnyDay);
-		showTextBox(baseMessage,40,60,300,200);
+	
+	public void showTimeChange(boolean day, boolean fog, boolean rain, boolean thunderstorm, boolean sunnyDay) {
+		String timeMsg = Text.getTimeChangeMessage(day, fog, rain, thunderstorm, sunnyDay);
+		showTextBox(timeMsg, 40,60,300,200);	// hardcoded coords. why these?
 	}
 	
-	public int showSavedGames(File[] saveFiles){
+	
+	public int showSavedGames(File[] saveFiles) {
 		si.drawImage(IMG_SAVED);
 		if (saveFiles == null || saveFiles.length == 0){
 			si.print(3,6, "No adventurers available",Color.WHITE);
@@ -449,56 +450,58 @@ public class GFXDisplay extends Display {
 		return choice;*/
 	}
 	
-	public void showTextBox(String text, int consoleX, int consoleY, int consoleW, int consoleH){
-		addornedTextArea.setBounds(consoleX, consoleY, consoleW, consoleH);
-		addornedTextArea.setText(text);
-		addornedTextArea.setVisible(true);
+	// aka showModalTextBox (i.e. await space key to confirm). TODO: And Escape.
+	
+	public void showTextBox(String text, int consoleX, int consoleY, int consoleW, int consoleH) {
+		adornedTextArea.setBounds(consoleX, consoleY, consoleW, consoleH);
+		adornedTextArea.setText(text);
+		adornedTextArea.setVisible(true);
 		si.waitKey(CharKey.SPACE);
-		addornedTextArea.setVisible(false);
+		adornedTextArea.setVisible(false);
 	}
 	
-	public void showTextBox(String title, String text, int consoleX, int consoleY, int consoleW, int consoleH){
-		showTextBox (title+" "+text, consoleX, consoleY, consoleW, consoleH);
+	public void showTextBox(String title, String text, int consoleX, int consoleY, int consoleW, int consoleH) {
+		showTextBox(title+" "+text, consoleX, consoleY, consoleW, consoleH);
 	}
 	
-	public void showTextBoxNoWait(String text, int consoleX, int consoleY, int consoleW, int consoleH){
-		addornedTextArea.setBounds(consoleX, consoleY, consoleW, consoleH);
-		addornedTextArea.setText(text);
-		addornedTextArea.setVisible(true);
+	public void showTextBoxNoWait(String text, int consoleX, int consoleY, int consoleW, int consoleH) {
+		adornedTextArea.setBounds(consoleX, consoleY, consoleW, consoleH);
+		adornedTextArea.setText(text);
+		adornedTextArea.setVisible(true);
 	}
 	
-	public void clearTextBox(){
-		addornedTextArea.setVisible(false);	
+	public void clearTextBox() {
+		adornedTextArea.setVisible(false);
 	}
 	
-	public boolean showTextBoxPrompt(String text, int consoleX, int consoleY, int consoleW, int consoleH){
-		addornedTextArea.setBounds(consoleX, consoleY, consoleW, consoleH);
-		addornedTextArea.setText(text);
-		addornedTextArea.setVisible(true);
+	public boolean showTextBoxPrompt(String text, int consoleX, int consoleY, int consoleW, int consoleH) {
+		adornedTextArea.setBounds(consoleX, consoleY, consoleW, consoleH);
+		adornedTextArea.setText(text);
+		adornedTextArea.setVisible(true);
 		CharKey x = new CharKey(CharKey.NONE);
 		while (x.code != CharKey.Y && x.code != CharKey.y && x.code != CharKey.N && x.code != CharKey.n)
 			x = si.inkey();
 		boolean ret = (x.code == CharKey.Y || x.code == CharKey.y);
-		addornedTextArea.setVisible(false);
+		adornedTextArea.setVisible(false);
 		return ret;
 	}
 	
 	public void showTextBox(String text, int consoleX, int consoleY, int consoleW, int consoleH, Font f){
-		addornedTextArea.setBounds(consoleX, consoleY, consoleW, consoleH);
-		addornedTextArea.setText(text);
-		addornedTextArea.setFont(f);
-		addornedTextArea.setVisible(true);
+		adornedTextArea.setBounds(consoleX, consoleY, consoleW, consoleH);
+		adornedTextArea.setText(text);
+		adornedTextArea.setFont(f);
+		adornedTextArea.setVisible(true);
 		si.waitKey(CharKey.SPACE);
-		addornedTextArea.setVisible(false);
+		adornedTextArea.setVisible(false);
 	}
 
-	private int readAlphaToNumber(int numbers){
-		while (true){
+	private int readAlphaToNumber(int numbers) {
+		while (true) {
 			CharKey key = si.inkey();
-			if (key.code >= CharKey.A && key.code <= CharKey.A + numbers -1){
+			if (key.code >= CharKey.A && key.code <= CharKey.A + numbers -1) {
 				return key.code - CharKey.A;
 			}
-			if (key.code >= CharKey.a && key.code <= CharKey.a + numbers -1){
+			if (key.code >= CharKey.a && key.code <= CharKey.a + numbers -1) {
 				return key.code - CharKey.a;
 			}
 		}
@@ -506,13 +509,17 @@ public class GFXDisplay extends Display {
 	
 	//private Color TRANSPARENT_BLUE = new Color(100,100,100,200);
 	
-	public void showChat(String chatID, Game game){
+	public void showChat(String chatID, Game game) {
 		si.saveBuffer();
 		GFXChat chat = GFXCuts.thus.get(chatID);
-		String[] marks = new String[] {"%NAME", "%%INTRO_1", "%%CLARA1"};
-		String[] replacements = new String[] {game.getPlayer().getName(), game.getPlayer().getCustomMessage("INTRO_1"), game.getPlayer().getCustomMessage("CLARA1")};
+		String[] marks = {"%NAME", "%%INTRO_1", "%%CLARA1"};
+		String[] replacements = {
+			game.getPlayer().getName(),
+			game.getPlayer().getCustomMessage("INTRO_1"),
+			game.getPlayer().getCustomMessage("CLARA1")
+		};
 		Image image = null;
-		for (int i = 0; i < chat.getConversations(); i++){
+		for (int i = 0; i < chat.getConversations(); i++) {
 			si.restore();
 			//si.setColor(TRANSPARENT_BLUE);
 			//si.getGraphics2D().fillRect(26,26,665,185);
@@ -528,7 +535,7 @@ public class GFXDisplay extends Display {
 		si.restore();
 	}
 	
-	public void showScreen(Object pScreen){
+	public void showScreen(Object pScreen) {
 		si.saveBuffer();
 		String screenText = (String) pScreen;
 		showTextBox(screenText, this.configuration.getScreenWidth() - 370, 70,340,375);

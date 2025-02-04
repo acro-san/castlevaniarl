@@ -66,15 +66,44 @@ public class Text {
 		"The trip to the castle was long and harsh, and after enduring many "+
 		"challenges through all Transylvania, you are close to the castle of "+
 		"chaos. You are almost at Castlevania, and you are here on business: " +
-		"To destroy forever the Curse of the Evil Count.";
+		"To destroy forever the Curse of the Evil Count.",
 		
 	
-	
-	
-	
-	public static final String
+		
+		
+		TIME_DAYBREAK  = "THE MORNING SUN HAS VANQUISHED THE HORRIBLE NIGHT...",
+		TIME_NIGHTFALL = "... WHAT A HORRIBLE NIGHT TO HAVE A CURSE",
+		TIME_FOGGY = "A HEAVY FOG ENGULFS THE PLACE",
+		TIME_RAIN  = "RAIN STARTS POURING FROM THE DARK SKY",
+		TIME_STORM = "A THUNDERSTORM BREAKS LOOSE THE SPIRITS OF DARK",
+		TIME_SUNNY = "A GENTLE SUN SHINES IN THIS GRAY DAY",
+		
+		
+		
+		
 		MERCHANT_BUY_CONFIRM = "Thanks!, May I interest you in something else?",
 		MERCHANT_BUY_FAIL_NOGOLD = "I am afraid you don\'t have enough gold",
 		MERCHANT_BUY_CANCEL = "Too bad... May I interest you in something else?";	// TUI logic only!?
 	
+	
+	public static String getTimeChangeMessage(boolean day, boolean fog, 
+		boolean rain, boolean thunderstorm, boolean sunnyDay)
+	{
+		String msg = day ? TIME_DAYBREAK: TIME_NIGHTFALL;
+		if (fog) {
+			msg += "\n\n"+TIME_FOGGY;
+		}
+		if (rain) {
+			msg += "\n\n"+TIME_RAIN;
+		}
+		if (thunderstorm) {
+			msg += "\n\n"+TIME_STORM;
+		}
+		if (sunnyDay) {
+			msg += "\n\n"+TIME_SUNNY;
+		}
+		return msg;
+	}
+
+
 }

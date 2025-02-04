@@ -230,25 +230,25 @@ public class CharDisplay extends Display {
 		si.cls();
 	}
 	
-	public void showHelp(){
+	public void showHelp() {
 		si.cls();
 		//printBars();
 		si.print( 1,1,  "                              * - HELP - *                                      ", ConsoleSystemInterface.RED);
 		
-		si.print( 3,3, "("+CharKey.getString(Display.getKeyBindings().getProperty("WEAPON_KEY"))+")", ConsoleSystemInterface.RED);
-		si.print( 3,4, "("+CharKey.getString(Display.getKeyBindings().getProperty("ATTACK1_KEY"))+")", ConsoleSystemInterface.RED);
-		si.print( 3,5, "("+CharKey.getString(Display.getKeyBindings().getProperty("DROP_KEY"))+")", ConsoleSystemInterface.RED);
-		si.print( 3,6, "("+CharKey.getString(Display.getKeyBindings().getProperty("EQUIP_KEY"))+")", ConsoleSystemInterface.RED);
-		si.print( 3,7, "("+CharKey.getString(Display.getKeyBindings().getProperty("TARGET_KEY"))+")", ConsoleSystemInterface.RED);
-		si.print( 3,8, "("+CharKey.getString(Display.getKeyBindings().getProperty("GET_KEY"))+")", ConsoleSystemInterface.RED);
-		si.print( 3,9, "("+CharKey.getString(Display.getKeyBindings().getProperty("JUMP_KEY"))+")", ConsoleSystemInterface.RED);
-		si.print( 3,10, "("+CharKey.getString(Display.getKeyBindings().getProperty("DIVE_KEY"))+")", ConsoleSystemInterface.RED);
-		si.print( 3,11, "("+CharKey.getString(Display.getKeyBindings().getProperty("RELOAD_KEY"))+")", ConsoleSystemInterface.RED);
-		si.print( 3,12, "("+CharKey.getString(Display.getKeyBindings().getProperty("SHOW_SKILLS_KEY"))+")", ConsoleSystemInterface.RED);
-		si.print( 3,13, "("+CharKey.getString(Display.getKeyBindings().getProperty("THROW_KEY"))+")", ConsoleSystemInterface.RED);
-		si.print( 3,14, "("+CharKey.getString(Display.getKeyBindings().getProperty("USE_KEY"))+")", ConsoleSystemInterface.RED);
-		si.print( 3,15, "("+CharKey.getString(Display.getKeyBindings().getProperty("UNEQUIP_KEY"))+")", ConsoleSystemInterface.RED);
-		si.print( 3,16, "("+CharKey.getString(Display.getKeyBindings().getProperty("SWITCH_WEAPONS_KEY"))+")", ConsoleSystemInterface.RED);
+		si.print( 3,3, "("+CharKey.getString(Display.keyBindings.getProperty("WEAPON_KEY"))+")", ConsoleSystemInterface.RED);
+		si.print( 3,4, "("+CharKey.getString(Display.keyBindings.getProperty("ATTACK1_KEY"))+")", ConsoleSystemInterface.RED);
+		si.print( 3,5, "("+CharKey.getString(Display.keyBindings.getProperty("DROP_KEY"))+")", ConsoleSystemInterface.RED);
+		si.print( 3,6, "("+CharKey.getString(Display.keyBindings.getProperty("EQUIP_KEY"))+")", ConsoleSystemInterface.RED);
+		si.print( 3,7, "("+CharKey.getString(Display.keyBindings.getProperty("TARGET_KEY"))+")", ConsoleSystemInterface.RED);
+		si.print( 3,8, "("+CharKey.getString(Display.keyBindings.getProperty("GET_KEY"))+")", ConsoleSystemInterface.RED);
+		si.print( 3,9, "("+CharKey.getString(Display.keyBindings.getProperty("JUMP_KEY"))+")", ConsoleSystemInterface.RED);
+		si.print( 3,10, "("+CharKey.getString(Display.keyBindings.getProperty("DIVE_KEY"))+")", ConsoleSystemInterface.RED);
+		si.print( 3,11, "("+CharKey.getString(Display.keyBindings.getProperty("RELOAD_KEY"))+")", ConsoleSystemInterface.RED);
+		si.print( 3,12, "("+CharKey.getString(Display.keyBindings.getProperty("SHOW_SKILLS_KEY"))+")", ConsoleSystemInterface.RED);
+		si.print( 3,13, "("+CharKey.getString(Display.keyBindings.getProperty("THROW_KEY"))+")", ConsoleSystemInterface.RED);
+		si.print( 3,14, "("+CharKey.getString(Display.keyBindings.getProperty("USE_KEY"))+")", ConsoleSystemInterface.RED);
+		si.print( 3,15, "("+CharKey.getString(Display.keyBindings.getProperty("UNEQUIP_KEY"))+")", ConsoleSystemInterface.RED);
+		si.print( 3,16, "("+CharKey.getString(Display.keyBindings.getProperty("SWITCH_WEAPONS_KEY"))+")", ConsoleSystemInterface.RED);
 		
 		si.print( 6,3,  "Action: Aim special weapon", ConsoleSystemInterface.WHITE);
 		si.print( 6,4,  "Attack: Uses a weapon", ConsoleSystemInterface.WHITE);
@@ -265,16 +265,18 @@ public class CharDisplay extends Display {
 		si.print( 6,15, "Unequip: Take off an item", ConsoleSystemInterface.WHITE);
 		si.print( 6,16, "Switch: Exchange primary weapon", ConsoleSystemInterface.WHITE);
 
-		si.print( 41,3 , "("+CharKey.getString(Display.getKeyBindings().getProperty("SHOW_STATS_KEY"))+")", ConsoleSystemInterface.RED);
-		si.print( 41,4 , "("+CharKey.getString(Display.getKeyBindings().getProperty("SHOW_INVENTORY_KEY"))+")", ConsoleSystemInterface.RED);
-		si.print( 41,5 , "("+CharKey.getString(Display.getKeyBindings().getProperty("LOOK_KEY"))+")", ConsoleSystemInterface.RED);
-		si.print( 41,6 , "("+CharKey.getString(Display.getKeyBindings().getProperty("SHOW_MESSAGE_HISTORY_KEY"))+")", ConsoleSystemInterface.RED);
-		si.print( 41,7, "("+CharKey.getString(Display.getKeyBindings().getProperty("SHOW_MAP_KEY"))+")", ConsoleSystemInterface.RED);
-		si.print( 41,8, "("+CharKey.getString(Display.getKeyBindings().getProperty("EXAMINE_LEVEL_MAP_KEY"))+")", ConsoleSystemInterface.RED);
-		si.print( 41,9, "("+CharKey.getString(Display.getKeyBindings().getProperty("QUIT_KEY"))+")", ConsoleSystemInterface.RED);
-		si.print( 41,10, "("+CharKey.getString(Display.getKeyBindings().getProperty("PROMPT_SAVE_KEY"))+")", ConsoleSystemInterface.RED);
-		si.print( 41,11, "("+CharKey.getString(Display.getKeyBindings().getProperty("SWITCH_MUSIC_KEY"))+")", ConsoleSystemInterface.RED);
-		                                                    
+		// TODO DECLARE LIST OF KEYBIND IDENTIFIERS for KEYMAP. based on these things like:
+		// K_SHOW_STATS, K_SHOW_INVENTORY, K_LOOK, K_MSG_HISTORY,viewlog?, ...
+		si.print( 41,3 , "("+CharKey.getString(Display.keyBindings.getProperty("SHOW_STATS_KEY"))+")", ConsoleSystemInterface.RED);
+		si.print( 41,4 , "("+CharKey.getString(Display.keyBindings.getProperty("SHOW_INVENTORY_KEY"))+")", ConsoleSystemInterface.RED);
+		si.print( 41,5 , "("+CharKey.getString(Display.keyBindings.getProperty("LOOK_KEY"))+")", ConsoleSystemInterface.RED);
+		si.print( 41,6 , "("+CharKey.getString(Display.keyBindings.getProperty("SHOW_MESSAGE_HISTORY_KEY"))+")", ConsoleSystemInterface.RED);
+		si.print( 41,7, "("+CharKey.getString(Display.keyBindings.getProperty("SHOW_MAP_KEY"))+")", ConsoleSystemInterface.RED);
+		si.print( 41,8, "("+CharKey.getString(Display.keyBindings.getProperty("EXAMINE_LEVEL_MAP_KEY"))+")", ConsoleSystemInterface.RED);
+		si.print( 41,9, "("+CharKey.getString(Display.keyBindings.getProperty("QUIT_KEY"))+")", ConsoleSystemInterface.RED);
+		si.print( 41,10, "("+CharKey.getString(Display.keyBindings.getProperty("PROMPT_SAVE_KEY"))+")", ConsoleSystemInterface.RED);
+		si.print( 41,11, "("+CharKey.getString(Display.keyBindings.getProperty("SWITCH_MUSIC_KEY"))+")", ConsoleSystemInterface.RED);
+		
 		si.print( 44,3, "Character: Skills and attributes", ConsoleSystemInterface.WHITE);
 		si.print( 44,4, "Inventory: Shows the inventory", ConsoleSystemInterface.WHITE);
 		si.print( 44,5, "Look: Identifies map symbols", ConsoleSystemInterface.WHITE);
@@ -286,11 +288,8 @@ public class CharDisplay extends Display {
 		si.print( 44,11, "Switch Music: Turns music on/off", ConsoleSystemInterface.WHITE);	
 		
 		si.print( 6,18, "[ Press space to exit ]", ConsoleSystemInterface.WHITE);
-
 		
-		/*
-
-		
+/*
 		si.print(0,1,  "                                                                                ");
 		si.print(0,2,  "                                                                                ");
 		si.print(0,3,  "                              * - HELP - *                                      ", ConsoleSystemInterface.RED);
@@ -326,7 +325,7 @@ public class CharDisplay extends Display {
 		si = syst;
 	}
 	
-	public void printBars(){
+	public void printBars() {
  		si.print(0,0,  "[==============================================================================]", ConsoleSystemInterface.WHITE);
 		si.print(0,1,  "  [==]  [==]  [==]  [==]  [==]  [==]  [==]  [==]  [==]  [==]  [==]  [==]  [==]", ConsoleSystemInterface.WHITE);
 		
@@ -356,19 +355,25 @@ public class CharDisplay extends Display {
 	}
 	
 	
+	public void showTimeChange(boolean day, boolean fog, boolean rain, boolean thunderstorm, boolean sunnyDay) {
+		String dayMsg = Text.getTimeChangeMessage(day, fog, rain, thunderstorm, sunnyDay);
+		// blocking/modal msgbox function! No reason for Display to have 'timechange' string-get function.
+		showTextBox(dayMsg, 3, 4, 30, 10);	//Modaltextbox...?
+	}
 	
-	public void showTimeChange(boolean day, boolean fog, boolean rain, boolean thunderstorm, boolean sunnyDay){
-		String baseMessage = getTimeChangeMessage(day, fog, rain, thunderstorm, sunnyDay); 
+
+	public void showTextBox(String msg, int x, int y, int w, int h) {	// "ModalTextBox"?
 		TextBox tb = new TextBox(si);
-		tb.setBounds(3,4,30,10);
+		tb.setBounds(x, y, w, h);
 		tb.setBorder(true);
-		tb.setText(baseMessage);
+		tb.setText(msg);
 		tb.draw();
 		si.refresh();
 		si.waitKey(CharKey.SPACE);
 	}
 	
-	public int showSavedGames(File[] saveFiles){
+	
+	public int showSavedGames(File[] saveFiles) {
 		si.cls();
 		printBars();
 		if (saveFiles == null || saveFiles.length == 0){

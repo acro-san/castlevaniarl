@@ -53,7 +53,7 @@ import crl.ui.*;
  * 	Must be listening to a System Interface
  */
 
-public class GFXUserInterface extends UserInterface implements Runnable {
+public class GFXUserInterface extends UserInterface {//implements Runnable {
 	private static final String BORDERS_FILE = "gfx/barrett-interface.gif"; //TODO: Move to GFXConfiguration
 	private static final int BORDERS_SCALE = 1; //TODO: Move to GFXConfiguration
 	private static final int BORDERS_SIZE = 32; //TODO: Move to GFXConfiguration
@@ -1988,7 +1988,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 	
 
 //	Runnable interface
-	public void run (){}
+//	public void run (){}
 	
 //	IO Utility
 	public void waitKey() {
@@ -2296,7 +2296,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 			btnOk = new GFXButton(IMG_OK_BTN);
 
 			lstInventory.setOpaque(false);
-			lstInventory.setCellRenderer(new ItemsCellRenderer());		
+			lstInventory.setCellRenderer(new ItemsCellRenderer());
 			
 			setOpaque(false);
 			setBorder(new EmptyBorder(STANDARD_WIDTH,STANDARD_WIDTH,STANDARD_WIDTH,STANDARD_WIDTH));
@@ -2474,20 +2474,20 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 			g.setFont(GFXDisplay.FNT_TEXT);
 			
 			
-			print(g, 3,3, "("+CharKey.getString(Display.getKeyBindings().getProperty("WEAPON_KEY"))+")", GFXDisplay.COLOR_BOLD);
-			print(g, 3,4, "("+CharKey.getString(Display.getKeyBindings().getProperty("ATTACK1_KEY"))+")", GFXDisplay.COLOR_BOLD);
-			print(g, 3,5, "("+CharKey.getString(Display.getKeyBindings().getProperty("DROP_KEY"))+")", GFXDisplay.COLOR_BOLD);
-			print(g, 3,6, "("+CharKey.getString(Display.getKeyBindings().getProperty("EQUIP_KEY"))+")", GFXDisplay.COLOR_BOLD);
-			print(g, 3,7, "("+CharKey.getString(Display.getKeyBindings().getProperty("TARGET_KEY"))+")", GFXDisplay.COLOR_BOLD);
-			print(g, 3,8, "("+CharKey.getString(Display.getKeyBindings().getProperty("GET_KEY"))+")", GFXDisplay.COLOR_BOLD);
-			print(g, 3,9, "("+CharKey.getString(Display.getKeyBindings().getProperty("JUMP_KEY"))+")", GFXDisplay.COLOR_BOLD);
-			print(g, 3,10, "("+CharKey.getString(Display.getKeyBindings().getProperty("DIVE_KEY"))+")", GFXDisplay.COLOR_BOLD);
-			print(g, 3,11, "("+CharKey.getString(Display.getKeyBindings().getProperty("RELOAD_KEY"))+")", GFXDisplay.COLOR_BOLD);
-			print(g, 3,12, "("+CharKey.getString(Display.getKeyBindings().getProperty("SHOW_SKILLS_KEY"))+")", GFXDisplay.COLOR_BOLD);
-			print(g, 3,13, "("+CharKey.getString(Display.getKeyBindings().getProperty("THROW_KEY"))+")", GFXDisplay.COLOR_BOLD);
-			print(g, 3,14, "("+CharKey.getString(Display.getKeyBindings().getProperty("USE_KEY"))+")", GFXDisplay.COLOR_BOLD);
-			print(g, 3,15, "("+CharKey.getString(Display.getKeyBindings().getProperty("UNEQUIP_KEY"))+")", GFXDisplay.COLOR_BOLD);
-			print(g, 3,16, "("+CharKey.getString(Display.getKeyBindings().getProperty("SWITCH_WEAPONS_KEY"))+")", GFXDisplay.COLOR_BOLD);
+			print(g, 3, 3, "("+CharKey.getString(Display.keyBindings.getProperty("WEAPON_KEY"))+")", GFXDisplay.COLOR_BOLD);
+			print(g, 3, 4, "("+CharKey.getString(Display.keyBindings.getProperty("ATTACK1_KEY"))+")", GFXDisplay.COLOR_BOLD);
+			print(g, 3, 5, "("+CharKey.getString(Display.keyBindings.getProperty("DROP_KEY"))+")", GFXDisplay.COLOR_BOLD);
+			print(g, 3, 6, "("+CharKey.getString(Display.keyBindings.getProperty("EQUIP_KEY"))+")", GFXDisplay.COLOR_BOLD);
+			print(g, 3, 7, "("+CharKey.getString(Display.keyBindings.getProperty("TARGET_KEY"))+")", GFXDisplay.COLOR_BOLD);
+			print(g, 3, 8, "("+CharKey.getString(Display.keyBindings.getProperty("GET_KEY"))+")", GFXDisplay.COLOR_BOLD);
+			print(g, 3, 9, "("+CharKey.getString(Display.keyBindings.getProperty("JUMP_KEY"))+")", GFXDisplay.COLOR_BOLD);
+			print(g, 3,10, "("+CharKey.getString(Display.keyBindings.getProperty("DIVE_KEY"))+")", GFXDisplay.COLOR_BOLD);
+			print(g, 3,11, "("+CharKey.getString(Display.keyBindings.getProperty("RELOAD_KEY"))+")", GFXDisplay.COLOR_BOLD);
+			print(g, 3,12, "("+CharKey.getString(Display.keyBindings.getProperty("SHOW_SKILLS_KEY"))+")", GFXDisplay.COLOR_BOLD);
+			print(g, 3,13, "("+CharKey.getString(Display.keyBindings.getProperty("THROW_KEY"))+")", GFXDisplay.COLOR_BOLD);
+			print(g, 3,14, "("+CharKey.getString(Display.keyBindings.getProperty("USE_KEY"))+")", GFXDisplay.COLOR_BOLD);
+			print(g, 3,15, "("+CharKey.getString(Display.keyBindings.getProperty("UNEQUIP_KEY"))+")", GFXDisplay.COLOR_BOLD);
+			print(g, 3,16, "("+CharKey.getString(Display.keyBindings.getProperty("SWITCH_WEAPONS_KEY"))+")", GFXDisplay.COLOR_BOLD);
 			
 			print(g, 6,3,  "Action: Uses a mystic weapon or aims weapon", Color.WHITE);
 			print(g, 6,4,  "Attack: Uses a weapon in a given direction", Color.WHITE);
@@ -2504,15 +2504,15 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 			print(g, 6,15, "Unequip: Take off an item", Color.WHITE);
 			print(g, 6,16, "Switch weapons: Exchange primary for secondary weapon", Color.WHITE);
 
-			print(g, 41,3 , "("+CharKey.getString(Display.getKeyBindings().getProperty("SHOW_STATS_KEY"))+")", GFXDisplay.COLOR_BOLD);
-			print(g, 41,4 , "("+CharKey.getString(Display.getKeyBindings().getProperty("SHOW_INVENTORY_KEY"))+")", GFXDisplay.COLOR_BOLD);
-			print(g, 41,5 , "("+CharKey.getString(Display.getKeyBindings().getProperty("LOOK_KEY"))+")", GFXDisplay.COLOR_BOLD);
-			print(g, 41,6 , "("+CharKey.getString(Display.getKeyBindings().getProperty("SHOW_MESSAGE_HISTORY_KEY"))+")", GFXDisplay.COLOR_BOLD);
-			print(g, 41,7, "("+CharKey.getString(Display.getKeyBindings().getProperty("SHOW_MAP_KEY"))+")", GFXDisplay.COLOR_BOLD);
-			//print(g, 41,8, "("+CharKey.getString(Display.getKeyBindings().getProperty("EXAMINE_LEVEL_MAP_KEY"))+")", GFXDisplay.COLOR_BOLD);
-			print(g, 41,9, "("+CharKey.getString(Display.getKeyBindings().getProperty("QUIT_KEY"))+")", GFXDisplay.COLOR_BOLD);
-			print(g, 41,10, "("+CharKey.getString(Display.getKeyBindings().getProperty("PROMPT_SAVE_KEY"))+")", GFXDisplay.COLOR_BOLD);
-			print(g, 41,11, "("+CharKey.getString(Display.getKeyBindings().getProperty("SWITCH_MUSIC_KEY"))+")", GFXDisplay.COLOR_BOLD);
+			print(g, 41,3 , "("+CharKey.getString(Display.keyBindings.getProperty("SHOW_STATS_KEY"))+")", GFXDisplay.COLOR_BOLD);
+			print(g, 41,4 , "("+CharKey.getString(Display.keyBindings.getProperty("SHOW_INVENTORY_KEY"))+")", GFXDisplay.COLOR_BOLD);
+			print(g, 41,5 , "("+CharKey.getString(Display.keyBindings.getProperty("LOOK_KEY"))+")", GFXDisplay.COLOR_BOLD);
+			print(g, 41,6 , "("+CharKey.getString(Display.keyBindings.getProperty("SHOW_MESSAGE_HISTORY_KEY"))+")", GFXDisplay.COLOR_BOLD);
+			print(g, 41,7, "("+CharKey.getString(Display.keyBindings.getProperty("SHOW_MAP_KEY"))+")", GFXDisplay.COLOR_BOLD);
+			//print(g, 41,8, "("+CharKey.getString(Display.keyBindings.getProperty("EXAMINE_LEVEL_MAP_KEY"))+")", GFXDisplay.COLOR_BOLD);
+			print(g, 41,9, "("+CharKey.getString(Display.keyBindings.getProperty("QUIT_KEY"))+")", GFXDisplay.COLOR_BOLD);
+			print(g, 41,10, "("+CharKey.getString(Display.keyBindings.getProperty("PROMPT_SAVE_KEY"))+")", GFXDisplay.COLOR_BOLD);
+			print(g, 41,11, "("+CharKey.getString(Display.keyBindings.getProperty("SWITCH_MUSIC_KEY"))+")", GFXDisplay.COLOR_BOLD);
 			
 			print(g, 44,3, "Character info: Shows your skills and attributes", Color.WHITE);
 			print(g, 44,4, "Inventory: Shows the inventory", Color.WHITE);
@@ -2522,7 +2522,7 @@ public class GFXUserInterface extends UserInterface implements Runnable {
 			//print(g, 44,8, "Area Map: Show the current area map", Color.WHITE);
 			print(g, 44,9, "Quit: Exits game", Color.WHITE);
 			print(g, 44,10, "Save: Saves game", Color.WHITE);
-			print(g, 44,11, "Switch Music: Turns music on/off", Color.WHITE);			
+			print(g, 44,11, "Switch Music: Turns music on/off", Color.WHITE);
 		}
 		
 		private void doOk(){

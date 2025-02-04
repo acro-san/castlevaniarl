@@ -7,7 +7,6 @@ import javax.swing.SwingUtilities;
 
 import crl.Main;
 import crl.ui.*;
-//import crl.action.vkiller.Whip;
 import crl.level.*;
 import crl.levelgen.*;
 import crl.monster.VMonster;
@@ -29,7 +28,7 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 	private Level currentLevel;
 	private boolean canSave;
 	
-	public void setCanSave(boolean vl){
+	public void setCanSave(boolean vl) {
 		canSave = vl;
 	}
 	
@@ -57,35 +56,39 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 		}
 	}
 
-	private void run(){
+	private void run() {
 		Debug.enterMethod(this, "run");
 		player.setFOV(new FOV());
 		player.getLevel().addMessage("Greetings "+player.getName()+", welcome to the game... Press '?' for Help");
 		ui.refresh();
 		checkTimeSwitch();
-		while (!endGame){
+		while (!endGame) {
 			Debug.enterMethod(this, "run.innerLoop "+turns);
 			Actor actor = dispatcher.getNextActor();
-            if (actor == player){
-            	player.darken();
-            	player.see();
-            	if (!player.justJumped()) {
+			if (actor == player) {
+				player.darken();
+				player.see();
+				if (!player.justJumped()) {
+					SwingUtilities.invokeLater(() -> { ui.refresh(); });
+					/*
 					SwingUtilities.invokeLater(new Runnable() {
 						public void run() {
 							ui.refresh();
 						}
 					});
+					*/
 				}
 				player.getGameSessionInfo().turns++;
 				player.checkDeath();
 				player.getLevel().checkUnleashers(this);
-				
 			}
-            if (endGame)
-            	break;
+			if (endGame) {
+				break;
+			}
 			actor.act();
-			if (endGame)
-            	break;
+			if (endGame) {
+				break;
+			}
 			actor.getLevel().getDispatcher().returnActor(actor);
 			
 			if (actor == player){
@@ -100,18 +103,19 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 		}
 		Debug.exitMethod();
 	}
-	 	
-	private void forwardTime(){
+	
+	private void forwardTime() {
 		timeSwitch = 0;
 		checkTimeSwitch();
 	}
 	
-	private void checkTimeSwitch(){
-		if (endGame)
+	private void checkTimeSwitch() {
+		if (endGame) {
 			return;
-		timeSwitch --;
+		}
+		timeSwitch--;
 		currentLevel.setTimecounter(timeSwitch);
-		if (timeSwitch <= 0){
+		if (timeSwitch <= 0) {
 			//Environmental Effects, random
 			boolean rain = Util.chance(20);
 			boolean thunderstorm = !rain && Util.chance(10);
@@ -131,10 +135,8 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 				} else {
 					Display.thus.showTimeChange(!isDay, fog, rain, thunderstorm, false);
 				}
-			}
-			else {
-
-
+			} else {
+				
 				if (currentLevel.hasNoonMusic()){
 					STMusicManagerNew.thus.stopMusic();
 					Display.thus.showTimeChange(!isDay, fog, rain, thunderstorm, sunnyDay);
