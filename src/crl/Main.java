@@ -45,7 +45,6 @@ import crl.data.Cells;
 import crl.data.Features;
 import crl.data.Items;
 import crl.data.MonsterLoader;
-import crl.data.NPCs;
 import crl.data.SmartFeatures;
 import crl.feature.CountDown;
 import crl.feature.FeatureFactory;
@@ -65,8 +64,7 @@ import crl.game.STMusicManagerNew;
 import crl.item.ItemDataTable;
 import crl.level.MapCellFactory;
 import crl.monster.MonsterData;
-import crl.npc.NPCDefinition;
-import crl.npc.NPCFactory;
+import crl.npc.NPCData;
 import crl.player.Player;
 import crl.ui.Appearance;
 import crl.ui.CommandListener;
@@ -115,20 +113,19 @@ public class Main {
 	private static boolean createNew = true;
 
 	
-	public static String getConfigurationVal(String key){
+	public static String getConfigurationVal(String key) {
 		return configuration.getProperty(key);
 	}
 
 	private static void init() {
-		if (createNew){		
+		if (createNew) {
 			System.out.println("CastlevaniaRL "+Game.getVersion());
 			System.out.println("by slashie ~ 2005-2007, 2010, 2024");
 			System.out.println("Reading configuration");
-	    	readConfiguration();
+			readConfiguration();
 			GFXConfiguration gfx_configuration = null;
-            try {
-    			
-    			switch (uiMode){
+			try {
+				switch (uiMode) {
 				case SWING_GFX:
 					gfx_configuration = new GFXConfiguration();
 					gfx_configuration.LoadConfiguration(UIconfiguration);
@@ -200,41 +197,44 @@ public class Main {
 				crash("Error initializing", e);
 			}
 			STMusicManagerNew.initManager();
-        	if (configuration.getProperty("enableSound") != null && configuration.getProperty("enableSound").equals("true")){ // Sound
-        		if (configuration.getProperty("enableMusic") == null || !configuration.getProperty("enableMusic").equals("true")){ // Music
-    	    		STMusicManagerNew.thus.setEnabled(false);
-    		    } else {
-    		    	System.out.println("Initializing Midi Sequencer");
-    	    		try {
-    	    			STMidiPlayer.sequencer = MidiSystem.getSequencer ();
-    	    			//STMidiPlayer.setVolume(0.1d);
-    	    			STMidiPlayer.sequencer.open();
-    	    			
-    	    		} catch(MidiUnavailableException mue) {
-    	            	Game.addReport("Midi device unavailable");
-    	            	System.out.println("Midi Device Unavailable");
-    	            	STMusicManagerNew.thus.setEnabled(false);
-    	            	return;
-    	            }
-    	    		System.out.println("Initializing Music Manager");
-    				
-    		    	
-    	    		Enumeration keys = configuration.keys();
-    	    	    while (keys.hasMoreElements()){
-    	    	    	String key = (String) keys.nextElement();
-    	    	    	if (key.startsWith("mus_")){
-    	    	    		String music = key.substring(4);
-    	    	    		STMusicManagerNew.thus.addMusic(music, configuration.getProperty(key));
-    	    	    	}
-    	    	    }
-    	    	    STMusicManagerNew.thus.setEnabled(true);
-    		    }
-    	    	if (configuration.getProperty("enableSFX") == null || !configuration.getProperty("enableSFX").equals("true")){
-    		    	SFXManager.setEnabled(false);
-    		    } else {
-    		    	SFXManager.setEnabled(true);
-    		    }
-        	}
+			if (configuration.getProperty("enableSound") != null &&
+				configuration.getProperty("enableSound").equals("true")) { // Sound
+				if (configuration.getProperty("enableMusic") == null || 
+					!configuration.getProperty("enableMusic").equals("true")) { // Music
+					STMusicManagerNew.thus.setEnabled(false);
+				} else {
+					System.out.println("Initializing Midi Sequencer");
+					try {
+						STMidiPlayer.sequencer = MidiSystem.getSequencer();
+						//STMidiPlayer.setVolume(0.1d);
+						STMidiPlayer.sequencer.open();
+						
+					} catch (MidiUnavailableException mue) {
+						Game.addReport("Midi device unavailable");
+						System.out.println("Midi Device Unavailable");
+						STMusicManagerNew.thus.setEnabled(false);
+						return;
+					}
+					System.out.println("Initializing Music Manager");
+					
+					
+					Enumeration<Object> keys = configuration.keys();
+					while (keys.hasMoreElements()) {
+						String key = (String)keys.nextElement();
+						if (key.startsWith("mus_")) {
+							String music = key.substring(4);
+							STMusicManagerNew.thus.addMusic(music, configuration.getProperty(key));
+						}
+					}
+					STMusicManagerNew.thus.setEnabled(true);
+				}
+				if (configuration.getProperty("enableSFX") == null ||
+					!configuration.getProperty("enableSFX").equals("true")) {
+					SFXManager.setEnabled(false);
+				} else {
+					SFXManager.setEnabled(true);
+				}
+			}
 			Player.initializeWhips("LEATHER_WHIP", "CHAIN_WHIP", "VKILLERW","THORN_WHIP", "FLAME_WHIP", "LIT_WHIP");
 			
 			if (CHECK_WEB_FOR_NEW_VERSION) {
@@ -382,6 +382,8 @@ public class Main {
 			// and continue running. TODO don't crash. maybe offer option to
 			// erase the save, and otherwise just abort loading.
 			crash("Savefile no longer loadable (program version changed)", new CRLException("Savefile version obsolete"));
+			
+			return;	// or rather: go back to 'continue' / loadgame screen.
 			
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
@@ -661,12 +663,9 @@ public class Main {
 	}
 
 
-	private static void initializeNPCs(){
-		NPCDefinition[] definitions = NPCs.getNPCDefinitions();
-		NPCFactory npcf = NPCFactory.getFactory();
-		for (int i=0; i<definitions.length; i++) {
-			npcf.addDefinition(definitions[i]);
-		}
+	private static void initializeNPCs() {
+		// check not already inited? or is this called only once at startup?
+		NPCData.init();
 	}
 
 	private static void initializeItems() {

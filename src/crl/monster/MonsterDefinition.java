@@ -4,6 +4,7 @@ import crl.ui.*;
 import crl.ai.*;
 
 public class MonsterDefinition {
+	
 	private String ID;
 	private String description;
 	private String longDescription;
@@ -64,7 +65,7 @@ public class MonsterDefinition {
 	public MonsterDefinition (String pID){
 		//sightListItem = new BasicListItem(' ',0, "");
 		ID = pID;
-    }
+	}
 
 	public String getID() {
 		return ID;

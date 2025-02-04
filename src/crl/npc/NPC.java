@@ -9,13 +9,14 @@ import crl.monster.*;
 
 //public class NPC extends Actor{
 public class NPC extends Monster {
-	private transient NPCDefinition definition;
-	private String defID;
-	private ActionSelector selector;
+	private transient NPCDef definition;	// only need set on init and reload. right?
+	private String defID;	// allows fetching definition from global def table
+	private ActionSelector selector;	// ?
 	
 //	private final static MonsterDefinition NPC_MONSTER_DEFINITION = new MonsterDefinition("NPC", "NPC", "VOID", "NULL_SELECTOR", 0, 2, 0, 5, 0, false, false, true, false, 0, 0, 0, 0);
 	
-	public final static MonsterDefinition NPC_MONSTER_DEFINITION = new MonsterDefinition("NPC");
+	public final static MonsterDefinition
+		NPC_MONSTER_DEFINITION = new MonsterDefinition("NPC");
 	static {
 		NPC_MONSTER_DEFINITION.setDescription("Innocent Being");
 		NPC_MONSTER_DEFINITION.setAppearance(Main.appearances.get("VOID"));
@@ -27,7 +28,7 @@ public class NPC extends Monster {
 		NPC_MONSTER_DEFINITION.setBloodContent(30);
 	}
 
-	public NPC (NPCDefinition def){
+	public NPC(NPCDef def) {
 		super(NPC_MONSTER_DEFINITION);
 		definition = def;
 		defID = def.getID();
@@ -36,39 +37,44 @@ public class NPC extends Monster {
 		hits = def.getHits();
 	}
 	
-	public Appearance getAppearance(){
-		
+	public Appearance getAppearance() {
 		return getNDefinition().getAppearance();
-    }
+	}
 
-	public ActionSelector getSelector(){
+	public ActionSelector getSelector() {
 		return selector;
-    }
+	}
 
-	public String getDescription(){
-		return getNDefinition().getDescription();
+	public String getDescription() {
+		return getNDefinition().description;
 	}
 	
-	private NPCDefinition getNDefinition(){
-		if (definition == null){
-			definition = NPCFactory.getFactory().getDefinition(defID);
+	private NPCDef getNDefinition() {
+		if (definition == null) {
+			definition = NPCData.getDefinition(defID);
+			// why not just get it out of the global defs array though?
+			// by npcID?
 		}
 		return definition;
 	}
 
-	public String getTalkMessage(){
-		if (talkMessage == null)
+
+	public String getTalkMessage() {
+		if (talkMessage == null) {
 			return getNDefinition().getTalkMessage();
-		else
+		} else {
 			return talkMessage;
+		}
 	}
 
-	public void message(String mess){
+
+	@Override
+	public void message(String msg) {
 		try {
-			if (mess.equals("ATTACK_PLAYER"))
+			if (msg.equals("ATTACK_PLAYER"))
 				((VillagerAI)getSelector()).setAttackPlayer(true);
 			else
-			if (mess.equals("EVT_MURDERER")){
+			if (msg.equals("EVT_MURDERER")){
 				if (getHits()>1)
 					((VillagerAI)getSelector()).setAttackPlayer(true);
 				else
@@ -80,7 +86,7 @@ public class NPC extends Monster {
 	}
 
 	@Override
-	public void damage (StringBuffer buff, int dam){
+	public void damage(StringBuffer buff, int dam){
 		try {
 			((VillagerAI)getSelector()).setOnDanger(true);
 			if (getHits() > 1)
@@ -92,7 +98,7 @@ public class NPC extends Monster {
 		super.damage(buff, dam);
 	}
 
-	public int getAttack (){
+	public int getAttack() {
 		return getNDefinition().getAttack();
 	}
 	
@@ -113,7 +119,7 @@ public class NPC extends Monster {
 	}
 	
 	public boolean isPriest(){
-		return getNDefinition().isPriest();
+		return getNDefinition().isPriest;
 	}
 	
 	private String npcID;

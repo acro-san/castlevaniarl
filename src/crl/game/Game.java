@@ -618,13 +618,15 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 				currentLevel.addMonster(h);
 				player.addHistoricEvent("brought "+h.getDescription()+" to safety");
 				Display.thus.showHostageRescue(h);
-				player.addGold(h.getReward());
-				Item reward = h.getItemReward();
-				if (reward != null)
-					if (player.canCarry())
+				player.addGold(h.reward);
+				Item reward = h.itemReward;
+				if (reward != null) {
+					if (player.canCarry()) {
 						player.addItem(reward);
-					else
+					} else {
 						player.level.addItem(player.getPosition(), reward);
+					}
+				}
 			}
 		}
 		dispatcher = currentLevel.getDispatcher();

@@ -407,10 +407,11 @@ public class GFXDisplay extends Display {
 			return x.code - CharKey.a;
 	}
 	
-	public void showHostageRescue(Hostage h){
-		String text = "Thanks for rescuing me! I will give you "+h.getReward()+" gold, it is all I have!";
-		if (h.getItemReward() != null)
-			text += "\n Take this, the "+h.getItemReward().getDescription()+", I found it inside the castle ";
+	public void showHostageRescue(Hostage h) {
+		String text = "Thanks for rescuing me! I will give you "+h.reward+" gold, it is all I have!";
+		if (h.itemReward != null) {
+			text += "\n Take this, the "+h.itemReward.getDescription()+", I found it inside the castle ";
+		}
 		showTextBox(text,30,40,300,300);
 	}
 	

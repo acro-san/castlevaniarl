@@ -50,7 +50,7 @@ public class Merchant extends NPC {
 		return merchantName;
 	}
 
-	public Merchant(NPCDefinition def, int pMerchandiseType) {
+	public Merchant(NPCDef def, int pMerchandiseType) {
 		super(def);
 		merchandiseType = (byte)pMerchandiseType;
 		merchantName = MERCHANT_NAMES[Util.rand(0, MERCHANT_NAMES.length-1)];
@@ -162,4 +162,5 @@ public class Merchant extends NPC {
 	public int getAttack() {
 		return 4;
 	}
+
 }

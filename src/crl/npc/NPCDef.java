@@ -5,22 +5,25 @@ import crl.ui.*;
 import crl.Main;
 import crl.ai.*;
 
-public class NPCDefinition {
+public class NPCDef {
+	
 	private String ID;
-	private String description;
-	private Appearance appearance;
-	private ActionSelector defaultSelector;
-	private String talkMessage;
+	public String description;
+	
+	private String talkMessage;		// dialogue. TODO: TxtTpl'd based on player status checks, prior meetings etc?
 	private int attack;
 	private int hits;
-	private ListItem sightListItem;
 	private String angryMessage;
 	private String dangerMessage;
-	private boolean isHostage;
-	private boolean isPriest;
+	public boolean isHostage = false;
+	public boolean isPriest = false;
+	private Appearance appearance;
+	private ActionSelector defaultSelector;	// ?
+	private ListItem sightListItem;	// ?
 
-	public NPCDefinition (String pID, String pDescription, String pAppearance,
-	String pDefaultSelectorID, String pTalkMessage, int pAttack, int pHits, String pAngryMessage, String pDangerMessage, boolean pHostage, boolean pPriest){
+	public NPCDef (String pID, String pDescription, String pAppearance,
+	String pDefaultSelectorID, String pTalkMessage, int pAttack, int pHits,
+	String pAngryMessage, String pDangerMessage, boolean pHostage, boolean pPriest) {
 		ID = pID;
 		description = pDescription;
 		appearance = Main.appearances.get(pAppearance);
@@ -40,9 +43,9 @@ public class NPCDefinition {
 		isPriest = pPriest;
 	}
 
-	public String getDescription() {
-		return description;
-	}
+//	public String getDescription() {
+//		return description;
+//	}
 
 	public Appearance getAppearance() {
 		return appearance;
@@ -79,7 +82,7 @@ public class NPCDefinition {
 	public String getDangerMessage(){
 		return dangerMessage;
 	}
-
+/*
 	public boolean isHostage() {
 		return isHostage;
 	}
@@ -87,7 +90,8 @@ public class NPCDefinition {
 	public void setHostage(boolean isHostage) {
 		this.isHostage = isHostage;
 	}
-
+*/
+	/*
 	public boolean isPriest() {
 		return isPriest;
 	}
@@ -95,6 +99,7 @@ public class NPCDefinition {
 	public void setPriest(boolean isPriest) {
 		this.isPriest = isPriest;
 	}
+	*/
 	
 }
 

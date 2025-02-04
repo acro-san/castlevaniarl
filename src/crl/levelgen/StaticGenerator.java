@@ -96,7 +96,7 @@ public class StaticGenerator {
 					}
 					l.addFeature(endFeature);
 				} else if (cmds[1].equals("NPC")) {
-					NPC toAdd = NPCFactory.getFactory().buildNPC(cmds[2]);
+					NPC toAdd = NPCData.buildNPC(cmds[2]);
 					toAdd.setPosition(where.x+x,where.y+y,where.z);
 					toAdd.level = l;
 					l.addActor(toAdd);
@@ -163,12 +163,12 @@ public class StaticGenerator {
 							toAdd.setPosition(x,y,z);
 							ret.addMonster(toAdd);
 						}else if (cmds[1].equals("NPC")){
-							NPC toAdd = NPCFactory.getFactory().buildNPC(cmds[2]);
+							NPC toAdd = NPCData.buildNPC(cmds[2]);
 							toAdd.setPosition(x,y,z);
 							toAdd.level = ret;
 							ret.addActor(toAdd);
 						} else if (cmds[1].equals("MERCHANT")){
-							NPC toAdd = NPCFactory.getFactory().buildMerchant(Integer.parseInt(cmds[2]));
+							NPC toAdd = NPCData.buildMerchant(Integer.parseInt(cmds[2]));
 							toAdd.level = ret;
 							toAdd.setPosition(x,y,z);
 							ret.addActor(toAdd);
@@ -216,12 +216,12 @@ public class StaticGenerator {
 							toAdd.setPosition(x,y,z);
 							ret.addMonster(toAdd);
 						}else if (cmds[0].equals("NPC")) {
-							NPC toAdd = NPCFactory.getFactory().buildNPC(cmds[1]);
+							NPC toAdd = NPCData.buildNPC(cmds[1]);
 							toAdd.setPosition(x,y,z);
 							toAdd.level = ret;
 							ret.addActor(toAdd);
 						} else if (cmds[0].equals("MERCHANT")) {
-							NPC toAdd = NPCFactory.getFactory().buildMerchant(Integer.parseInt(cmds[1]));
+							NPC toAdd = NPCData.buildMerchant(Integer.parseInt(cmds[1]));
 							toAdd.setPosition(x,y,z);
 							ret.addActor(toAdd);
 						}

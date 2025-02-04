@@ -402,19 +402,21 @@ public class CharDisplay extends Display {
 			return x.code - CharKey.a;
 	}
 	
-	public void showHostageRescue(Hostage h){
+	public void showHostageRescue(Hostage h) {
 		TextBox tb = new TextBox(si);
 		tb.setBounds(3,4,30,10);
 		tb.setBorder(true);
 		
-		String text = "Thanks for rescuing me! I will give you "+h.getReward()+" gold, it is all I have!";
-		if (h.getItemReward() != null)
-			text += "\n\n\nTake this, the "+h.getItemReward().getDescription()+", I found it inside the castle ";
+		String text = "Thanks for rescuing me! I will give you "+h.reward+" gold, it is all I have!";
+		if (h.itemReward != null) {
+			text += "\n\n\nTake this, the "+h.itemReward.getDescription()+", I found it inside the castle ";
+		}
 		tb.setText(text);
 		tb.draw();
 		si.refresh();
-		si.waitKey(CharKey.SPACE);	
+		si.waitKey(CharKey.SPACE);
 	}
+	
 	
 	public Advancement showLevelUp(Vector<Advancement> advancements) {
 		si.saveBuffer();
@@ -452,7 +454,7 @@ public class CharDisplay extends Display {
 		return choice;*/
 	}
 	
-	private int readAlphaToNumber(int numbers){
+	private int readAlphaToNumber(int numbers) {
 		while (true){
 			CharKey key = si.inkey();
 			if (key.code >= CharKey.A && key.code <= CharKey.A + numbers -1){
@@ -464,7 +466,7 @@ public class CharDisplay extends Display {
 		}
 	}
 	
-	public void showChat(String chatID, Game game){
+	public void showChat(String chatID, Game game) {
 		si.saveBuffer();
 		CharChat chat = CharCuts.thus.get(chatID);
 		TextBox tb = new TextBox(si);

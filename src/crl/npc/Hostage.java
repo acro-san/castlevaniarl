@@ -5,8 +5,9 @@ import crl.item.Item;
 import sz.util.*;
 
 public class Hostage extends NPC {
-	private int reward;
-	private Item itemReward;
+	
+	public int reward;
+	public Item itemReward;
 	private String hostrinchLevel;
 	private String rescuedMessage;
 	private boolean rescued;
@@ -20,25 +21,21 @@ public class Hostage extends NPC {
 		rescuedMessage = Util.pick(Text.HOSTAGE_RESCUE_TIPS);
 	}
 	
-	public String getTalkMessage(){
+	public String getTalkMessage() {
 		if (!rescued)
 			return super.getTalkMessage();
 		else
 			return rescuedMessage;
 	}
 
-
-	public Hostage (NPCDefinition def){
+	public Hostage(NPCDef def) {
 		super(def);
 	}
-	
-	public int getReward(){
-		return reward;
-	}
-	
-	public void setReward(int l){
-		reward = l;
-	}
+	/*
+	 * public int getReward() { return reward; }
+	 * 
+	 * public void setReward(int l) { reward = l; }
+	 */
 
 	public String getHostrinchLevel() {
 		return hostrinchLevel;
@@ -48,6 +45,7 @@ public class Hostage extends NPC {
 		this.hostrinchLevel = hostrinchLevel;
 	}
 
+	/*
 	public Item getItemReward() {
 		return itemReward;
 	}
@@ -55,6 +53,6 @@ public class Hostage extends NPC {
 	public void setItemReward(Item itemReward) {
 		this.itemReward = itemReward;
 	}
-	
+	*/
 	
 }

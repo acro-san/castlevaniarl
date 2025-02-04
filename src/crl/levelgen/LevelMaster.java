@@ -655,8 +655,8 @@ public class LevelMaster {
 		
 		
 		if (hasHostage) {
-			Hostage hostage = NPCFactory.getFactory().buildHostage();
-			hostage.setReward(100 * (Util.rand(100,150)/100));
+			Hostage hostage = NPCData.buildHostage();
+			hostage.reward = (100 * (Util.rand(100,150)/100));
 			while (true) {
 				Position rand = new Position(
 					Util.rand(5, ret.getWidth()),
