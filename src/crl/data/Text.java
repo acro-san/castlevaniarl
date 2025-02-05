@@ -234,7 +234,30 @@ public class Text {
 		"chaos. You are almost at Castlevania, and you are here on business: " +
 		"To destroy forever the Curse of the Evil Count.",
 		
+		ARENA_INTRO_LINE0 =
+		"In the year of 1451, the castle of Dracula emerges from the dust of "+
+		"the cursed soils of Transylvania.\n\nSonia, a girl choosen by fate "+
+		"to be the first of vampire hunters, heads to the mysterious castle "+
+		"seeking to finish the misery and havoc unleashed by the servants of "+
+		"the Count of chaos, Dracula.\n\nWielding the sacred Vampire Killer "+
+		"whip, and full of courage within her heart, she opens the porticullis"+
+		" of the castle courtyard.",
+		
+		ARENA_INTRO_LINE1 = "Sonia crosses the castle courtyard, leaving behind"+
+		" her all traces of light and venturing into the source of chaos "+
+		"itself.\n\nSuddenly, she hears a voice unto her head... \"This is "+
+		"not a place for mortals! Yet prove to be worthy...  and you may then "+
+		"come in...\"",
 	
+		ARENA_INTRO_LINE2 = "All at once, monstrous creatures of every foul "+
+		"kind crawl out of the soil, and soar in from the surrounding night,"+
+		" and the castle doors are sealed shut.\n\nKnowing that there is no "+
+		"way back, Sonia cracks her Vampire Killer whip...\n\n\n"+
+		"And so this adventure begins...",	// could be tighter still.
+		
+		
+		
+		LEVEL3_INTRO_LINE0 = "A monstrous Warg appears out of nowhere! Remember to [j]ump, attack from safe distance (with [.]), and use your [p]owers!",
 		
 		
 		TIME_DAYBREAK  = "THE MORNING SUN HAS VANQUISHED THE HORRIBLE NIGHT...",

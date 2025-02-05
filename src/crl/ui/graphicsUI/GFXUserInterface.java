@@ -58,7 +58,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 	private static final int BORDERS_SCALE = 1; //TODO: Move to GFXConfiguration
 	private static final int BORDERS_SIZE = 32; //TODO: Move to GFXConfiguration
 
-	private int STANDARD_WIDTH;
+	int STANDARD_WIDTH;
 
 	private int xrange;
 	private int yrange;
@@ -80,10 +80,12 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 
 	private transient SwingSystemInterface si;
 
-	private Font FNT_MESSAGEBOX;
-	private Font FNT_PERSISTANTMESSAGEBOX;
+	protected static Font
+		FNT_MESSAGEBOX,	// MerchantBox needs this in same package. Generalise further?
+		FNT_PERSISTANTMESSAGEBOX;
 	
-	private BufferedImage
+	// 
+	BufferedImage
 		HEALTH_RED,
 		HEALTH_DARK_RED,
 		HEALTH_MAGENTA,
@@ -133,12 +135,12 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		BLOOD1,
 		BLOOD2,
 		IMG_EXIT_BTN,
-		IMG_OK_BTN,
-		IMG_BUY_BTN,
-		IMG_YES_BTN,
-		IMG_NO_BTN,
-		
-		IMG_ICON;
+		IMG_OK_BTN;
+	
+	BufferedImage IMG_BUY_BTN;
+	BufferedImage IMG_YES_BTN;
+	BufferedImage IMG_NO_BTN;
+	BufferedImage IMG_ICON;
 	
 	private Color
 		COLOR_BORDER_OUT, COLOR_BORDER_IN, COLOR_WINDOW_BACKGROUND;
@@ -161,8 +163,9 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		MINIMAP_WATER = new Color(100,123,130),//new Color(65,103,135),
 		MINIMAP_WATER_FOW = new Color(67,92,102);//new Color(10,81,116);	// in 'fog of war' (non-LoS)
 
+
+	private GFXConfiguration configuration;
 	
-	protected GFXConfiguration configuration;
 	
 	public GFXUserInterface(GFXConfiguration configuration) {
 		this.configuration = configuration;
@@ -537,10 +540,10 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 			py = pp.y,
 			pz = pp.z;
 		//Cell[] [] cells = level.getCellsAround(player.getPosition().x,player.getPosition().y, player.getPosition().z, range);
-		Cell[] [] rcells = level.getMemoryCellsAround(px,py,pz, xrange,yrange);
-		Cell[] [] vcells = level.getVisibleCellsAround(px,py,pz,xrange,yrange);
+		Cell[][] rcells = level.getMemoryCellsAround(px,py,pz, xrange,yrange);
+		Cell[][] vcells = level.getVisibleCellsAround(px,py,pz,xrange,yrange);
 		
-		Position runner = new Position(px - xrange, py-yrange, pz);
+		Position runner = new Position(px-xrange, py-yrange, pz);
 		
 		monstersOnSight.removeAllElements();
 		featuresOnSight.removeAllElements();
@@ -915,12 +918,13 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		renderMiniMap();
 		
 		//si.printAtPixel(18,80,""+player.getHoverHeight(), Color.WHITE);
-  		Debug.exitMethod();
-    }
+		Debug.exitMethod();
+	}
 
-    private void initProperties(){
-    	STANDARD_WIDTH = this.configuration.getNormalTileWidth();
-    	
+
+	private void initProperties() {
+		STANDARD_WIDTH = this.configuration.getNormalTileWidth();
+		
 		xrange = this.configuration.getScreenWidthInTiles();
 		yrange = this.configuration.getScreenHeightInTiles();
 
@@ -932,8 +936,8 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		FNT_PERSISTANTMESSAGEBOX = this.configuration.getPersistantMessageBoxFont();
 		IMG_STATUSSCR_BGROUND = this.configuration.getStatusScreenBackground();
 	}
-    
-	public void init(SwingSystemInterface psi, UserCommand[] gameCommands, Action target){
+	
+	public void init(SwingSystemInterface psi, UserCommand[] gameCommands, Action target) {
 		Debug.enterMethod(this, "init");
 		super.init(gameCommands);
 		this.target = target;
@@ -949,8 +953,10 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		
 		/*-- Load Fonts */
 		try {
-			FNT_MESSAGEBOX = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(new File("res/v5easter.ttf"))).deriveFont(Font.PLAIN, 15);
-		} catch (FontFormatException ffe){
+			FNT_MESSAGEBOX = Font.createFont(Font.TRUETYPE_FONT, 
+				new FileInputStream(new File("res/v5easter.ttf"))).deriveFont(Font.PLAIN, 15);
+			
+		} catch (FontFormatException ffe) {
 			Game.crash("Error loading the font", ffe);
 		} catch (IOException ioe){
 			Game.crash("Error loading the font", ioe);
@@ -958,7 +964,18 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		
 		/*-- Load UI Images */
 		try {
-			BufferedImage userInterfaceTileset = this.configuration.getImageConfiguration().getUserInterfaceTileset();
+			// FIXME Load Graphhics. explicitly. overrideably.
+			// the graphics loaded should have NOTHING to do with CONFIG FILES...
+			// but named specific ones can be override sets for modding later if desired.
+			// ...
+			
+///			loadGraphics();	// FUNCTION. that does the thing we want. please.
+			// will need now elaborated with animation frames.
+			
+			// thx, i hate it. 2 levels of indirection to find out where/how the
+			// graphics are loaded? *WHAT FOR*!???
+			
+			BufferedImage userInterfaceTileset = configuration.getImageConfiguration().getUserInterfaceTileset();
 			BufferedImage viewportUserInterfaceTileset = this.configuration.getImageConfiguration().getViewportUserInterfaceTileset();
 			int viewportUserInterfaceScale = this.configuration.getViewportUserInterfaceScale();
 			HEALTH_WHITE = ImageUtils.crearImagen(userInterfaceTileset, 198, 1, 5, 16);
@@ -966,7 +983,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 			HEALTH_RED = ImageUtils.crearImagen(userInterfaceTileset, 210, 1, 5, 16); 
 			HEALTH_DARK_RED = ImageUtils.crearImagen(userInterfaceTileset, 216, 1, 5, 16);
 			HEALTH_MAGENTA = ImageUtils.crearImagen(userInterfaceTileset, 222, 1, 5, 16); 
-			 
+			
 			HEALTH_YELLOW = ImageUtils.crearImagen(userInterfaceTileset, 228, 1, 5, 16);
 			HEALTH_BROWN = ImageUtils.crearImagen(userInterfaceTileset, 234, 1, 5, 16); 
 			HEALTH_PURPLE = ImageUtils.crearImagen(userInterfaceTileset, 240, 1, 5, 16);
@@ -974,19 +991,18 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 			HEART_TILE = ImageUtils.crearImagen(userInterfaceTileset, 199, 20, 14, 12);
 			GOLD_TILE = ImageUtils.crearImagen(userInterfaceTileset, 214, 19, 9, 13);
 			KEY_TILE = ImageUtils.crearImagen(userInterfaceTileset, 224, 20, 13, 13);
-	    	
-	    	
+			
 			TILE_MORNING_TIME = ImageUtils.crearImagen(userInterfaceTileset, 1, 109, 49, 24);
 			TILE_NOON_TIME = ImageUtils.crearImagen(userInterfaceTileset, 52, 109, 49, 24);
-	    	TILE_AFTERNOON_TIME = ImageUtils.crearImagen(userInterfaceTileset, 103, 109, 49, 24);
-	    	TILE_DUSK_TIME = ImageUtils.crearImagen(userInterfaceTileset, 154, 109, 49, 24);
-	    	TILE_NIGHT_TIME = ImageUtils.crearImagen(userInterfaceTileset, 205, 109, 49, 24);
-	    	TILE_DAWN_TIME = ImageUtils.crearImagen(userInterfaceTileset, 256, 109, 49, 24);
-	    	
-	    	
-	    	//TILE_NO_SHO;
-	    	TILE_SHOT_II  = ImageUtils.crearImagen(userInterfaceTileset, 300, 3, 16, 16);
-	    	TILE_SHOT_III  = ImageUtils.crearImagen(userInterfaceTileset, 300, 20, 16, 16);
+			TILE_AFTERNOON_TIME = ImageUtils.crearImagen(userInterfaceTileset, 103, 109, 49, 24);
+			TILE_DUSK_TIME = ImageUtils.crearImagen(userInterfaceTileset, 154, 109, 49, 24);
+			TILE_NIGHT_TIME = ImageUtils.crearImagen(userInterfaceTileset, 205, 109, 49, 24);
+			TILE_DAWN_TIME = ImageUtils.crearImagen(userInterfaceTileset, 256, 109, 49, 24);
+			
+			
+			//TILE_NO_SHO;
+			TILE_SHOT_II  = ImageUtils.crearImagen(userInterfaceTileset, 300, 3, 16, 16);
+			TILE_SHOT_III  = ImageUtils.crearImagen(userInterfaceTileset, 300, 20, 16, 16);
 
 			TILE_LINE_STEPS  = ImageUtils.crearImagen(viewportUserInterfaceTileset, 280 * viewportUserInterfaceScale, 25* viewportUserInterfaceScale, 6* viewportUserInterfaceScale, 5* viewportUserInterfaceScale);
 			TILE_LINE_AIM  = ImageUtils.crearImagen(viewportUserInterfaceTileset, 265* viewportUserInterfaceScale, 37* viewportUserInterfaceScale, 36* viewportUserInterfaceScale, 36* viewportUserInterfaceScale);
@@ -996,8 +1012,8 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 			TILE_HEALTH_BACK = ImageUtils.crearImagen(userInterfaceTileset, 3, 34, 261, 24);
 			TILE_TIME_BACK  = ImageUtils.crearImagen(userInterfaceTileset, 246, 1, 22, 21);
 			
-			IMG_STATUSSCR_BGROUND = configuration.getUserInterfaceBackgroundImage(); 
-					//ImageUtils.createImage("gfx/barrett-moon_2x.gif");
+			IMG_STATUSSCR_BGROUND = configuration.getUserInterfaceBackgroundImage();
+			//ImageUtils.createImage("gfx/barrett-moon_2x.gif");
 			
 			BORDER1 = ImageUtils.crearImagen(BORDERS_FILE, 34 * BORDERS_SCALE, 1 * BORDERS_SCALE, BORDERS_SIZE, BORDERS_SIZE);
 			BORDER2 = ImageUtils.crearImagen(BORDERS_FILE, 1 * BORDERS_SCALE, 1 * BORDERS_SCALE, BORDERS_SIZE, BORDERS_SIZE);
@@ -1026,13 +1042,15 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 			IMG_NO_BTN = ImageUtils.crearImagen(userInterfaceTileset, 254,81,60,26);
 			
 			IMG_ICON = ImageUtils.createImage("res/crl_icon.png");
-		} catch (Exception e){
+			
+		} catch (Exception e) {
 			e.printStackTrace();
 			Debug.byebye(e.getMessage());
 		}
 		
 		si.setIcon(IMG_ICON);
 		si.setTitle("CastlevaniaRL v"+Game.getVersion());
+		
 		/*-- Init Components*/
 		messageBox = new SwingInformBox();
 		/*idList = new ListBox(psi);*/
@@ -1048,7 +1066,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		
 		psi.add(messageBox);
 		
-		merchantBox = new MerchantBox(BORDER1, BORDER2, BORDER3, BORDER4, COLOR_BORDER_IN, COLOR_BORDER_OUT, BORDERS_SIZE, BORDERS_SIZE);
+		merchantBox = new MerchantBox(this, BORDER1, BORDER2, BORDER3, BORDER4, COLOR_BORDER_IN, COLOR_BORDER_OUT, BORDERS_SIZE, BORDERS_SIZE);
 		merchantBox.setBounds(150, 60, 500, 410);
 		merchantBox.setVisible(false);
 		psi.add(merchantBox);
@@ -2014,259 +2032,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 	}
 	
 	
-	
-	class MerchantBox extends AdornedBorderPanel{
-		private JList lstMerchandise;
-		private GFXButton btnBuy;
-		private GFXButton btnExit;
-		private GFXButton btnYes;
-		private GFXButton btnNo;
-		private JTextArea prompt;
-		private JLabel lblGold;
 
-		//private ShopMenuItem choice;
-		private Item choice;
-		private Thread activeThread;
-		
-		public void setVisible(boolean val){
-			super.setVisible(val);
-			if (val){
-				lstMerchandise.requestFocus();
-				if (lstMerchandise.getModel().getSize() > 0)
-					lstMerchandise.setSelectedIndex(0);
-			}
-		}
-		
-		public MerchantBox(Image UPRIGHT, 
-				Image UPLEFT, Image DOWNRIGHT, Image DOWNLEFT,
-				Color OUT_COLOR, Color IN_COLOR,
-				int borderWidth, int borderHeight) {
-			super(UPRIGHT, UPLEFT, DOWNRIGHT, DOWNLEFT, OUT_COLOR, IN_COLOR, borderWidth, borderHeight);
-			
-			lstMerchandise = new JList(new DefaultListModel());
-			btnBuy = new GFXButton(IMG_BUY_BTN);
-			btnExit = new GFXButton(IMG_EXIT_BTN);
-			btnYes = new GFXButton(IMG_YES_BTN);
-			btnNo = new GFXButton(IMG_NO_BTN);
-
-			lblGold = new JLabel();
-			lblGold.setOpaque(false);
-			lblGold.setForeground(Color.YELLOW);
-			btnYes.setVisible(false);
-			btnNo.setVisible(false);
-			
-			lstMerchandise.setCellRenderer(new MerchandiseCellRenderer());		
-			lstMerchandise.setOpaque(false);
-			
-			addKeyListener(new KeyListener(){
-
-				public void keyPressed(KeyEvent e) {
-					if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_SPACE || e.getKeyCode() == KeyEvent.VK_Y){
-						if (btnYes.isVisible())
-							doYes();
-						else
-							doBuy();
-					}
-					if (e.getKeyCode() == KeyEvent.VK_ESCAPE || e.getKeyCode() == KeyEvent.VK_N){
-						if (btnYes.isVisible())
-							doNo();
-						else
-							doExit();
-					}
-				}
-
-				public void keyReleased(KeyEvent e) {}
-
-				public void keyTyped(KeyEvent e) {}
-				
-			});
-			
-			lstMerchandise.addKeyListener(new KeyListener(){
-
-				public void keyPressed(KeyEvent e) {
-					if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_SPACE){
-						if (btnYes.isVisible())
-							doYes();
-						else
-							doBuy();
-					}else
-					if (e.getKeyCode() == KeyEvent.VK_ESCAPE){
-						if (btnYes.isVisible())
-							doNo();
-						else
-							doExit();
-					}else if (e.getKeyCode() == KeyEvent.VK_NUMPAD8){
-						if (lstMerchandise.getSelectedIndex() > 0)
-							lstMerchandise.setSelectedIndex(lstMerchandise.getSelectedIndex()-1);
-					} else if (e.getKeyCode() == KeyEvent.VK_NUMPAD2){
-						if (lstMerchandise.getSelectedIndex() < lstMerchandise.getModel().getSize()-1)
-							lstMerchandise.setSelectedIndex(lstMerchandise.getSelectedIndex()+1);
-					}
-				}
-
-				public void keyReleased(KeyEvent e) {}
-
-				public void keyTyped(KeyEvent e) {}
-				
-			});
-			
-			setOpaque(false);
-			setBorder(new EmptyBorder(STANDARD_WIDTH,STANDARD_WIDTH,STANDARD_WIDTH,STANDARD_WIDTH));
-			
-			setLayout(new BorderLayout());
-			((BorderLayout)getLayout()).setHgap(16);
-			((BorderLayout)getLayout()).setVgap(16);
-			/*JLabel title = new JLabel("Skills");
-			title.setFont(UI_FONT);
-			title.setForeground(GFXDisplay.GOLD);*/
-			
-			prompt = new JTextArea();
-			prompt.setFont(FNT_MESSAGEBOX);
-			prompt.setOpaque(false);
-			prompt.setForeground(Color.WHITE);
-			prompt.setLineWrap(true);
-			prompt.setWrapStyleWord(true);
-			prompt.setEditable(false);
-			prompt.setFocusable(false);
-			//prompt.setVisible(false);
-			
-			JPanel pnlButtons = new JPanel();
-			pnlButtons.add(lblGold);
-			pnlButtons.add(btnBuy);
-			pnlButtons.add(btnExit);
-			pnlButtons.setOpaque(false);
-			
-			JPanel pnlSuperior = new JPanel(new BorderLayout());
-			pnlSuperior.add(prompt, BorderLayout.CENTER);
-			JPanel miniPanelBotones = new JPanel();
-			miniPanelBotones.setOpaque(false);
-			miniPanelBotones.add(btnYes);
-			miniPanelBotones.add(btnNo);
-			pnlSuperior.add(miniPanelBotones, BorderLayout.SOUTH);
-			pnlSuperior.setOpaque(false);	
-			
-			add(pnlSuperior, BorderLayout.NORTH);
-			add(lstMerchandise, BorderLayout.CENTER);
-			add(pnlButtons, BorderLayout.SOUTH);
-			
-			setBackground(Color.BLACK);
-			
-			btnYes.addActionListener(new ActionListener(){
-				public void actionPerformed(ActionEvent arg0) {
-					doYes();
-				}
-			});
-			
-			btnNo.addActionListener(new ActionListener(){
-				public void actionPerformed(ActionEvent arg0) {
-					doNo();
-				}
-			});
-			
-			btnBuy.addActionListener(new ActionListener(){
-				public void actionPerformed(ActionEvent arg0) {
-					doBuy();
-				}
-			});
-			
-			btnExit.addActionListener(new ActionListener(){
-				public void actionPerformed(ActionEvent arg0) {
-					doExit();
-				}
-			});
-			
-		}
-		
-		private void doBuy(){
-			if (activeThread != null){
-				//choice = (ShopMenuItem) lstMerchandise.getSelectedValue();
-				choice = (Item) lstMerchandise.getSelectedValue();
-				setPrompt("The "+choice.getDescription()+", "+choice.getShopDescription()+"; it costs "+choice.getGoldPrice()+", Do you want to buy it? (Y/n)");
-				btnBuy.setEnabled(false);
-				btnExit.setEnabled(false);
-				lstMerchandise.setEnabled(false);
-				btnYes.setVisible(true);
-				btnNo.setVisible(true);
-				requestFocus();
-			}
-		}
-		
-		private void doExit(){
-			if (activeThread != null){
-				choice = null;
-				activeThread.interrupt();
-			}
-
-		}
-		
-		private void doYes(){
-			activeThread.interrupt();
-			btnBuy.setEnabled(true);
-			btnExit.setEnabled(true);
-			lstMerchandise.setEnabled(true);
-			btnYes.setVisible(false);
-			btnNo.setVisible(false);
-			lstMerchandise.requestFocus();
-		}
-		
-		private void doNo(){
-			setPrompt("Too bad... May I interest you in something else?");
-			btnBuy.setEnabled(true);
-			btnExit.setEnabled(true);
-			lstMerchandise.setEnabled(true);
-			btnYes.setVisible(false);
-			btnNo.setVisible(false);
-			lstMerchandise.requestFocus();
-		}
-		
-		public void setPrompt(String prompt){
-			this.prompt.setText(prompt);
-		}
-		
-		public void setMerchandise(Vector skills){
-			((DefaultListModel)lstMerchandise.getModel()).removeAllElements();
-			for (int i = 0; i < skills.size(); i++){
-				((DefaultListModel)lstMerchandise.getModel()).addElement(skills.elementAt(i));
-			}
-		}
-		
-		public void informChoice(Thread who){
-			choice = null;
-			activeThread = who;
-		}
-		
-		public Item getSelection(){
-			return choice;
-		}
-		
-		public void setGold(int gold){
-			lblGold.setText("Player gold: "+gold);
-		}
-		
-		class MerchandiseCellRenderer extends DefaultListCellRenderer {
-			private JLabel ren;
-			
-			public MerchandiseCellRenderer(){
-				ren = new JLabel();
-				ren.setFont(FNT_MESSAGEBOX);
-				ren.setOpaque(false);
-				ren.setForeground(Color.WHITE);
-				ren.setBackground(GFXDisplay.COLOR_BOLD);
-
-			}
-			public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-				Item smi = (Item) value;
-				ren.setIcon(new ImageIcon(((GFXAppearance)smi.getAppearance()).getIconImage()));
-				//ren.setText(smi.getMenuDescription());
-				ren.setText(smi.getAttributesDescription() + " ["+smi.getDefinition().menuDescription+"] ($"+smi.getGoldPrice()+")");
-				ren.setOpaque(isSelected);
-				return ren;
-			}
-			
-			
-		}
-	}
-	
 	class MultiItemsBox extends AdornedBorderPanel{
 		private JList lstInventory;
 		private GFXButton btnExit;
