@@ -35,7 +35,7 @@ public class GFXPlayerGenerator extends PlayerGenerator{
 	private String IMG_FLAME = "gfx/barrett-picker.gif";
 	
 	public Player generatePlayer() {
-		si.drawImage(configuration.getUserInterfaceBackgroundImage());
+		si.drawImage(configuration.userInterfaceBackgroundImage);
 		si.printAtPixel(69,86,"CHOOSE YOUR DESTINY", GFXDisplay.COLOR_BOLD);
 		si.getGraphics2D().setColor(Color.DARK_GRAY);
 		si.getGraphics2D().fillRect(70,94,661,3);

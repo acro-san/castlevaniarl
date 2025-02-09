@@ -264,24 +264,24 @@ public class Main {
 	private static Properties UIconfiguration;
 	private static String uiFile;
 	
-	private static void readConfiguration(){
+	private static void readConfiguration() {
 		configuration = new Properties();
-	    try {
-	    	configuration.load(new FileInputStream("cvrl.cfg"));
-	    } catch (IOException e) {
-	    	System.out.println("Error loading configuration file, please confirm existence of cvrl.cfg");
-	    	System.exit(-1);
-	    }
-	    
-	    if (uiMode == SWING_GFX){
-		    UIconfiguration = new Properties();
-		    try {
-		    	UIconfiguration.load(new FileInputStream(uiFile));
-		    } catch (IOException e) {
-		    	System.out.println("Error loading configuration file, please confirm existence of "+uiFile);
-		    	System.exit(-1);
-		    }
-	    }
+		try {
+			configuration.load(new FileInputStream("cvrl.cfg"));
+		} catch (IOException e) {
+			System.out.println("Error loading configuration file, please confirm existence of cvrl.cfg");
+			System.exit(-1);
+		}
+
+		if (uiMode == SWING_GFX){
+			UIconfiguration = new Properties();
+			try {
+				UIconfiguration.load(new FileInputStream(uiFile));
+			} catch (IOException e) {
+				System.out.println("Error loading configuration file, please confirm existence of "+uiFile);
+				System.exit(-1);
+			}
+		}
 
 	}
 	
@@ -346,8 +346,8 @@ public class Main {
 		title();
 	}
 	
-	private static void training(){
-		if (currentGame != null){
+	private static void training() {
+		if (currentGame != null) {
 			ui.removeCommandListener(currentGame);
 		}
 		currentGame = new Game();
@@ -356,6 +356,7 @@ public class Main {
 		//si.cls();
 		setMonsterRecord(GameFiles.getMonsterRecord());
 		currentGame.training();
+		//ui.refresh();	// or something? why's title gfx not clear when training ends?
 		title();
 	}
 	

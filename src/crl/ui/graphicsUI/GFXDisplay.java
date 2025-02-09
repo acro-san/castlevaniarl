@@ -38,7 +38,6 @@ public class GFXDisplay extends Display {
 	
 	private SwingSystemInterface si;
 	
-	
 	private String
 		IMG_TITLE,
 		IMG_PROLOGUE,
@@ -67,7 +66,7 @@ public class GFXDisplay extends Display {
 	
 	public static Color COLOR_BOLD;
 	
-	protected GFXConfiguration configuration;
+	protected GFXConfiguration conf;
 	
 	private void initProperties(Properties p) {
 		IMG_TITLE = p.getProperty("IMG_TITLE");
@@ -89,7 +88,7 @@ public class GFXDisplay extends Display {
 			FNT_TITLE = PropertyFilters.getFont(p.getProperty("FNT_TITLE"), p.getProperty("FNT_TITLE_SIZE"));
 			FNT_TEXT = PropertyFilters.getFont(p.getProperty("FNT_TEXT"), p.getProperty("FNT_TEXT_SIZE"));
 			FNT_PROLOGUE = PropertyFilters.getFont(p.getProperty("FNT_PROLOGUE"), p.getProperty("FNT_PROLOGUE_SIZE"));
-			FNT_DIALOGUEIN  = FNT_TEXT;
+			FNT_DIALOGUEIN = FNT_TEXT;
 			FNT_MONO = PropertyFilters.getFont(p.getProperty("FNT_MONO"), p.getProperty("FNT_MONO_SIZE"));
 		} catch (FontFormatException ffe) {
 			Game.crash("Error loading the font", ffe);
@@ -105,7 +104,7 @@ public class GFXDisplay extends Display {
 	private GFXChatBox gfxChatBox;
 	
 	public GFXDisplay(SwingSystemInterface si, Properties p, GFXConfiguration configuration) {
-		this.configuration = configuration;
+		conf = configuration;
 		initProperties(p);
 		this.si = si;
 		try {
@@ -145,9 +144,9 @@ public class GFXDisplay extends Display {
 	
 	
 	public int showTitleScreen() {
-		double scale = configuration.getScreenScale();
-		int centreX = configuration.getScreenWidth() / 2;
-		int pickerX = (configuration.getScreenWidth() / 2) - (IMG_PICKER.getWidth() / 2);
+		double scale = conf.screenScale;
+		int centreX = conf.screenWidth / 2;
+		int pickerX = (conf.screenWidth / 2) - (IMG_PICKER.getWidth() / 2);
 		GFXUserInterface gui = (GFXUserInterface)Main.ui;
 		gui.messageBox.setVisible(false);
 		gui.persistantMessageBox.setVisible(false);
@@ -240,7 +239,7 @@ public class GFXDisplay extends Display {
 		//si.drawImage(311,64, IMG_GBAT);
 		si.setFont(FNT_TEXT);
 		si.setColor(Color.GRAY);
-		JTextArea t1 = createTempArea(150,170,this.configuration.getScreenWidth() - 300,400);
+		JTextArea t1 = createTempArea(150, 170, conf.screenWidth - 300, 400);
 		t1.setFont(FNT_PROLOGUE);
 		t1.setForeground(Color.WHITE);
 		t1.setText(
@@ -305,8 +304,8 @@ public class GFXDisplay extends Display {
 		si.printAtPixel(156,136, "Epilogue", Color.WHITE);
 		String heshe = (player.getSex() == Player.MALE ? "he" : "she");
 		//String hisher = (player.getSex() == Player.MALE ? "his" : "her");
-		JTextArea t1 = createTempArea(150,170,this.configuration.getScreenWidth() - 300,400);
-
+		JTextArea t1 = createTempArea(150,170,conf.screenWidth - 300, 400);
+		
 		t1.setForeground(Color.WHITE);
 		t1.setText(player.getName()+ " made many sacrifices, but now the long fight is over. Dracula is dead "+
 				"and all other spirits are asleep. In the shadows, a person watches the castle fall. "+
@@ -325,11 +324,11 @@ public class GFXDisplay extends Display {
 
 	}
 	
-	public void showHiscores(HiScore[] scores){
+	public void showHiscores(HiScore[] scores) {
 		int leftMargin;
 		int widthAdjustment;
 		
-		if (configuration.getScreenWidth() == 1024) {
+		if (conf.screenWidth == 1024) {	// FIXME Hardcoded, nonproportional and bad!
 			leftMargin = 9;
 			widthAdjustment = 112;
 		} else {
@@ -340,7 +339,7 @@ public class GFXDisplay extends Display {
 		adornedTextArea.setBounds(8, 110, 782, 395);
 		adornedTextArea.paintAt(si.getGraphics2D(), 8 + widthAdjustment,110);
 		si.setFont(FNT_TITLE);
-		si.printAtPixelCentered(configuration.getScreenWidth() / 2,160, "The most brave of Belmonts", Color.WHITE);
+		si.printAtPixelCentered(conf.screenWidth / 2, 160, "The most brave of Belmonts", Color.WHITE);
 		si.setFont(FNT_TEXT);
 		si.print(18 + leftMargin,8, "SCORE", GFXDisplay.COLOR_BOLD);
 		si.print(25 + leftMargin,8, "DATE", GFXDisplay.COLOR_BOLD);	
@@ -542,7 +541,7 @@ public class GFXDisplay extends Display {
 	public void showScreen(Object pScreen) {
 		si.saveBuffer();
 		String screenText = (String) pScreen;
-		showTextBox(screenText, this.configuration.getScreenWidth() - 370, 70,340,375);
+		showTextBox(screenText, conf.screenWidth - 370, 70,340,375);
 		//si.waitKey(CharKey.SPACE);
 		si.restore();
 	}
@@ -569,7 +568,7 @@ public class GFXDisplay extends Display {
 	
 	public void showMap(String locationKey, String locationDescription) {
 		si.saveBuffer();
-		int mapX = this.configuration.getScreenWidth() / 2 - 696 /2;
+		int mapX = conf.screenWidth / 2 - 696 /2;
 		int mapY = 100;
 		si.drawImage(mapX,mapY, IMG_MAP);
 		si.printAtPixel(mapX + 130, mapY + 150, locationDescription, Color.BLACK);

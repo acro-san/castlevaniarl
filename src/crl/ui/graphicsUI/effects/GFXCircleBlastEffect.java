@@ -10,15 +10,16 @@ import crl.conf.gfx.data.GFXConfiguration;
 import crl.ui.graphicsUI.GFXUserInterface;
 import crl.ui.graphicsUI.SwingSystemInterface;
 
-public class GFXCircleBlastEffect extends GFXEffect{
+public class GFXCircleBlastEffect extends GFXEffect {
 	private Color blastColor;
-	private int ADVANCE = 9;
+	private static final int ADVANCE = 9;
 
-    public GFXCircleBlastEffect(String ID, Color blastColor, int delay, GFXConfiguration configuration){
-    	super(ID, delay, configuration);
-    	this.blastColor = blastColor;
-    }
-    
+	public GFXCircleBlastEffect(String ID, Color blastColor, int delay, GFXConfiguration configuration) {
+		super(ID, delay, configuration);
+		this.blastColor = blastColor;
+	}
+
+
 	public void drawEffect(GFXUserInterface ui, SwingSystemInterface si){
 		ui.refresh();
 		si.saveBuffer();
@@ -28,8 +29,8 @@ public class GFXCircleBlastEffect extends GFXEffect{
 		Stroke oldStroke = g.getStroke();
 		g.setStroke(new BasicStroke(10));
 		g.setColor(blastColor);
-		int xcenter = center.x * this.configuration.getNormalTileWidth() + this.configuration.getHalfTileWidth();
-		int ycenter = center.y * this.configuration.getNormalTileWidth() + this.configuration.getHalfTileWidth();
+		int xcenter = center.x * configuration.normalTileWidth + configuration.halfTileWidth;
+		int ycenter = center.y * configuration.normalTileWidth + configuration.halfTileWidth;
 		for (int i = 0; i < 30; i++){
 			g.fillOval(xcenter-i*(ADVANCE+i), ycenter-i*(ADVANCE+i),i*(ADVANCE+i)*2,i*(ADVANCE+i)*2);
 			si.refresh();

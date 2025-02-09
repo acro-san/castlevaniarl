@@ -158,8 +158,8 @@ public class SwingSystemInterface {
 	
 	private void setWindowedBounds() {
 		Dimension ssize = Toolkit.getDefaultToolkit().getScreenSize();
-		int ww = configuration.getScreenWidth(),	//game screen width
-			wh = configuration.getScreenHeight();
+		int ww = configuration.screenWidth,	//game screen width
+			wh = configuration.screenHeight;
 		frameMain.getContentPane().setPreferredSize(new Dimension(ww, wh));
 		frameMain.setBounds(
 			(ssize.width - ww) / 2,
@@ -442,7 +442,7 @@ public class SwingSystemInterface {
 	}
 }
 
-class SwingInterfacePanel extends JPanel{
+class SwingInterfacePanel extends JPanel {
 
 	private static final long serialVersionUID = -7392757206841150146L;
 	private Image bufferImage;
@@ -454,26 +454,26 @@ class SwingInterfacePanel extends JPanel{
 	private Image[] backImageBuffers;
 	private Graphics[] backGraphicsBuffers;
 	
-	private Color color;
-	private Font font;
+//	private Color color;
+//	private Font font;
 	private FontMetrics fontMetrics;
 	protected GFXConfiguration configuration;
 	
-	public void cls(){
+	public void cls() {
 		Color oldColor = bufferGraphics.getColor();
 		bufferGraphics.setColor(Color.BLACK);
-		bufferGraphics.fillRect(0,0,configuration.getScreenWidth(),
-								configuration.getScreenHeight());
+		bufferGraphics.fillRect(0,0,configuration.screenWidth,
+								configuration.screenHeight);
 		bufferGraphics.setColor(oldColor);
 	}
 	
-	public void setColor(Color color){
-		this.color = color;
+	public void setColor(Color color) {
+	//	this.color = color;
 		bufferGraphics.setColor(color);
 	}
 	
-	public void setFontFace(Font f){
-		font = f;
+	public void setFontFace(Font f) {
+	///	font = f;
 		bufferGraphics.setFont(f);
 		fontMetrics = bufferGraphics.getFontMetrics();
 	}
@@ -492,8 +492,8 @@ class SwingInterfacePanel extends JPanel{
 		NUM_BACKBUFFERS = 5;
 	
 	public void init() {
-		int w = configuration.getScreenWidth(),
-			h = configuration.getScreenHeight();
+		int w = configuration.screenWidth,
+			h = configuration.screenHeight;
 		bufferImage = createImage(w, h);
 		bufferGraphics = bufferImage.getGraphics();
 		bufferGraphics.setColor(Color.WHITE);
@@ -507,15 +507,15 @@ class SwingInterfacePanel extends JPanel{
 		}
 	}
 	
-	public void drawImage(Image img){
+	public void drawImage(Image img) {
 		bufferGraphics.drawImage(img, 0, 0,this);
 	}
 	
-	public void drawImage(int scrX, int scrY, Image img){
+	public void drawImage(int scrX, int scrY, Image img) {
 		bufferGraphics.drawImage(img, scrX, scrY,this);
 	}
 	
-	public void print(int x, int y, String text){
+	public void print(int x, int y, String text) {
 		bufferGraphics.drawString(text, x,y);
 		//repaint();
 	}
@@ -531,32 +531,32 @@ class SwingInterfacePanel extends JPanel{
 		bufferGraphics.setColor(old);
 	}
 	
-	public void print(int x, int y, String text, Color c){
+	public void print(int x, int y, String text, Color c) {
 		print(x, y, text, c, false);
 		//repaint();
 	}
 	
-	public void saveBuffer(){
+	public void saveBuffer() {
 		backGraphics.drawImage(bufferImage,0,0,this);
 	}
 	
-	public void saveBuffer(int buffer){
+	public void saveBuffer(int buffer) {
 		backGraphicsBuffers[buffer].drawImage(bufferImage,0,0,this);
 	}
 	
-	public void restore(){
+	public void restore() {
 		bufferGraphics.drawImage(backImage, 0,0,this);
 	}
 	
-	public void restore(int buffer){
+	public void restore(int buffer) {
 		bufferGraphics.drawImage(backImageBuffers[buffer], 0,0,this);
 	}
 	
-	public void flash(Color c){
+	public void flash(Color c) {
 		
 	}
 	
-	public void paintComponent(Graphics g){
+	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		if (bufferImage != null){
 			g.drawImage(bufferImage, 0, 0, null);

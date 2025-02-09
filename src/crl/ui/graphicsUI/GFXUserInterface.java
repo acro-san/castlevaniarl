@@ -164,11 +164,11 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		MINIMAP_WATER_FOW = new Color(67,92,102);//new Color(10,81,116);	// in 'fog of war' (non-LoS)
 
 
-	private GFXConfiguration configuration;
+	private GFXConfiguration gfxConf;
 	
 	
 	public GFXUserInterface(GFXConfiguration configuration) {
-		this.configuration = configuration;
+		this.gfxConf = configuration;
 	}
 
 
@@ -223,8 +223,8 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		//si.drawImage(GFXDisplay.IMG_FRAME);
 		int lw = level.getWidth();
 		int lh = level.getHeight();
-		int sw = this.configuration.getScreenWidth();
-		int sh = this.configuration.getScreenHeight();
+		int sw = gfxConf.screenWidth;
+		int sh = gfxConf.screenHeight;
 		int remnantx = (int)((sw - 60 - (lw * 3))/2.0d); 
 		int remnanty = (int)((sh - 120 - (lh * 3))/2.0d);
 		Graphics2D g = si.getGraphics2D();
@@ -288,8 +288,8 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 	private void renderMiniMap() {
 		int lw = level.getWidth();
 		int lh = level.getHeight();
-		int sw = configuration.getScreenWidth();
-		int sh = configuration.getScreenHeight();
+		int sw = gfxConf.screenWidth;
+		int sh = gfxConf.screenHeight;
 		int mapX = sw - 60 - (lw * 3);
 		int mapY = sh - 60 - (lh * 3);
 		Graphics2D g = si.getGraphics2D();
@@ -723,8 +723,8 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 					if (mask != null) {
 						si.getGraphics2D().setColor(mask);
 						si.getGraphics2D().fillRect(
-							(PC_POS.x-xrange+x)*STANDARD_WIDTH + this.configuration.getCameraPosition().x,
-							(PC_POS.y-yrange+y)*STANDARD_WIDTH + this.configuration.getCameraPosition().y,
+							(PC_POS.x-xrange+x)*STANDARD_WIDTH + gfxConf.cameraPosition.x,
+							(PC_POS.y-yrange+y)*STANDARD_WIDTH + gfxConf.cameraPosition.y,
 							STANDARD_WIDTH, STANDARD_WIDTH);
 					}
 				}
@@ -873,37 +873,45 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 			int restB = ((sixthiedBossHits-1) % 20) + 1;
 			
 			for (int i = 0; i < 20; i++) {
-				si.drawImage(this.configuration.getScreenWidth() - 135 + (i*6), this.configuration.getScreenHeight() - 60, i + 1 <= restB ? foreColorB : backColorB);
+				si.drawImage(gfxConf.screenWidth - 135 + (i*6),
+						gfxConf.screenHeight - 60,
+						(i+1 <= restB) ? foreColorB : backColorB);
 			}
 		}
 		
 		//TODO: Add the background
-		if  (player.getPlayerClass() == Player.CLASS_VAMPIREKILLER){
-    		if (player.getMysticWeapon() != -1)
-    			si.drawImage(18,38, getImageForMystic(player.getMysticWeapon()));
-    	}else
-    	if (player.getWeapon() != null) {
-    		si.drawImage(18,38, ((GFXAppearance)player.getWeapon().getAppearance()).getIconImage());
-    	}
-		if (player.level.levelNumber != -1) {
-			si.printAtPixel(this.configuration.getScreenWidth() - 276,50,"STAGE  "+player.level.levelNumber+" "+player.level.getDescription(), Color.WHITE);
+		if  (player.getPlayerClass() == Player.CLASS_VAMPIREKILLER) {
+			if (player.getMysticWeapon() != -1) {
+				si.drawImage(18,38, getImageForMystic(player.getMysticWeapon()));
+			}
 		} else {
-			si.printAtPixel(this.configuration.getScreenWidth() - 276,50,player.level.getDescription(), Color.WHITE);
+			if (player.getWeapon() != null) {
+				si.drawImage(18,38, ((GFXAppearance)player.getWeapon().getAppearance()).getIconImage());
+			}
 		}
 		
+		if (player.level.levelNumber != -1) {
+			si.printAtPixel(gfxConf.screenWidth - 276, 50, "STAGE  "+player.level.levelNumber+" "+player.level.getDescription(), Color.WHITE);
+		} else {
+			si.printAtPixel(gfxConf.screenWidth - 276, 50, player.level.getDescription(), Color.WHITE);
+		}
 		
 		//si.drawImage(759, 35, TILE_TIME_BACK);
-		int timeTilePosition = this.configuration.getScreenWidth() - 77;
-    	si.drawImage(timeTilePosition, 38, timeTile);
-    	if (player.getFlag(Consts.ENV_FOG))
-    		si.printAtPixel (timeTilePosition,30,"FOG",Color.GRAY);
-    	if (player.getFlag(Consts.ENV_RAIN))
-    		si.printAtPixel (timeTilePosition,30,"RAIN",Color.BLUE);
-    	if (player.getFlag(Consts.ENV_SUNNY))
-    		si.printAtPixel (timeTilePosition,30,"SUNNY",Color.YELLOW);
-    	if (player.getFlag(Consts.ENV_THUNDERSTORM))
-    		si.printAtPixel (timeTilePosition,30,"STORM",Color.WHITE);
-    	
+		int timeTilePosition = gfxConf.screenWidth - 77;
+		si.drawImage(timeTilePosition, 38, timeTile);
+		if (player.getFlag(Consts.ENV_FOG)) {
+			si.printAtPixel(timeTilePosition,30,"FOG",Color.GRAY);
+		}
+		if (player.getFlag(Consts.ENV_RAIN)) {
+			si.printAtPixel(timeTilePosition,30,"RAIN",Color.BLUE);
+		}
+		if (player.getFlag(Consts.ENV_SUNNY)) {
+			si.printAtPixel(timeTilePosition,30,"SUNNY",Color.YELLOW);
+		}
+		if (player.getFlag(Consts.ENV_THUNDERSTORM)) {
+			si.printAtPixel(timeTilePosition,30,"STORM",Color.WHITE);
+		}
+		
 		si.drawImage(166, 42,HEART_TILE);
 		si.printAtPixel(182,51,""+player.getHearts(), Color.WHITE);
 		si.drawImage(206, 42,GOLD_TILE);
@@ -914,7 +922,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 			Hostage h = player.getHostage();
 			si.drawImage(18,64, ((GFXAppearance)h.getAppearance()).getImage());
 		}
-
+		
 		renderMiniMap();
 		
 		//si.printAtPixel(18,80,""+player.getHoverHeight(), Color.WHITE);
@@ -923,26 +931,28 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 
 
 	private void initProperties() {
-		STANDARD_WIDTH = this.configuration.getNormalTileWidth();
+		STANDARD_WIDTH = gfxConf.normalTileWidth;
 		
-		xrange = this.configuration.getScreenWidthInTiles();
-		yrange = this.configuration.getScreenHeightInTiles();
+		xrange = gfxConf.screenWidthInTiles;
+		yrange = gfxConf.screenHeightInTiles;
 
-		PC_POS = this.configuration.getPlayerLocationOnScreen();
-		COLOR_WINDOW_BACKGROUND = this.configuration.getWindowBackgroundColour();
-		COLOR_BORDER_IN = this.configuration.getBorderColourIn();
-		COLOR_BORDER_OUT = this.configuration.getBorderColourOut();
-		FNT_MESSAGEBOX = this.configuration.getMessageBoxFont();
-		FNT_PERSISTANTMESSAGEBOX = this.configuration.getPersistantMessageBoxFont();
-		IMG_STATUSSCR_BGROUND = this.configuration.getStatusScreenBackground();
+		PC_POS = gfxConf.playerLocationOnScreen;
+		COLOR_WINDOW_BACKGROUND = gfxConf.windowBackgroundColour;
+		COLOR_BORDER_IN = gfxConf.borderColourInner;
+		COLOR_BORDER_OUT = gfxConf.borderColourOuter;
+		FNT_MESSAGEBOX = gfxConf.messageBoxFont;
+		FNT_PERSISTANTMESSAGEBOX = gfxConf.persistantMessageBoxFont;
+		IMG_STATUSSCR_BGROUND = gfxConf.statusScreenBackground;
 	}
+	
 	
 	public void init(SwingSystemInterface psi, UserCommand[] gameCommands, Action target) {
 		Debug.enterMethod(this, "init");
 		super.init(gameCommands);
 		this.target = target;
 		initProperties();
-		//GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setDisplayMode(new DisplayMode(800,600,8, DisplayMode.REFRESH_RATE_UNKNOWN));
+		//GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().
+		//setDisplayMode(new DisplayMode(800,600,8, DisplayMode.REFRESH_RATE_UNKNOWN));
 		
 		/*-- Assign values */
 		si = psi;
@@ -953,7 +963,8 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		
 		/*-- Load Fonts */
 		try {
-			FNT_MESSAGEBOX = Font.createFont(Font.TRUETYPE_FONT, 
+			// WHYYY isn't THIS font part of the gfxconfig ?!!?
+			FNT_MESSAGEBOX = Font.createFont(Font.TRUETYPE_FONT,
 				new FileInputStream(new File("res/v5easter.ttf"))).deriveFont(Font.PLAIN, 15);
 			
 		} catch (FontFormatException ffe) {
@@ -973,11 +984,11 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 			// will need now elaborated with animation frames.
 			
 			// thx, i hate it. 2 levels of indirection to find out where/how the
-			// graphics are loaded? *WHAT FOR*!???
+			// graphics are loaded? *WHAT FOR*!?
 			
-			BufferedImage userInterfaceTileset = configuration.getImageConfiguration().getUserInterfaceTileset();
-			BufferedImage viewportUserInterfaceTileset = this.configuration.getImageConfiguration().getViewportUserInterfaceTileset();
-			int viewportUserInterfaceScale = this.configuration.getViewportUserInterfaceScale();
+			BufferedImage userInterfaceTileset = gfxConf.textures.UserInterfaceTileset;
+			BufferedImage viewportUserInterfaceTileset = gfxConf.textures.ViewportUserInterfaceTileset;
+			int viewportUserInterfaceScale = gfxConf.viewportUserInterfaceScale;
 			HEALTH_WHITE = ImageUtils.crearImagen(userInterfaceTileset, 198, 1, 5, 16);
 			/*HEALTH_BLUE? unneeded*/
 			HEALTH_RED = ImageUtils.crearImagen(userInterfaceTileset, 210, 1, 5, 16); 
@@ -1012,13 +1023,14 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 			TILE_HEALTH_BACK = ImageUtils.crearImagen(userInterfaceTileset, 3, 34, 261, 24);
 			TILE_TIME_BACK  = ImageUtils.crearImagen(userInterfaceTileset, 246, 1, 22, 21);
 			
-			IMG_STATUSSCR_BGROUND = configuration.getUserInterfaceBackgroundImage();
+			IMG_STATUSSCR_BGROUND = gfxConf.userInterfaceBackgroundImage;
 			//ImageUtils.createImage("gfx/barrett-moon_2x.gif");
 			
 			BORDER1 = ImageUtils.crearImagen(BORDERS_FILE, 34 * BORDERS_SCALE, 1 * BORDERS_SCALE, BORDERS_SIZE, BORDERS_SIZE);
 			BORDER2 = ImageUtils.crearImagen(BORDERS_FILE, 1 * BORDERS_SCALE, 1 * BORDERS_SCALE, BORDERS_SIZE, BORDERS_SIZE);
 			BORDER3 = ImageUtils.crearImagen(BORDERS_FILE, 100 * BORDERS_SCALE, 1 * BORDERS_SCALE, BORDERS_SIZE, BORDERS_SIZE);
 			BORDER4 = ImageUtils.crearImagen(BORDERS_FILE, 67 * BORDERS_SCALE, 1 * BORDERS_SCALE, BORDERS_SIZE, BORDERS_SIZE);
+			
 			
 			IMG_AXE = ImageUtils.crearImagen("gfx/crl_features.gif", 48,0,16,16);
 			IMG_BIBLE = ImageUtils.crearImagen("gfx/crl_features.gif", 96,0,16,16);
@@ -1053,8 +1065,9 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		
 		/*-- Init Components*/
 		messageBox = new SwingInformBox();
-		/*idList = new ListBox(psi);*/
-		messageBox.setBounds(16, this.configuration.getScreenHeight() - 10 * 24, this.configuration.getScreenWidth() - 32, 10 * 24);
+
+		messageBox.setBounds(16, gfxConf.screenHeight - 10 * 24,
+			gfxConf.screenWidth - 32, 10 * 24);
 		messageBox.setForeground(COLOR_LAST_MESSAGE);
 		messageBox.setBackground(Color.BLACK);
 		messageBox.setFont(FNT_MESSAGEBOX);
@@ -1082,7 +1095,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		psi.add(helpBox);
 		
 		persistantMessageBox = new AdornedBorderTextArea(BORDER1, BORDER2, BORDER3, BORDER4, COLOR_BORDER_IN, COLOR_BORDER_OUT, BORDERS_SIZE, BORDERS_SIZE);
-		persistantMessageBox.setBounds(this.configuration.getScreenWidth() - 280,90,260,400);
+		persistantMessageBox.setBounds(gfxConf.screenWidth - 280, 90, 260, 400);
 		persistantMessageBox.setVisible(false);
 		persistantMessageBox.setFont(FNT_PERSISTANTMESSAGEBOX);
 		persistantMessageBox.setForeground(Color.WHITE);
@@ -1536,7 +1549,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
   		menuBox.setTitle("Items");
   		menuBox.setMenuItems(inventory);
   		
-  		MenuBox itemUsageChoices = new MenuBox(si, this.configuration, null);
+  		MenuBox itemUsageChoices = new MenuBox(si, this.gfxConf, null);
   		itemUsageChoices.setItemsPerPage(6);
   		itemUsageChoices.setWidth(20);
   		itemUsageChoices.setPosition(52,15);
@@ -2314,10 +2327,10 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		return ret;
 	}
 
-	public void drawImageVP(int scrX, int scrY, Image img){
+	public void drawImageVP(int scrX, int scrY, Image img) {
 		si.drawImage(
-				this.configuration.getCameraPosition().x + scrX * this.configuration.getCameraScale(),
-				this.configuration.getCameraPosition().y + scrY * this.configuration.getCameraScale(),
+			gfxConf.cameraPosition.x + scrX * this.gfxConf.cameraScale,
+			gfxConf.cameraPosition.y + scrY * this.gfxConf.cameraScale,
 			img
 		);
 	}

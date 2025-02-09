@@ -61,9 +61,9 @@ public class MenuBox {
 		int realH = (itemsPerPage+1)*gap+20;
 		int realPosX = xpos*10 - 20;
 		int realPosY = ypos*24 - 30;
-		Color COLOR_WINDOW_BACKGROUND = this.configuration.getWindowBackgroundColour();
-		Color COLOR_BORDER_IN = this.configuration.getBorderColourIn();
-		Color COLOR_BORDER_OUT = this.configuration.getBorderColourOut();
+		Color COLOR_WINDOW_BACKGROUND = configuration.windowBackgroundColour;
+		Color COLOR_BORDER_IN = configuration.borderColourInner;
+		Color COLOR_BORDER_OUT = configuration.borderColourOuter;
 
 		si.getGraphics2D().setColor(COLOR_WINDOW_BACKGROUND);
 		si.getGraphics2D().fillRect(realPosX+6, realPosY+6, realW-14, realH-14);

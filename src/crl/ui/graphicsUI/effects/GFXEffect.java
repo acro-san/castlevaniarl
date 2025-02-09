@@ -7,7 +7,7 @@ import crl.ui.graphicsUI.SwingSystemInterface;
 
 public abstract class GFXEffect extends Effect {
 	
-	protected GFXConfiguration configuration;
+	protected GFXConfiguration configuration;	//TODO rename 'cfg'.
 	
 	public GFXEffect(String ID, GFXConfiguration configuration){
 		super(ID);

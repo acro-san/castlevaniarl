@@ -14,221 +14,103 @@ import sz.util.Position;
 import sz.util.PropertyFilters;
 
 /**
- * Configuration settings for GFX UI
+ * Settings for GFX UI
  * 
  * @author Tuukka Turto
  */
 public class GFXConfiguration {
 
-	protected int bigTileWidth;
-	protected int halfTileWidth;
-	protected int normalTileWidth;
-	protected int cellHeight;
+	public int
+		bigTileWidth,
+		
+		halfTileWidth,	// "width of half tile" ?!
+		normalTileWidth,	//"width of normal tile" ?!
+		
+		cellHeight,
+		
+		screenWidth,
+		screenHeight,
 	
-	protected int screenWidth;
-	protected int screenHeight;
-	protected int screenWidthInTiles;
-	protected int screenHeightInTiles;
-	protected Position playerLocationOnScreen;
+		screenWidthInTiles,
+		screenHeightInTiles;
+		
+	public Color
+		windowBackgroundColour,
+		borderColourInner,
+		borderColourOuter;
 	
-	protected Color windowBackgroundColour;
-	protected Color borderColourIn;
-	protected Color borderColourOut;
+	public Font
+		messageBoxFont,
+		persistantMessageBoxFont;
 	
-	protected Font messageBoxFont;
-	protected Font persistantMessageBoxFont;
+	public BufferedImage
+		statusScreenBackground,
+		userInterfaceBackgroundImage;
 	
-	protected BufferedImage statusScreenBackground;
+	// TODO Rename this var 'textures'.
+	public Textures textures;
+	
+	public double screenScale;
 
-	protected BufferedImage UserInterfaceBackgroundImage;
-	protected GFXImageConfiguration imageConfiguration;
+	public int effectsScale;
+	public int viewportUserInterfaceScale;
 	
-	protected double screenScale;
+	public int cameraScale;
+	public Position cameraPosition;
+	public Position playerLocationOnScreen;
 
-	protected int effectsScale;
-	protected int viewportUserInterfaceScale;
-	
-	protected int cameraScale;
-	protected Position cameraPosition;
-	
-	/**
-	 * Default constructor
-	 */
-	public GFXConfiguration() {
+
+	public void LoadConfiguration(Properties p) {
+		//screenScale = 1.28;
+		screenScale = PropertyFilters.getDouble(p.getProperty("SCREEN_SCALE"));
+		effectsScale = PropertyFilters.inte(p.getProperty("EFFECTS_SCALE"));
+		viewportUserInterfaceScale = PropertyFilters.inte(p.getProperty("VIEWPORT_UI_SCALE"));
+		bigTileWidth = PropertyFilters.inte(p.getProperty("BIG_TILESIZE"));
+		normalTileWidth = PropertyFilters.inte(p.getProperty("TILESIZE"));
+		halfTileWidth = PropertyFilters.inte(p.getProperty("HALF_TILESIZE"));
+		cellHeight = PropertyFilters.inte(p.getProperty("CELL_HEIGHT"));
 		
-	}
-	
-	/**
-	 * Load configuration from given properties
-	 */
-	public void LoadConfiguration(Properties p) {	
-		//this.screenScale = 1.28;
-		this.screenScale = PropertyFilters.getDouble(p.getProperty("SCREEN_SCALE"));
-		this.effectsScale = PropertyFilters.inte(p.getProperty("EFFECTS_SCALE"));
-		this.viewportUserInterfaceScale = PropertyFilters.inte(p.getProperty("VIEWPORT_UI_SCALE"));
-		this.bigTileWidth = PropertyFilters.inte(p.getProperty("BIG_TILESIZE"));
-		this.normalTileWidth = PropertyFilters.inte(p.getProperty("TILESIZE"));
-		this.halfTileWidth = PropertyFilters.inte(p.getProperty("HALF_TILESIZE"));
-		this.cellHeight = PropertyFilters.inte(p.getProperty("CELL_HEIGHT"));
+		screenWidthInTiles = PropertyFilters.inte(p.getProperty("XRANGE"));
+		screenHeightInTiles = PropertyFilters.inte(p.getProperty("YRANGE"));
+		playerLocationOnScreen = PropertyFilters.getPosition(p.getProperty("PC_POS"));
 		
-		this.screenWidthInTiles = PropertyFilters.inte(p.getProperty("XRANGE"));
-		this.screenHeightInTiles = PropertyFilters.inte(p.getProperty("YRANGE"));
-		this.playerLocationOnScreen = PropertyFilters.getPosition(p.getProperty("PC_POS"));
+		cameraScale = PropertyFilters.inte(p.getProperty("CAMERA_SCALE"));
+		cameraPosition= PropertyFilters.getPosition(p.getProperty("CAMERA_POS"));
 		
-		this.cameraScale = PropertyFilters.inte(p.getProperty("CAMERA_SCALE"));
-		this.cameraPosition= PropertyFilters.getPosition(p.getProperty("CAMERA_POS"));
+		windowBackgroundColour = PropertyFilters.getColor(p.getProperty("COLOR_WINDOW_BACKGROUND"));
+		borderColourInner = PropertyFilters.getColor(p.getProperty("COLOR_BORDER_IN"));
+		borderColourOuter = PropertyFilters.getColor(p.getProperty("COLOR_BORDER_OUT"));
 		
-		
-		this.windowBackgroundColour = PropertyFilters.getColor(p.getProperty("COLOR_WINDOW_BACKGROUND"));
-		this.borderColourIn = PropertyFilters.getColor(p.getProperty("COLOR_BORDER_IN"));
-		this.borderColourOut = PropertyFilters.getColor(p.getProperty("COLOR_BORDER_OUT"));
-		
-		this.screenWidth = PropertyFilters.inte(p.getProperty("WINDOW_WIDTH"));
-		this.screenHeight = PropertyFilters.inte(p.getProperty("WINDOW_HEIGHT"));		
+		screenWidth = PropertyFilters.inte(p.getProperty("WINDOW_WIDTH"));
+		screenHeight = PropertyFilters.inte(p.getProperty("WINDOW_HEIGHT"));
 		
 		try {
-			this.messageBoxFont = PropertyFilters.getFont(p.getProperty("FNT_MESSAGEBOX"),p.getProperty("FNT_MESSAGEBOX_SIZE"));
-			this.persistantMessageBoxFont = PropertyFilters.getFont(p.getProperty("FNT_PERSISTANTMESSAGEBOX"),p.getProperty("FNT_PERSISTANTMESSAGEBOX_SIZE"));
+			messageBoxFont = PropertyFilters.getFont(
+				p.getProperty("FNT_MESSAGEBOX"),
+				p.getProperty("FNT_MESSAGEBOX_SIZE"));
+			persistantMessageBoxFont = PropertyFilters.getFont(
+				p.getProperty("FNT_PERSISTANTMESSAGEBOX"),
+				p.getProperty("FNT_PERSISTANTMESSAGEBOX_SIZE"));
 			
-		} catch (FontFormatException ffe){
+		} catch (FontFormatException ffe) {
 			Game.crash("Error loading the font", ffe);
-		} catch (IOException ioe){
+		} catch (IOException ioe) {
 			Game.crash("Error loading the font", ioe);
 		}
 		
 		/*-- Load UI Images */
 		try {
-			this.statusScreenBackground = ImageUtils.createImage(p.getProperty("IMG_STATUSSCR_BGROUND"));
-			this.UserInterfaceBackgroundImage = ImageUtils.createImage(p.getProperty("IMG_INTERFACE"));
+			statusScreenBackground = Textures.lim(p, "IMG_STATUSSCR_BGROUND");
+			//statusScreenBackground = ImageUtils.createImage(p.getProperty("IMG_STATUSSCR_BGROUND"));
+			//userInterfaceBackgroundImage = ImageUtils.createImage(p.getProperty("IMG_INTERFACE"));
+			userInterfaceBackgroundImage = Textures.lim(p, "IMG_INTERFACE");
 			
-		} catch (Exception e){
-			Game.crash(e.getMessage(),e);
+		} catch (Exception e) {
+			Game.crash(e.getMessage(), e);
 		}
 		
-		imageConfiguration = new GFXImageConfiguration();
-		imageConfiguration.LoadConfiguration(p);
+		textures = new Textures(p);
 	}
 
-	/**
-	 * @return the width of big tile
-	 */
-	public int getBigTileWidth() {
-		return bigTileWidth;
-	}
 
-	/**
-	 * @return the width of half tile
-	 */
-	public int getHalfTileWidth() {
-		return halfTileWidth;
-	}
-
-	/**
-	 * @return the width of normal tile
-	 */
-	public int getNormalTileWidth() {
-		return normalTileWidth;
-	}
-
-	/**
-	 * @return the cell height
-	 */
-	public int getCellHeight() {
-		return cellHeight;
-	}
-
-	/**
-	 * @return the width of screen in tiles
-	 */
-	public int getScreenWidthInTiles() {
-		return screenWidthInTiles;
-	}
-
-	/**
-	 * @return the height of screen in tiles
-	 */
-	public int getScreenHeightInTiles() {
-		return screenHeightInTiles;
-	}
-
-	/**
-	 * @return the player location on screen
-	 */
-	public Position getPlayerLocationOnScreen() {
-		return playerLocationOnScreen;
-	}
-
-	/**
-	 * @return the background colour of window
-	 */
-	public Color getWindowBackgroundColour() {
-		return windowBackgroundColour;
-	}
-
-	/**
-	 * @return the inner border colour
-	 */
-	public Color getBorderColourIn() {
-		return borderColourIn;
-	}
-
-	/**
-	 * @return the outer border colour
-	 */
-	public Color getBorderColourOut() {
-		return borderColourOut;
-	}
-
-	/**
-	 * @return the font for message box
-	 */
-	public Font getMessageBoxFont() {
-		return messageBoxFont;
-	}
-
-	/**
-	 * @return the font for persistent message box
-	 */
-	public Font getPersistantMessageBoxFont() {
-		return persistantMessageBoxFont;
-	}
-
-	/**
-	 * @return the status screen background
-	 */
-	public BufferedImage getStatusScreenBackground() {
-		return statusScreenBackground;
-	}
-
-	public double getScreenScale() {
-		return screenScale;
-	}
-	
-	public int getScreenWidth() {
-		return screenWidth;
-	}
-	
-	public int getScreenHeight() {
-		return screenHeight;
-	}
-	
-	public BufferedImage getUserInterfaceBackgroundImage() {
-		return UserInterfaceBackgroundImage;
-	}
-	
-	public GFXImageConfiguration getImageConfiguration() {
-		return imageConfiguration;
-	}
-
-	public int getViewportUserInterfaceScale() {
-		return viewportUserInterfaceScale;
-	}
-	
-	public Position getCameraPosition() {
-		return cameraPosition;
-	}
-	
-	public int getCameraScale() {
-		return cameraScale;
-	}
 }

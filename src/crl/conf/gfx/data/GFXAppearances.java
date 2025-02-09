@@ -8,11 +8,13 @@ import crl.ui.*;
 import crl.ui.graphicsUI.*;
 
 public class GFXAppearances {
+	
 	private int WIDTH_BIG;
 	private int UI_SCALE;
 	private int WIDTH_HALF;
-	private int WIDTH_QUARTER;
-	private final static int ICON_SIZE = 16;
+//	private int WIDTH_QUARTER;
+	private final static int
+		ICON_SIZE = 16;	// hardcoded...
 	private int CELL_HEIGHT;
 	private int WIDTH_NORMAL;
 	
@@ -21,28 +23,29 @@ public class GFXAppearances {
 	public GFXAppearances(GFXConfiguration configuration) {
 		this.configuration = configuration;
 		
-		WIDTH_BIG = configuration.getBigTileWidth();
-		WIDTH_HALF = configuration.getHalfTileWidth();
-		UI_SCALE = configuration.getViewportUserInterfaceScale();
-		WIDTH_QUARTER = (int) Math.floor(configuration.getHalfTileWidth() / 2);
-		CELL_HEIGHT = configuration.getCellHeight();
-		WIDTH_NORMAL = configuration.getNormalTileWidth();
+		WIDTH_BIG = configuration.bigTileWidth;
+		WIDTH_HALF = configuration.halfTileWidth;
+		UI_SCALE = configuration.viewportUserInterfaceScale;
+//		WIDTH_QUARTER = (int)Math.floor(configuration.halfTileWidth / 2);
+		CELL_HEIGHT = configuration.cellHeight;
+		WIDTH_NORMAL = configuration.normalTileWidth;
 		
-		SetAppearances();
+		setAppearances();
 	}
 	
-	private Appearance [] defs;
+	
+	private Appearance[] defs;
 	
 	
-	protected void SetAppearances() {
-		GFXImageConfiguration imgConfig = configuration.getImageConfiguration();
-		defs = new Appearance[]{
+	protected void setAppearances() {
+		Textures imgConfig = configuration.textures;
+		defs = new Appearance[] {
 		createTAppearance("VOID", 4,5),
 		new GFXAppearance("NOTHING", null, null,null,null,0,0),
 
-		createAppearance("BLOOD1", imgConfig.getEffectsImage(), 5, 4),
-		createAppearance("BLOOD2", imgConfig.getEffectsImage(), 6, 4),
-		createAppearance("BLOOD3", imgConfig.getEffectsImage(), 7, 4),
+		createAppearance("BLOOD1", imgConfig.EffectsImage, 5, 4),
+		createAppearance("BLOOD2", imgConfig.EffectsImage, 6, 4),
+		createAppearance("BLOOD3", imgConfig.EffectsImage, 7, 4),
 		
 		/*NEEDED*/
 		//createAppearance("COFFIN", imgConfig.getItemsImage(), 1,1),
@@ -50,13 +53,13 @@ public class GFXAppearances {
 		
 		createTAppearance("DOOR", 11,2),
 		
-		createAppearance("SHADOW", imgConfig.getShadowImage(), 1,1),
+		createAppearance("SHADOW", imgConfig.ShadowImage, 1,1),
 		
-		createAppearance("CHRISTOPHER_B", imgConfig.getCharactersImage(), 1,5),
+		createAppearance("CHRISTOPHER_B", imgConfig.CharactersImage, 1,5),
 		
-		createAppearance("SOLEIYU_B", imgConfig.getCharactersImage(), 2,5),
-		createAppearance("BADBELMONT", imgConfig.getCharactersImage(), 2,6),
-		createBAppearance("PRELUDE_DRACULA", imgConfig.getBigMonstersImage(), 4, 5),
+		createAppearance("SOLEIYU_B", imgConfig.CharactersImage, 2,5),
+		createAppearance("BADBELMONT", imgConfig.CharactersImage, 2,6),
+		createBAppearance("PRELUDE_DRACULA", imgConfig.BigMonstersImage, 4, 5),
 		
 		/*Town*/
 		createTAppearance("TOWN_GRASS", 4, 1),
@@ -381,143 +384,141 @@ public class GFXAppearances {
 		createIAppearance("CHAIN_WHIP", false, 5, 25),
 		createIAppearance("THORN_WHIP", false, 6, 25),
 		createIAppearance("LEATHER_WHIP", false, 7, 25),
-
 		
-
-
+		
 		// Monsters
-		createAppearance("R_SKELETON", imgConfig.getMonstersImage(), 1, 1),
-		createAppearance("GZOMBIE", imgConfig.getMonstersImage(), 4, 2),
-        createAppearance("ZOMBIE", imgConfig.getMonstersImage(), 7, 8),
-        createAppearance("WHITE_SKELETON", imgConfig.getMonstersImage(), 1, 1),
-        createAppearance("PANTHER", imgConfig.getMonstersImage(), 5, 3),
-        createBAppearance("WARG", imgConfig.getBigMonstersImage(), 7, 1),
-        createAppearance("BLACK_KNIGHT", imgConfig.getMonstersImage(), 9, 4),
-        createAppearance("APE_SKELETON", imgConfig.getMonstersImage(), 7, 3),
-        createBAppearance("PARANTHROPUS", imgConfig.getBigMonstersImage(), 1, 1),
-        createAppearance("BAT", imgConfig.getMonstersImage(), 8, 3),
-        createAppearance("SKULL_HEAD", imgConfig.getMonstersImage(), 2, 6),
-        createAppearance("SKULL_LORD", imgConfig.getMonstersImage(), 3, 6),
-        createAppearance("MERMAN", imgConfig.getMonstersImage(), 9, 5),
-        createAppearance("WEREBEAR", imgConfig.getMonstersImage(), 6, 6),
-        createAppearance("HUNCHBACK", imgConfig.getMonstersImage(), 6, 7),
-        createAppearance("BONE_ARCHER", imgConfig.getMonstersImage(), 2, 1),
-        createAppearance("SKELETON_PANTHER", imgConfig.getMonstersImage(), 6, 3),
-        createAppearance("BONE_PILLAR", imgConfig.getMonstersImage(), 9, 6),
-        createAppearance("AXE_KNIGHT", imgConfig.getMonstersImage(), 1, 5),
-        createAppearance("MEDUSA_HEAD", imgConfig.getMonstersImage(), 4, 6),
-        createAppearance("DURGA", imgConfig.getMonstersImage(), 1, 4),
-        createAppearance("SKELETON_ATHLETE", imgConfig.getMonstersImage(), 3, 1),
-        createAppearance("BLADE_SOLDIER", imgConfig.getMonstersImage(), 1, 2),
-        createAppearance("BONE_HALBERD", imgConfig.getMonstersImage(), 4, 1),
-        createAppearance("CROW", imgConfig.getMonstersImage(), 4, 8),
-        createAppearance("BLOOD_SKELETON", imgConfig.getMonstersImage(), 9, 1),
-        createAppearance("LIZARD_SWORDSMAN", imgConfig.getMonstersImage(), 7, 5),
-        createBAppearance("COCKATRICE", imgConfig.getBigMonstersImage(), 4, 1),
-        createAppearance("COOPER_ARMOR", imgConfig.getMonstersImage(), 10, 4),
-        createAppearance("GHOUL", imgConfig.getMonstersImage(), 8, 8),
-        createAppearance("SALOME", imgConfig.getMonstersImage(), 7, 4),
-        createAppearance("ECTOPLASM", imgConfig.getMonstersImage(), 3, 3),
-        createBAppearance("RULER_SWORD_LV1", imgConfig.getBigMonstersImage(), 2, 2),
-        createBAppearance("BEAST_DEMON", imgConfig.getBigMonstersImage(), 2, 1),
-        createBAppearance("DEVIL", imgConfig.getBigMonstersImage(), 3, 1),
-        createAppearance("BALLOON_POD", imgConfig.getMonstersImage(), 5, 7),
-        createAppearance("LILITH", imgConfig.getMonstersImage(), 5, 4),
-        createAppearance("BONE_MUSKET", imgConfig.getMonstersImage(), 5, 1),
-        createAppearance("KILLER_PLANT", imgConfig.getMonstersImage(), 3, 7),
-        createAppearance("VAMPIRE_BAT", imgConfig.getMonstersImage(), 9, 3),
-        createBAppearance("DEATH_MANTIS", imgConfig.getBigMonstersImage(), 5, 2),
-        createAppearance("DHURON", imgConfig.getMonstersImage(), 7, 2),
-        createAppearance("DRAGON_SKULL_CANNON", imgConfig.getMonstersImage(), 10, 6),
-        createAppearance("MUMMY_MAN", imgConfig.getMonstersImage(), 5, 2),
-        createAppearance("ZELDO", imgConfig.getMonstersImage(), 8, 2),
-        createAppearance("MUD_MAN", imgConfig.getMonstersImage(), 2, 3),
-        createAppearance("CAGNAZOO", imgConfig.getMonstersImage(), 4, 5),
-        createBAppearance("ALRAUNE", imgConfig.getBigMonstersImage(), 4, 4),
-        createBAppearance("GOLEM", imgConfig.getBigMonstersImage(), 2, 3),
-        createAppearance("ARACHNE", imgConfig.getMonstersImage(), 3, 4),
-        createAppearance("SPEAR_SKELETON", imgConfig.getMonstersImage(), 8, 1),
-        
-        createAppearance("KNIFE_MERMAN", imgConfig.getMonstersImage(), 10, 5),
-        createAppearance("MASTER_LIZARD", imgConfig.getMonstersImage(), 8, 5),
-        createAppearance("WHIP_SKELETON", imgConfig.getMonstersImage(), 6, 1),
-        createAppearance("FROZEN_SHADE", imgConfig.getMonstersImage(), 10, 2),
-        createAppearance("MINOTAUR", imgConfig.getMonstersImage(), 7, 6),
-        createBAppearance("TRITON", imgConfig.getBigMonstersImage(), 6, 2),
-        createAppearance("NOVA_SKELETON", imgConfig.getMonstersImage(), 10, 1),
-        createBAppearance("ARMOR_LORD", imgConfig.getBigMonstersImage(), 1, 3),
-        createAppearance("FLEA_ARMOR", imgConfig.getMonstersImage(), 7, 7),
-        createAppearance("BUER", imgConfig.getMonstersImage(), 4, 7),
-        createAppearance("WIGHT", imgConfig.getMonstersImage(), 9, 2),
-        createAppearance("SPECTER", imgConfig.getMonstersImage(), 4, 3),
-        createBAppearance("RULER_SWORD_LV2", imgConfig.getBigMonstersImage(), 3, 2),
-        createAppearance("CURLY", imgConfig.getMonstersImage(), 2, 4),
-        createBAppearance("FIRE_WARG", imgConfig.getBigMonstersImage(), 1, 2),
-        createAppearance("BONE_ARK", imgConfig.getMonstersImage(), 1, 7),
-        createAppearance("MIMIC", imgConfig.getMonstersImage(), 5, 6),
-        createBAppearance("MANTICORE", imgConfig.getBigMonstersImage(), 7, 2),
-        createAppearance("FLAME_KNIGHT", imgConfig.getMonstersImage(), 2, 5),
-        createBAppearance("ARMOR_GUARDIAN", imgConfig.getBigMonstersImage(), 1, 4),
-        createBAppearance("DEMON_LORD", imgConfig.getBigMonstersImage(), 6, 1),
-        createAppearance("HEAT_SHADE", imgConfig.getMonstersImage(), 1, 3),
-        createBAppearance("FLESH_GOLEM", imgConfig.getBigMonstersImage(), 4, 3),
-        createAppearance("WEREWOLF", imgConfig.getMonstersImage(), 8, 6),
-        createBAppearance("ALURA_UNE", imgConfig.getBigMonstersImage(), 5, 4),
-        createAppearance("DRAHIGNAZOO", imgConfig.getMonstersImage(), 5, 5),
-        createAppearance("SUCCUBUS", imgConfig.getMonstersImage(), 6, 4),
-        createAppearance("BLADE_MASTER", imgConfig.getMonstersImage(), 2, 2),
-        createBAppearance("BASILISK", imgConfig.getBigMonstersImage(), 5, 1),
-        createAppearance("GARGOYLE", imgConfig.getMonstersImage(), 6, 5),
-        createAppearance("HARPY", imgConfig.getMonstersImage(), 4, 4),
-        createAppearance("KICKER_SKELETON", imgConfig.getMonstersImage(), 7, 1),
-        createBAppearance("BEHEMOTH", imgConfig.getBigMonstersImage(), 6, 3),
-        createBAppearance("DISCUS_LORD", imgConfig.getBigMonstersImage(), 7, 3),
-        createBAppearance("GIANT_ARMOR", imgConfig.getBigMonstersImage(), 2, 4),
-        createAppearance("WITCH", imgConfig.getMonstersImage(), 8, 4),
-        createAppearance("MANDRAGORA", imgConfig.getMonstersImage(), 8, 7),
-        createBAppearance("IRON_GOLEM", imgConfig.getBigMonstersImage(), 2, 3),
-        createBAppearance("VICTORY_ARMOR", imgConfig.getBigMonstersImage(), 3, 4),
-        createBAppearance("RULER_SWORD_LV3", imgConfig.getBigMonstersImage(), 4, 2),
-        createAppearance("SPEAR_KNIGHT", imgConfig.getMonstersImage(), 3, 9),
-        createAppearance("FLYING_SPEAR_SKELETON", imgConfig.getMonstersImage(), 4, 9), 
+		createAppearance("R_SKELETON", imgConfig.MonstersImage, 1, 1),
+		createAppearance("GZOMBIE", imgConfig.MonstersImage, 4, 2),
+		createAppearance("ZOMBIE", imgConfig.MonstersImage, 7, 8),
+		createAppearance("WHITE_SKELETON", imgConfig.MonstersImage, 1, 1),
+		createAppearance("PANTHER", imgConfig.MonstersImage, 5, 3),
+		createBAppearance("WARG", imgConfig.BigMonstersImage, 7, 1),
+		createAppearance("BLACK_KNIGHT", imgConfig.MonstersImage, 9, 4),
+		createAppearance("APE_SKELETON", imgConfig.MonstersImage, 7, 3),
+		createBAppearance("PARANTHROPUS", imgConfig.BigMonstersImage, 1, 1),
+		createAppearance("BAT", imgConfig.MonstersImage, 8, 3),
+		createAppearance("SKULL_HEAD", imgConfig.MonstersImage, 2, 6),
+		createAppearance("SKULL_LORD", imgConfig.MonstersImage, 3, 6),
+		createAppearance("MERMAN", imgConfig.MonstersImage, 9, 5),
+		createAppearance("WEREBEAR", imgConfig.MonstersImage, 6, 6),
+		createAppearance("HUNCHBACK", imgConfig.MonstersImage, 6, 7),
+		createAppearance("BONE_ARCHER", imgConfig.MonstersImage, 2, 1),
+		createAppearance("SKELETON_PANTHER", imgConfig.MonstersImage, 6, 3),
+		createAppearance("BONE_PILLAR", imgConfig.MonstersImage, 9, 6),
+		createAppearance("AXE_KNIGHT", imgConfig.MonstersImage, 1, 5),
+		createAppearance("MEDUSA_HEAD", imgConfig.MonstersImage, 4, 6),
+		createAppearance("DURGA", imgConfig.MonstersImage, 1, 4),
+		createAppearance("SKELETON_ATHLETE", imgConfig.MonstersImage, 3, 1),
+		createAppearance("BLADE_SOLDIER", imgConfig.MonstersImage, 1, 2),
+		createAppearance("BONE_HALBERD", imgConfig.MonstersImage, 4, 1),
+		createAppearance("CROW", imgConfig.MonstersImage, 4, 8),
+		createAppearance("BLOOD_SKELETON", imgConfig.MonstersImage, 9, 1),
+		createAppearance("LIZARD_SWORDSMAN", imgConfig.MonstersImage, 7, 5),
+		createBAppearance("COCKATRICE", imgConfig.BigMonstersImage, 4, 1),
+		createAppearance("COOPER_ARMOR", imgConfig.MonstersImage, 10, 4),
+		createAppearance("GHOUL", imgConfig.MonstersImage, 8, 8),
+		createAppearance("SALOME", imgConfig.MonstersImage, 7, 4),
+		createAppearance("ECTOPLASM", imgConfig.MonstersImage, 3, 3),
+		createBAppearance("RULER_SWORD_LV1", imgConfig.BigMonstersImage, 2, 2),
+		createBAppearance("BEAST_DEMON", imgConfig.BigMonstersImage, 2, 1),
+		createBAppearance("DEVIL", imgConfig.BigMonstersImage, 3, 1),
+		createAppearance("BALLOON_POD", imgConfig.MonstersImage, 5, 7),
+		createAppearance("LILITH", imgConfig.MonstersImage, 5, 4),
+		createAppearance("BONE_MUSKET", imgConfig.MonstersImage, 5, 1),
+		createAppearance("KILLER_PLANT", imgConfig.MonstersImage, 3, 7),
+		createAppearance("VAMPIRE_BAT", imgConfig.MonstersImage, 9, 3),
+		createBAppearance("DEATH_MANTIS", imgConfig.BigMonstersImage, 5, 2),
+		createAppearance("DHURON", imgConfig.MonstersImage, 7, 2),
+		createAppearance("DRAGON_SKULL_CANNON", imgConfig.MonstersImage, 10, 6),
+		createAppearance("MUMMY_MAN", imgConfig.MonstersImage, 5, 2),
+		createAppearance("ZELDO", imgConfig.MonstersImage, 8, 2),
+		createAppearance("MUD_MAN", imgConfig.MonstersImage, 2, 3),
+		createAppearance("CAGNAZOO", imgConfig.MonstersImage, 4, 5),
+		createBAppearance("ALRAUNE", imgConfig.BigMonstersImage, 4, 4),
+		createBAppearance("GOLEM", imgConfig.BigMonstersImage, 2, 3),
+		createAppearance("ARACHNE", imgConfig.MonstersImage, 3, 4),
+		createAppearance("SPEAR_SKELETON", imgConfig.MonstersImage, 8, 1),
+		
+		createAppearance("KNIFE_MERMAN", imgConfig.MonstersImage, 10, 5),
+		createAppearance("MASTER_LIZARD", imgConfig.MonstersImage, 8, 5),
+		createAppearance("WHIP_SKELETON", imgConfig.MonstersImage, 6, 1),
+		createAppearance("FROZEN_SHADE", imgConfig.MonstersImage, 10, 2),
+		createAppearance("MINOTAUR", imgConfig.MonstersImage, 7, 6),
+		createBAppearance("TRITON", imgConfig.BigMonstersImage, 6, 2),
+		createAppearance("NOVA_SKELETON", imgConfig.MonstersImage, 10, 1),
+		createBAppearance("ARMOR_LORD", imgConfig.BigMonstersImage, 1, 3),
+		createAppearance("FLEA_ARMOR", imgConfig.MonstersImage, 7, 7),
+		createAppearance("BUER", imgConfig.MonstersImage, 4, 7),
+		createAppearance("WIGHT", imgConfig.MonstersImage, 9, 2),
+		createAppearance("SPECTER", imgConfig.MonstersImage, 4, 3),
+		createBAppearance("RULER_SWORD_LV2", imgConfig.BigMonstersImage, 3, 2),
+		createAppearance("CURLY", imgConfig.MonstersImage, 2, 4),
+		createBAppearance("FIRE_WARG", imgConfig.BigMonstersImage, 1, 2),
+		createAppearance("BONE_ARK", imgConfig.MonstersImage, 1, 7),
+		createAppearance("MIMIC", imgConfig.MonstersImage, 5, 6),
+		createBAppearance("MANTICORE", imgConfig.BigMonstersImage, 7, 2),
+		createAppearance("FLAME_KNIGHT", imgConfig.MonstersImage, 2, 5),
+		createBAppearance("ARMOR_GUARDIAN", imgConfig.BigMonstersImage, 1, 4),
+		createBAppearance("DEMON_LORD", imgConfig.BigMonstersImage, 6, 1),
+		createAppearance("HEAT_SHADE", imgConfig.MonstersImage, 1, 3),
+		createBAppearance("FLESH_GOLEM", imgConfig.BigMonstersImage, 4, 3),
+		createAppearance("WEREWOLF", imgConfig.MonstersImage, 8, 6),
+		createBAppearance("ALURA_UNE", imgConfig.BigMonstersImage, 5, 4),
+		createAppearance("DRAHIGNAZOO", imgConfig.MonstersImage, 5, 5),
+		createAppearance("SUCCUBUS", imgConfig.MonstersImage, 6, 4),
+		createAppearance("BLADE_MASTER", imgConfig.MonstersImage, 2, 2),
+		createBAppearance("BASILISK", imgConfig.BigMonstersImage, 5, 1),
+		createAppearance("GARGOYLE", imgConfig.MonstersImage, 6, 5),
+		createAppearance("HARPY", imgConfig.MonstersImage, 4, 4),
+		createAppearance("KICKER_SKELETON", imgConfig.MonstersImage, 7, 1),
+		createBAppearance("BEHEMOTH", imgConfig.BigMonstersImage, 6, 3),
+		createBAppearance("DISCUS_LORD", imgConfig.BigMonstersImage, 7, 3),
+		createBAppearance("GIANT_ARMOR", imgConfig.BigMonstersImage, 2, 4),
+		createAppearance("WITCH", imgConfig.MonstersImage, 8, 4),
+		createAppearance("MANDRAGORA", imgConfig.MonstersImage, 8, 7),
+		createBAppearance("IRON_GOLEM", imgConfig.BigMonstersImage, 2, 3),
+		createBAppearance("VICTORY_ARMOR", imgConfig.BigMonstersImage, 3, 4),
+		createBAppearance("RULER_SWORD_LV3", imgConfig.BigMonstersImage, 4, 2),
+		createAppearance("SPEAR_KNIGHT", imgConfig.MonstersImage, 3, 9),
+		createAppearance("FLYING_SPEAR_SKELETON", imgConfig.MonstersImage, 4, 9),
 
-        createBAppearance("GIANTBAT", imgConfig.getBigMonstersImage(), 2, 5),
-        createBAppearance("DEATH", imgConfig.getBigMonstersImage(), 3, 5),
-        createAppearance("SICKLE", imgConfig.getMonstersImage(), 2, 9),
-        createBAppearance("DRACULA", imgConfig.getBigMonstersImage(), 4, 5),
-        createBAppearance("MEDUSA", imgConfig.getBigMonstersImage(), 1, 5),
-        createAppearance("SNAKE", imgConfig.getMonstersImage(), 1, 9),
-        createBAppearance("FRANK", imgConfig.getBigMonstersImage(), 7, 4),
-    	createAppearance("IGOR", imgConfig.getMonstersImage(), 10, 8),
-    	createBAppearance("DEMON_DRACULA", imgConfig.getBigMonstersImage(), 5, 5),
-    	createBAppearance("AKMODAN", imgConfig.getBigMonstersImage(), 6, 5),
-    	createBAppearance("DRAGON_KING", imgConfig.getBigMonstersImage(), 1, 6),
-    	createBAppearance("ORLOX", imgConfig.getBigMonstersImage(), 4, 6),
-    	createBAppearance("WATER_DRAGON", imgConfig.getBigMonstersImage(), 2, 6),
-    	createBAppearance("LEGION", imgConfig.getBigMonstersImage(), 7, 5),
-    	createBAppearance("CERBERUS", imgConfig.getBigMonstersImage(), 3, 6),
-    	createAppearance("DOPPELGANGER", imgConfig.getMonstersImage(), 6, 5), /*Pending*/
-    	
-    	
-    	
-    	createAppearance("S_CAT", imgConfig.getMonstersImage(), 5, 9),
-    	createAppearance("S_BIRD", imgConfig.getMonstersImage(), 6, 9),
-    	createAppearance("S_TURTLE", imgConfig.getMonstersImage(), 7, 9),
-    	createBAppearance("S_TIGER", imgConfig.getMonstersImage(), 8, 9),
-    	createAppearance("S_EAGLE", imgConfig.getMonstersImage(), 9, 9),
-    	createAppearance("S_TORTOISE", imgConfig.getMonstersImage(), 7, 9), /*Pending*/
-    	createBAppearance("S_DRAGON", imgConfig.getMonstersImage(), 6, 5), /*Pending*/
-    	
+		createBAppearance("GIANTBAT", imgConfig.BigMonstersImage, 2, 5),
+		createBAppearance("DEATH", imgConfig.BigMonstersImage, 3, 5),
+		createAppearance("SICKLE", imgConfig.MonstersImage, 2, 9),
+		createBAppearance("DRACULA", imgConfig.BigMonstersImage, 4, 5),
+		createBAppearance("MEDUSA", imgConfig.BigMonstersImage, 1, 5),
+		createAppearance("SNAKE", imgConfig.MonstersImage, 1, 9),
+		createBAppearance("FRANK", imgConfig.BigMonstersImage, 7, 4),
+		createAppearance("IGOR", imgConfig.MonstersImage, 10, 8),
+		createBAppearance("DEMON_DRACULA", imgConfig.BigMonstersImage, 5, 5),
+		createBAppearance("AKMODAN", imgConfig.BigMonstersImage, 6, 5),
+		createBAppearance("DRAGON_KING", imgConfig.BigMonstersImage, 1, 6),
+		createBAppearance("ORLOX", imgConfig.BigMonstersImage, 4, 6),
+		createBAppearance("WATER_DRAGON", imgConfig.BigMonstersImage, 2, 6),
+		createBAppearance("LEGION", imgConfig.BigMonstersImage, 7, 5),
+		createBAppearance("CERBERUS", imgConfig.BigMonstersImage, 3, 6),
+		createAppearance("DOPPELGANGER", imgConfig.MonstersImage, 6, 5), /*Pending*/
+		
+		
+		
+		createAppearance("S_CAT", imgConfig.MonstersImage, 5, 9),
+		createAppearance("S_BIRD", imgConfig.MonstersImage, 6, 9),
+		createAppearance("S_TURTLE", imgConfig.MonstersImage, 7, 9),
+		createBAppearance("S_TIGER", imgConfig.MonstersImage, 8, 9),
+		createAppearance("S_EAGLE", imgConfig.MonstersImage, 9, 9),
+		createAppearance("S_TORTOISE", imgConfig.MonstersImage, 7, 9), /*Pending*/
+		createBAppearance("S_DRAGON", imgConfig.MonstersImage, 6, 5), /*Pending*/
+		
 		// Features
 		createXAppearance("CANDLE",
-			imgConfig.getFeaturesImage(),
+			imgConfig.FeaturesImage,
 			0,
 			7 * WIDTH_HALF,
 			WIDTH_HALF,
 			WIDTH_NORMAL
 		), 
 		createXAppearance("URN_FLAME",
-			imgConfig.getFeaturesImage(),
+			imgConfig.FeaturesImage,
 			2 * WIDTH_HALF,
 			7 * WIDTH_HALF,
 			WIDTH_HALF,
@@ -525,7 +526,7 @@ public class GFXAppearances {
 			12
 		),
 		createAppearance("FLAME",
-			imgConfig.getEffectsImage(),
+			imgConfig.EffectsImage,
 			13 * WIDTH_NORMAL,
 			14 * WIDTH_NORMAL,
 			WIDTH_NORMAL,
@@ -561,91 +562,94 @@ public class GFXAppearances {
 		createIAppearance("MUPGRADE", true, 4, 2),
 		createIAppearance("BLAST_CRYSTAL", true, 9, 1),
 
-		createAppearance("MOUND", imgConfig.getEffectsImage(), 11, 17),
+		createAppearance("MOUND", imgConfig.EffectsImage, 11, 17),
 
-        //Characters
-		createAppearance("VKILLER", imgConfig.getCharactersImage(), 1, 1),
-		createAppearance("VANQUISHER", imgConfig.getCharactersImage(), 3, 1),
-		createAppearance("RENEGADE", imgConfig.getCharactersImage(), 5, 1),
-        createAppearance("INVOKER", imgConfig.getCharactersImage(), 1, 2),
-        createAppearance("MANBEAST", imgConfig.getCharactersImage(), 3, 2),
-        createAppearance("BEAST", imgConfig.getCharactersImage(), 5, 2),
-        createAppearance("KNIGHT", imgConfig.getCharactersImage(), 1, 3),
-        
-        createAppearance("VKILLER_W", imgConfig.getCharactersImage(), 2, 1),
-        createAppearance("SONIA_B", imgConfig.getCharactersImage(), 2, 1),
-		createAppearance("VANQUISHER_W", imgConfig.getCharactersImage(), 4, 1),
-		createAppearance("RENEGADE_W", imgConfig.getCharactersImage(), 6, 1),
-        createAppearance("INVOKER_W", imgConfig.getCharactersImage(), 2, 2),
-        createAppearance("MANBEAST_W", imgConfig.getCharactersImage(), 4, 2),
-        createAppearance("BEAST_W", imgConfig.getCharactersImage(), 6, 2),
-        createAppearance("KNIGHT_W", imgConfig.getCharactersImage(), 2, 3),
-        
-        createAppearance("MORPHED_WOLF", imgConfig.getMonstersImage(), 1, 10), 
-        createAppearance("MORPHED_WOLF2", imgConfig.getMonstersImage(), 2, 10), 
-        createAppearance("MORPHED_BAT", imgConfig.getMonstersImage(), 3, 10), 
-        createAppearance("MORPHED_BAT2", imgConfig.getMonstersImage(), 4, 10), 
-        createAppearance("MORPHED_MYST", imgConfig.getMonstersImage(), 5, 10), 
-        createAppearance("MORPHED_MYST2", imgConfig.getMonstersImage(), 6, 10), 
-        createAppearance("MORPHED_WEREBEAR", imgConfig.getMonstersImage(), 7, 10), 
-        createAppearance("MORPHED_WEREDEMON", imgConfig.getMonstersImage(), 8, 10), 
-        createAppearance("MORPHED_WEREWOLF", imgConfig.getMonstersImage(), 10, 10), 
-        createAppearance("MORPHED_WEREBEAST", imgConfig.getMonstersImage(), 9, 10),
-        createAppearance("MORPHED_LUPINE", imgConfig.getCharactersImage(), 5, 2), 
-        
-        
-        createAppearance("SOLEIYU_B_KID", imgConfig.getCharactersImage(), 6, 6),
-   		createAppearance("MAN", imgConfig.getCharactersImage(), 3, 3),
-        createAppearance("WOMAN", imgConfig.getCharactersImage(), 4, 3),
-        createAppearance("OLDMAN", imgConfig.getCharactersImage(), 5, 3),
-        createAppearance("OLDWOMAN", imgConfig.getCharactersImage(), 6, 3),
-        createAppearance("MERCHANT", imgConfig.getCharactersImage(), 1, 4),
-        createAppearance("PRIEST", imgConfig.getCharactersImage(), 2, 4),
-        createAppearance("DOG", imgConfig.getCharactersImage(), 3, 4),
-        createAppearance("HOSTAGE_GUY", imgConfig.getCharactersImage(), 4, 4),
-        createAppearance("HOSTAGE_GIRL", imgConfig.getCharactersImage(), 5, 4),
-        createAppearance("CLARA", imgConfig.getCharactersImage(), 1, 6),
-        createAppearance("VINDELITH", imgConfig.getCharactersImage(), 1, 6),
-        createAppearance("CLAW", imgConfig.getCharactersImage(), 5, 5),
-        createAppearance("MAIDEN", imgConfig.getCharactersImage(), 4, 5),
-        createAppearance("MELDUCK", imgConfig.getCharactersImage(), 3, 5),
-        createAppearance("ICEY", imgConfig.getCharactersImage(), 4, 6),
-        createAppearance("LARDA", imgConfig.getCharactersImage(), 3, 3),
-        createAppearance("CHRISTOPHER_BELMONT_NPC", imgConfig.getCharactersImage(), 3, 6),
-        createAppearance("BARRETT", imgConfig.getCharactersImage(), 5, 6),
-        
+		// Characters
+		createAppearance("VKILLER", imgConfig.CharactersImage, 1, 1),
+		createAppearance("VANQUISHER", imgConfig.CharactersImage, 3, 1),
+		createAppearance("RENEGADE", imgConfig.CharactersImage, 5, 1),
+		createAppearance("INVOKER", imgConfig.CharactersImage, 1, 2),
+		createAppearance("MANBEAST", imgConfig.CharactersImage, 3, 2),
+		createAppearance("BEAST", imgConfig.CharactersImage, 5, 2),
+		createAppearance("KNIGHT", imgConfig.CharactersImage, 1, 3),
+		
+		createAppearance("VKILLER_W", imgConfig.CharactersImage, 2, 1),
+		createAppearance("SONIA_B", imgConfig.CharactersImage, 2, 1),
+		createAppearance("VANQUISHER_W", imgConfig.CharactersImage, 4, 1),
+		createAppearance("RENEGADE_W", imgConfig.CharactersImage, 6, 1),
+		createAppearance("INVOKER_W", imgConfig.CharactersImage, 2, 2),
+		createAppearance("MANBEAST_W", imgConfig.CharactersImage, 4, 2),
+		createAppearance("BEAST_W", imgConfig.CharactersImage, 6, 2),
+		createAppearance("KNIGHT_W", imgConfig.CharactersImage, 2, 3),
+
+		createAppearance("MORPHED_WOLF", imgConfig.MonstersImage, 1, 10), 
+		createAppearance("MORPHED_WOLF2", imgConfig.MonstersImage, 2, 10), 
+		createAppearance("MORPHED_BAT", imgConfig.MonstersImage, 3, 10), 
+		createAppearance("MORPHED_BAT2", imgConfig.MonstersImage, 4, 10), 
+		createAppearance("MORPHED_MYST", imgConfig.MonstersImage, 5, 10), 
+		createAppearance("MORPHED_MYST2", imgConfig.MonstersImage, 6, 10), 
+		createAppearance("MORPHED_WEREBEAR", imgConfig.MonstersImage, 7, 10), 
+		createAppearance("MORPHED_WEREDEMON", imgConfig.MonstersImage, 8, 10), 
+		createAppearance("MORPHED_WEREWOLF", imgConfig.MonstersImage, 10, 10), 
+		createAppearance("MORPHED_WEREBEAST", imgConfig.MonstersImage, 9, 10),
+		createAppearance("MORPHED_LUPINE", imgConfig.CharactersImage, 5, 2), 
+
+		createAppearance("SOLEIYU_B_KID", imgConfig.CharactersImage, 6, 6),
+		createAppearance("MAN", imgConfig.CharactersImage, 3, 3),
+		createAppearance("WOMAN", imgConfig.CharactersImage, 4, 3),
+		createAppearance("OLDMAN", imgConfig.CharactersImage, 5, 3),
+		createAppearance("OLDWOMAN", imgConfig.CharactersImage, 6, 3),
+		createAppearance("MERCHANT", imgConfig.CharactersImage, 1, 4),
+		createAppearance("PRIEST", imgConfig.CharactersImage, 2, 4),
+		createAppearance("DOG", imgConfig.CharactersImage, 3, 4),
+		createAppearance("HOSTAGE_GUY", imgConfig.CharactersImage, 4, 4),
+		createAppearance("HOSTAGE_GIRL", imgConfig.CharactersImage, 5, 4),
+		createAppearance("CLARA", imgConfig.CharactersImage, 1, 6),
+		createAppearance("VINDELITH", imgConfig.CharactersImage, 1, 6),
+		createAppearance("CLAW", imgConfig.CharactersImage, 5, 5),
+		createAppearance("MAIDEN", imgConfig.CharactersImage, 4, 5),
+		createAppearance("MELDUCK", imgConfig.CharactersImage, 3, 5),
+		createAppearance("ICEY", imgConfig.CharactersImage, 4, 6),
+		createAppearance("LARDA", imgConfig.CharactersImage, 3, 3),
+		createAppearance("CHRISTOPHER_BELMONT_NPC", imgConfig.CharactersImage, 3, 6),
+		createAppearance("BARRETT", imgConfig.CharactersImage, 5, 6),
+
 		// Weapons
-        };
+		};
 	}
+
 
 	public Appearance[] getAppearances() {
 		return defs;
 	}
 	
-	public GFXAppearance createAppearance(String ID, BufferedImage bigImage, int xpos, int ypos){
+	
+	public GFXAppearance createAppearance(String ID, BufferedImage bigImage, int xpos, int ypos) {
 		xpos--;
 		ypos--;
-
+		
 		try {
-			BufferedImage img = ImageUtils.crearImagen(bigImage, 
-					xpos*WIDTH_NORMAL, ypos*WIDTH_NORMAL, 
+			BufferedImage img = ImageUtils.crearImagen(bigImage,
+					xpos*WIDTH_NORMAL, ypos*WIDTH_NORMAL,
 					WIDTH_NORMAL, WIDTH_NORMAL);
-			GFXAppearance ret = new GFXAppearance(ID, img,0,0);
+			GFXAppearance ret = new GFXAppearance(ID, img, 0, 0);
 			return ret;
-		} catch (Exception e){
+		} catch (Exception e) {
 			Game.crash("Error loading image ", e);
 		}
 		return null;
 	}
 	
-	public GFXAppearance createAppearance(String ID, BufferedImage bigImage, int xpos, int ypos, int width, int height,int superw, int superh){
+	
+	public GFXAppearance createAppearance(String ID, BufferedImage bigImage,
+			int xpos, int ypos, int width, int height,int superw, int superh) {
 		xpos--;
 		ypos--;
 		try {
 			BufferedImage img = ImageUtils.crearImagen(bigImage, xpos, ypos, width, height);
 			GFXAppearance ret = new GFXAppearance(ID, img,superw,superh);
 			return ret;
-		} catch (Exception e){
+		} catch (Exception e) {
 			Game.crash("Error loading image ", e);
 		}
 		return null;
@@ -660,20 +664,20 @@ public class GFXAppearances {
 			BufferedImage img = ImageUtils.crearImagen(bigImage, xpos, ypos, width, height);
 			GFXAppearance ret = new GFXAppearance(ID, img,(width-48)/2,(height-64)/2+yoff);
 			return ret;
-		} catch (Exception e){
+		} catch (Exception e) {
 			Game.crash("Error loading image ", e);
 		}
 		return null;
 	}
 	
-	public GFXAppearance createTAppearance(String ID, int xpos, int ypos){
+	public GFXAppearance createTAppearance(String ID, int xpos, int ypos) {
 		xpos--;
 		ypos--;
-		GFXImageConfiguration imgConfig = configuration.getImageConfiguration();
-		BufferedImage bigImage = imgConfig.getTerrainImage();
-		BufferedImage bigDarkImage = imgConfig.getDarkTerrainImage();
-		BufferedImage bigNiteImage = imgConfig.getNightTerrainImage();
-		BufferedImage bigDarkNiteImage = imgConfig.getDarkNightTerrainImage();
+		Textures imgConfig = configuration.textures;
+		BufferedImage bigImage = imgConfig.TerrainImage;
+		BufferedImage bigDarkImage = imgConfig.DarkTerrainImage;
+		BufferedImage bigNiteImage = imgConfig.NightTerrainImage;
+		BufferedImage bigDarkNiteImage = imgConfig.DarkNightTerrainImage;
 		
 		try {
 			BufferedImage img = ImageUtils.crearImagen(bigImage, xpos*WIDTH_NORMAL, ypos*CELL_HEIGHT, WIDTH_NORMAL, CELL_HEIGHT);
@@ -688,14 +692,15 @@ public class GFXAppearances {
 		return null;
 	}
 	
-	public GFXAppearance createTAppearance(String ID, int xpos, int ypos, int xoff, int yoff){
+	
+	public GFXAppearance createTAppearance(String ID, int xpos, int ypos, int xoff, int yoff) {
 		xpos--;
 		ypos--;
-		GFXImageConfiguration imgConfig = configuration.getImageConfiguration();
-		BufferedImage bigImage = imgConfig.getTerrainImage();
-		BufferedImage bigDarkImage = imgConfig.getDarkTerrainImage();
-		BufferedImage bigNiteImage = imgConfig.getNightTerrainImage();
-		BufferedImage bigDarkNiteImage = imgConfig.getDarkNightTerrainImage();
+		Textures imgConfig = configuration.textures;
+		BufferedImage bigImage = imgConfig.TerrainImage;
+		BufferedImage bigDarkImage = imgConfig.DarkTerrainImage;
+		BufferedImage bigNiteImage = imgConfig.NightTerrainImage;
+		BufferedImage bigDarkNiteImage = imgConfig.DarkNightTerrainImage;
 		
 		try {
 			BufferedImage img = ImageUtils.crearImagen(bigImage, xpos*WIDTH_NORMAL, ypos*CELL_HEIGHT, WIDTH_NORMAL, CELL_HEIGHT);
@@ -710,7 +715,8 @@ public class GFXAppearances {
 		return null;
 	}
 	
-	public GFXAppearance createBAppearance(String ID, BufferedImage bigImage, int xpos, int ypos){
+	
+	public GFXAppearance createBAppearance(String ID, BufferedImage bigImage, int xpos, int ypos) {
 		xpos--;
 		ypos--;
 		try {
@@ -723,9 +729,16 @@ public class GFXAppearances {
 		return null;
 	}
 	
-	public GFXAppearance createIAppearance(String ID, boolean isFeature, int xpos, int ypos){
-		BufferedImage bigImage = isFeature ? this.configuration.imageConfiguration.getFeaturesImage() : this.configuration.imageConfiguration.getItemsImage();
-		BufferedImage iconImage = isFeature ? this.configuration.imageConfiguration.FeatureIconsImage : this.configuration.imageConfiguration.ItemIconsImage;
+	public GFXAppearance createIAppearance(String ID, boolean isFeature, int xpos, int ypos) {
+		BufferedImage bigImage, iconImage;
+		if (isFeature) {
+			bigImage  = configuration.textures.FeaturesImage;
+			iconImage = configuration.textures.FeatureIconsImage;
+		} else {
+			bigImage  = configuration.textures.ItemsImage;
+			iconImage = configuration.textures.ItemIconsImage;
+		}
+		
 		xpos--;
 		ypos--;
 		try {
