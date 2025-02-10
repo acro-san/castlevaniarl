@@ -317,7 +317,8 @@ public class Monster extends Actor implements Cloneable {
 			return;
 		}
 		
-		if (p.getPlayerClass() == Player.CLASS_VAMPIREKILLER) {
+		// FIXME See 'Feature.java' logic. is there overlap with this??
+		if (p.playerClass == Player.CLASS_VAMPIREKILLER) {
 			if (Util.chance(20)) {
 				// Will get a mystic weapon
 				if (p.getFlag("MYSTIC_CRYSTAL") && Util.chance(20))

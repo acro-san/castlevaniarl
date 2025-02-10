@@ -50,11 +50,12 @@ public class GFXPlayerGenerator extends PlayerGenerator{
 				x.code != CharKey.F &&
 				x.code != CharKey.f)
 			x = si.inkey();
-		int sex = 0;
-		if (x.code == CharKey.M || x.code == CharKey.m)
+		byte sex = Player.MALE;
+		if (x.code == CharKey.M || x.code == CharKey.m) {
 			sex = Player.MALE;
-		else
+		} else {
 			sex = Player.FEMALE;
+		}
 		si.printAtPixel(138,133, x.toString(), GFXDisplay.COLOR_BOLD);
 		
 		GFXAppearance[] apps = new GFXAppearance[CLASS_APPEARANCES.length];
@@ -65,26 +66,26 @@ public class GFXPlayerGenerator extends PlayerGenerator{
 				apps[i] = (GFXAppearance)Main.appearances.get(CLASS_APPEARANCES[i]+"_W");
 		}
 
-        si.printAtPixel(80,173, CLASS_NAMES[0], Color.WHITE);
-        si.printAtPixel(80,191, CLASS_NAMES[1], Color.WHITE);
-        si.printAtPixel(80,209, CLASS_NAMES[2], Color.WHITE);
-        si.printAtPixel(80,227, CLASS_NAMES[3], Color.WHITE);
-        si.printAtPixel(80,245, CLASS_NAMES[4], Color.WHITE);
-        si.printAtPixel(80,263, CLASS_NAMES[5], Color.WHITE);
-        
-        si.printAtPixel(350,260, "Attack      ", GFXDisplay.COLOR_BOLD);
-        si.printAtPixel(350,280, "Soul Power  ", GFXDisplay.COLOR_BOLD);
-        si.printAtPixel(350,300, "Resistance  ", GFXDisplay.COLOR_BOLD);
-        si.printAtPixel(350,320, "Evasion     ", GFXDisplay.COLOR_BOLD);
-        si.printAtPixel(350,340,"Movement    ", GFXDisplay.COLOR_BOLD);
-        si.printAtPixel(350,360,"Combat      ", GFXDisplay.COLOR_BOLD);
-        si.printAtPixel(350,380,"Invokation  ", GFXDisplay.COLOR_BOLD);
-        si.printAtPixel(350,400,"Strength    ", GFXDisplay.COLOR_BOLD);
-        si.printAtPixel(350,420,"Sight       ", GFXDisplay.COLOR_BOLD);
-        si.printAtPixel(350,440,"Wealth      ", GFXDisplay.COLOR_BOLD);
-        txtClassDescription.setVisible(true);
+		si.printAtPixel(80,173, CLASS_NAMES[0], Color.WHITE);
+		si.printAtPixel(80,191, CLASS_NAMES[1], Color.WHITE);
+		si.printAtPixel(80,209, CLASS_NAMES[2], Color.WHITE);
+		si.printAtPixel(80,227, CLASS_NAMES[3], Color.WHITE);
+		si.printAtPixel(80,245, CLASS_NAMES[4], Color.WHITE);
+		si.printAtPixel(80,263, CLASS_NAMES[5], Color.WHITE);
+
+		si.printAtPixel(350,260, "Attack      ", GFXDisplay.COLOR_BOLD);
+		si.printAtPixel(350,280, "Soul Power  ", GFXDisplay.COLOR_BOLD);
+		si.printAtPixel(350,300, "Resistance  ", GFXDisplay.COLOR_BOLD);
+		si.printAtPixel(350,320, "Evasion     ", GFXDisplay.COLOR_BOLD);
+		si.printAtPixel(350,340,"Movement    ", GFXDisplay.COLOR_BOLD);
+		si.printAtPixel(350,360,"Combat      ", GFXDisplay.COLOR_BOLD);
+		si.printAtPixel(350,380,"Invokation  ", GFXDisplay.COLOR_BOLD);
+		si.printAtPixel(350,400,"Strength    ", GFXDisplay.COLOR_BOLD);
+		si.printAtPixel(350,420,"Sight       ", GFXDisplay.COLOR_BOLD);
+		si.printAtPixel(350,440,"Wealth      ", GFXDisplay.COLOR_BOLD);
+		txtClassDescription.setVisible(true);
 		x = new CharKey(CharKey.NONE);
-		int choice = 0;
+		byte choice = Player.CLASS_VAMPIREKILLER;
 		si.saveBuffer();
 		while (true) {
 			si.restore();
@@ -113,11 +114,11 @@ public class GFXPlayerGenerator extends PlayerGenerator{
 				x = si.inkey();
 			}
 			if (x.code == CharKey.UARROW) {
-				if (choice > 0) {
+				if (choice > Player.CLASS_VAMPIREKILLER) {
 					choice--;
 				}
 			} else if (x.code == CharKey.DARROW){
-				if (choice < 5) {
+				if (choice < Player.CLASS_KNIGHT) {
 					choice++;
 				}
 			} else {

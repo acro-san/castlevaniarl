@@ -95,7 +95,7 @@ public class NPCData {
 	public static Hostage buildHostage() {
 		Hostage ret = new Hostage((NPCDef)definitions.get( Util.pick(hostages) ));
 		Player p = Main.ui.getPlayer();	//FIXME: *SURELY* the UI isn't where the player's stored though?
-		if (p.getPlayerClass() != Player.CLASS_VAMPIREKILLER) {
+		if (p.playerClass != Player.CLASS_VAMPIREKILLER) {
 			int artifactCategory = ((int) (p.getPlayerLevel() / 6.0));
 			ret.itemReward = Main.itemData.createWeapon(Util.pick(hostageArtifacts[artifactCategory]),"");
 		}

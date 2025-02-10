@@ -973,7 +973,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		}
 		
 		// TODO: Add the background
-		if (player.getPlayerClass() == Player.CLASS_VAMPIREKILLER) {
+		if (player.playerClass == Player.CLASS_VAMPIREKILLER) {
 			if (player.getMysticWeapon() != -1) {
 				si.drawImage(18,38, getImageForMystic(player.getMysticWeapon()));
 			}

@@ -170,7 +170,7 @@ public abstract class PlayerGenerator {
 	}
 	
 	
-	public Player getPlayer(String name, int sex, int choice) {
+	public Player getPlayer(String name, byte sex, byte classChoice) {
 		Player player = new Player();
 		player.setSex(sex);
 		if (name.trim().equals("")) {
@@ -182,225 +182,209 @@ public abstract class PlayerGenerator {
 		} else {
 			player.setName(name);
 		}
-		switch (choice){
-			case 0:
-				player.setPlayerClass(Player.CLASS_VAMPIREKILLER);
-			break;
-			case 1:
-				player.setPlayerClass(Player.CLASS_RENEGADE);
-			break;
-			case 2:
-				player.setPlayerClass(Player.CLASS_VANQUISHER);
-			break;
-			case 3:
-				player.setPlayerClass(Player.CLASS_INVOKER);
-			break;
-			case 4:
-				player.setPlayerClass(Player.CLASS_MANBEAST);
-			break;
-			case 5:
-				player.setPlayerClass(Player.CLASS_KNIGHT);
-			break;
-		}
 		
-		String classID = null;
+		assert(	classChoice >= Player.CLASS_VAMPIREKILLER &&
+				classChoice <= Player.CLASS_KNIGHT);
+		player.setPlayerClass(classChoice);
+		
 		String[] plots = null;
 		String[] descriptions = null;
 		String[] initWeapons = null;
 		String[] initArmors = null;
 		String[] initItems = null;
 		player.setBaseSightRange(4);
-		switch (player.getPlayerClass()){
-			case Player.CLASS_VAMPIREKILLER:
-				classID = "VKILLER";
-				player.setGold(Util.rand(3,7) * 100);
-				plots = Text.VKILLER_PLOTS;
-				descriptions = Text.VKILLER_DESCRIPTIONS;
-				initWeapons = VKILLER_WEAPONS;
-				initArmors = VKILLER_ARMORS;
-				initItems = VKILLER_ITEMS;
-				player.setWalkCost(40);
-				player.setAttackCost(50);
-				player.setAttack(5);
-				player.setBaseEvadeChance(5);
-				player.setCastCost(30);
-				player.setSoulPower(1);
-				player.setCarryMax(15);
-				player.setBreathing(35);
-				player.increaseWeaponSkillLevel(ItemDefinition.CAT_WHIPS);
-				player.increaseWeaponSkillLevel(ItemDefinition.CAT_PROJECTILES);
-				player.setBannedArmors(VKILLER_BANNED_ARMOR);
-				player.setAdvancementLevels(ADVANCEMENT_LEVELS_NORMAL);
-				player.setFlag("ONLY_VK", true);
-				player.putCustomMessage("INTRO_1", "This forest suffers as darkness corrupts its roots, it is my fate to get to Castlevania and fight my way through.");
-				player.putCustomMessage("CLARA1", "I came here to fulfill my fate as a Vampire Killer, and destroy the dark count Dracula");
+		// "setClass()" - from CharClassDefs? or 'initAsClass(..)' since it randomizes gold amount.
+		switch (player.playerClass) {
+		case Player.CLASS_VAMPIREKILLER:
+			player.setGold(Util.rand(3,7) * 100);
+			plots = Text.VKILLER_PLOTS;
+			descriptions = Text.VKILLER_DESCRIPTIONS;
+			initWeapons = VKILLER_WEAPONS;
+			initArmors = VKILLER_ARMORS;
+			initItems = VKILLER_ITEMS;
+			player.setWalkCost(40);
+			player.setAttackCost(50);
+			player.setAttack(5);
+			player.setBaseEvadeChance(5);
+			player.setCastCost(30);
+			player.setSoulPower(1);
+			player.setCarryMax(15);
+			player.setBreathing(35);
+			player.increaseWeaponSkillLevel(ItemDefinition.CAT_WHIPS);
+			player.increaseWeaponSkillLevel(ItemDefinition.CAT_PROJECTILES);
+			player.setBannedArmors(VKILLER_BANNED_ARMOR);
+			player.setAdvancementLevels(ADVANCEMENT_LEVELS_NORMAL);
+			player.setFlag("ONLY_VK", true);
+			player.putCustomMessage("INTRO_1", "This forest suffers as darkness corrupts its roots, it is my fate to get to Castlevania and fight my way through.");
+			player.putCustomMessage("CLARA1", "I came here to fulfill my fate as a Vampire Killer, and destroy the dark count Dracula");
 			break;
-			case Player.CLASS_VANQUISHER:
-				classID = "VANQUISHER";
-				player.setGold(Util.rand(5,15) * 100);
-				player.setHitsMax(17);
-				player.heal();
-				plots = Text.VANQUISHER_PLOTS;
-				descriptions = Text.VANQUISHER_DESCRIPTIONS;
-				initWeapons = VANQUISHER_WEAPONS;
-				initArmors = VANQUISHER_ARMORS;
-				initItems = VANQUISHER_ITEMS;
-				player.setWalkCost(60);
-				player.setAttackCost(60);
-				player.setAttack(3);
-				player.setSoulPower(3);
-				player.setCastCost(30);
-				player.setCarryMax(15);
-				player.setHeartMax(30);
-				player.setBreathing(25);
-				player.increaseWeaponSkillLevel(ItemDefinition.CAT_STAVES);
-				player.increaseWeaponSkillLevel(ItemDefinition.CAT_RINGS);
-				player.setBannedArmors(VANQUISHER_BANNED_ARMOR);
-				player.setAdvancementLevels(ADVANCEMENT_LEVELS_HARD);
-				player.putCustomMessage("INTRO_1", "The time is almost over, the trip over here will be wasted if I dont reach the castle soon.");
-				player.putCustomMessage("CLARA1", "Get out of my way, I have issues to attend inside the castle");
+			
+		// RENEGADE HERE. consistency please.
+		case Player.CLASS_RENEGADE:
+			player.setGold(Util.rand(2,10) * 100);
+			plots = Text.RENEGADE_PLOTS;
+			descriptions = Text.RENEGADE_DESCRIPTIONS;
+			initWeapons = RENEGADE_WEAPONS;
+			initArmors = RENEGADE_ARMORS;
+			initItems = RENEGADE_ITEMS;
+			player.setBaseSightRange(5);
+			player.setBaseEvadeChance(5);
+			player.setWalkCost(40);
+			player.setAttackCost(40);
+			player.setAttack(5);
+			player.setCastCost(40);
+			player.setCarryMax(15);
+			player.setSoulPower(2);
+			player.setBreathing(35);
+			player.increaseWeaponSkillLevel(ItemDefinition.CAT_DAGGERS);
+			player.increaseWeaponSkillLevel(ItemDefinition.CAT_SWORDS);
+			player.setBannedArmors(RENEGADE_BANNED_ARMOR);
+			player.setAdvancementLevels(ADVANCEMENT_LEVELS_NORMAL);
+
+			player.setShield(Main.itemData.createShield(Util.pick(RENEGADE_SHIELDS), Util.pick(ARMOR_MATERIALS)));
+			player.setSecondaryWeapon(Main.itemData.createWeapon("BASELARD", Util.pick(WEAPON_MATERIALS)));
+
+			player.putCustomMessage("INTRO_1", "I can almost breathe the chaos that invades every tree and animal in this forest. It is time to return to the castle.");
+			player.putCustomMessage("CLARA1", "Commonner? . . . Ignorant human... get out of my way.");
 			break;
-			case Player.CLASS_RENEGADE:
-				classID = "RENEGADE";
-				player.setGold(Util.rand(2,10) * 100);
-				plots = Text.RENEGADE_PLOTS;
-				descriptions = Text.RENEGADE_DESCRIPTIONS;
-				initWeapons = RENEGADE_WEAPONS;
-				initArmors = RENEGADE_ARMORS;
-				initItems = RENEGADE_ITEMS;
-				player.setBaseSightRange(5);
-				player.setBaseEvadeChance(5);
-				player.setWalkCost(40);
-				player.setAttackCost(40);
-				player.setAttack(5);
-				player.setCastCost(40);
-				player.setCarryMax(15);
-				player.setSoulPower(2);
-				player.setBreathing(35);
-				player.increaseWeaponSkillLevel(ItemDefinition.CAT_DAGGERS);
-				player.increaseWeaponSkillLevel(ItemDefinition.CAT_SWORDS);
-				player.setBannedArmors(RENEGADE_BANNED_ARMOR);
-				player.setAdvancementLevels(ADVANCEMENT_LEVELS_NORMAL);
-				
-				player.setShield(Main.itemData.createShield(Util.pick(RENEGADE_SHIELDS), Util.pick(ARMOR_MATERIALS)));
-				player.setSecondaryWeapon(Main.itemData.createWeapon("BASELARD", Util.pick(WEAPON_MATERIALS)));
-				
-				player.putCustomMessage("INTRO_1", "I can almost breathe the chaos that invades every tree and animal in this forest. It is time to return to the castle.");
-				player.putCustomMessage("CLARA1", "Commonner? . . . Ignorant human... get out of my way.");
+			
+		case Player.CLASS_VANQUISHER:
+
+			player.setGold(Util.rand(5,15) * 100);
+			player.setHitsMax(17);
+			player.heal();
+			plots = Text.VANQUISHER_PLOTS;
+			descriptions = Text.VANQUISHER_DESCRIPTIONS;
+			initWeapons = VANQUISHER_WEAPONS;
+			initArmors = VANQUISHER_ARMORS;
+			initItems = VANQUISHER_ITEMS;
+			player.setWalkCost(60);
+			player.setAttackCost(60);
+			player.setAttack(3);
+			player.setSoulPower(3);
+			player.setCastCost(30);
+			player.setCarryMax(15);
+			player.setHeartMax(30);
+			player.setBreathing(25);
+			player.increaseWeaponSkillLevel(ItemDefinition.CAT_STAVES);
+			player.increaseWeaponSkillLevel(ItemDefinition.CAT_RINGS);
+			player.setBannedArmors(VANQUISHER_BANNED_ARMOR);
+			player.setAdvancementLevels(ADVANCEMENT_LEVELS_HARD);
+			player.putCustomMessage("INTRO_1", "The time is almost over, the trip over here will be wasted if I dont reach the castle soon.");
+			player.putCustomMessage("CLARA1", "Get out of my way, I have issues to attend inside the castle");
 			break;
-			case Player.CLASS_INVOKER:
-				classID = "INVOKER";
-				player.setGold(Util.rand(2,10) * 100);
-				player.setHitsMax(17);
-				player.heal();
-				plots = Text.INVOKER_PLOTS;
-				descriptions = Text.INVOKER_DESCRIPTIONS;
-				initWeapons = INVOKER_WEAPONS;
-				initArmors = INVOKER_ARMORS;
-				initItems = INVOKER_ITEMS;
-				player.setWalkCost(60);
-				player.setSoulPower(3);
-				player.setAttackCost(50);
-				player.setAttack(3);
-				player.setHeartMax(30);
-				player.setCastCost(40);
-				player.setCarryMax(15);
-				player.setBreathing(25);
-				player.increaseWeaponSkillLevel(ItemDefinition.CAT_STAVES);
-				player.increaseWeaponSkillLevel(ItemDefinition.CAT_RINGS);
-				player.setBannedArmors(INVOKER_BANNED_ARMOR);
-				player.setAdvancementLevels(ADVANCEMENT_LEVELS_NORMAL);
-				player.putCustomMessage("INTRO_1", "I can sense all kind of dreaded souls lurking in here, I am afraid my master was right, I really need to reach the castle.");
-				player.putCustomMessage("CLARA1", "Something bigger than myself has got me here, you would never understand it... the castle calls me.");
+
+		case Player.CLASS_INVOKER:
+			player.setGold(Util.rand(2,10) * 100);
+			player.setHitsMax(17);
+			player.heal();
+			plots = Text.INVOKER_PLOTS;
+			descriptions = Text.INVOKER_DESCRIPTIONS;
+			initWeapons = INVOKER_WEAPONS;
+			initArmors = INVOKER_ARMORS;
+			initItems = INVOKER_ITEMS;
+			player.setWalkCost(60);
+			player.setSoulPower(3);
+			player.setAttackCost(50);
+			player.setAttack(3);
+			player.setHeartMax(30);
+			player.setCastCost(40);
+			player.setCarryMax(15);
+			player.setBreathing(25);
+			player.increaseWeaponSkillLevel(ItemDefinition.CAT_STAVES);
+			player.increaseWeaponSkillLevel(ItemDefinition.CAT_RINGS);
+			player.setBannedArmors(INVOKER_BANNED_ARMOR);
+			player.setAdvancementLevels(ADVANCEMENT_LEVELS_NORMAL);
+			player.putCustomMessage("INTRO_1", "I can sense all kind of dreaded souls lurking in here, I am afraid my master was right, I really need to reach the castle.");
+			player.putCustomMessage("CLARA1", "Something bigger than myself has got me here, you would never understand it... the castle calls me.");
 			break;
-			case Player.CLASS_MANBEAST:
-				//player.setRegenRate(40);
-				player.setGold(Util.rand(1,5) * 100);
-				player.setHitsMax(26);
-				player.setBaseSightRange(6);
-				player.heal();
-				classID = "MANBEAST";
-				plots = Text.MANBEAST_PLOTS;
-				descriptions = Text.MANBEAST_DESCRIPTIONS;
-				initWeapons = null;
-				initArmors = MANBEAST_ARMORS;
-				initItems = MANBEAST_ITEMS;
-				player.setWalkCost(35);
-				player.setAttackCost(40);
-				player.setCastCost(60);
-				player.setSoulPower(1);
-				player.setHeartMax(15);
-				player.setAttack(3);
-				player.setCarryMax(20);
-				player.setBreathing(45);
-				player.setBaseEvadeChance(20);
-				player.increaseWeaponSkillLevel(ItemDefinition.CAT_UNARMED);
-				player.increaseWeaponSkillLevel(ItemDefinition.CAT_PROJECTILES);
-				player.setBannedArmors(MANBEAST_BANNED_ARMOR);
-				player.setAdvancementLevels(ADVANCEMENT_LEVELS_HARDER);
-				player.addItem(Main.itemData.createItem("THROWING_KNIFE"));
-				player.putCustomMessage("INTRO_1", "I can hear, I can smell, I can sense the damned creatures that almost anihilated my brothers... tell me, where is the castle?");
-				player.putCustomMessage("CLARA1", "Don't let appearances fool you... the blood of my brothers and sisters fills my veins, anger will get me through this damned place and to the heart of the count");
+		case Player.CLASS_MANBEAST:
+			//player.setRegenRate(40);
+			player.setGold(Util.rand(1,5) * 100);
+			player.setHitsMax(26);
+			player.setBaseSightRange(6);
+			player.heal();
+			plots = Text.MANBEAST_PLOTS;
+			descriptions = Text.MANBEAST_DESCRIPTIONS;
+			initWeapons = null;
+			initArmors = MANBEAST_ARMORS;
+			initItems = MANBEAST_ITEMS;
+			player.setWalkCost(35);
+			player.setAttackCost(40);
+			player.setCastCost(60);
+			player.setSoulPower(1);
+			player.setHeartMax(15);
+			player.setAttack(3);
+			player.setCarryMax(20);
+			player.setBreathing(45);
+			player.setBaseEvadeChance(20);
+			player.increaseWeaponSkillLevel(ItemDefinition.CAT_UNARMED);
+			player.increaseWeaponSkillLevel(ItemDefinition.CAT_PROJECTILES);
+			player.setBannedArmors(MANBEAST_BANNED_ARMOR);
+			player.setAdvancementLevels(ADVANCEMENT_LEVELS_HARDER);
+			player.addItem(Main.itemData.createItem("THROWING_KNIFE"));
+			player.putCustomMessage("INTRO_1", "I can hear, I can smell, I can sense the damned creatures that almost anihilated my brothers... tell me, where is the castle?");
+			player.putCustomMessage("CLARA1", "Don't let appearances fool you... the blood of my brothers and sisters fills my veins, anger will get me through this damned place and to the heart of the count");
 			break;
-			case Player.CLASS_KNIGHT:
-				classID = "KNIGHT";
-				player.setGold(Util.rand(5,12) * 100);
-				player.setHitsMax(23);
-				player.setHeartMax(10);
-				player.setBreathing(15);
-				player.heal();
-				int skilleds = Util.rand(4,5);
-				String[] randWpnSkillUp = {
-					ItemDefinition.CAT_UNARMED,
-					ItemDefinition.CAT_DAGGERS,
-					ItemDefinition.CAT_SWORDS,
-					ItemDefinition.CAT_SPEARS,
-					ItemDefinition.CAT_WHIPS,
-					ItemDefinition.CAT_MACES,
-					ItemDefinition.CAT_STAVES,
-					ItemDefinition.CAT_RINGS,
-					ItemDefinition.CAT_PROJECTILES,
-					ItemDefinition.CAT_BOWS,
-					ItemDefinition.CAT_PISTOLS,
-					ItemDefinition.CAT_SHIELD
-				};
-				for (int i = 0; i < skilleds; i++) {
-					player.increaseWeaponSkillLevel(Util.pick(randWpnSkillUp));
-				}
-				plots = Text.KNIGHT_PLOTS;
-				descriptions = Text.KNIGHT_DESCRIPTIONS;
-				initWeapons = KNIGHT_WEAPONS;
-				initArmors = KNIGHT_ARMORS;
-				initItems = KNIGHT_ITEMS;
-				player.setWalkCost(50);
-				player.setAttackCost(40);
-				player.setCastCost(60);
-				player.setAttack(7);
-				player.setCarryMax(20);
-				player.increaseWeaponSkillLevel(ItemDefinition.CAT_SWORDS);
-				player.increaseWeaponSkillLevel(ItemDefinition.CAT_SPEARS);
-				player.increaseWeaponSkillLevel(ItemDefinition.CAT_PISTOLS);
-				player.increaseWeaponSkillLevel(ItemDefinition.CAT_SHIELD);
-				player.setBannedArmors(KNIGHT_BANNED_ARMOR);
-				player.setAdvancementLevels(ADVANCEMENT_LEVELS_NORMAL);
-				player.setShield(Main.itemData.createShield(Util.pick(KNIGHT_SHIELDS), Util.pick(ARMOR_MATERIALS)));
-				player.putCustomMessage("INTRO_1", "Indeed, those seem to be Wargs: demonic wolf-like creatures summoned by the Count of Darkness to protect his castle. We better get to the castle quickly.");
-				player.putCustomMessage("CLARA1", "Can you not see the mark of heavens? I am a Knight of the Sacred Order, and I came to cleanse this place from darkness.");
+		case Player.CLASS_KNIGHT:
+			player.setGold(Util.rand(5,12) * 100);
+			player.setHitsMax(23);
+			player.setHeartMax(10);
+			player.setBreathing(15);
+			player.heal();
+			int skilleds = Util.rand(4,5);
+			String[] randWpnSkillUp = {
+				ItemDefinition.CAT_UNARMED,
+				ItemDefinition.CAT_DAGGERS,
+				ItemDefinition.CAT_SWORDS,
+				ItemDefinition.CAT_SPEARS,
+				ItemDefinition.CAT_WHIPS,
+				ItemDefinition.CAT_MACES,
+				ItemDefinition.CAT_STAVES,
+				ItemDefinition.CAT_RINGS,
+				ItemDefinition.CAT_PROJECTILES,
+				ItemDefinition.CAT_BOWS,
+				ItemDefinition.CAT_PISTOLS,
+				ItemDefinition.CAT_SHIELD
+			};
+			for (int i = 0; i < skilleds; i++) {
+				player.increaseWeaponSkillLevel(Util.pick(randWpnSkillUp));
+			}
+			plots = Text.KNIGHT_PLOTS;
+			descriptions = Text.KNIGHT_DESCRIPTIONS;
+			initWeapons = KNIGHT_WEAPONS;
+			initArmors = KNIGHT_ARMORS;
+			initItems = KNIGHT_ITEMS;
+			player.setWalkCost(50);
+			player.setAttackCost(40);
+			player.setCastCost(60);
+			player.setAttack(7);
+			player.setCarryMax(20);
+			player.increaseWeaponSkillLevel(ItemDefinition.CAT_SWORDS);
+			player.increaseWeaponSkillLevel(ItemDefinition.CAT_SPEARS);
+			player.increaseWeaponSkillLevel(ItemDefinition.CAT_PISTOLS);
+			player.increaseWeaponSkillLevel(ItemDefinition.CAT_SHIELD);
+			player.setBannedArmors(KNIGHT_BANNED_ARMOR);
+			player.setAdvancementLevels(ADVANCEMENT_LEVELS_NORMAL);
+			player.setShield(Main.itemData.createShield(Util.pick(KNIGHT_SHIELDS), Util.pick(ARMOR_MATERIALS)));
+			player.putCustomMessage("INTRO_1", "Indeed, those seem to be Wargs: demonic wolf-like creatures summoned by the Count of Darkness to protect his castle. We better get to the castle quickly.");
+			player.putCustomMessage("CLARA1", "Can you not see the mark of heavens? I am a Knight of the Sacred Order, and I came to cleanse this place from darkness.");
 			break;
 		}
 		
-		ItemDataTable itf = Main.itemData;
+		String classAppearanceID = CLASS_ID_STRINGS[player.playerClass];
 		HashMap<String, Appearance> aps = Main.appearances;
-		if (player.getSex()==Player.MALE)
-			player.setAppearance(aps.get(classID));
+		if (player.getSex() == Player.MALE)
+			player.setAppearance(aps.get(classAppearanceID));
 		else
-			player.setAppearance(aps.get(classID+"_W"));
-
+			player.setAppearance(aps.get(classAppearanceID+"_W"));
+		
 		player.setPlot(
 			TxtTpl.t(player, Util.pick(plots)),
-			TxtTpl.t(player, getClassStartEquipmentDescription(player.getPlayerClass())));
-		player.setDescription(
-			TxtTpl.t(player, Util.pick(descriptions)));
+			TxtTpl.t(player, getClassStartEquipmentDescription(player.playerClass)));
+		player.setDescription( TxtTpl.t(player, Util.pick(descriptions)) );
+		
+		ItemDataTable itf = Main.itemData;
 		if (initWeapons != null) {
 			player.setWeapon(itf.createWeapon(Util.pick(initWeapons), Util.pick(WEAPON_MATERIALS)));
 		}
@@ -414,7 +398,7 @@ public abstract class PlayerGenerator {
 	}
 
 
-	static final String[]
+	public static final String[]
 		CLASS_EQUIP_DESCRIPTIONS = {
 			"the vampire killer whip, %%SEX sacred charm",	// 0: vampirekiller
 			"%%SEX dark powers",	// 1: renegade
@@ -432,6 +416,16 @@ public abstract class PlayerGenerator {
 			"KNIGHT"	// 5: knight
 		};
 	
+	// TODO Move to Player. then deprecate ... use ints.
+	protected String[] CLASS_APPEARANCES = {
+		"VKILLER", "RENEGADE", "VANQUISHER", "INVOKER", "MANBEAST", "KNIGHT"
+	};
+	// TODO Move to Text.
+	protected String[] CLASS_NAMES = {	// ManBeast aka 'Werebeast'? (Werewolf=='Man'wolf),Wolfwere also valid, but sounds odd.
+		"Vampire Killer", "Darkness Renegade","Vanquisher Wizard","Souls' Master","Beastman","Knight of the Order"
+	};
+	
+	
 	private String getClassStartEquipmentDescription(int classID) {
 		if (classID < 0 || classID > Player.CLASS_KNIGHT) {
 			// But is there even reason to be checking for this to occur!?
@@ -442,7 +436,7 @@ public abstract class PlayerGenerator {
 	}
 	
 	public static String getClassID(int classID) {
-		if (classID < 0 || classID > Player.CLASS_KNIGHT) {
+		if (classID < Player.CLASS_VAMPIREKILLER || classID > Player.CLASS_KNIGHT) {
 			// But is there even reason to be checking for this to occur!?
 			System.err.println("Invalid character class!: "+classID);
 			return "";
@@ -497,72 +491,17 @@ public abstract class PlayerGenerator {
 		{"7","0","Hardy","0","Normal","Deadly","Poor","Strong","Normal","Wealthy"}
 	};
 	
-	// TODO Move to Text. then deprecate ... use ints.
-	protected String[] CLASS_APPEARANCES = {
-		"VKILLER", "RENEGADE", "VANQUISHER", "INVOKER", "MANBEAST", "KNIGHT"
-	};
-	// TODO Move to Text.
-	protected String[] CLASS_NAMES = {
-		"Vampire Killer", "Darkness Renegade","Vanquisher Wizard","Souls' Master","Manbeast","Knight of the Order"
-	};
 	
-	
-	private int[] ADVANCEMENT_LEVELS_NORMAL = {
-		1,
-		4,
-		7,
-		10,
-		14,
-		18,
-		22,
-		27,
-		32,
-		37,
-		43,
-		49,
-		55,
-		62,
-		69,
-		76
-	};
-	
-	private int[] ADVANCEMENT_LEVELS_HARD = {
-		1,
-		5,
-		9,
-		13,
-		18,
-		23,
-		28,
-		34,
-		40,
-		46,
-		53,
-		60,
-		67,
-		75,
-		83,
-		91
-	};
-	
-	private int[] ADVANCEMENT_LEVELS_HARDER = {
-		1,
-		6,
-		11,
-		16,
-		22,
-		28,
-		34,
-		41,
-		48,
-		55,
-		63,
-		71,
-		79,
-		88,
-		97,
-		106
-	};
+	private static final int[]
+		ADVANCEMENT_LEVELS_NORMAL = {
+			1,  4,  7, 10, 14, 18, 22, 27, 32, 37, 43, 49, 55, 62, 69, 76
+		},
+		ADVANCEMENT_LEVELS_HARD = {
+			1,  5,  9, 13, 18, 23, 28, 34, 40, 46, 53, 60, 67, 75, 83, 91
+		},
+		ADVANCEMENT_LEVELS_HARDER = {
+			1,  6, 11, 16, 22, 28, 34, 41, 48, 55, 63, 71, 79, 88, 97, 106
+		};
 
 	private String[] SONIA_ITEMS = {"HEAL_HERB", "GARLIC", "BIBUTI"};
 

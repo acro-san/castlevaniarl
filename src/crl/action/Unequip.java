@@ -19,7 +19,7 @@ public class Unequip extends Action{
 	public void execute(){
 		Player player = (Player)performer;
 		if (player.getArmor() == targetEquipedItem){
-			if (player.getPlayerClass() == Player.CLASS_VAMPIREKILLER){
+			if (player.playerClass == Player.CLASS_VAMPIREKILLER) {
 				performer.level.addMessage("You can't abandon the vampire killer armor");
 				return;
 			}
@@ -28,7 +28,7 @@ public class Unequip extends Action{
 			player.setArmor(null);
 		}
 		if (player.getWeapon() == targetEquipedItem){
-			if (player.getPlayerClass() == Player.CLASS_VAMPIREKILLER && player.getFlag("ONLY_VK")){
+			if (player.playerClass == Player.CLASS_VAMPIREKILLER && player.getFlag("ONLY_VK")) {
 				performer.level.addMessage("You can't abandon the mystic whip");
 				return;
 			}

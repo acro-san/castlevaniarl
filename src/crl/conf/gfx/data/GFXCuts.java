@@ -211,10 +211,10 @@ public class GFXCuts {
 		return ret;
 	}
 
-	
+
 	public static Image getPortraitForPlayer(Player p) {
 		if (p.getSex() == Player.MALE) {
-			switch (p.getPlayerClass()) {
+			switch (p.playerClass) {
 			case Player.CLASS_VAMPIREKILLER:
 				return PRT_M1;
 			case Player.CLASS_RENEGADE:
@@ -229,7 +229,7 @@ public class GFXCuts {
 				return PRT_M6;
 			}
 		} else {
-			switch (p.getPlayerClass()) {
+			switch (p.playerClass) {
 			case Player.CLASS_VAMPIREKILLER:
 				return PRT_F1;
 			case Player.CLASS_RENEGADE:

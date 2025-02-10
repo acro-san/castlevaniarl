@@ -5,16 +5,17 @@ import crl.item.Item;
 import crl.item.ItemDefinition;
 import crl.player.Player;
 
-public class Equip extends Action{
-	public String getID(){
+public class Equip extends Action {
+	
+	public String getID() {
 		return "Equip";
 	}
 	
-	public boolean needsItem(){
+	public boolean needsItem() {
 		return true;
 	}
 
-	public String getPromptItem(){
+	public String getPromptItem() {
 		return "Wear what?";
 	}
 
@@ -30,7 +31,7 @@ public class Equip extends Action{
 	public void execute(){
 		ItemDefinition def = targetItem.getDefinition();
 		Player player = (Player)performer;
-		if (!player.canWield()){
+		if (!player.canWield()) {
 			performer.level.addMessage("You can't wear anything!");
 			return;
 		}
@@ -53,7 +54,7 @@ public class Equip extends Action{
 				break;
 				
 			case ItemDefinition.EQUIPTYPE_WEAPON:
-				if (player.getPlayerClass() == Player.CLASS_VAMPIREKILLER && player.getFlag("ONLY_VK")){
+				if (player.playerClass == Player.CLASS_VAMPIREKILLER && player.getFlag("ONLY_VK")) {
 					performer.level.addMessage("You can't abandon the mystic whip");
 					return;
 				}
@@ -127,7 +128,7 @@ public class Equip extends Action{
 		}
 	}
 	
-	public int getCost(){
+	public int getCost() {
 		return 50;
 	}
 }

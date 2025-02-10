@@ -63,7 +63,7 @@ public class Merchant extends NPC {
 	public Vector<Item> getMerchandiseFor(Player player) {
 		int gameTurns = player.getGameSessionInfo().turns;
 		if (refreshTurns == -1 || gameTurns - refreshTurns > 1000) {
-			if (player.getPlayerClass() == Player.CLASS_VAMPIREKILLER && (
+			if (player.playerClass == Player.CLASS_VAMPIREKILLER && (
 					merchandiseType == ItemDefinition.SHOPTYPE_WEAPONS ||
 					merchandiseType == ItemDefinition.SHOPTYPE_ARMOR)
 					)
@@ -103,7 +103,7 @@ public class Merchant extends NPC {
 	}*/
 	
 	public void refreshMerchandise(Player player) {
-		if (player.getPlayerClass() == Player.CLASS_VAMPIREKILLER && (
+		if (player.playerClass == Player.CLASS_VAMPIREKILLER && (
 				merchandiseType == ItemDefinition.SHOPTYPE_WEAPONS ||
 				merchandiseType == ItemDefinition.SHOPTYPE_ARMOR)
 			)

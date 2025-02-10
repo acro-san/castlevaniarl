@@ -70,8 +70,8 @@ public class Player extends Actor {
 	
 	// Attributes
 	private String name;
-	private int sex;
-	private int playerClass;
+	private byte sex;
+	public byte playerClass;	// damn java keyword!
 	
 	private String plot;
 	private String plot2;
@@ -456,7 +456,7 @@ public class Player extends Actor {
 
 	}
 
-	public void increaseWeaponSkill(String category){
+	public void increaseWeaponSkill(String category) {
 		Counter c = ((Counter)weaponSkillsCounters.get(category));
 		Counter s = ((Counter)weaponSkills.get(category));
 		
@@ -464,7 +464,7 @@ public class Player extends Actor {
 		if (c.getCount() > s.getCount()*80+10){
 			c.reset();
 			if (s.getCount() == 9){
-				if (getFlag("WEAPON_MASTER") && getPlayerClass() != CLASS_KNIGHT){
+				if (getFlag("WEAPON_MASTER") && playerClass != CLASS_KNIGHT){
 					
 				} else {
 					Main.ui.showImportantMessage("You have become a master with "+ItemDefinition.getCategoryDescription(category)+"!");
@@ -625,7 +625,7 @@ public class Player extends Actor {
 	private Hashtable<String, Equipment> inventory = new Hashtable<>();
 
 	public String getSecondaryWeaponDescription() {
-		if (getPlayerClass() == CLASS_VAMPIREKILLER) {
+		if (playerClass == CLASS_VAMPIREKILLER) {
 			if (getMysticWeapon() != -1)
 				return weaponName(getMysticWeapon());
 			else
@@ -907,7 +907,7 @@ public class Player extends Actor {
 		return sex;
 	}
 
-	public void setSex(int value) {
+	public void setSex(byte value) {
 		sex = value;
 	}
 
@@ -1330,7 +1330,7 @@ public class Player extends Actor {
 	}
 	
 	public boolean deservesUpgrade() {
-		if (getPlayerClass() != CLASS_VAMPIREKILLER ) {
+		if (playerClass != CLASS_VAMPIREKILLER) {
 			return false;
 		}
 		if (getWeapon() == VAMPIRE_WHIP) {
@@ -1344,7 +1344,7 @@ public class Player extends Actor {
 	}
 	
 	public boolean deservesMUpgrade() {
-		if (getPlayerClass() != CLASS_VAMPIREKILLER ) {
+		if (playerClass != CLASS_VAMPIREKILLER) {
 			return false;
 		}
 		//Debug.say(mUpgradeCount);
@@ -1360,7 +1360,7 @@ public class Player extends Actor {
 	
 	
 
-	private void invokeRosary(){
+	private void invokeRosary() {
 		level.addMessage("A blast of holy light surrounds you!");
 		//level.addEffect(new SplashEffect(getPosition(), "****~~~~,,,,....", Appearance.WHITE));
 		SFXManager.play("wav/lazrshot.wav");
@@ -1498,13 +1498,14 @@ public class Player extends Actor {
 	}
 	
 	public void increaseWhip() {
-		if (!(getPlayerClass() == CLASS_VAMPIREKILLER)) {
+		if (playerClass != CLASS_VAMPIREKILLER) {
 			return;
 		}
-		if (whipLevel < 2)
+		if (whipLevel < 2) {
 			whipLevel++;
-		else
+		} else {
 			return;
+		}
 		switch (whipLevel) {
 		case 1:
 			level.addMessage("Your leather whip turns into a chain whip!");
@@ -1517,8 +1518,9 @@ public class Player extends Actor {
 	}
 
 	public void decreaseWhip() {
-		if (!(getPlayerClass() == CLASS_VAMPIREKILLER))
+		if (playerClass != CLASS_VAMPIREKILLER) {
 			return;
+		}
 		if (shotLevel > 0)
 			shotLevel--;
 		if (whipLevel > 0)
@@ -1581,11 +1583,11 @@ public class Player extends Actor {
 	public void setCarryMax(int value) {
 		carryMax = value;
 	}
-
+/*
 	public int getPlayerClass() {
 		return playerClass;
 	}
-
+*/
 	public boolean isEthereal(){
 		return hasCounter(Consts.C_MYSTMORPH) || hasCounter(Consts.C_MYSTMORPH2);
 	}
@@ -1620,9 +1622,10 @@ public class Player extends Actor {
     }*/
 	
 	// FIXME We have these values in Text, fixed, already, do we not!?
-	public void setPlayerClass(int value) {
+	// 
+	public void setPlayerClass(byte value) {
 		playerClass = value;
-		switch (playerClass){
+		switch (playerClass) {
 			case CLASS_VAMPIREKILLER:
 				classString = "Vampire Killer";
 				break;
@@ -1674,9 +1677,9 @@ public class Player extends Actor {
 			Appearance ret = super.appearance;
 			if (ret == null) {
 				if (getSex() == Player.MALE) {
-					setAppearance(Main.appearances.get(PlayerGenerator.getClassID(getPlayerClass())));
+					setAppearance(Main.appearances.get(PlayerGenerator.getClassID(playerClass)));
 				} else {
-					setAppearance(Main.appearances.get(PlayerGenerator.getClassID(getPlayerClass())+"_W"));
+					setAppearance(Main.appearances.get(PlayerGenerator.getClassID(playerClass)+"_W"));
 				}
 				ret = super.getAppearance();
 			}
@@ -1877,7 +1880,7 @@ public class Player extends Actor {
 	}
 
 	public String getWeaponDescription() {
-		if (getPlayerClass() == CLASS_VAMPIREKILLER)
+		if (playerClass == CLASS_VAMPIREKILLER)
 			if (getMysticWeapon() != -1)
 				return weaponName(getMysticWeapon());
 			else
@@ -1949,7 +1952,7 @@ public class Player extends Actor {
 		skills.put("SKILL_MYSTMORPH2", new Skill("Adv. Ethereal Metamorphosis", new MystMorph2(), 10));
 		skills.put("SKILL_BATMORPH2", new Skill("Adv. Chiroptera Metamorphosis", new BatMorph2(), 10));
 		
-		//Vanquisher Skills
+		// Vanquisher Skills
 		skills.put("HOMING_BALL", new Skill("Homing Ball", new HomingBall(), 2));
 		skills.put("CHARGE_BALL", new Skill("Charge Ball", new ChargeBall(), 6));
 		skills.put("FLAME_SPELL", new Skill("Flame Spell", new FlameSpell(), 8));
@@ -1965,7 +1968,7 @@ public class Player extends Actor {
 		skills.put("MINDLOCK", new Skill("Mindlock", new MindLock(), 7));
 		skills.put("MAJOR_JINX", new Skill("Major Jinx", new MajorJinx(), 0));
 		
-		//Invoker Skills
+		// Invoker Skills
 		skills.put("INVOKE_CAT", new Skill("Cat Soul", new Cat(), 3));
 		skills.put("INVOKE_TURTLE", new Skill("Turtle Soul", new Turtle(), 5));
 		skills.put("INVOKE_BIRD", new Skill("Birds' Soul", new Bird(), 2));
@@ -1981,7 +1984,7 @@ public class Player extends Actor {
 		skills.put("SUMMON_EAGLE", new Skill("Invoke Eagle", new InvokeEagle(), 5));
 		skills.put("SUMMON_DRAGON", new Skill("Invoke Dragon", new InvokeDragon(), 8));
 		
-		// ManBeast
+		// BeastMan
 		skills.put("CLAW_SWIPE", new Skill("Claw Swipe", new ClawSwipe(), 3));
 		skills.put("LUPINE_MORPH", new Skill("Lupine Morph", new LupineMorph(), 15));
 		skills.put("IMPACT_BLOW", new Skill("Power Blow", new PowerBlow(), 3));
@@ -1997,9 +2000,8 @@ public class Player extends Actor {
 		skills.put("COMPLETECONTROL", new Skill("Complete Control"));
 		skills.put("WEREWOLF_MORPH", new Skill("Legendary Werewolf", new WereWolfMorph(), 20));
 		
-		//Knight
+		// Knight
 		skills.put("SHIELD_GUARD", new Skill("Shield Guard", new Defend(), 1));
-		
 		
 	}
 
@@ -2023,11 +2025,11 @@ public class Player extends Actor {
 		EVT_FORWARDTIME = 16,
 		EVT_INN = 17;
 	
-	public final static int
+	public final static byte
 		MALE = 1,
 		FEMALE = 2;
 
-	public final static int
+	public final static byte
 		CLASS_VAMPIREKILLER = 0,
 		CLASS_RENEGADE = 1,
 		CLASS_VANQUISHER = 2,
@@ -2587,26 +2589,26 @@ public class Player extends Actor {
 	private Vector<Advancement> tmpAvailableAdvancements = new Vector<>();
 	public Vector<Advancement> getAvailableAdvancements() {
 		tmpAvailableAdvancements.clear();
-		out: for (int i = 0; i < ADVANCEMENTS[getPlayerClass()].length; i++){
-			if (getFlag(ADVANCEMENTS[getPlayerClass()][i].getID())){
+		out: for (int i = 0; i < ADVANCEMENTS[playerClass].length; i++) {
+			if (getFlag(ADVANCEMENTS[playerClass][i].getID())){
 				//Already has the advancement
 				continue;
 			}
-			String[] requirements = ADVANCEMENTS[getPlayerClass()][i].getRequirements();
-			for (int j = 0; j < requirements.length; j++){
+			String[] requirements = ADVANCEMENTS[playerClass][i].getRequirements();
+			for (int j = 0; j < requirements.length; j++) {
 				if (!getFlag(requirements[j])){
 					//Misses a requirement
 					continue out;
 				}
 			}
-			String[] bans = ADVANCEMENTS[getPlayerClass()][i].getBans();
-			for (int j = 0; j < bans.length; j++){
-				if (getFlag(bans[j])){
+			String[] bans = ADVANCEMENTS[playerClass][i].getBans();
+			for (int j = 0; j < bans.length; j++) {
+				if (getFlag(bans[j])) {
 					//Has a ban
 					continue out;
 				}
 			}
-			tmpAvailableAdvancements.add(ADVANCEMENTS[getPlayerClass()][i]);
+			tmpAvailableAdvancements.add(ADVANCEMENTS[playerClass][i]);
 		}
 		return tmpAvailableAdvancements;
 	}
@@ -2614,8 +2616,8 @@ public class Player extends Actor {
 	
 	public Vector<Advancement> getAvailableStatAdvancements() {
 		tmpAvailableAdvancements.clear();
-		for (int i = 0; i < STATADVANCEMENTS[getPlayerClass()].length; i++){
-			tmpAvailableAdvancements.add(STATADVANCEMENTS[getPlayerClass()][i]);
+		for (int i = 0; i < STATADVANCEMENTS[playerClass].length; i++) {
+			tmpAvailableAdvancements.add(STATADVANCEMENTS[playerClass][i]);
 		}
 		int rand = Util.rand(2,3);
 		for (int i = 0; i < rand; i++){
@@ -2654,7 +2656,7 @@ public class Player extends Actor {
 		}
 	}
 	
-	public void deMorph(){
+	public void deMorph() {
 		if (hasCounter(Consts.C_BATMORPH))
 			setCounter(Consts.C_BATMORPH, 0);
 		if (hasCounter(Consts.C_BATMORPH2))
@@ -2681,17 +2683,22 @@ public class Player extends Actor {
 	
 	private ActionSelector originalSelector;
 	
-	private void carryOrDrop(Item item){
-		if (canCarry()){
+	private void carryOrDrop(Item item) {
+		if (canCarry()) {
 			addItem(item);
 		} else {
 			level.addItem(getPosition(), item);
 		}
 	}
-	public void morph(String morphID, int count, boolean smallMorph, boolean bigMorph, int morphStrength, int loseMindChance){
+	public void morph(String morphID, int count, boolean smallMorph,
+			boolean bigMorph, int morphStrength, int loseMindChance) {
 		deMorph();
-		if (getFlag(Consts.F_SELFCONTROL)) {
-			loseMindChance = (int) Math.floor(loseMindChance / 2.0D);
+		
+		// FIXME There's no way for the player to know this is a CHANCE!
+		// using the Manbeast's 15-heart [P]ower ability just wasted resources/unequipped a weapon,
+		// without any way to know there could have been some other outcome...
+		if (getFlag(Consts.F_SELFCONTROL)) {	
+			loseMindChance = (int)Math.floor(loseMindChance / 2.0);
 		}
 		if (getFlag(Consts.F_COMPLETECONTROL)) {
 			loseMindChance = 0;
@@ -2727,10 +2734,11 @@ public class Player extends Actor {
 		}
 		
 		Item armor = getArmor();
-		if (armor != null){
-			if (bigMorph){
+		if (armor != null) {
+			if (bigMorph) {
 				if (armor.getDefense() > morphStrength) {
-					selfDamage("Your armor is too strong! You feel trapped! You are injured!", Player.DAMAGE_MORPHED_WITH_STRONG_ARMOR, new Damage(10, true));
+					selfDamage("Your armor is too strong! You feel trapped! You are injured!",
+						Player.DAMAGE_MORPHED_WITH_STRONG_ARMOR, new Damage(10, true));
 					return;
 				}
 				level.addMessage("You destroy your "+armor.getDescription()+"!");
@@ -2742,7 +2750,6 @@ public class Player extends Actor {
 			}
 		}
 		
-		
 		setCounter(morphID, count);
 	}
 	
@@ -2751,7 +2758,7 @@ public class Player extends Actor {
 	}
 	
 	public boolean isMorphed(){
-		return 
+		return
 			hasCounter(Consts.C_LUPINEMORPH) ||
 			hasCounter(Consts.C_BEARMORPH) ||
 			hasCounter(Consts.C_BEASTMORPH)||
@@ -2764,21 +2771,9 @@ public class Player extends Actor {
 			hasCounter(Consts.C_MYSTMORPH) ||
 			hasCounter(Consts.C_MYSTMORPH2);
 	}
-	
-	/*
-	private boolean standsOnPlace(){
-		return 
-			hasCounter(Consts.C_LUPINEMORPH) ||
-			hasCounter(Consts.C_BEARMORPH) ||
-			hasCounter(Consts.C_BEASTMORPH)||
-			hasCounter(Consts.C_DEMONMORPH) ||
-			hasCounter(Consts.C_WEREWOLFMORPH) ||
-			hasCounter(Consts.C_MYSTMORPH) ||
-			hasCounter(Consts.C_MYSTMORPH2);
-	}
-	*/
-	
-	public int stareMonster(Monster who){
+
+
+	public int stareMonster(Monster who) {
 		if (who.getPosition().z != getPosition().z) {
 			return -1;
 		}
@@ -2811,10 +2806,10 @@ public class Player extends Actor {
 			else
 				return Action.UPRIGHT;
 		}
-		//return -1;
 	}
 	
-	public int stareMonster(){
+	
+	public int stareMonster() {
 		Monster nearest = getNearestMonster();
 		if (nearest == null)
 			return -1;
@@ -2891,53 +2886,55 @@ public class Player extends Actor {
 			punchDamage = 16+2*getAttack()+(int)Math.ceil(1.5d*punchDamage);
 		} else if (hasCounter(Consts.C_POWERBLOW3)){ 
 			punchDamage = 25+3*getAttack()+(int)Math.ceil(1.7d*punchDamage);
-		} else if (getPlayerClass() == Player.CLASS_MANBEAST){
+		} else if (playerClass == Player.CLASS_MANBEAST) {
 			punchDamage = (int)Math.ceil(1.3d*punchDamage);
 		}
 		return getAttack() + punchDamage;
 	}
 	
-	public int getPunchPush(){
+	
+	public int getPunchPush() {
 		int push = 0;
-		if (hasCounter(Consts.C_BEASTMORPH)){
+		if (hasCounter(Consts.C_BEASTMORPH)) {
 			push = 3;
-		} else if (hasCounter(Consts.C_BEARMORPH)){
+		} else if (hasCounter(Consts.C_BEARMORPH)) {
 			push = 4;
-		} else if (hasCounter(Consts.C_LUPINEMORPH)){
+		} else if (hasCounter(Consts.C_LUPINEMORPH)) {
 			push = 2;
-		} else if (hasCounter(Consts.C_WEREWOLFMORPH)){
+		} else if (hasCounter(Consts.C_WEREWOLFMORPH)) {
 			push = 3;
-		} else if (hasCounter(Consts.C_POWERBLOW)){
+		} else if (hasCounter(Consts.C_POWERBLOW)) {
 			push = 2;
-		} else if (hasCounter(Consts.C_POWERBLOW2)){ 
+		} else if (hasCounter(Consts.C_POWERBLOW2)) {
 			push = 3;
-		} else if (hasCounter(Consts.C_POWERBLOW3)){ 
+		} else if (hasCounter(Consts.C_POWERBLOW3)) {
 			push = 4;
 		}
 		return push;
 	}
 	
-	public String getPunchDescription(){
+	
+	public String getPunchDescription() {
 		String attackDescription = "punch";
-		if (hasCounter(Consts.C_BEASTMORPH)){
+		if (hasCounter(Consts.C_BEASTMORPH)) {
 			attackDescription = "claw";
-		} else if (hasCounter(Consts.C_BEARMORPH)){
+		} else if (hasCounter(Consts.C_BEARMORPH)) {
 			attackDescription = "bash";
-		} else if (hasCounter(Consts.C_DEMONMORPH)){
+		} else if (hasCounter(Consts.C_DEMONMORPH)) {
 			attackDescription = "claw";
-		} else if (hasCounter(Consts.C_LUPINEMORPH)){
+		} else if (hasCounter(Consts.C_LUPINEMORPH)) {
 			attackDescription = "slash at";
-		} else if (hasCounter(Consts.C_WEREWOLFMORPH)){
+		} else if (hasCounter(Consts.C_WEREWOLFMORPH)) {
 			attackDescription = "slash through";
-		} else if (hasCounter(Consts.C_WOLFMORPH) || hasCounter(Consts.C_WOLFMORPH2)){
+		} else if (hasCounter(Consts.C_WOLFMORPH) || hasCounter(Consts.C_WOLFMORPH2)) {
 			attackDescription = "bite";
-		} else if (hasCounter(Consts.C_POWERBLOW)){
+		} else if (hasCounter(Consts.C_POWERBLOW)) {
 			attackDescription = "charge against";
-		} else if (hasCounter(Consts.C_POWERBLOW2)){ 
+		} else if (hasCounter(Consts.C_POWERBLOW2)) {
 			attackDescription = "charge against";
-		} else if (hasCounter(Consts.C_POWERBLOW3)){ 
+		} else if (hasCounter(Consts.C_POWERBLOW3)) {
 			attackDescription = "charge against";
-		} else if (getPlayerClass() == Player.CLASS_MANBEAST){
+		} else if (playerClass == Player.CLASS_MANBEAST) {
 			attackDescription = "slash at";
 		}
 		return attackDescription;
@@ -2949,7 +2946,7 @@ public class Player extends Actor {
 			multiplier = 0.5;
 		}
 		if (weapon != null) {
-			if (getPlayerClass() == Player.CLASS_VAMPIREKILLER) {
+			if (playerClass == Player.CLASS_VAMPIREKILLER) {
 				return (int)(multiplier * (weaponSkill(weapon.getDefinition().weaponCategory) +
 						(int)Math.round(getAttack() * (weapon.getAttack()/2.0))));
 			} else {
@@ -2967,7 +2964,7 @@ public class Player extends Actor {
 	
 	public int getArmorDefense(){
 		if (getArmor() != null){
-			if (getPlayerClass() == CLASS_VAMPIREKILLER){
+			if (playerClass == CLASS_VAMPIREKILLER) {
 				return (int)(getArmor().getDefense() + Math.ceil(getPlayerLevel()/3.0D));
 			} else {
 				return getArmor().getDefense();
@@ -2979,8 +2976,9 @@ public class Player extends Actor {
 	
 	public int getDefenseBonus(){
 		int ret = 0;
-		if (getPlayerClass() == Player.CLASS_MANBEAST)
-			ret+= Math.ceil(getPlayerLevel()/2.5D);
+		if (playerClass == Player.CLASS_MANBEAST) {
+			ret+= Math.ceil((double)getPlayerLevel() / 2.5);
+		}
 		if (hasIncreasedDefense())
 			ret++;
 		ret += getMorphDefense();
@@ -2991,52 +2989,40 @@ public class Player extends Actor {
 		int blockChance = 0;
 		if (getShield() != null &&
 			(getWeapon() == null || (getWeapon()!= null && !getWeapon().isTwoHanded()))) {
-			if (getPlayerClass() == CLASS_KNIGHT){
+			if (playerClass == CLASS_KNIGHT) {
 				blockChance = getShield().getCoverage();
 			} else {
-				blockChance = (int)(getShield().getCoverage()/2.0d);
+				blockChance = (int)(getShield().getCoverage() / 2.0);
 			}
 			blockChance += 2 * weaponSkill(ItemDefinition.CAT_SHIELD);
-			if (blockChance > 70)
+			if (blockChance > 70) {
 				return 70;
-			else
+			} else {
 				return blockChance;
+			}
 		} else {
 			return 0;
 		}
 	}
 
 	
-	public int getShieldCoverageChance(){
+	public int getShieldCoverageChance() {
 		if (getShield() != null &&
 			(getWeapon() == null || (getWeapon()!= null && !getWeapon().isTwoHanded()))) {
 			int coverageChance = 0;
-			if (getPlayerClass() == CLASS_KNIGHT){
+			if (playerClass == CLASS_KNIGHT) {
 				coverageChance = 70;
 			} else {
 				coverageChance = getShield().getCoverage();
 			}
 			return coverageChance;
-		} else{
+		} else {
 			return 0;
 		}
 	}
-	
-	/*
-	public void increaseCoolness(int x){
-		coolness += x;
-	}
-	
-	public void reduceCoolness(int x){
-		coolness -= x;
-	}
-	
-	public int getCoolness(){
-		return coolness;
-	}
-	*/
 
-	public void abandonHostage(){
+
+	public void abandonHostage() {
 		getHostage().setPosition(getPosition());
 		level.addMonster(getHostage());
 		addHistoricEvent("abandoned "+getHostage().getDescription()+" at the "+level.getDescription());

@@ -25,7 +25,7 @@ public class WhirlwindWhip extends Action {
 			return;
 		}
 		int attack = aPlayer.getWeaponAttack();
-		if (aPlayer.getPlayerClass() == Player.CLASS_VAMPIREKILLER){
+		if (aPlayer.playerClass == Player.CLASS_VAMPIREKILLER) {
 			attack = aPlayer.weaponSkill(ItemDefinition.CAT_WHIPS) + 
 				(int)Math.round(aPlayer.getAttack() * (aPlayer.getWeapon().getAttack()/2.0D));
 		}

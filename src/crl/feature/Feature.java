@@ -46,10 +46,10 @@ public class Feature implements Cloneable, java.io.Serializable {
 		}
 		String[] prizeList = null;
 
-		if (p.getPlayerClass() == Player.CLASS_VAMPIREKILLER) {
+		if (p.playerClass == Player.CLASS_VAMPIREKILLER) {
 			if (Util.chance(10)) {
 				//Will get a mystic weapon
-        		if (p.getFlag("MYSTIC_CRYSTAL") && Util.chance(50))
+				if (p.getFlag("MYSTIC_CRYSTAL") && Util.chance(50))
         			prizeList = new String[]{"CRYSTALWP"};
         		else if (p.getFlag("MYSTIC_FIST") && Util.chance(50))
         			prizeList = new String[]{"FISTWP"};

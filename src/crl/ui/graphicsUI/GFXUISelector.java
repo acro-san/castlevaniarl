@@ -81,7 +81,7 @@ public class GFXUISelector extends UISelector
 				mouseDirection = -1;
 				if (level.isValidCoordinate(mousePosition)) {
 					//if (level.getMonsterAt(mousePosition) != null){
-						if (player.getPlayerClass() == Player.CLASS_VAMPIREKILLER) {
+						if (player.playerClass == Player.CLASS_VAMPIREKILLER) {
 							ret = player.getMysticAction();
 							try {
 				            	if (ret != null) {
@@ -165,7 +165,7 @@ public class GFXUISelector extends UISelector
 				}
 			} else
 			if (input.code == WEAPON_KEY) {
-				if (player.getPlayerClass() == Player.CLASS_VAMPIREKILLER) {
+				if (player.playerClass == Player.CLASS_VAMPIREKILLER) {
 					ret = player.getMysticAction();
 					try {
 						if (ret != null) {

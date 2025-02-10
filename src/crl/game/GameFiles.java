@@ -255,7 +255,7 @@ public class GameFiles {
 		int score = player.score;
 		String name = player.getName();
 		String playerClass = "NONE";
-		switch (player.getPlayerClass()){
+		switch (player.playerClass) {
 		case Player.CLASS_INVOKER:
 			playerClass="INV";
 			break;

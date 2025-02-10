@@ -78,7 +78,7 @@ public class ConsoleUISelector extends UISelector {
 				}
 			} else
 			if (input.code == WEAPON_KEY){
-				if (player.getPlayerClass() == Player.CLASS_VAMPIREKILLER) {
+				if (player.playerClass == Player.CLASS_VAMPIREKILLER) {
 					ret = player.getMysticAction();
 					try {
 						if (ret != null) {
