@@ -2,19 +2,20 @@ package crl.action.monster.boss;
 
 import sz.util.Position;
 import sz.util.Util;
+import crl.Main;
 import crl.action.Action;
 import crl.level.Level;
 import crl.monster.Monster;
 import crl.player.Damage;
 import crl.player.Player;
-import crl.ui.effects.EffectFactory;
 
-public class ShadowApocalypse extends Action{
-	public String getID(){
+public class ShadowApocalypse extends Action {
+	
+	public String getID() {
 		return "SHADOW_APOCALYPSE";
 	}
 	
-	public void execute(){
+	public void execute() {
 		Level aLevel = performer.level;
 		aLevel.addMessage("A voice thunders! 'SHADOW APOCALYPSE!!'");
 		int sickles = Util.rand(4,8);
@@ -24,7 +25,8 @@ public class ShadowApocalypse extends Action{
 			int xgo = performer.getPosition().x + xvar - 4;
 			int ygo = performer.getPosition().y + yvar - 4;
 			//UserInterface.getUI().drawEffect(new SplashEffect(new Position(xvar+performer.getPosition().x, yvar+performer.getPosition().y), "Oo*'.", Appearance.CYAN));
-			drawEffect(EffectFactory.getSingleton().createLocatedEffect(new Position(xvar+performer.getPosition().x, yvar+performer.getPosition().y, performer.getPosition().z), "SFX_SHADOW_APOCALYPSE"));
+			Position pp = performer.getPosition();
+			drawEffect(Main.efx.createLocatedEffect(new Position(xvar+pp.x, yvar+pp.y, pp.z), "SFX_SHADOW_APOCALYPSE"));
 			for (int jx = xgo; jx <= xgo+4; jx++) {
 				for (int jy = ygo; jy <= ygo+4; jy++) {
 					hit(jx, jy, performer.getPosition().z);

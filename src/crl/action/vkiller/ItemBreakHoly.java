@@ -7,11 +7,11 @@ import crl.level.Level;
 import crl.monster.Monster;
 import crl.monster.VMonster;
 import crl.player.Player;
-import crl.ui.effects.EffectFactory;
 import sz.util.Position;
 import sz.util.Util;
 
 public class ItemBreakHoly extends HeartAction {
+	
 	public int getHeartCost() {
 		return 5;
 	}
@@ -21,9 +21,9 @@ public class ItemBreakHoly extends HeartAction {
 	
 	public void execute(){
 		Player aPlayer = (Player) performer;
-        Level aLevel = performer.level;
+		Level aLevel = performer.level;
 		aLevel.addMessage("You jump! You unleash a rain of holy water!");
-		Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(aPlayer.getPosition(), "SFX_HOLY_RAINSPLASH"));
+		Main.ui.drawEffect(Main.efx.createLocatedEffect(aPlayer.getPosition(), "SFX_HOLY_RAINSPLASH"));
 		int damage = 6 + getPlayer().getShotLevel() + getPlayer().getSoulPower();
 		
 		VMonster monsters = aLevel.getMonsters();
@@ -47,15 +47,15 @@ public class ItemBreakHoly extends HeartAction {
 			int ydif = 5-Util.rand(0,10);
 			Position destinationPoint = Position.add(aPlayer.getPosition(), new Position(xdif,ydif));
 			if (aLevel.isValidCoordinate(destinationPoint)){
-				Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(destinationPoint, "SFX_HOLY_RAINDROP"));
+				Main.ui.drawEffect(Main.efx.createLocatedEffect(destinationPoint, "SFX_HOLY_RAINDROP"));
 				Main.ui.refresh();
 				Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-	        	if (destinationFeature != null && destinationFeature.isDestroyable()){
+				if (destinationFeature != null && destinationFeature.isDestroyable()) {
 					Feature prize = destinationFeature.damage(aPlayer, damage);
-		        	if (prize != null){
-		        		aLevel.addMessage ("The "+destinationFeature.getDescription()+" burns until consumption!");
+					if (prize != null) {
+						aLevel.addMessage("The "+destinationFeature.getDescription()+" burns until consumption!");
 					} else {
-						aLevel.addMessage ("The "+destinationFeature.getDescription()+" burns.");
+						aLevel.addMessage("The "+destinationFeature.getDescription()+" burns.");
 					}
 				}
 				Monster targetMonster = performer.level.getMonsterAt(destinationPoint);
@@ -77,11 +77,11 @@ public class ItemBreakHoly extends HeartAction {
 		}
 	}
 
-	public int getCost(){
+	public int getCost() {
 		Player p = (Player) performer;
 		return (int)(25 / (p.getShotLevel()+1));
 	}
-	public String getSFX(){
+	public String getSFX() {
 		return "wav/breakpot.wav";
 	}
 }

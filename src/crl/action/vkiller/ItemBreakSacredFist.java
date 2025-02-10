@@ -7,11 +7,10 @@ import crl.action.BeamProjectileSkill;
 import crl.level.Cell;
 import crl.level.Level;
 import crl.player.Player;
-import crl.ui.UserInterface;
-import crl.ui.effects.EffectFactory;
 
 public class ItemBreakSacredFist extends BeamProjectileSkill {
-	public String getID(){
+	
+	public String getID() {
 		return "ItemBreakSacredFist";
 	}
 	
@@ -21,8 +20,7 @@ public class ItemBreakSacredFist extends BeamProjectileSkill {
 	}
 	
 	public int getDamage() {
-		return 25 +
-		 2*getPlayer().getSoulPower();
+		return 25 + 2*getPlayer().getSoulPower();
 	}
 	
 	public int getHeartCost() {
@@ -82,22 +80,20 @@ public class ItemBreakSacredFist extends BeamProjectileSkill {
 		int i = 0;
 		for (; i < 5; i++){
 			runner = line.next();
-        	Cell destinationCell = performer.level.getMapCell(runner);
+			Cell destinationCell = performer.level.getMapCell(runner);
 			if (
-				level.isWalkable(runner) &&	
-				destinationCell.getHeight() == level.getMapCell(player.getPosition()).getHeight() 
+				level.isWalkable(runner) &&
+				destinationCell.getHeight() == level.getMapCell(player.getPosition()).getHeight()
 			)
 				;
 			else
 				break;
 		}
-		drawEffect(EffectFactory.getSingleton().createDirectedEffect(player.getPosition(), targetPosition, "SFX_TELEPORT", i));
+		drawEffect(Main.efx.createDirectedEffect(player.getPosition(), targetPosition, "SFX_TELEPORT", i));
 		
 		player.setPosition(new Position(runner));
 		player.see();
 		Main.ui.refresh();
-		
 	}
-	
 	
 }

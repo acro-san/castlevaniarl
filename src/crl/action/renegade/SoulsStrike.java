@@ -1,14 +1,15 @@
 package crl.action.renegade;
 
 import sz.util.Position;
+import crl.Main;
 import crl.action.HeartAction;
 import crl.level.Level;
 import crl.monster.Monster;
 import crl.player.Player;
-import crl.ui.effects.EffectFactory;
 
-public class SoulsStrike extends HeartAction{
-	public String getID(){
+public class SoulsStrike extends HeartAction {
+	
+	public String getID() {
 		return "Souls Strike";
 	}
 	
@@ -16,13 +17,13 @@ public class SoulsStrike extends HeartAction{
 		return 8;
 	}
 	
-	public void execute(){
+	public void execute() {
 		super.execute();
 		Level aLevel = performer.level;
 		Player aPlayer = aLevel.getPlayer();
 		aLevel.addMessage("Three souls come from under your cape");
 		
-		for (int i = 0; i < 3; i++){
+		for (int i = 0; i < 3; i++) {
 			Monster nearestMonster = aPlayer.getNearestMonster();
 			if (nearestMonster == null || Position.flatDistance(nearestMonster.getPosition(), aPlayer.getPosition())>15){
 			} else {
@@ -30,7 +31,7 @@ public class SoulsStrike extends HeartAction{
 				if (nearestMonster.wasSeen())
 					buff.append("The soul impacts the "+nearestMonster.getDescription()+"!");
 				nearestMonster.damage(buff, 10+aPlayer.getSoulPower()*2);
-				drawEffect(EffectFactory.getSingleton().createDirectedEffect(aPlayer.getPosition(), nearestMonster.getPosition(), "SFX_SOULSSTRIKE", Position.flatDistance(performer.getPosition(), nearestMonster.getPosition())));
+				drawEffect(Main.efx.createDirectedEffect(aPlayer.getPosition(), nearestMonster.getPosition(), "SFX_SOULSSTRIKE", Position.flatDistance(performer.getPosition(), nearestMonster.getPosition())));
 				aLevel.addMessage(buff.toString());
 			}
 		}

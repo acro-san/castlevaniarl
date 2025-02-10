@@ -1,5 +1,6 @@
 package sz.util;
 
+@Deprecated
 public class OutParameter {
 	private Object object;
 	private int intValue;

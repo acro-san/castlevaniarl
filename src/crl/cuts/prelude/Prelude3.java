@@ -8,7 +8,6 @@ import crl.game.PlayerGenerator;
 import crl.level.Level;
 import crl.monster.Monster;
 import crl.player.Player;
-import crl.ui.effects.EffectFactory;
 
 public class Prelude3 extends Unleasher {
 
@@ -18,7 +17,7 @@ public class Prelude3 extends Unleasher {
 			return;
 		
 		level.addMessage("Dracula invokes a deadly beam of chaos energy!!!");
-		Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(level.getPlayer().getPosition(), "SFX_KILL_CHRIS"));
+		Main.ui.drawEffect(Main.efx.createLocatedEffect(level.getPlayer().getPosition(), "SFX_KILL_CHRIS"));
 		
 		Player p = level.getPlayer();
 		game.setPlayer(PlayerGenerator.thus.createSpecialPlayer("SOLEIYU"));

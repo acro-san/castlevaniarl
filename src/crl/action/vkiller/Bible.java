@@ -2,17 +2,16 @@ package crl.action.vkiller;
 
 import java.util.Vector;
 
-import sz.util.Position;
-import crl.action.Action;
+import crl.Main;
 import crl.action.HeartAction;
-import crl.actor.Actor;
 import crl.feature.Feature;
 import crl.level.Level;
 import crl.monster.Monster;
 import crl.player.Player;
-import crl.ui.effects.EffectFactory;
+import sz.util.Position;
 
 public class Bible extends HeartAction {
+	
 	public int getHeartCost() {
 		return 2;
 	}
@@ -33,7 +32,7 @@ public class Bible extends HeartAction {
 		Player aPlayer = (Player) performer;
 		aPlayer.level.addMessage("You open the bible!");
 		//drawEffect(new SequentialEffect(performer.getPosition(), steps, "?�", Appearance.CYAN, 10));
-		drawEffect(EffectFactory.getSingleton().createLocatedEffect(performer.getPosition(), "SFX_BIBLE"));
+		drawEffect(Main.efx.createLocatedEffect(performer.getPosition(), "SFX_BIBLE"));
 
 		int damage = getDamage();
 		for (int i = 0; i < steps.size(); i++){
@@ -76,6 +75,7 @@ public class Bible extends HeartAction {
 		return "Where do you want to throw the Cross?";
 	}
 
+	// bible_steps. isn't this duplicated elsewhere already!??
 	private final static Vector<Position> steps = new Vector<>(55);
 	static {
 		steps.add(new Position(1,0));

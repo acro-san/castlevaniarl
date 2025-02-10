@@ -13,7 +13,8 @@ import crl.monster.Monster;
 import crl.player.Player;
 import crl.ui.effects.EffectFactory;
 
-public class Holy extends HeartAction{
+public class Holy extends HeartAction {
+	
 	public int getHeartCost() {
 		return 1;
 	}
@@ -35,21 +36,21 @@ public class Holy extends HeartAction{
 	public void execute(){
 		super.execute();
 		Player aPlayer = (Player) performer;
-        Level aLevel = performer.level;
+		Level aLevel = performer.level;
 		aLevel.addMessage("You throw a vial of holy water!");
 		
 		int damage = getDamage();
 
-		if (targetPosition.equals(performer.getPosition())){
-        	aLevel.addMessage("The vial washes over you");
-        	if (Util.chance(30)){
-        		aLevel.addMessage("You feel healed.");
-        		aPlayer.recoverHits(2);
-        	} else {
-        		aLevel.addMessage("The bottle hits your head and breaks.");
-        	}
-        	return;
-        }
+		if (targetPosition.equals(performer.getPosition())) {
+			aLevel.addMessage("The vial washes over you");
+			if (Util.chance(30)) {
+				aLevel.addMessage("You feel healed.");
+				aPlayer.recoverHits(2);
+			} else {
+				aLevel.addMessage("The bottle hits your head and breaks.");
+			}
+			return;
+		}
 		
 		Line holyLine = new Line(performer.getPosition(), targetPosition);
 		Position flameOrigin = null;
@@ -63,7 +64,7 @@ public class Holy extends HeartAction{
 			}
 		}
 		
-		Main.ui.drawEffect(EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(), targetPosition, "SFX_HOLY", i));
+		Main.ui.drawEffect(Main.efx.createDirectedEffect(performer.getPosition(), targetPosition, "SFX_HOLY", i));
 		
 		if (destinationCell == null){
 			flameOrigin = aLevel.getDeepPosition(flameOrigin);
@@ -73,23 +74,23 @@ public class Holy extends HeartAction{
 			}
 		}
 		
-		Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(flameOrigin, "SFX_HOLY_FLAME"));
+		Main.ui.drawEffect(Main.efx.createLocatedEffect(flameOrigin, "SFX_HOLY_FLAME"));
 		aLevel.addSmartFeature("BURNING_FLAME", flameOrigin);
 		aLevel.addSmartFeature("BURNING_FLAME", Position.add(flameOrigin, Action.directionToVariation(Action.UPLEFT)));
 		aLevel.addSmartFeature("BURNING_FLAME", Position.add(flameOrigin, Action.directionToVariation(Action.UPRIGHT)));
 		aLevel.addSmartFeature("BURNING_FLAME", Position.add(flameOrigin, Action.directionToVariation(Action.DOWNLEFT)));
 		aLevel.addSmartFeature("BURNING_FLAME", Position.add(flameOrigin, Action.directionToVariation(Action.DOWNRIGHT)));
 
-		for (int x = flameOrigin.x -1; x <= flameOrigin.x+1; x++)
-			for (int y = flameOrigin.y -1; y <= flameOrigin.y+1; y++){
+		for (int x = flameOrigin.x -1; x <= flameOrigin.x+1; x++) {
+			for (int y = flameOrigin.y -1; y <= flameOrigin.y+1; y++) {
 				Position destinationPoint = new Position(x,y, flameOrigin.z);
 				Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-	        	if (destinationFeature != null && destinationFeature.isDestroyable()){
+				if (destinationFeature != null && destinationFeature.isDestroyable()) {
 					StringBuffer message = new StringBuffer();
-		        	message.append("The "+destinationFeature.getDescription()+" burns");
+					message.append("The "+destinationFeature.getDescription()+" burns");
 					Feature prize = destinationFeature.damage(aPlayer, damage);
-		        	if (prize != null){
-			        	message.append(" until consumption!");
+					if (prize != null) {
+						message.append(" until consumption!");
 
 					}
 					message.append(".");
@@ -102,24 +103,27 @@ public class Holy extends HeartAction{
 						message.append("The "+targetMonster.getDescription()+" catches in flame");
 					//targetMonster.damage(player.getWhipLevel());
 					targetMonster.damage(message, damage);
-		        	if (targetMonster.isDead()){
-		        		if (targetMonster.wasSeen())
-		        			message.append(" and is roasted!");
+					if (targetMonster.isDead()) {
+						if (targetMonster.wasSeen()) {
+							message.append(" and is roasted!");
+						}
 						performer.level.removeMonster(targetMonster);
 					}
 					aLevel.addMessage(message.toString());
 				}
 			}
+		}
 	}
 
-	public String getPromptPosition(){
+	public String getPromptPosition() {
 		return "Where do you want to throw the vial?";
 	}
 	
-	public int getCost(){
+	public int getCost() {
 		Player p = (Player) performer;
 		return (int)(25 / (p.getShotLevel()+1));
 	}
+	
 	public String getSFX(){
 		return "wav/breakpot.wav";
 	}

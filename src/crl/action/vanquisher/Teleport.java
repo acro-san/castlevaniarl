@@ -1,19 +1,16 @@
 package crl.action.vanquisher;
 
-import sz.util.Line;
-import sz.util.Position;
 import crl.Main;
-import crl.action.Action;
 import crl.action.HeartAction;
-import crl.actor.Actor;
 import crl.level.Cell;
 import crl.level.Level;
 import crl.player.Player;
-import crl.ui.UserInterface;
-import crl.ui.effects.EffectFactory;
+import sz.util.Line;
+import sz.util.Position;
 
-public class Teleport extends HeartAction{
-	public String getID(){
+public class Teleport extends HeartAction {
+	
+	public String getID() {
 		return "Teleport2";
 	}
 	
@@ -34,29 +31,29 @@ public class Teleport extends HeartAction{
 		Player player = (Player) performer;
 		Level level = player.level;
 		level.addMessage("You dematerialize!");
-		if (targetPosition.equals(performer.getPosition())){
-        	level.addMessage("You appear in the same place!");
-        	return;
-        }
+		if (targetPosition.equals(performer.getPosition())) {
+			level.addMessage("You appear in the same place!");
+			return;
+		}
 
 		Line line = new Line(player.getPosition(), targetPosition);
 		Position runner = line.next();
 		Position prerunner = new Position(runner);
 		int i = 0;
-		for (; i < 6; i++){
+		for (; i < 6; i++) {
 			prerunner.x = runner.x;
 			prerunner.y = runner.y;
 			prerunner.z = runner.z;
 			runner = line.next();
-        	Cell destinationCell = performer.level.getMapCell(runner);
-			if (level.isWalkable(runner) &&	
-				destinationCell.getHeight() == level.getMapCell(player.getPosition()).getHeight() 
+			Cell destinationCell = performer.level.getMapCell(runner);
+			if (level.isWalkable(runner) &&
+				destinationCell.getHeight() == level.getMapCell(player.getPosition()).getHeight()
 			)
 				;
 			else
 				break;
 		}
-		drawEffect(EffectFactory.getSingleton().createDirectedEffect(player.getPosition(), targetPosition, "SFX_TELEPORT", i));
+		drawEffect(Main.efx.createDirectedEffect(player.getPosition(), targetPosition, "SFX_TELEPORT", i));
 		
 		player.landOn(prerunner);
 		player.see();

@@ -3,6 +3,7 @@ package crl.feature.action;
 import sz.util.Line;
 import sz.util.Position;
 import sz.util.Util;
+import crl.Main;
 import crl.action.Action;
 import crl.actor.Actor;
 import crl.feature.Feature;
@@ -16,12 +17,13 @@ import crl.player.Player;
 import crl.ui.effects.Effect;
 import crl.ui.effects.EffectFactory;
 
-public class CrossBack extends Action{
-	public String getID(){
+public class CrossBack extends Action {
+	
+	public String getID() {
 		return "Cross";
 	}
 	
-	public boolean needsPosition(){
+	public boolean needsPosition() {
 		return true;
 	}
 
@@ -30,20 +32,17 @@ public class CrossBack extends Action{
 		aLevel.addMessage("The cross comes back!");
 		int damage = 3 + aLevel.getPlayer().getShotLevel() + aLevel.getPlayer().getSoulPower();
 		
-		if (targetPosition.equals(performer.getPosition())){
-        	if (Util.chance(50)){
-        		aLevel.addMessage("The cross falls heads! You catch the cross.");
-        	} else {
-        		aLevel.addMessage("The cross falls tails! You catch the cross.");
-        	}
-        	return;
-        }
-		
+		if (targetPosition.equals(performer.getPosition())) {
+			if (Util.chance(50)) {
+				aLevel.addMessage("The cross falls heads! You catch the cross.");
+			} else {
+				aLevel.addMessage("The cross falls tails! You catch the cross.");
+			}
+			return;
+		}
 		
 		Line crossLine = new Line(performer.getPosition(), targetPosition);
-		
 		int startHeight = ((SmartFeature)performer).height;
-		
 		crossLine.next();
 		Position destinationPoint = null;
 		int i = 0;
@@ -83,8 +82,7 @@ public class CrossBack extends Action{
 			}
 		}
 
-		Effect crossEffect = EffectFactory.getSingleton().
-			createDirectedEffect(performer.getPosition(), targetPosition, "SFX_CROSS", i);
+		Effect crossEffect = Main.efx.createDirectedEffect(performer.getPosition(), targetPosition, "SFX_CROSS", i);
 		crossEffect.setPosition(performer.level.getPlayer().getPosition());
 		drawEffect(crossEffect);
 	}
@@ -96,7 +94,7 @@ public class CrossBack extends Action{
 	
 	public int getCost() {
 		if (performer instanceof Player) {
-			Player p = (Player) performer;
+			Player p = (Player)performer;
 			return (int)(25 / (p.getShotLevel()+1));
 		} else {
 			return 40;
@@ -117,4 +115,5 @@ public class CrossBack extends Action{
 		}
 		return true;
 	}
+	
 }

@@ -1,30 +1,29 @@
 package crl.action.vanquisher;
 
-import sz.util.Position;
-import crl.action.Action;
+import crl.Main;
 import crl.action.HeartAction;
-import crl.actor.Actor;
 import crl.level.Level;
 import crl.monster.Monster;
-import crl.monster.VMonster;
 import crl.player.Player;
-import crl.ui.effects.EffectFactory;
+import sz.util.Position;
 
-public class LitStorm extends HeartAction{
+public class LitStorm extends HeartAction {
+	
 	public int getHeartCost() {
 		return 10;
 	}
-	public String getID(){
+	
+	public String getID() {
 		return "LitStorm";
 	}
 	
-	public void execute(){
+	public void execute() {
 		super.execute();
 		Level aLevel = performer.level;
-        Player aPlayer = aLevel.getPlayer();
+		Player aPlayer = aLevel.getPlayer();
 		aLevel.addMessage("You invoke the spell of lighting!");
-
-		for (int i = 0; i < 3; i++){
+		
+		for (int i = 0; i < 3; i++) {
 			Monster nearestMonster = aPlayer.getNearestMonster();
 			if (nearestMonster == null || Position.flatDistance(nearestMonster.getPosition(), aPlayer.getPosition())>10){
 			} else {
@@ -33,13 +32,13 @@ public class LitStorm extends HeartAction{
 					buff.append("Lighting zaps the "+nearestMonster.getDescription()+"!");
 				nearestMonster.damage(buff, 5+aPlayer.getSoulPower()*2);
 				aLevel.addMessage(buff.toString());
-				drawEffect(EffectFactory.getSingleton().createDirectedEffect(aPlayer.getPosition(), nearestMonster.getPosition(), "SFX_LIT_SPELL", Position.flatDistance(performer.getPosition(), nearestMonster.getPosition())));
+				drawEffect(Main.efx.createDirectedEffect(aPlayer.getPosition(), nearestMonster.getPosition(), "SFX_LIT_SPELL", Position.flatDistance(performer.getPosition(), nearestMonster.getPosition())));
 				
 			}
 		}
 	}
 
-	public int getCost(){
+	public int getCost() {
 		Player p = (Player) performer;
 		return (int)(p.getCastCost() * 1.5);
 	}

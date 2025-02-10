@@ -1,18 +1,17 @@
 package crl.action;
 
-import sz.util.Line;
-import sz.util.OutParameter;
-import sz.util.Position;
-import crl.action.Action;
-import crl.action.ProjectileSkill;
+import crl.Main;
 import crl.feature.Feature;
 import crl.level.Level;
 import crl.monster.Monster;
 import crl.player.Player;
-import crl.ui.effects.EffectFactory;
+import sz.util.Line;
+import sz.util.OutParameter;
+import sz.util.Position;
 
-public abstract class BeamProjectileSkill extends ProjectileSkill{
-	public String plottedLocatedEffect(){
+public abstract class BeamProjectileSkill extends ProjectileSkill {
+	
+	public String plottedLocatedEffect() {
 		return null;
 	}
 	
@@ -25,27 +24,28 @@ public abstract class BeamProjectileSkill extends ProjectileSkill{
 		if (targetPosition.equals(performer.getPosition()))
 			return;
 		reduceHearts();
-        Level aLevel = performer.level;
-        Player aPlayer = aLevel.getPlayer();
-        int attackHeight = aLevel.getMapCell(aPlayer.getPosition()).getHeight();
-	    if (showThrowMessage())
-	    	aLevel.addMessage(getShootMessage());
-	    targetDirection = getGeneralDirection(performer.getPosition(), targetPosition);
+		Level aLevel = performer.level;
+		Player aPlayer = aLevel.getPlayer();
+		int attackHeight = aLevel.getMapCell(aPlayer.getPosition()).getHeight();
+		if (showThrowMessage()) {
+			aLevel.addMessage(getShootMessage());
+		}
+		targetDirection = getGeneralDirection(performer.getPosition(), targetPosition);
 		
-	    OutParameter outPosition1 = new OutParameter();
-	    OutParameter outPosition2 = new OutParameter();
-	    Action.fillNormalPositions(performer.getPosition(), targetDirection, outPosition1, outPosition2);
-	    
-	    Position start1 = (Position) outPosition1.getObject();
-	    Position start2 = (Position) outPosition2.getObject();
-	    
-	    Action.fillNormalPositions(targetPosition, targetDirection, outPosition1, outPosition2);
-	    Position end1 = (Position) outPosition1.getObject();
-	    Position end2 = (Position) outPosition2.getObject();
-	    
-	    /*aLevel.addFeature("SMALLHEART", start1);
-	    aLevel.addFeature("SMALLHEART", start2);*/
-	    
+		OutParameter outPosition1 = new OutParameter();
+		OutParameter outPosition2 = new OutParameter();
+		Action.fillNormalPositions(performer.getPosition(), targetDirection, outPosition1, outPosition2);
+		
+		Position start1 = (Position) outPosition1.getObject();
+		Position start2 = (Position) outPosition2.getObject();
+		
+		Action.fillNormalPositions(targetPosition, targetDirection, outPosition1, outPosition2);
+		Position end1 = (Position) outPosition1.getObject();
+		Position end2 = (Position) outPosition2.getObject();
+		
+		/*aLevel.addFeature("SMALLHEART", start1);
+		aLevel.addFeature("SMALLHEART", start2);*/
+		
 		Line fireLine = new Line(performer.getPosition(), targetPosition);
 		Line fireLine1 = new Line(start1, end1);
 		Line fireLine2 = new Line(start2, end2);
@@ -54,14 +54,15 @@ public abstract class BeamProjectileSkill extends ProjectileSkill{
 		deadLines[2] = false;
 		fireLine.next();
 		int projectileHeight = attackHeight;
-		for (int i=0; i<getRange(); i++){
-			for (int hits = 0; hits < 3; hits++){
-				if (deadLines[hits])
+		for (int i=0; i<getRange(); i++) {
+			for (int hits = 0; hits < 3; hits++) {
+				if (deadLines[hits]) {
 					continue;
+				}
 				Position destinationPoint = null;
 				Position originPoint = null;
 				Position finalPoint = null;
-				switch (hits){
+				switch (hits) {
 				case 0:
 					destinationPoint = fireLine.next();
 					originPoint = performer.getPosition();
@@ -81,11 +82,11 @@ public abstract class BeamProjectileSkill extends ProjectileSkill{
 				if (!aLevel.isValidCoordinate(destinationPoint))
 					continue;
 				if (plottedLocatedEffect() != null){
-					drawEffect(EffectFactory.getSingleton().createLocatedEffect(destinationPoint, plottedLocatedEffect()));
+					drawEffect(Main.efx.createLocatedEffect(destinationPoint, plottedLocatedEffect()));
 				}
-				if (aLevel.isSolid(destinationPoint)){
+				if (aLevel.isSolid(destinationPoint)) {
 					if (!piercesThru()){
-						drawEffect(EffectFactory.getSingleton().createDirectedEffect(originPoint, finalPoint, getSFXID(), i));
+						drawEffect(Main.efx.createDirectedEffect(originPoint, finalPoint, getSFXID(), i));
 						deadLines[hits] = true;
 						continue;
 					}
@@ -95,18 +96,19 @@ public abstract class BeamProjectileSkill extends ProjectileSkill{
 				
 				int destinationHeight = aLevel.getMapCell(destinationPoint).getHeight();
 	
-				if (destinationHeight == projectileHeight){
+				if (destinationHeight == projectileHeight) {
 					Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-		        	if (destinationFeature != null && destinationFeature.isDestroyable()){
-			        	message = "The " + getSpellAttackDesc() + " hits the "+destinationFeature.getDescription();
-			        	if (!piercesThru())
-			        		drawEffect(EffectFactory.getSingleton().createDirectedEffect(originPoint, finalPoint, getSFXID(), i));
+					if (destinationFeature != null && destinationFeature.isDestroyable()) {
+						message = "The " + getSpellAttackDesc() + " hits the "+destinationFeature.getDescription();
+						if (!piercesThru()) {
+							drawEffect(Main.efx.createDirectedEffect(originPoint, finalPoint, getSFXID(), i));
+						}
 						Feature prize = destinationFeature.damage(aPlayer, getDamage());
-			        	if (prize != null){
-				        	message += " and destroys it.";
+						if (prize != null) {
+							message += " and destroys it.";
 						}
 						aLevel.addMessage(message);
-						if (!piercesThru()){
+						if (!piercesThru()) {
 							deadLines[hits] = true;
 							continue;
 						}
@@ -114,19 +116,18 @@ public abstract class BeamProjectileSkill extends ProjectileSkill{
 				}
 				Monster targetMonster = performer.level.getMonsterAt(destinationPoint);
 				
-				if (targetMonster != null){
+				if (targetMonster != null) {
 					//int monsterHeight = destinationHeight + (targetMonster.isFlying() ? 1 : 0);
 					int monsterHeight = destinationHeight + targetMonster.getHoverHeight();
 					
 					if (projectileHeight == monsterHeight){
-						if (targetMonster.tryMagicHit(aPlayer,getDamage(), getHit(), targetMonster.wasSeen(), getSpellAttackDesc(), isWeaponAttack(), performer.getPosition())){
+						if (targetMonster.tryMagicHit(aPlayer,getDamage(), getHit(), targetMonster.wasSeen(), getSpellAttackDesc(), isWeaponAttack(), performer.getPosition())) {
 							if (!piercesThru()){
-								drawEffect(EffectFactory.getSingleton().createDirectedEffect(originPoint, finalPoint, getSFXID(), i));
+								drawEffect(Main.efx.createDirectedEffect(originPoint, finalPoint, getSFXID(), i));
 								deadLines[hits] = true;
 								continue;
 							}
-								
-						};
+						}
 					} else if (projectileHeight < monsterHeight) {
 						aLevel.addMessage("The "+getSpellAttackDesc()+" flies under the "+targetMonster.getDescription());
 					} else {
@@ -135,7 +136,7 @@ public abstract class BeamProjectileSkill extends ProjectileSkill{
 				}
 			}
 		}
-		for (int hits = 0; hits < 3; hits++){
+		for (int hits = 0; hits < 3; hits++) {
 			Position originPoint = null;
 			Position finalPoint = null;
 			switch (hits){
@@ -152,8 +153,9 @@ public abstract class BeamProjectileSkill extends ProjectileSkill{
 				finalPoint = end2;
 				break;
 			}
-			if (!deadLines[hits])
-				drawEffect(EffectFactory.getSingleton().createDirectedEffect(originPoint, finalPoint, getSFXID(), getRange()));
+			if (!deadLines[hits]) {
+				drawEffect(Main.efx.createDirectedEffect(originPoint, finalPoint, getSFXID(), getRange()));
+			}
 		}
 	}
 }

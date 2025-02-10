@@ -9,22 +9,22 @@ import crl.level.Cell;
 import crl.level.Level;
 import crl.monster.Monster;
 import crl.player.Player;
-import crl.ui.effects.EffectFactory;
 
-public class Egg extends HeartAction{
+public class Egg extends HeartAction {
+	
 	public int getHeartCost() {
 		return 1;
 	}
 	
-	public String getID(){
+	public String getID() {
 		return "Egg";
 	}
 	
-	public boolean needsPosition(){
+	public boolean needsPosition() {
 		return true;
 	}
 
-	public void execute(){
+	public void execute() {
 		super.execute();
 		Player aPlayer = (Player) performer;
 		Level aLevel = performer.level;
@@ -46,7 +46,7 @@ public class Egg extends HeartAction{
 					break;
 				}
 			}
-			Main.ui.drawEffect(EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(), targetPosition, "SFX_EGG", i));
+			Main.ui.drawEffect(Main.efx.createDirectedEffect(performer.getPosition(), targetPosition, "SFX_EGG", i));
 		}
 		
 		if (destinationCell == null) {
@@ -57,7 +57,7 @@ public class Egg extends HeartAction{
 			}
 		}
 		
-		Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(flameOrigin, "SFX_EGG_BLAST"));
+		Main.ui.drawEffect(Main.efx.createLocatedEffect(flameOrigin, "SFX_EGG_BLAST"));
 
 		StringBuffer message = new StringBuffer();
 		for (int x = flameOrigin.x -1; x <= flameOrigin.x+1; x++) {
@@ -90,14 +90,18 @@ public class Egg extends HeartAction{
 		aLevel.addMessage(message.toString());
 	}
 
-	public String getPromptoPosition() {
+	@Override
+	public String getPromptPosition() {
 		return "Where do you want to throw the egg?";
 	}
+	
+	@Override
 	public int getCost() {
 		Player p = (Player) performer;
 		return (int)(25 / (p.getShotLevel()+1));
 	}
 	
+	@Override
 	public String getSFX() {
 		return "wav/breakpot.wav";
 	}

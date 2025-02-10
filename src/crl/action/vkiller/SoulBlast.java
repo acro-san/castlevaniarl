@@ -6,11 +6,10 @@ import crl.action.HeartAction;
 import crl.level.Level;
 import crl.monster.VMonster;
 import crl.player.Player;
-import crl.ui.effects.EffectFactory;
 
 public class SoulBlast extends HeartAction{
 	
-	public String getID(){
+	public String getID() {
 		return "Soul Flame";
 	}
 	
@@ -18,17 +17,19 @@ public class SoulBlast extends HeartAction{
 		return 20;
 	}
 	
-	public void execute(){
+	public void execute() {
 		super.execute();
-        Level aLevel = performer.level;
-        aLevel.addMessage("Soul Blast!");
-        int damage = 50 + aLevel.getPlayer().getShotLevel()*2 + aLevel.getPlayer().getSoulPower()*3;
-		Position blastPosition = performer.getPosition();
-		Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(blastPosition, "SFX_SOUL_BLAST"));
+		Level aLevel = performer.level;
+		aLevel.addMessage("Soul Blast!");
+		int damage = 50 + aLevel.getPlayer().getShotLevel()*2 + aLevel.getPlayer().getSoulPower()*3;
+
+		Position pp = performer.getPosition();
+		Main.ui.drawEffect(Main.efx.createLocatedEffect(pp, "SFX_SOUL_BLAST"));
 		
 		VMonster monsters = aLevel.getMonsters();
-		for (int i = 0; i < monsters.size(); i++){
-			if (monsters.elementAt(i).getPosition().z == performer.getPosition().z && Position.distance(monsters.elementAt(i).getPosition(), performer.getPosition()) < 5){
+		for (int i = 0; i < monsters.size(); i++) {
+			Position mp = monsters.elementAt(i).getPosition();
+			if (mp.z == pp.z && Position.distance(mp, pp) < 5) {
 				StringBuffer buff = new StringBuffer();
 				if (monsters.elementAt(i).wasSeen()) {
 					buff.append("The "+monsters.elementAt(i).getDescription()+" is hit by the holy blast!");
@@ -37,13 +38,15 @@ public class SoulBlast extends HeartAction{
 				aLevel.addMessage(buff.toString());
 			}
 		}
-
 	}
 
-	public String getPromptoPosition(){
+	@Override
+	public String getPromptPosition() {
 		return "Where do you want to throw the vial?";
 	}
-	public int getCost(){
+	
+	@Override
+	public int getCost() {
 		Player p = (Player) performer;
 		return (int)(25 / (p.getShotLevel()+1));
 	}

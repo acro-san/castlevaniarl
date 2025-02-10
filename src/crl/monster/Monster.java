@@ -62,23 +62,23 @@ public class Monster extends Actor implements Cloneable {
 			return false;
 	}
 
-	public void freeze(int cont){
+	public void freeze(int cont) {
 		setCounter(Consts.C_MONSTER_FREEZE, cont);
 	}
 
-	public int getFreezeResistance(){
+	public int getFreezeResistance() {
 		return 0; //placeholder
 	}
 
-	public Appearance getAppearance(){
+	public Appearance getAppearance() {
 		return getDefinition().getAppearance();
 	}
 
-	public Object clone(){
+
+	public Object clone() {
 		try {
-        	return super.clone();
-		} catch (Exception x)
-		{
+			return super.clone();
+		} catch (Exception x) {
 			return null;
 		}
 
@@ -109,7 +109,7 @@ public class Monster extends Actor implements Cloneable {
 				if (pp.y > getPosition().y){
 					return Action.DOWN;
 				} else {
-                     return Action.UP;
+					return Action.UP;
 				}
 			} else
 			if (pp.y == getPosition().y){
@@ -125,7 +125,7 @@ public class Monster extends Actor implements Cloneable {
 				else
 					return Action.UPLEFT;
 			} else {
-                if (pp.y > getPosition().y)
+				if (pp.y > getPosition().y)
 					return Action.DOWNRIGHT;
 				else
 					return Action.UPRIGHT;
@@ -134,16 +134,18 @@ public class Monster extends Actor implements Cloneable {
 		return -1;
 	}
 
-	public void damageWithWeapon(StringBuffer message, int dam){
-		Item wep = level.getPlayer().getWeapon();
-		if (wep != null)
-			level.getPlayer().increaseWeaponSkill(wep.getDefinition().weaponCategory);
-		else
-			level.getPlayer().increaseWeaponSkill(ItemDefinition.CAT_UNARMED);
+	public void damageWithWeapon(StringBuffer message, int dam) {
+		Player pl = level.getPlayer();
+		Item wep = pl.getWeapon();
+		if (wep == null) {
+			pl.increaseWeaponSkill(ItemDefinition.CAT_UNARMED);
+		} else {
+			pl.increaseWeaponSkill(wep.getDefinition().weaponCategory);
+		}
 		damage(message, dam);
 	}
 	
-	public void damage(StringBuffer message, int dam){
+	public void damage(StringBuffer message, int dam) {
 		if (selector instanceof DraculaAI) {
 			((DraculaAI)selector).setOnBattle(true);
 		}
@@ -152,52 +154,54 @@ public class Monster extends Actor implements Cloneable {
 				level.addMessage("The "+getDescription()+" "+getEvadeMessage());
 			return;
 		}
-		if (hasCounter(Consts.C_MONSTER_FREEZE))
+		if (hasCounter(Consts.C_MONSTER_FREEZE)) {
 			dam *= 2;
+		}
 		message.append(" ("+dam+")");
 		hits -= dam;
-		Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(getPosition(), "SFX_QUICK_WHITE_HIT"));
-		if (getDefinition().getBloodContent() > 0){
-			if (level.getPlayer().hasCounter(Consts.C_BLOOD_THIRST) &&
-					Position.flatDistance(getPosition(), level.getPlayer().getPosition()) < 3){
+		Main.ui.drawEffect(Main.efx.createLocatedEffect(getPosition(), "SFX_QUICK_WHITE_HIT"));
+		Player pl = level.getPlayer();
+		if (getDefinition().getBloodContent() > 0) {
+			if (pl.hasCounter(Consts.C_BLOOD_THIRST) &&
+					Position.flatDistance(getPosition(), pl.getPosition()) < 3) {
 				int recover = (int)Math.ceil(getDefinition().getBloodContent()/30);
 				level.addMessage("You drink some of the "+getDefinition().getDescription()+" blood! (+"+recover+")");
-				level.getPlayer().recoverHits(recover);
+				pl.recoverHits(recover);
 			}
 			if (Util.chance(40)) {
 				level.addBlood(getPosition(), Util.rand(0,1));
 			}
 		}
-		if (level.getPlayer().getFlag("HEALTH_REGENERATION") && Util.chance(30)) {
-			level.getPlayer().recoverHits(1);
+		if (pl.getFlag("HEALTH_REGENERATION") && Util.chance(30)) {	// *RANDOM* regen?! Why not slow tickrate?
+			pl.recoverHits(1);
 		}
 
 		if (isDead()) {
-			if (this == level.getBoss()){
+			if (this == level.getBoss()) {
 				//if (!level.isWalkable(getPosition())){
 					//level.addMessage("You get a castle key!");
-					level.getPlayer().addKeys(1);
+					pl.addKeys(1);
 				/*} else
 					setFeaturePrize("KEY");*/
 				//level.addEffect(new DoubleSplashEffect(getPosition(), "O....,,..,.,.,,......", Appearance.RED, ".,,,,..,,.,.,..,,,,,,", Appearance.WHITE));
-				Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(getPosition(), "SFX_BOSS_DEATH"));
+				Main.ui.drawEffect(Main.efx.createLocatedEffect(getPosition(), "SFX_BOSS_DEATH"));
 				level.addMessage("The whole level trembles with holy energy!");
 				level.removeBoss();
-				level.getPlayer().addHistoricEvent("vanquished the "+this.getDescription()+" on the "+level.getDescription());
+				pl.addHistoricEvent("vanquished the "+this.getDescription()+" on the "+level.getDescription());
 				level.anihilate();
 				level.removeRespawner();
 				//level.getPlayer().addSoulPower(Util.rand(10,20)*level.getLevelNumber());
 			} else {
-				level.getPlayer().increaseMUpgradeCount();
+				pl.increaseMUpgradeCount();
 				setPrize();
 			}
 			if (featurePrize != null && !level.getMapCell(getPosition()).isSolid())
-				if (level.getMapCell(getPosition()).isShallowWater()){
+				if (level.getMapCell(getPosition()).isShallowWater()) {
 					level.addMessage("A "+FeatureFactory.getDescriptionForID(featurePrize) +" falls into the " + level.getMapCell(getPosition()).getDescription());
 					level.addFeature(featurePrize, getPosition());
-				}
-				else
+				} else {
 					level.addFeature(featurePrize, getPosition());
+				}
 			
 			if (getDefinition().isBleedable()) {
 				Position runner = new Position(-1,-1,getPosition().z);
@@ -209,19 +213,19 @@ public class Monster extends Actor implements Cloneable {
 					}
 				}
 			}
-			
 			die();
-			level.getPlayer().addScore(getDefinition().getScore());
-			level.getPlayer().addXP(getDefinition().getScore());
-			//level.getPlayer().addSoulPower(Util.rand(0,3));
-			level.getPlayer().getGameSessionInfo().addDeath(getDefinition());
+			pl.addScore(getDefinition().getScore());
+			pl.addXP(getDefinition().getScore());
+			//pl.addSoulPower(Util.rand(0,3));
+			pl.getGameSessionInfo().addDeath(getDefinition());
 		}
 	}
 
+
 	public int getScore() {
 		return getDefinition().getScore();
-		
 	}
+	
 	public boolean isDead() {
 		return hits <= 0;
 	}

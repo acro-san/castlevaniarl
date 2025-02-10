@@ -7,7 +7,6 @@ import crl.action.HeartAction;
 import crl.level.Cell;
 import crl.level.Level;
 import crl.player.Player;
-import crl.ui.effects.EffectFactory;
 
 public class WarpDash extends HeartAction {
 	
@@ -23,7 +22,7 @@ public class WarpDash extends HeartAction {
 		return true;
 	}
 
-	public String getPromptPosition(){
+	public String getPromptPosition() {
 		return "Where do you want to dash?";
 	}
 
@@ -52,7 +51,7 @@ public class WarpDash extends HeartAction {
 			
 		}
 		player.landOn(new Position(runner));
-		drawEffect(EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(), targetPosition, "SFX_WARPDASH", i));
+		drawEffect(Main.efx.createDirectedEffect(performer.getPosition(), targetPosition, "SFX_WARPDASH", i));
 		player.see();
 		Main.ui.refresh();
 	}

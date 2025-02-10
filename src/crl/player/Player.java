@@ -1,8 +1,7 @@
-	package crl.player;
+package crl.player;
 
 import sz.fov.FOV;
 import sz.util.*;
-import crl.ui.effects.*;
 import java.util.*;
 
 import crl.item.*;
@@ -78,7 +77,7 @@ public class Player extends Actor {
 	private String plot2;
 	private String description;
 
-	//Status
+	// Status
 	private int playerLevel = 1;
 	private int xp;
 	private int nextLevelXP = 1000; //5000
@@ -598,7 +597,7 @@ public class Player extends Actor {
 			}
 		}
 		damage("The "+who.getDescription()+" hits you.", dam);
-		Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(getPosition(), "SFX_QUICK_WHITE_HIT"));
+		Main.ui.drawEffect(Main.efx.createLocatedEffect(getPosition(), "SFX_QUICK_WHITE_HIT"));
 		if (hits < 0) {
 			if (getSex() == MALE)
 				SFXManager.play("wav/die_male.wav");
@@ -1363,7 +1362,7 @@ public class Player extends Actor {
 		level.addMessage("A blast of holy light surrounds you!");
 		//level.addEffect(new SplashEffect(getPosition(), "****~~~~,,,,....", Appearance.WHITE));
 		SFXManager.play("wav/lazrshot.wav");
-		Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(getPosition(), "SFX_ROSARY_BLAST"));
+		Main.ui.drawEffect(Main.efx.createLocatedEffect(getPosition(), "SFX_ROSARY_BLAST"));
 		
 		String message = "";
 
@@ -1392,7 +1391,8 @@ public class Player extends Actor {
 		}
 		monsters.removeAll(removables);
 		//level.removeMonster(monster);
- 	}
+	}
+
 
 	public boolean isFainted() {
 		return faintCount > 0;
@@ -1473,61 +1473,65 @@ public class Player extends Actor {
 	}
 	
 	public void setLitWhip() {
-		if (playerClass == CLASS_VAMPIREKILLER)
-    		weapon = LIT_WHIP;
-    }
-    
-    public void setThornWhip(){
-    	if (playerClass == CLASS_VAMPIREKILLER)
-    		weapon = THORN_WHIP;
-    }
-    
-    public void increaseShot(){
-    	if (playerClass == CLASS_VAMPIREKILLER && shotLevel < 2)
-    		shotLevel++;
-    }
-    
-    public int getShotLevel(){
-    	return shotLevel;
-    }
-    
-    public void increaseWhip(){
-    	if (!(getPlayerClass() == CLASS_VAMPIREKILLER))
-    		return;
-    	if (whipLevel < 2)
-    		whipLevel++;
-    	else
-    		return;
-    	switch (whipLevel){
-    	case 1:
-    		level.addMessage("Your leather whip turns into a chain whip!");
-    		weapon = CHAIN_WHIP;
-    		break;
-    	case 2:
-    		level.addMessage("Your chain whip turns into the Vampire Killer!");
-    		weapon = VAMPIRE_WHIP;
-    	}
-    }
-    
-    public void decreaseWhip(){
-    	if (!(getPlayerClass() == CLASS_VAMPIREKILLER))
-    		return;
-    	if (shotLevel > 0)
-    		shotLevel--;
-    	if (whipLevel > 0)
-    		whipLevel--;
-    	else
-    		return;
-    	switch (whipLevel){
-    	case 1:
-    		level.addMessage("Your Vampire Killer turns into a chain whip!");
-    		weapon = CHAIN_WHIP;
-    		break;
-    	case 0:
-    		level.addMessage("Your chain whip turns into a leather whip!");
-    		weapon = LEATHER_WHIP;
-    	}
-    }
+		if (playerClass == CLASS_VAMPIREKILLER) {
+			weapon = LIT_WHIP;
+		}
+	}
+	
+	public void setThornWhip() {
+		if (playerClass == CLASS_VAMPIREKILLER) {
+			weapon = THORN_WHIP;
+		}
+	}
+	
+	public void increaseShot() {
+		if (playerClass == CLASS_VAMPIREKILLER && shotLevel < 2) {
+			shotLevel++;
+		}
+	}
+	
+	public int getShotLevel() {
+		return shotLevel;
+	}
+	
+	public void increaseWhip() {
+		if (!(getPlayerClass() == CLASS_VAMPIREKILLER)) {
+			return;
+		}
+		if (whipLevel < 2)
+			whipLevel++;
+		else
+			return;
+		switch (whipLevel) {
+		case 1:
+			level.addMessage("Your leather whip turns into a chain whip!");
+			weapon = CHAIN_WHIP;
+			break;
+		case 2:
+			level.addMessage("Your chain whip turns into the Vampire Killer!");
+			weapon = VAMPIRE_WHIP;
+		}
+	}
+
+	public void decreaseWhip() {
+		if (!(getPlayerClass() == CLASS_VAMPIREKILLER))
+			return;
+		if (shotLevel > 0)
+			shotLevel--;
+		if (whipLevel > 0)
+			whipLevel--;
+		else
+			return;
+		switch (whipLevel){
+		case 1:
+			level.addMessage("Your Vampire Killer turns into a chain whip!");
+			weapon = CHAIN_WHIP;
+			break;
+		case 0:
+			level.addMessage("Your chain whip turns into a leather whip!");
+			weapon = LEATHER_WHIP;
+		}
+	}
 
 	/// private int defense; //Temporary stat
 	private int defenseCounter;

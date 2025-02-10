@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import sz.util.Position;
-
+import crl.Main;
 import crl.item.Item;
 import crl.level.Level;
 import crl.monster.Monster;
@@ -32,8 +32,8 @@ public class TestMandragoraScream {
 	
 	@Before
 	public void setUp() throws Exception {
-		effectFactory = mock(EffectFactory.class);	
-		EffectFactory.setSingleton(effectFactory);
+		effectFactory = mock(EffectFactory.class);
+		Main.efx = effectFactory;
 		
 		monsters = mock(VMonster.class);
 		

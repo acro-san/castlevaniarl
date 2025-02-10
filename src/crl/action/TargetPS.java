@@ -2,12 +2,12 @@ package crl.action;
 
 import sz.util.Position;
 import sz.util.Util;
+import crl.Main;
 import crl.actor.Actor;
 import crl.item.Item;
 import crl.item.ItemDefinition;
 import crl.monster.Monster;
 import crl.player.Player;
-import crl.ui.effects.EffectFactory;
 
 public class TargetPS extends ProjectileSkill {
 
@@ -129,9 +129,11 @@ public class TargetPS extends ProjectileSkill {
 			return false;
 		}
 
-		if (!EffectFactory.getSingleton().isDirectedEffect(
-				"SFX_WP_"+weapon.getDefinition().getID()
-			)) {
+		// wtf specific string naming heck.:!?
+		String wfxID = "SFX_WP_" + weapon.getDefinition().getID();
+		// this seems a bad way to go about querying if a targeted projectile
+		// can be directed. surely that should be a simple field on the skill??
+		if (!Main.efx.isDirectedEffect(wfxID)) {
 			invalidationMessage = "You cannot target your " + weapon.getDescription() + ". Attack on a direction instead!";
 			return false;
 		}

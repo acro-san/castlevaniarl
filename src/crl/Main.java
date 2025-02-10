@@ -108,6 +108,8 @@ public class Main {
 	public static HashMap<String, ActionSelector>
 		selectors = new HashMap<>();
 	
+	public static EffectFactory efx;	//instead of EffectFactory.getSingleton()!
+	
 	public static ItemDataTable itemData;// = new ItemFactory();
 	
 	private static Game currentGame;
@@ -158,10 +160,11 @@ public class Main {
 					ui = new GFXUserInterface(gfx_configuration);
 					Display.thus = new GFXDisplay(si, UIconfiguration, gfx_configuration);
 					PlayerGenerator.thus = new GFXPlayerGenerator(si, gfx_configuration);
-					EffectFactory.setSingleton(new GFXEffectFactory());
+					//EffectFactory.setSingleton(new GFXEffectFactory());
+					efx = new GFXEffectFactory();
 					
 					GFXEffect[] gef = new GFXEffects(gfx_configuration).getEffects();
-					((GFXEffectFactory)EffectFactory.getSingleton()).setEffects(gef);
+					((GFXEffectFactory)efx).setEffects(gef);
 					initializeUI(si);
 					break;
 				case JCURSES_CONSOLE:
@@ -179,8 +182,8 @@ public class Main {
 					CharCuts.initializeSingleton();
 					Display.thus = new CharDisplay(csi);
 					PlayerGenerator.thus = new CharPlayerGenerator(csi);
-					EffectFactory.setSingleton(new CharEffectFactory());
-					((CharEffectFactory)EffectFactory.getSingleton()).setEffects(new CharEffects().getEffects());
+					efx = new CharEffectFactory();
+					((CharEffectFactory)efx).setEffects(new CharEffects().getEffects());
 					initializeUI(csi);
 					break;
 				case SWING_CONSOLE:
@@ -192,8 +195,8 @@ public class Main {
 					CharCuts.initializeSingleton();
 					Display.thus = new CharDisplay(csi);
 					PlayerGenerator.thus = new CharPlayerGenerator(csi);
-					EffectFactory.setSingleton(new CharEffectFactory());
-					((CharEffectFactory)EffectFactory.getSingleton()).setEffects(new CharEffects().getEffects());
+					efx = new CharEffectFactory();
+					((CharEffectFactory)efx).setEffects(new CharEffects().getEffects());
 					initializeUI(csi);
 				}
 			} catch (Exception e){

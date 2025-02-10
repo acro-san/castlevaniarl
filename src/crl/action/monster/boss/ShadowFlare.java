@@ -2,27 +2,28 @@ package crl.action.monster.boss;
 
 import sz.util.Position;
 import sz.util.Util;
+import crl.Main;
 import crl.action.Action;
 import crl.feature.Feature;
 import crl.level.Level;
 import crl.monster.Monster;
 import crl.player.Damage;
 import crl.player.Player;
-import crl.ui.effects.EffectFactory;
 
-public class ShadowFlare extends Action{
-	public String getID(){
+public class ShadowFlare extends Action {
+	
+	public String getID() {
 		return "SHADOWFLARE";
 	}
 	
-	public void execute(){
+	public void execute() {
 		Monster aMonster = (Monster)performer;
 		Level aLevel = aMonster.level;
 		if (targetDirection == -1)
 			return;
-	    aLevel.addMessage("Dracula invokes shadow flares!");
-	    Position runner1 = new Position(performer.getPosition());
-	    Position runner2 = null;
+		aLevel.addMessage("Dracula invokes shadow flares!");
+		Position runner1 = new Position(performer.getPosition());
+		Position runner2 = null;
 		Position runner3 = null;
 		int randy = Util.rand(1,2);
 		if (targetDirection == Action.UP || targetDirection == Action.DOWN){
@@ -35,39 +36,39 @@ public class ShadowFlare extends Action{
 
 		Position directionVar = Action.directionToVariation(targetDirection);
 		
-		drawEffect(EffectFactory.getSingleton().createDirectedEffect(runner1, Position.add(runner1, directionVar), "SFX_SHADOW_FLARE",10));
-		drawEffect(EffectFactory.getSingleton().createDirectedEffect(runner2, Position.add(runner2, directionVar), "SFX_SHADOW_FLARE",10));
-		drawEffect(EffectFactory.getSingleton().createDirectedEffect(runner3, Position.add(runner3, directionVar), "SFX_SHADOW_FLARE",10));
-		for (int i = 0; i < 10; i++){
-			hit (runner1);
-			hit (runner2);
-			hit (runner3);
+		drawEffect(Main.efx.createDirectedEffect(runner1, Position.add(runner1, directionVar), "SFX_SHADOW_FLARE",10));
+		drawEffect(Main.efx.createDirectedEffect(runner2, Position.add(runner2, directionVar), "SFX_SHADOW_FLARE",10));
+		drawEffect(Main.efx.createDirectedEffect(runner3, Position.add(runner3, directionVar), "SFX_SHADOW_FLARE",10));
+		for (int i = 0; i < 10; i++) {
+			hit(runner1);
+			hit(runner2);
+			hit(runner3);
 			runner1.add(directionVar);
 			runner2.add(directionVar);
 			runner3.add(directionVar);
 		}
 	}
 
-	public int getCost(){
+	public int getCost() {
 		return 50;
 	}
 	
-	private void hit(Position destinationPoint){
+	private void hit(Position destinationPoint) {
 		String message = "";
 		Level aLevel = performer.level;
-        Player aPlayer = aLevel.getPlayer();
+		Player aPlayer = aLevel.getPlayer();
 		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-        if (destinationFeature != null && destinationFeature.isDestroyable()){
-	       	message = "The flares crush the "+destinationFeature.getDescription();
+		if (destinationFeature != null && destinationFeature.isDestroyable()) {
+			message = "The flares crush the "+destinationFeature.getDescription();
 			Feature prize = destinationFeature.damage(aPlayer, 4);
-	       	if (prize != null){
-		       	message += ", consuming it!";
+			if (prize != null) {
+				message += ", consuming it!";
 			}
 			aLevel.addMessage(message);
 		}
-        if (destinationPoint.equals(aPlayer.getPosition())){
-        	aPlayer.damage("You are burned by the shadow flare!", (Monster)performer, new Damage(3, false));
+		if (destinationPoint.equals(aPlayer.getPosition())) {
+			aPlayer.damage("You are burned by the shadow flare!", (Monster)performer, new Damage(3, false));
 		}
-        //drawEffect(EffectFactory.getSingleton().createLocatedEffect(destinationPoint, "SFX_SHADOW_FLARE"));
+		//drawEffect(Main.efx.createLocatedEffect(destinationPoint, "SFX_SHADOW_FLARE"));
 	}
 }

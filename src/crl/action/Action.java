@@ -12,6 +12,7 @@ import crl.player.Player;
 import crl.ui.effects.Effect;
 
 public abstract class Action implements java.io.Serializable {
+	
 	protected Actor performer;
 
 	protected int targetDirection;
@@ -31,6 +32,7 @@ public abstract class Action implements java.io.Serializable {
 		DOWNLEFT = 7,
 		SELF = 8;
 	
+	
 	public abstract String getID();
 	
 	public int getCost() {
@@ -44,23 +46,23 @@ public abstract class Action implements java.io.Serializable {
 		return ret;
 	}
 
-	public void setPerformer(Actor what){
+	public void setPerformer(Actor what) {
 		performer = what;
 	}
 
-	public void setDirection(int direction){
+	public void setDirection(int direction) {
 		targetDirection = direction;
 	}
 
-	public void setEquipedItem(Item item){
+	public void setEquipedItem(Item item) {
 		targetEquipedItem = item;
 	}
 
-	public void setPosition(Position position){
+	public void setPosition(Position position) {
 		targetPosition = position;
 	}
 
-	public void setItem (Item what){
+	public void setItem(Item what){
 		targetItem = what;
 	}
 	
@@ -137,6 +139,39 @@ public abstract class Action implements java.io.Serializable {
 		VARDL = new Position(-1, 1),
 		VARSL = new Position(0 , 0);
 
+
+	// useful in a few Directional Missile "effect" actions.
+	public static int solveDirection(Position old, Position newP) {
+		if (newP.x == old.x) {
+			if (newP.y > old.y) {
+				return Action.DOWN;
+			} else {
+				return Action.UP;
+			}
+		} else {
+			if (newP.y == old.y) {
+				if (newP.x > old.x) {
+					return Action.RIGHT;
+				} else {
+					return Action.LEFT;
+				}
+			} else {
+				if (newP.x < old.x) {
+					if (newP.y > old.y)
+						return Action.DOWNLEFT;
+					else
+						return Action.UPLEFT;
+				} else {
+					if (newP.y > old.y)
+						return Action.DOWNRIGHT;
+					else
+						return Action.UPRIGHT;
+				}
+			}
+		}
+	}
+	
+	
 	public static Position directionToVariation(int code) {
 		switch (code) {
 		case UP:
@@ -162,7 +197,7 @@ public abstract class Action implements java.io.Serializable {
 		}
 	}
 
-	public static int toIntDirection(Position what){
+	public static int toIntDirection(Position what) {
 		switch (what.x) {
 			case 1:
 				switch (what.y) {
@@ -194,7 +229,8 @@ public abstract class Action implements java.io.Serializable {
 		return -1;
 	}
 	
-	public static int toIntDirection(CharKey ck){
+	
+	public static int toIntDirection(CharKey ck) {
 		if (ck.isUpArrow())	return Action.UP;
 		else if (ck.isLeftArrow())	return Action.LEFT;
 		else if (ck.isRightArrow())	return Action.RIGHT;
@@ -207,11 +243,11 @@ public abstract class Action implements java.io.Serializable {
 		else return -1;
 	}
 	
-	protected void drawEffect(Effect x){
+	protected void drawEffect(Effect x) {
 		Main.ui.drawEffect(x);
 	}
 	
-	public String getSFX(){
+	public String getSFX() {
 		return null;
 	}
 	
@@ -222,7 +258,7 @@ public abstract class Action implements java.io.Serializable {
 			throw new RuntimeException("getPlayer used in an Actor other than player");
 	}
 	
-	public boolean canPerform(Actor a){
+	public boolean canPerform(Actor a) {
 		return true;
 	}
 	
@@ -240,7 +276,7 @@ public abstract class Action implements java.io.Serializable {
 		return invalidationMessage;
 	}
 	
-	public static int getGeneralDirection(Position from, Position to){
+	public static int getGeneralDirection(Position from, Position to) {
 		if (from.x == to.x)
 			if (from.y > to.y)
 				return UP;
@@ -261,7 +297,11 @@ public abstract class Action implements java.io.Serializable {
 			else return RIGHT;
 		}
 	}
-	public static void fillNormalPositions(Position where, int direction, OutParameter position1, OutParameter position2){
+	
+	
+	// ????? OutParameter -> WTF?
+	public static void fillNormalPositions(Position where, int direction,
+			OutParameter position1, OutParameter position2) {
 		switch (direction){
 		case Action.UP:
 			position1.setObject(Position.add(where, VARUL));
@@ -300,7 +340,7 @@ public abstract class Action implements java.io.Serializable {
 
 	// Sometimes when we are executing an action, we need to pause to
 	// display an updated version of the world
-	protected final void actionAnimationPause(){
-		try {Thread.sleep(150);}catch (Exception e){}
+	protected final void actionAnimationPause() {
+		try {Thread.sleep(150);} catch (Exception e) {}
 	}
 }

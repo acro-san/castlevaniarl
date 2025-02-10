@@ -3,13 +3,14 @@ package crl.ui.effects;
 import sz.util.Position;
 
 public abstract class EffectFactory {
+	/*
 	private static EffectFactory singleton;
 	public static void setSingleton(EffectFactory ef){
 		singleton = ef;
 	}
 	public static EffectFactory getSingleton(){
 		return singleton;
-	}
+	}*/
 
 	public abstract boolean isDirectedEffect(String ID);
 	

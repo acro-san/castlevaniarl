@@ -1,19 +1,17 @@
 package crl.action.vkiller;
 
-import sz.util.Line;
-import sz.util.Position;
-import crl.action.Action;
+import crl.Main;
 import crl.action.HeartAction;
-import crl.actor.Actor;
 import crl.feature.Feature;
 import crl.level.Cell;
 import crl.level.Level;
 import crl.monster.Monster;
 import crl.player.Player;
-import crl.ui.UserInterface;
-import crl.ui.effects.EffectFactory;
+import sz.util.Line;
+import sz.util.Position;
 
-public class AirDash extends HeartAction{
+public class AirDash extends HeartAction {
+	
 	public int getHeartCost() {
 		return 5;
 	}
@@ -41,22 +39,22 @@ public class AirDash extends HeartAction{
 		aLevel.addMessage("You jump and dash forward!");
 		if (targetPosition.equals(performer.getPosition())){
 			aLevel.addMessage("You fall back.");
-        	return;
-        }
+			return;
+		}
 		
 		int damage = getDamage();
 
-		boolean hit = false;
+//		boolean hit = false;
 		Line fireLine = new Line(performer.getPosition(), targetPosition);
 		
-		boolean curved = false;
-		int flyStart = 0, flyEnd = 0;
+//		boolean curved = false;
+//		int flyStart = 0, flyEnd = 0;
 		Position previousPoint = aPlayer.getPosition();
 		int projectileHeight = aLevel.getMapCell(aPlayer.getPosition()).getHeight();
 		for (int i=0; i<4; i++){
 			Position destinationPoint = fireLine.next();
 			if (aLevel.isSolid(destinationPoint)){
-				drawEffect(EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(), targetPosition, "SFX_AIRDASH", i));
+				drawEffect(Main.efx.createDirectedEffect(performer.getPosition(), targetPosition, "SFX_AIRDASH", i));
 				aPlayer.landOn(previousPoint);
 				return;
 			}
@@ -67,12 +65,12 @@ public class AirDash extends HeartAction{
 
 			if (destinationHeight == projectileHeight){
 				Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-	        	if (destinationFeature != null && destinationFeature.isDestroyable()){
-		        	message = "You hit the "+destinationFeature.getDescription();
-		        	drawEffect(EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(), targetPosition, "SFX_AIRDASH", i));
+				if (destinationFeature != null && destinationFeature.isDestroyable()) {
+					message = "You hit the "+destinationFeature.getDescription();
+					drawEffect(Main.efx.createDirectedEffect(performer.getPosition(), targetPosition, "SFX_AIRDASH", i));
 					Feature prize = destinationFeature.damage(aPlayer, damage);
-		        	if (prize != null){
-			        	message += " and destroys it.";
+					if (prize != null) {
+						message += " and destroys it.";
 					}
 					aLevel.addMessage(message);
 					aPlayer.landOn(previousPoint);
@@ -86,8 +84,8 @@ public class AirDash extends HeartAction{
 				int monsterHeight = destinationHeight + targetMonster.getHoverHeight();
 				if (projectileHeight == monsterHeight){
 					if (targetMonster.tryMagicHit(aPlayer,damage, 100, targetMonster.wasSeen(), "dash", false, performer.getPosition())){
-						drawEffect(EffectFactory.getSingleton().createDirectedEffect(aPlayer.getPosition(), targetPosition, "SFX_AIRDASH", i));
-						hit = true;
+						drawEffect(Main.efx.createDirectedEffect(aPlayer.getPosition(), targetPosition, "SFX_AIRDASH", i));
+//						hit = true;
 						Position runner = new Position(destinationPoint);
 						outa: for (int ii = 0; ii < 2; ii++){
 							Cell fly = aLevel.getMapCell(runner);
@@ -115,11 +113,11 @@ public class AirDash extends HeartAction{
 			previousPoint = destinationPoint;
 		}
 		
-		drawEffect(EffectFactory.getSingleton().createDirectedEffect(aPlayer.getPosition(), targetPosition, "SFX_AIRDASH", 4));
+		drawEffect(Main.efx.createDirectedEffect(aPlayer.getPosition(), targetPosition, "SFX_AIRDASH", 4));
 		aPlayer.landOn(previousPoint);
 	}
 
-	public int getCost(){
+	public int getCost() {
 		Player p = (Player) performer;
 		return (int)(p.getWalkCost() * 1.4);
 	}

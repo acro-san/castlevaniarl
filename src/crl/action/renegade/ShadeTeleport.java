@@ -1,19 +1,16 @@
 package crl.action.renegade;
 
-import sz.util.Line;
-import sz.util.Position;
 import crl.Main;
-import crl.action.Action;
 import crl.action.HeartAction;
-import crl.actor.Actor;
 import crl.level.Cell;
 import crl.level.Level;
 import crl.player.Player;
-import crl.ui.UserInterface;
-import crl.ui.effects.EffectFactory;
+import sz.util.Line;
+import sz.util.Position;
 
-public class ShadeTeleport extends HeartAction{
-	public String getID(){
+public class ShadeTeleport extends HeartAction {
+	
+	public String getID() {
 		return "ShadeTeleport";
 	}
 	
@@ -54,7 +51,7 @@ public class ShadeTeleport extends HeartAction{
 			else
 				break;
 		}
-		drawEffect(EffectFactory.getSingleton().createDirectedEffect(player.getPosition(), targetPosition, "SFX_SHADETELEPORT", i));
+		drawEffect(Main.efx.createDirectedEffect(player.getPosition(), targetPosition, "SFX_SHADETELEPORT", i));
 		
 		player.setPosition(new Position(runner));
 		player.see();
@@ -62,12 +59,12 @@ public class ShadeTeleport extends HeartAction{
 		
 	}
 
-	public int getCost(){
+	public int getCost() {
 		Player p = (Player) performer;
 		return (int)(p.getCastCost() * 1.4);
 	}
 	
-	public String getSFX(){
+	public String getSFX() {
 		return "wav/scrch.wav";
 	}
 }

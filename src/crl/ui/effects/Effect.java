@@ -1,24 +1,22 @@
 package crl.ui.effects;
 
 import sz.util.*;
-import crl.*;
-import crl.ui.*;
 
-public abstract class Effect {
+public class Effect {	//abstract??
+	
+	private String id;
 	private Position position;
 	protected int animationDelay = 50;
-
-	private String id;
 	
-	public String getID(){
+	public String getID() {
 		return id;
 	}
 	
-	public void set(Position loc){
+	public void set(Position loc) {
 		setPosition(loc);
 	}
 	
-	public Effect(String id){
+	public Effect(String id) {
 		this.id = id;
 	}
 
@@ -27,10 +25,9 @@ public abstract class Effect {
 		animationDelay = delay;
 	}
 
-	//public abstract void drawEffect(UserInterface ui, ConsoleSystemInterface si);
-	
-	protected final void animationPause(){
-		try {Thread.sleep(animationDelay);}catch (Exception e){}
+
+	protected final void animationPause() {
+		try {Thread.sleep(animationDelay);} catch (InterruptedException e) {}
 	}
 
 	public Position getPosition() {
@@ -44,4 +41,6 @@ public abstract class Effect {
 	public void setAnimationDelay(int value) {
 		animationDelay = value;
 	}
+	
+	// there's nothing abstract??
 }

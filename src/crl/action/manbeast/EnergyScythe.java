@@ -9,7 +9,6 @@ import crl.level.Cell;
 import crl.level.Level;
 import crl.monster.Monster;
 import crl.player.Player;
-import crl.ui.effects.EffectFactory;
 
 public class EnergyScythe extends HeartAction {
 	
@@ -95,7 +94,7 @@ public class EnergyScythe extends HeartAction {
 		Level aLevel = performer.level;
 		Player aPlayer = aLevel.getPlayer();
 		//UserInterface.getUI().drawEffect(new TileEffect(destinationPoint, '*', Appearance.RED, 100));
-		Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(destinationPoint, "SFX_RED_HIT"));
+		Main.ui.drawEffect(Main.efx.createLocatedEffect(destinationPoint, "SFX_RED_HIT"));
 		//aLevel.addBlood(destinationPoint, 8);
 		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
 		if (destinationFeature != null && destinationFeature.isDestroyable()) {

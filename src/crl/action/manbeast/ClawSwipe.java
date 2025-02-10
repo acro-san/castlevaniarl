@@ -10,10 +10,9 @@ import crl.level.Cell;
 import crl.level.Level;
 import crl.monster.Monster;
 import crl.player.Player;
-import crl.ui.UserInterface;
-import crl.ui.effects.EffectFactory;
 
-public class ClawSwipe extends HeartAction{
+public class ClawSwipe extends HeartAction {
+	
 	public int getHeartCost() {
 		return 3;	
 	}
@@ -94,47 +93,48 @@ public class ClawSwipe extends HeartAction{
 		Level aLevel = performer.level;
 		Player aPlayer = aLevel.getPlayer();
 		//UserInterface.getUI().drawEffect(new TileEffect(destinationPoint, '*', Appearance.RED, 100));
-		Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(destinationPoint, "SFX_RED_HIT"));
+		Main.ui.drawEffect(Main.efx.createLocatedEffect(destinationPoint, "SFX_RED_HIT"));
 		
 		//aLevel.addBlood(destinationPoint, 8);
 		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-        if (destinationFeature != null && destinationFeature.isDestroyable()){
-	       	message.append("You crush the "+destinationFeature.getDescription());
+		if (destinationFeature != null && destinationFeature.isDestroyable()) {
+			message.append("You crush the "+destinationFeature.getDescription());
 
 			Feature prize = destinationFeature.damage(aPlayer, damage);
-	       	if (prize != null){
-		       	message.append(", breaking it apart!");
+			if (prize != null) {
+				message.append(", breaking it apart!");
 			}
 			aLevel.addMessage(message.toString());
-        	return true;
+			return true;
 		}
-        Monster targetMonster = performer.level.getMonsterAt(destinationPoint);
+		Monster targetMonster = performer.level.getMonsterAt(destinationPoint);
 		Cell destinationCell = performer.level.getMapCell(destinationPoint);
-        if (
+		if (
 			targetMonster != null &&
 			!(targetMonster.isInWater() && targetMonster.canSwim()) &&
 				(destinationCell.getHeight() == aLevel.getMapCell(aPlayer.getPosition()).getHeight() ||
 				destinationCell.getHeight() -1  == aLevel.getMapCell(aPlayer.getPosition()).getHeight() ||
 				destinationCell.getHeight() == aLevel.getMapCell(aPlayer.getPosition()).getHeight()-1)
-				){
-        		if (targetMonster.wasSeen())
-        			message.append("You crush the "+targetMonster.getDescription());
-				//targetMonster.damage(player.getWhipLevel());
-				targetMonster.damage(message, damage);
-	        	
-				aLevel.addMessage(message.toString());
-
-				return true;
+			)
+		{
+			if (targetMonster.wasSeen()) {
+				message.append("You crush the "+targetMonster.getDescription());
 			}
+			//targetMonster.damage(player.getWhipLevel());
+			targetMonster.damage(message, damage);
+			aLevel.addMessage(message.toString());
+			return true;
+		}
 		return false;
 	}
 	
-	public boolean canPerform(Actor a){
+	public boolean canPerform(Actor a) {
 		Player aPlayer = (Player) a;
-        if (aPlayer.getHearts() < 3){
-        	invalidationMessage = "You feel wimpy";
-            return false;
+		if (aPlayer.getHearts() < 3) {
+			invalidationMessage = "You feel wimpy";
+			return false;
 		}
-        return true;
+		return true;
 	}
+
 }

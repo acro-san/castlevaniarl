@@ -4,14 +4,14 @@ import crl.Main;
 import crl.action.HeartAction;
 import crl.level.Level;
 import crl.player.Player;
-import crl.ui.effects.EffectFactory;
 
-public class SoulWind extends HeartAction{
+public class SoulWind extends HeartAction {
+	
 	public int getHeartCost() {
 		return 10;
 	}
 
-	public String getID(){
+	public String getID() {
 		return "Soul Wind";
 	}
 	
@@ -19,16 +19,16 @@ public class SoulWind extends HeartAction{
 		super.execute();
 		Player aPlayer = (Player) performer;
 		Level x = performer.level;
-		Main.ui.drawEffect(EffectFactory.getSingleton().createLocatedEffect(aPlayer.getPosition(), "SFX_SOUL_WIND"));
+		Main.ui.drawEffect(Main.efx.createLocatedEffect(aPlayer.getPosition(), "SFX_SOUL_WIND"));
 		x.addMessage("Soul Wind!");
 		x.stopTime(20 + aPlayer.getShotLevel()*5+ 2*aPlayer.getSoulPower());
 	}
 
-	public String getSFX(){
+	public String getSFX() {
 		return "wav/clockbel.wav";
 	}
 	
-	public int getCost(){
+	public int getCost() {
 		Player p = (Player) performer;
 		return (int)(25 / (p.getShotLevel()+1));
 	}
