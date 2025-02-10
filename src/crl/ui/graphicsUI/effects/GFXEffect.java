@@ -14,7 +14,7 @@ public abstract class GFXEffect extends Effect {
 		this.configuration = configuration;
 	}
 	
-	public GFXEffect(String id, int delay, GFXConfiguration configuration){
+	public GFXEffect(String id, int delay, GFXConfiguration configuration) {
 		super(id, delay);
 		this.configuration = configuration;
 	}

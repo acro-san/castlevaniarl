@@ -514,7 +514,7 @@ public class GFXDisplay extends Display {
 	
 	public void showChat(String chatID, Game game) {
 		si.saveBuffer();
-		GFXChat chat = GFXCuts.thus.get(chatID);
+		GFXChat chat = GFXCuts.get(chatID);
 		String[] marks = {"%NAME", "%%INTRO_1", "%%CLARA1"};
 		String[] replacements = {
 			game.getPlayer().getName(),
@@ -529,7 +529,7 @@ public class GFXDisplay extends Display {
 			if (chat.getPortrait(i) != null)
 				image = chat.getPortrait(i);
 			else
-				image = getPortraitForPlayer(game.getPlayer());
+				image = GFXCuts.getPortraitForPlayer(game.getPlayer());
 			gfxChatBox.set(image, TxtTpl.replace(marks, replacements, chat.getName(i)), TxtTpl.replace(marks, replacements, chat.getConversation(i)));
 			gfxChatBox.setVisible(true);
 			si.waitKey(CharKey.SPACE);
@@ -582,42 +582,9 @@ public class GFXDisplay extends Display {
 		si.restore();
 		si.refresh();
 	}
+
 	
-	private Image getPortraitForPlayer(Player p){
-		if (p.getSex() == Player.MALE)
-			switch (p.getPlayerClass()){
-			case Player.CLASS_VAMPIREKILLER:
-				return GFXCuts.thus.PRT_M1;
-			case Player.CLASS_RENEGADE:
-				return GFXCuts.thus.PRT_M2;
-			case Player.CLASS_VANQUISHER:
-				return GFXCuts.thus.PRT_M3;
-			case Player.CLASS_INVOKER:
-				return GFXCuts.thus.PRT_M4;
-			case Player.CLASS_MANBEAST:
-				return GFXCuts.thus.PRT_M5;
-			case Player.CLASS_KNIGHT:
-				return GFXCuts.thus.PRT_M6;
-			}
-		else
-			switch (p.getPlayerClass()){
-			case Player.CLASS_VAMPIREKILLER:
-				return GFXCuts.thus.PRT_F1;
-			case Player.CLASS_RENEGADE:
-				return GFXCuts.thus.PRT_F2;
-			case Player.CLASS_VANQUISHER:
-				return GFXCuts.thus.PRT_F3;
-			case Player.CLASS_INVOKER:
-				return GFXCuts.thus.PRT_F4;
-			case Player.CLASS_MANBEAST:
-				return GFXCuts.thus.PRT_F5;
-			case Player.CLASS_KNIGHT:
-				return GFXCuts.thus.PRT_F6;
-			}
-		return null;
-	}
-	
-	public static JTextArea createTempArea(int xpos, int ypos, int w, int h){
+	public static JTextArea createTempArea(int xpos, int ypos, int w, int h) {
 		JTextArea ret = new JTextArea();
 		ret.setOpaque(false);
 		ret.setForeground(Color.WHITE);

@@ -21,6 +21,7 @@ import crl.ui.graphicsUI.effects.GFXSequentialEffect;
 import crl.ui.graphicsUI.effects.GFXSplashEffect;
 
 public class GFXEffects {
+	
 	private Vector<Position> SFX_BIBLE_STEPS = new Vector<>(55);
 	private BufferedImage IMG_EFFECTS;
 	
@@ -37,7 +38,7 @@ public class GFXEffects {
 		LoadEffects();
 	}
 	
-	private BufferedImage[][] readSlashes(BufferedImage source){
+	private BufferedImage[][] readSlashes(BufferedImage source) {
 		BufferedImage[][] ret = new BufferedImage[8][5];
 		try {
 		ret[4][0] = createSlashFrame(source, 0,72,29,12);
@@ -51,7 +52,7 @@ public class GFXEffects {
 		ret[2][2] = createSlashFrame(source, 0,352,78,83);
 		ret[2][3] = createSlashFrame(source, 0,230,112,121);
 		ret[2][4] = createSlashFrame(source, 0,84,143,145);
-		} catch (Exception e){
+		} catch (Exception e) {
 			Game.crash("Error loading the effects", e);
 		}
 		
@@ -311,9 +312,9 @@ public class GFXEffects {
 
 	
 	private BufferedImage[] loadMaterialize() {
-		int effectsScale = this.configuration.effectsScale;
+		int effectsScale = configuration.effectsScale;
 		try {
-			BufferedImage[] ret = new BufferedImage[]{
+			BufferedImage[] ret = {
 				ImageUtils.crearImagen(IMG_EFFECTS, 0 * effectsScale, 485 * effectsScale, 40 * effectsScale,59 * effectsScale),
 				ImageUtils.crearImagen(IMG_EFFECTS, 44 * effectsScale, 485 * effectsScale, 40 * effectsScale,59 * effectsScale),
 				ImageUtils.crearImagen(IMG_EFFECTS, 88 * effectsScale, 485 * effectsScale, 40 * effectsScale,59 * effectsScale)
@@ -328,13 +329,13 @@ public class GFXEffects {
 	private BufferedImage[] loadVanish() {
 		int effectsScale = this.configuration.effectsScale;
 		try {
-			BufferedImage[] ret = new BufferedImage[]{
+			BufferedImage[] ret = {
 				ImageUtils.crearImagen(IMG_EFFECTS, 129 * effectsScale, 485 * effectsScale, 40 * effectsScale,59 * effectsScale),
 				ImageUtils.crearImagen(IMG_EFFECTS, 172 * effectsScale, 485 * effectsScale, 40 * effectsScale,59 * effectsScale),
 				ImageUtils.crearImagen(IMG_EFFECTS, 215 * effectsScale, 485 * effectsScale, 40 * effectsScale,59 * effectsScale)
 			};
 			return ret;
-		} catch (Exception e){
+		} catch (Exception e) {
 			Game.crash("Error loading effect", e);
 		}
 		return null;
@@ -361,7 +362,7 @@ public class GFXEffects {
 	
 	protected void LoadEffects() {
 		effects = new GFXEffect[] {
-			//Animated Missile Effects
+			// Animated Missile Effects
 			new GFXAnimatedMissileEffect("SFX_CHARGE_BALL", load2(0,0), 50, configuration),
 			new GFXAnimatedEffect("SFX_HOMING_BALL",load2(2,0), 60, configuration),
 			new GFXDirectionalMissileEffect("SFX_METEORBALL", load8(8,0), 30, configuration),
@@ -580,7 +581,7 @@ public class GFXEffects {
 	}
 	
 	
-	public GFXEffect[] getEffects(){
+	public GFXEffect[] getEffects() {
 		return effects;
 	}
 }

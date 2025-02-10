@@ -1,5 +1,6 @@
 package crl.conf.gfx.data;
 
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.Hashtable;
 
@@ -7,17 +8,32 @@ import sz.util.Debug;
 import sz.util.ImageUtils;
 
 import crl.game.Game;
+import crl.player.Player;
 import crl.ui.graphicsUI.GFXChat;
 
 public class GFXCuts {
-	public static GFXCuts thus;
-	private BufferedImage
+	//public static GFXCuts thus;
+	
+	// but these could all be static, right? in a static GFXCuts?
+	private static BufferedImage
 		PRT_DRACULA, PRT_CHRIS, PRT_SOLEIYU, PRT_SOLEIYU_D, PRT_MELDUCK,
 		PRT_CLARA,PRT_MAIDEN, PRT_DEATH,PRT_VINDELITH,PRT_CLAW;
-	public BufferedImage
+	
+	public static BufferedImage
 		PRT_M1, PRT_M2, PRT_M3, PRT_M4, PRT_M5, PRT_M6,
 		PRT_F1, PRT_F2, PRT_F3, PRT_F4, PRT_F5, PRT_F6;
-	{
+	
+	private static Hashtable<String, GFXChat> hashCuts;	// cutscenesByStringID
+	
+	//public GFXCuts() {
+	static {
+		hashCuts = new Hashtable<>();
+		init();	// or 'load' or whatever you want to call it?
+	}
+	//}
+	
+	
+	private static void init() {	// or 'load()'?
 		try {
 			BufferedImage PRT = ImageUtils.createImage("gfx/crl_portraits2x.gif");
 			PRT_DRACULA = ImageUtils.crearImagen(PRT, 8, 205, 84, 86);
@@ -45,15 +61,10 @@ public class GFXCuts {
 			PRT_F4 = ImageUtils.crearImagen(PRT, 278, 107, 84, 86);
 			PRT_F5 = ImageUtils.crearImagen(PRT, 368, 107, 84, 86);
 			PRT_F6 = ImageUtils.crearImagen(PRT, 458, 107, 84, 86);
-		} catch (Exception iae){
+		} catch (Exception iae) {
 			Debug.byebye(iae.getMessage());
 		}
-	}
-	public static void initializeSingleton(){
-		thus = new GFXCuts();
-	}
-	private Hashtable hashCuts = new Hashtable();
-	{
+		
 		GFXChat temp = null;
 		temp = new GFXChat();
 		temp.add("Count Dracula", "We meet again Vampire Killer. You are old now.", PRT_DRACULA);
@@ -187,15 +198,54 @@ public class GFXCuts {
 		temp.add("Clara", "You are right... I have seen enough fake Belmonts lately... Just a word of advice \"Belmont\": get the hell out of here while you can!", PRT_CLARA);
 		hashCuts.put("VINDELITH3", temp);
 		
-
 	}
 
-	public GFXChat get(String ID){
-		GFXChat ret = (GFXChat) hashCuts.get(ID);
-		if (ret == null)
+
+	public static GFXChat get(String ID) {
+		GFXChat ret = hashCuts.get(ID);
+		// TODO This is not an exception. Run an asset-checker loop or somesuch
+		// to ensure every ID needed is defined. Dev controls all asset files!
+		if (ret == null) {
 			Game.crash("Couldnt find GFXChat "+ID, new Exception());
+		}
 		return ret;
 	}
+
 	
+	public static Image getPortraitForPlayer(Player p) {
+		if (p.getSex() == Player.MALE) {
+			switch (p.getPlayerClass()) {
+			case Player.CLASS_VAMPIREKILLER:
+				return PRT_M1;
+			case Player.CLASS_RENEGADE:
+				return PRT_M2;
+			case Player.CLASS_VANQUISHER:
+				return PRT_M3;
+			case Player.CLASS_INVOKER:
+				return PRT_M4;
+			case Player.CLASS_MANBEAST:
+				return PRT_M5;
+			case Player.CLASS_KNIGHT:
+				return PRT_M6;
+			}
+		} else {
+			switch (p.getPlayerClass()) {
+			case Player.CLASS_VAMPIREKILLER:
+				return PRT_F1;
+			case Player.CLASS_RENEGADE:
+				return PRT_F2;
+			case Player.CLASS_VANQUISHER:
+				return PRT_F3;
+			case Player.CLASS_INVOKER:
+				return PRT_F4;
+			case Player.CLASS_MANBEAST:
+				return PRT_F5;
+			case Player.CLASS_KNIGHT:
+				return PRT_F6;
+			}
+		}
+		return null;
+	}
+
 
 }

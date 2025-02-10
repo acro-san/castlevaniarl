@@ -84,6 +84,7 @@ import crl.ui.graphicsUI.GFXPlayerGenerator;
 import crl.ui.graphicsUI.GFXUISelector;
 import crl.ui.graphicsUI.GFXUserInterface;
 import crl.ui.graphicsUI.SwingSystemInterface;
+import crl.ui.graphicsUI.effects.GFXEffect;
 import crl.ui.graphicsUI.effects.GFXEffectFactory;
 
 public class Main {
@@ -155,11 +156,12 @@ public class Main {
 					SwingSystemInterface si = new SwingSystemInterface(gfx_configuration);
 					System.out.println("Initializing Swing GFX User Interface");
 					ui = new GFXUserInterface(gfx_configuration);
-					GFXCuts.initializeSingleton();
 					Display.thus = new GFXDisplay(si, UIconfiguration, gfx_configuration);
 					PlayerGenerator.thus = new GFXPlayerGenerator(si, gfx_configuration);
 					EffectFactory.setSingleton(new GFXEffectFactory());
-					((GFXEffectFactory)EffectFactory.getSingleton()).setEffects(new GFXEffects(gfx_configuration).getEffects());
+					
+					GFXEffect[] gef = new GFXEffects(gfx_configuration).getEffects();
+					((GFXEffectFactory)EffectFactory.getSingleton()).setEffects(gef);
 					initializeUI(si);
 					break;
 				case JCURSES_CONSOLE:
