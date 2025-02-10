@@ -74,7 +74,7 @@ public class TargetPS extends ProjectileSkill {
 		if (weapon != null && !weapon.getAttackSound().equals("DEFAULT")){
 			return weapon.getAttackSound();
 		} else {
-			if (((Player)performer).getSex() == Player.MALE)
+			if (((Player)performer).sex == Player.MALE)
 				return "wav/punch_male.wav";
 			else
 				return "wav/punch_female.wav";

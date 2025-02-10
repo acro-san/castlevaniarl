@@ -213,7 +213,7 @@ public class GFXCuts {
 
 
 	public static Image getPortraitForPlayer(Player p) {
-		if (p.getSex() == Player.MALE) {
+		if (p.sex == Player.MALE) {
 			switch (p.playerClass) {
 			case Player.CLASS_VAMPIREKILLER:
 				return PRT_M1;

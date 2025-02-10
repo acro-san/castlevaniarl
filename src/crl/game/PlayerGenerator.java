@@ -29,7 +29,7 @@ public abstract class PlayerGenerator {
 		HashMap<String, Appearance> aps = Main.appearances;
 		
 		Player chris = new Player();
-		chris.setSex(Player.MALE);
+		chris.sex = Player.MALE;
 		chris.setDoNotRecordScore(true);
 		chris.setName("Christopher");
 		chris.setPlayerClass(Player.CLASS_VAMPIREKILLER);
@@ -68,7 +68,7 @@ public abstract class PlayerGenerator {
 		SPECIAL_PLAYERS.put("CHRIS", chris);
 		
 		Player solei = new Player();
-		solei.setSex(Player.MALE);
+		solei.sex = Player.MALE;
 		solei.setName("Soleiyu");
 		solei.setDoNotRecordScore(true);
 		solei.setAttack(15);
@@ -111,7 +111,7 @@ public abstract class PlayerGenerator {
 		SPECIAL_PLAYERS.put("SOLEIYU", solei);
 		
 		Player kidso = new Player();
-		kidso.setSex(Player.MALE);
+		kidso.sex = Player.MALE;
 		kidso.setName("Child Soleiyu");
 		kidso.setDoNotRecordScore(true);
 		kidso.setAttack(1);
@@ -133,7 +133,7 @@ public abstract class PlayerGenerator {
 		SPECIAL_PLAYERS.put("SOLEIYU_KID", kidso);
 		
 		Player sonia = new Player();
-		sonia.setSex(Player.FEMALE);
+		sonia.sex = Player.FEMALE;
 		sonia.setDoNotRecordScore(false);
 		sonia.setName("Sonia");
 		sonia.setPlayerClass(Player.CLASS_VAMPIREKILLER);
@@ -172,7 +172,7 @@ public abstract class PlayerGenerator {
 	
 	public Player getPlayer(String name, byte sex, byte classChoice) {
 		Player player = new Player();
-		player.setSex(sex);
+		player.sex = sex;
 		if (name.trim().equals("")) {
 			if (sex == Player.MALE) {
 				player.setName(Util.pick(Text.RANDOM_PLAYER_MALE_NAMES));
@@ -374,7 +374,7 @@ public abstract class PlayerGenerator {
 		
 		String classAppearanceID = CLASS_ID_STRINGS[player.playerClass];
 		HashMap<String, Appearance> aps = Main.appearances;
-		if (player.getSex() == Player.MALE)
+		if (player.sex == Player.MALE)
 			player.setAppearance(aps.get(classAppearanceID));
 		else
 			player.setAppearance(aps.get(classAppearanceID+"_W"));

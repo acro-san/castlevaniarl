@@ -52,7 +52,7 @@ public class MonsterLoader {
 				def.canFly = Boolean.valueOf(data[9]);//.equals("true"));
 				def.score = Integer.parseInt(data[10]);
 				def.sightRange = Integer.parseInt(data[11]);
-				def.maxHits = Integer.parseInt(data[12]);
+				def.maxHP = Integer.parseInt(data[12]);
 				def.attack = Integer.parseInt(data[13]);
 				def.walkCost = Integer.parseInt(data[14]);
 				def.attackCost = Integer.parseInt(data[15]);

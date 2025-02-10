@@ -13,7 +13,7 @@ public class Prelude3 extends Unleasher {
 
 	public void unleash(Level level, Game game) {
 		Monster dracula = level.getMonsterByID("PRELUDE_DRACULA"); 
-		if (dracula.getHits () > dracula.getMaxHits()/2)
+		if (dracula.getHits () > dracula.getMaxHP()/2)
 			return;
 		
 		level.addMessage("Dracula invokes a deadly beam of chaos energy!!!");

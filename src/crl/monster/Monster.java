@@ -19,9 +19,8 @@ public class Monster extends Actor implements Cloneable {
 	private transient MonsterDefinition definition;
 	private String defID;
 
-	protected int hits;	// HEALTHPOINTS / HP. 'hits' is ambiguous. like a question. 'hits'?
-	private int maxHits;	// MAX HP!
-	
+	protected int hp;
+	private int hpMax;
 	
 	public String featurePrize;
 	public boolean isVisible = true;
@@ -43,7 +42,7 @@ public class Monster extends Actor implements Cloneable {
 	}
 
 	public void increaseHits(int i){
-		hits += i;
+		hp += i;
 	}
 
 	public void act(){
@@ -160,7 +159,7 @@ public class Monster extends Actor implements Cloneable {
 			dam *= 2;
 		}
 		message.append(" ("+dam+")");
-		hits -= dam;
+		hp -= dam;
 		Main.ui.drawEffect(Main.efx.createLocatedEffect(getPosition(), "SFX_QUICK_WHITE_HIT"));
 		Player pl = level.getPlayer();
 		if (getDefinition().isBleedable()) {
@@ -229,7 +228,7 @@ public class Monster extends Actor implements Cloneable {
 	}
 	
 	public boolean isDead() {
-		return hits <= 0;
+		return hp <= 0;
 	}
 
 	public String getDescription() {
@@ -262,7 +261,7 @@ public class Monster extends Actor implements Cloneable {
 
 	// FIXME Rename as HEALTHPOINTS.
 	public int getHits() {
-		return hits;
+		return hp;
 	}
 
 	public Monster(MonsterDefinition md) {
@@ -271,8 +270,8 @@ public class Monster extends Actor implements Cloneable {
 		//selector = md.getDefaultSelector();
 		selector = md.defaultSelector.derive();
 		
-		hits = md.maxHits;
-		maxHits = md.maxHits;
+		hp = md.maxHP;
+		hpMax = md.maxHP;
 	}
 
 /*
@@ -464,7 +463,7 @@ public class Monster extends Actor implements Cloneable {
 			double damageMod = 1;
 			StringBuffer hitDesc = new StringBuffer();
 			int damage = (int)(baseDamage * damageMod);
-			double percent = (double)damage / getDefinition().maxHits;
+			double percent = (double)damage / getDefinition().maxHP;
 			if (percent > 1.0)
 				hitDesc.append("The "+attackDesc+ " whacks the "+getDescription()+ " apart!!");
 			else if (percent > 0.7)
@@ -599,7 +598,7 @@ public class Monster extends Actor implements Cloneable {
 		double damageMod = 1;
 		StringBuffer hitDesc = new StringBuffer();
 		int damage = (int)(baseDamage * damageMod);
-		double percent = (double)damage / getDefinition().maxHits;
+		double percent = (double)damage / getDefinition().maxHP;
 		if (percent > 1.0d)
 			hitDesc.append("The "+attacker.getDescription()+" whacks the "+getDescription()+ " apart!!");
 		else if (percent > 0.7d)
@@ -617,17 +616,17 @@ public class Monster extends Actor implements Cloneable {
 	
 	}
 	
-	// TODO Rename getMaxHP()
-	public int getMaxHits() {
-		return getDefinition().maxHits;
+	
+	public int getMaxHP() {
+		return getDefinition().maxHP;
 	}
 	
 	public boolean isFlying() {
 		return getDefinition().canFly;
 	}
 	
-	public void recoverHits() {
-		hits = maxHits;
+	public void recoverAllHP() {
+		hp = hpMax;
 	}
 	
 	

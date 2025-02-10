@@ -642,7 +642,7 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 		}
 		
 		if (currentLevel.boss != null) {
-			currentLevel.boss.recoverHits();
+			currentLevel.boss.recoverAllHP();
 		}
 		if (!dispatcher.contains(player)) {
 			dispatcher.addActor(player);

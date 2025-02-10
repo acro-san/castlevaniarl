@@ -19,7 +19,7 @@ public class TxtTpl {
 		REPL_MARKS = {"%%SEX", "%%his", "%%him", "%%he", "%%NAME"};	// case sensitive?
 	
 	public static String t(Player p, String tpl) {
-		return t(p.getName(), p.getSex(), tpl);
+		return t(p.getName(), p.sex, tpl);
 	}
 	
 	public static String t(String name, int sex, String tpl) {

@@ -136,11 +136,11 @@ public class CharDisplay extends Display {
 		si.cls();
 	}
 	
-	public boolean showResumeScreen(Player player){
+	public boolean showResumeScreen(Player player) {
 		GameSessionInfo gsi = player.getGameSessionInfo();
 		si.cls();
 		printBars();
-		String heshe = (player.getSex() == Player.MALE ? "He" : "She");
+		String heshe = (player.sex == Player.MALE ? "He" : "She");
 		
 		si.print(2,3, "The chronicles of "+player.getName(), ConsoleSystemInterface.RED);
 		
@@ -172,8 +172,8 @@ public class CharDisplay extends Display {
 	public void showEndgame(Player player){
 		si.cls();
 		printBars();
-		String heshe = (player.getSex() == Player.MALE ? "he" : "she");
-		String hisher = (player.getSex() == Player.MALE ? "his" : "her");
+		String heshe = (player.sex == Player.MALE ? "he" : "she");
+		String hisher = (player.sex == Player.MALE ? "his" : "her");
 
 		si.print(2,3, "                           ", ConsoleSystemInterface.RED);
 		

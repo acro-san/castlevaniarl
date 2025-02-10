@@ -16,15 +16,15 @@ public class MonsterDefinition {
 	public /*transient*/ Appearance appearance;	// why marked transient? Ah! no serialize needed on this ref.
 	// or look it up by ID always? then there IS NO REF, and int ids are smaller than object refs.
 	
-	public ActionSelector defaultSelector;	// AI?
+	public ActionSelector defaultSelector;
 	
 	public int
 		score,
-		maxHits,
+		maxHP,
 		attack = 1,
 		sightRange = 10,
 		
-		leaping, //Capability of moving to a higher cell
+		leaping, // Capability of moving to a higher cell
 	
 		bloodContent,
 		minLevel,
@@ -38,7 +38,7 @@ public class MonsterDefinition {
 	public boolean
 		canFly,
 		canSwim,
-		isEthereal,	// Walks thru solid
+		isEthereal,	// Walks through solid
 		isUndead;
 
 	public MonsterDefinition(String pID) {

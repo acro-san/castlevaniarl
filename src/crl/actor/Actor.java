@@ -13,20 +13,21 @@ import crl.level.Level;
 import crl.ui.Appearance;
 
 public class Actor implements Cloneable, java.io.Serializable, PriorityEnqueable {
+	
 	protected /*transient*/ int positionx, positiony, positionz;
 	protected transient Appearance appearance;
-	
 	public ActionSelector selector;
 	private /*transient*/ Position position = new Position(0,0,0);
 	private int hoverHeight;
 	private /*transient*/ int nextTime = 10;
 	
-	public Level level;
+	public Level level;	// not combat level. a ref to the MAP this is in.
 	
 	private boolean isJumping;
 	private int startingJumpingHeight;
 
-	
+
+
 	public int getCost(){
 		//Debug.say("Cost of "+getDescription()+" "+ nextTime);
 		return nextTime;
@@ -34,10 +35,10 @@ public class Actor implements Cloneable, java.io.Serializable, PriorityEnqueable
 	
 	public void reduceCost(int value){
 		//Debug.say("Reducing cost of "+getDescription()+"by"+value+" (from "+nextTime+")");
-		nextTime = nextTime - value;
+		nextTime -= value;
 	}
 	
-	public void setNextTime(int value){
+	public void setNextTime(int value) {
 		//Debug.say("Next time for "+getDescription()+" "+ value);
 		nextTime = value;
 	}
@@ -51,7 +52,7 @@ public class Actor implements Cloneable, java.io.Serializable, PriorityEnqueable
 			if (counter.intValue() == 0){
 				hashCounters.remove(key);
 			} else {
-				hashCounters.put(key, new Integer(counter.intValue()-1));
+				hashCounters.put(key, Integer.valueOf(counter.intValue()-1));
 			}
 		}
 	}
@@ -60,7 +61,7 @@ public class Actor implements Cloneable, java.io.Serializable, PriorityEnqueable
 		return "";
 	}
 
-	public void execute(Action x){
+	public void execute(Action x) {
 		if (x != null){
 			x.setPerformer(this);
 			if (x.canPerform(this)){

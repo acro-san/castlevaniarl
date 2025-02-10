@@ -278,13 +278,13 @@ public class Attack extends Action {
 		}
 	}
 
-	public String getSFX(){
+	public String getSFX() {
 		Player p = (Player)performer;
 		weapon = p.getWeapon();
 		if (weapon != null && !weapon.getAttackSound().equals("DEFAULT")) {
 			return weapon.getAttackSound();
 		} else {
-			if (p.getSex() == Player.MALE)
+			if (p.sex == Player.MALE)
 				return "wav/punch_male.wav";
 			else
 				return "wav/punch_female.wav";

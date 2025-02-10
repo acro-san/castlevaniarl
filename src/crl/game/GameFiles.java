@@ -315,7 +315,7 @@ public class GameFiles {
 			
 			GameSessionInfo gsi = player.getGameSessionInfo();
 			gsi.deathLevelDescription = player.level.getDescription();
-			String heshe = (player.getSex() == Player.MALE ? "He" : "She");
+			String heshe = (player.sex == Player.MALE ? "He" : "She");
 			
 			fileWriter.write("/-----------------------------------");fileWriter.newLine();
 			fileWriter.write(" CastlevaniaRL"+Game.getVersion()+ " Post Mortem");fileWriter.newLine();
@@ -377,7 +377,7 @@ public class GameFiles {
 			fileWriter.write("-- Final Stats --");fileWriter.newLine();
 			fileWriter.newLine();
 			fileWriter.write(player.getName()+" the level "+ player.getPlayerLevel()+" "+player.getClassString() + " "+player.getStatusString());fileWriter.newLine();
-			fileWriter.write("Sex: "+ (player.getSex() == Player.MALE ? "M" : "F"));
+			fileWriter.write("Sex: "+ (player.sex == Player.MALE ? "M" : "F"));
 			fileWriter.newLine();
 			fileWriter.write("Hits: "+player.getHits()+ "/"+player.getHitsMax()+" Hearts: " + player.getHearts() +"/"+player.getHeartsMax()+
 				  " Gold: "+player.getGold()+ " Keys: "+player.getKeys());fileWriter.newLine();
@@ -489,11 +489,14 @@ public class GameFiles {
 			
 			GameSessionInfo gsi = player.getGameSessionInfo();
 			gsi.deathLevelDescription = player.level.getDescription();
-			String heshe = (player.getSex() == Player.MALE ? "He" : "She");
+			String heshe = (player.sex == Player.MALE ? "He" : "She");
 			
-			fileWriter.write("/-----------------------------------");fileWriter.newLine();
-			fileWriter.write(" CastlevaniaRL"+Game.getVersion()+ " Post Mortem");fileWriter.newLine();
-			fileWriter.write(" -----------------------------------/");fileWriter.newLine();
+			fileWriter.write("/-----------------------------------");
+			fileWriter.newLine();
+			fileWriter.write(" CastlevaniaRL"+Game.getVersion()+ " Post Mortem");
+			fileWriter.newLine();
+			fileWriter.write(" -----------------------------------/");
+			fileWriter.newLine();
 			fileWriter.newLine();
 			fileWriter.newLine();
 			fileWriter.write(player.getPlot()+", "+player.getDescription()+" journeys to the cursed castle.");
@@ -507,7 +510,7 @@ public class GameFiles {
 			fileWriter.write(heshe +" is able to use the following skills:");
 			fileWriter.newLine();
 			Vector<Skill> skills = player.getAvailableSkills();
-			for (int i = 0; i < skills.size(); i++){
+			for (int i = 0; i < skills.size(); i++) {
 				fileWriter.write(skills.elementAt(i).getMenuDescription());
 				fileWriter.newLine();
 			}
@@ -515,18 +518,30 @@ public class GameFiles {
 			fileWriter.newLine();
 			fileWriter.write(heshe+" has the following proficiencies:");
 			fileWriter.newLine();
-			fileWriter.write("Hand to hand combat "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_UNARMED)]);fileWriter.newLine();
-			fileWriter.write("Daggers             "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_DAGGERS)]);fileWriter.newLine();
-			fileWriter.write("Swords              "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_SWORDS)]);fileWriter.newLine();
-			fileWriter.write("Spears              "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_SPEARS)]);fileWriter.newLine();
-			fileWriter.write("Whips               "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_WHIPS)]);fileWriter.newLine();
-			fileWriter.write("Maces and Flails    "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_MACES)]);fileWriter.newLine();
-			fileWriter.write("Pole Weapons        "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_STAVES)]);fileWriter.newLine();
-			fileWriter.write("Rings               "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_RINGS)]);fileWriter.newLine();
-			fileWriter.write("Hand thrown items   "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_PROJECTILES)]);fileWriter.newLine();
-			fileWriter.write("Bows / XBows        "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_BOWS)]);fileWriter.newLine();
-			fileWriter.write("Missile machinery   "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_PISTOLS)]);fileWriter.newLine();
-			fileWriter.write("Shields             "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_SHIELD)]);fileWriter.newLine();
+			fileWriter.write("Hand to hand combat "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_UNARMED)]);
+			fileWriter.newLine();
+			fileWriter.write("Daggers             "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_DAGGERS)]);
+			fileWriter.newLine();
+			fileWriter.write("Swords              "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_SWORDS)]);
+			fileWriter.newLine();
+			fileWriter.write("Spears              "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_SPEARS)]);
+			fileWriter.newLine();
+			fileWriter.write("Whips               "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_WHIPS)]);
+			fileWriter.newLine();
+			fileWriter.write("Maces and Flails    "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_MACES)]);
+			fileWriter.newLine();
+			fileWriter.write("Pole Weapons        "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_STAVES)]);
+			fileWriter.newLine();
+			fileWriter.write("Rings               "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_RINGS)]);
+			fileWriter.newLine();
+			fileWriter.write("Hand thrown items   "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_PROJECTILES)]);
+			fileWriter.newLine();
+			fileWriter.write("Bows / XBows        "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_BOWS)]);
+			fileWriter.newLine();
+			fileWriter.write("Missile machinery   "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_PISTOLS)]);
+			fileWriter.newLine();
+			fileWriter.write("Shields             "+Text.VERBOSE_SKILLS[player.weaponSkill(ItemDefinition.CAT_SHIELD)]);
+			fileWriter.newLine();
 			
 			fileWriter.newLine();
 			Vector<String> history = gsi.getHistory();
@@ -547,45 +562,62 @@ public class GameFiles {
 		///		i++;
 			}
 			fileWriter.newLine();
-			fileWriter.write("-- Current Stats --");fileWriter.newLine();fileWriter.newLine();
-			fileWriter.write(player.getName()+" the level "+ player.getPlayerLevel()+" "+player.getClassString() + " "+player.getStatusString());fileWriter.newLine();
-			fileWriter.write("Sex: "+ (player.getSex() == Player.MALE ? "M" : "F"));fileWriter.newLine();
+			fileWriter.write("-- Current Stats --");fileWriter.newLine();
+			fileWriter.newLine();
+			fileWriter.write(player.getName()+" the level "+ player.getPlayerLevel()+" "+player.getClassString() + " "+player.getStatusString());
+			fileWriter.newLine();
+			fileWriter.write("Sex: "+ (player.sex == Player.MALE ? "M" : "F"));
+			fileWriter.newLine();
 			fileWriter.write("Hits: "+player.getHits()+ "/"+player.getHitsMax()+" Hearts: " + player.getHearts() +"/"+player.getHeartsMax()+
-				  " Gold: "+player.getGold()+ " Keys: "+player.getKeys());fileWriter.newLine();
-			fileWriter.write("Carrying: "+player.getItemCount()+"/"+player.getCarryMax());fileWriter.newLine();
-			fileWriter.write("Attack: +"+player.getAttack());fileWriter.newLine();
-			fileWriter.write("Soul Power: +"+player.getSoulPower());fileWriter.newLine();
-			fileWriter.write("Evade: "+player.getEvadeChance()+"%");fileWriter.newLine();
-			fileWriter.write("Combat: "+(50-player.getAttackCost()));fileWriter.newLine();
-			fileWriter.write("Invokation: "+(50-player.getCastCost()));fileWriter.newLine();
-			fileWriter.write("Movement: "+(50-player.getWalkCost()));fileWriter.newLine();
+				  " Gold: "+player.getGold()+ " Keys: "+player.getKeys());
+			fileWriter.newLine();
+			fileWriter.write("Carrying: "+player.getItemCount()+"/"+player.getCarryMax());
+			fileWriter.newLine();
+			fileWriter.write("Attack: +"+player.getAttack());
+			fileWriter.newLine();
+			fileWriter.write("Soul Power: +"+player.getSoulPower());
+			fileWriter.newLine();
+			fileWriter.write("Evade: "+player.getEvadeChance()+"%");
+			fileWriter.newLine();
+			fileWriter.write("Combat: "+(50-player.getAttackCost()));
+			fileWriter.newLine();
+			fileWriter.write("Invokation: "+(50-player.getCastCost()));
+			fileWriter.newLine();
+			fileWriter.write("Movement: "+(50-player.getWalkCost()));
+			fileWriter.newLine();
 			
-			fileWriter.write("Experience: "+player.getXp()+"/"+player.getNextXP());fileWriter.newLine();
+			fileWriter.write("Experience: "+player.getXp()+"/"+player.getNextXP());
+			fileWriter.newLine();
 			fileWriter.newLine();
 			
 			Vector<Equipment> inventory = player.getInventory();
 			fileWriter.newLine();
 			fileWriter.write("-- Inventory --");
 			fileWriter.newLine();
-			fileWriter.write("Weapon "+player.getEquipedWeaponDescription());fileWriter.newLine();
-			fileWriter.write("Secondary "+player.getSecondaryWeaponDescription());fileWriter.newLine();
-			fileWriter.write("Armor     "+player.getArmorDescription());fileWriter.newLine();
-			fileWriter.write("Shield    "+player.getAccDescription());fileWriter.newLine();fileWriter.newLine();
+			fileWriter.write("Weapon "+player.getEquipedWeaponDescription());
+			fileWriter.newLine();
+			fileWriter.write("Secondary "+player.getSecondaryWeaponDescription());
+			fileWriter.newLine();
+			fileWriter.write("Armor     "+player.getArmorDescription());
+			fileWriter.newLine();
+			fileWriter.write("Shield    "+player.getAccDescription());
+			fileWriter.newLine();fileWriter.newLine();
 			
 			for (Iterator<Equipment> iter = inventory.iterator(); iter.hasNext();) {
 				Equipment element = iter.next();
-				fileWriter.write(element.getQuantity()+ " - "+ element.getMenuDescription());fileWriter.newLine();
+				fileWriter.write(element.getQuantity()+ " - "+ element.getMenuDescription());
+				fileWriter.newLine();
 			}
 			fileWriter.newLine();
-			fileWriter.write("-- Latest Messages --");fileWriter.newLine();
+			fileWriter.write("-- Latest Messages --");
+			fileWriter.newLine();
 			Vector<String> messages = Main.ui.getMessageBuffer();
 			for (int j = 0; j < messages.size(); j++){
 				fileWriter.write(messages.elementAt(j).toString());
 				fileWriter.newLine();
 			}
-			
 			fileWriter.close();
-		} catch (IOException ioe){
+		} catch (IOException ioe) {
 			Game.crash("Error writing the chardump", ioe);
 		}
 	}

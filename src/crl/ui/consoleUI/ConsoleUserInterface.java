@@ -552,7 +552,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		si.print(0,2,"ENEMY    ");
 		if (player.level.boss != null) {	// TODO && bossSeen!
 			// duplicate logic! see GFXUserInterface.drawBossHealthBar()!
-			int sixthiedBossHits = (int)Math.ceil((player.level.boss.getHits() * 60.0)/(double)player.level.boss.getMaxHits());
+			int sixthiedBossHits = (int)Math.ceil((player.level.boss.getHits() * 60.0)/(double)player.level.boss.getMaxHP());
 			int foreColorB = 0;
 			int backColorB = 0;
 			switch (((sixthiedBossHits-1) / 20) + 1) {
@@ -1311,21 +1311,21 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 	public void showPlayerStats (){
 		si.saveBuffer();
 		si.cls();
-	    si.print(1,0, player.getName()+" the level "+ player.getPlayerLevel()+" "+player.getClassString() + " "+player.getStatusString(), ConsoleSystemInterface.RED);
-	    si.print(1,1, "Sex: "+ (player.getSex() == Player.MALE ? "M" : "F"));
-	    si.print(1,2, "Hits: "+player.getHits()+ "/"+player.getHitsMax()+" Hearts: " + player.getHearts() +"/"+player.getHeartsMax()+
+		si.print(1,0, player.getName()+" the level "+ player.getPlayerLevel()+" "+player.getClassString() + " "+player.getStatusString(), ConsoleSystemInterface.RED);
+		si.print(1,1, "Sex: "+ (player.sex == Player.MALE ? "M" : "F"));
+		si.print(1,2, "Hits: "+player.getHits()+ "/"+player.getHitsMax()+" Hearts: " + player.getHearts() +"/"+player.getHeartsMax()+
 					  " Gold: "+player.getGold()+ " Keys: "+player.getKeys());
-	    si.print(1,3, "Carrying: "+player.getItemCount()+"/"+player.getCarryMax());
-	    si.print(1,5, "Attack      +"+player.getAttack());
-	    si.print(1,6, "Soul Power  +"+player.getSoulPower());
-	    si.print(1,7, "Evade       "+player.getEvadeChance()+"%");
-	    si.print(1,8, "Combat      "+(50-player.getAttackCost()));
-	    si.print(1,9, "Invocation  "+(50-player.getCastCost()));
-	    si.print(1,10,"Movement    "+(50-player.getWalkCost()));
-	    
-	    si.print(1,11,"Experience  "+player.getXp()+"/"+player.getNextXP());
-	    
-	    /*si.print(1,2, "Skills", ConsoleSystemInterface.RED);
+		si.print(1,3, "Carrying: "+player.getItemCount()+"/"+player.getCarryMax());
+		si.print(1,5, "Attack      +"+player.getAttack());
+		si.print(1,6, "Soul Power  +"+player.getSoulPower());
+		si.print(1,7, "Evade       "+player.getEvadeChance()+"%");
+		si.print(1,8, "Combat      "+(50-player.getAttackCost()));
+		si.print(1,9, "Invocation  "+(50-player.getCastCost()));
+		si.print(1,10,"Movement    "+(50-player.getWalkCost()));
+		
+		si.print(1,11,"Experience  "+player.getXp()+"/"+player.getNextXP());
+		
+		/*si.print(1,2, "Skills", ConsoleSystemInterface.RED);
 		Vector skills = player.getAvailableSkills();
 		int cont = 0;
 		for (int i = 0; i < skills.size(); i++){
@@ -1333,7 +1333,6 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 				cont++;
 			si.print((cont-1) * 25 + 1, 3 + i - ((cont-1) * 10), ((Skill)skills.elementAt(i)).getMenuDescription());
 		}*/
-
 		
 		si.print(1,13, "Weapon Proficiencies", ConsoleSystemInterface.RED);
 		si.print(1,14, "Hand to hand             Whips                    Projectiles", ConsoleSystemInterface.RED);
@@ -1366,33 +1365,33 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		si.restore();
 	}
 
-    public Action showSkills() throws ActionCancelException {
-    	Debug.enterMethod(this, "showSkills");
-    	si.saveBuffer();
-		Vector skills = player.getAvailableSkills();
-  		MenuBox menuBox = new MenuBox(si);
-  		menuBox.setHeight(14);
-  		menuBox.setWidth(33);
-  		menuBox.setBorder(true);
-  		menuBox.setForeColor(ConsoleSystemInterface.RED);
-  		menuBox.setPosition(24,4);
-  		menuBox.setMenuItems(skills);
-  		menuBox.setTitle("Skills");
-  		menuBox.setPromptSize(0);
-  		menuBox.draw();
+	public Action showSkills() throws ActionCancelException {
+		Debug.enterMethod(this, "showSkills");
+		si.saveBuffer();
+		Vector<Skill> skills = player.getAvailableSkills();
+		MenuBox menuBox = new MenuBox(si);
+		menuBox.setHeight(14);
+		menuBox.setWidth(33);
+		menuBox.setBorder(true);
+		menuBox.setForeColor(ConsoleSystemInterface.RED);
+		menuBox.setPosition(24,4);
+		menuBox.setMenuItems(skills);
+		menuBox.setTitle("Skills");
+		menuBox.setPromptSize(0);
+		menuBox.draw();
 		si.refresh();
-        Skill selectedSkill = (Skill)menuBox.getSelection();
-        if (selectedSkill == null){
-        	si.restore();
-        	Debug.exitMethod("null");
-        	return null;
-        }
-        si.restore();
-        if (selectedSkill.isSymbolic()){
-        	Debug.exitMethod("null");
-        	return null;
-        }
-        	
+		Skill selectedSkill = (Skill)menuBox.getSelection();
+		if (selectedSkill == null) {
+			si.restore();
+			Debug.exitMethod("null");
+			return null;
+		}
+		si.restore();
+		if (selectedSkill.isSymbolic()) {
+			Debug.exitMethod("null");
+			return null;
+		}
+		
 		Action selectedAction = selectedSkill.getAction();
 		selectedAction.setPerformer(player);
 		if (selectedAction.canPerform(player))
@@ -1405,34 +1404,34 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		return selectedAction;
 	}
 
-    public void levelUp(){
-    	showMessage("You gained a level!, [Press Space to continue]");
-    	si.waitKey(CharKey.SPACE);
-    	if (player.deservesAdvancement(player.getPlayerLevel())){
-	    	Vector advancements = player.getAvailableAdvancements();
-	    	if (advancements.size() != 0) {
-		    	Advancement playerChoice = Display.thus.showLevelUp(advancements);
-		    	playerChoice.advance(player);
-		    	player.getGameSessionInfo().addHistoryItem("went for "+playerChoice.getName());
-	    	}
-    	}
-    	if (player.deservesStatAdvancement(player.getPlayerLevel())){
-	    	Vector advancements = player.getAvailableStatAdvancements();
-	    	if (advancements.size() != 0) {
-		    	Advancement playerChoice = Display.thus.showLevelUp(advancements);
-		    	playerChoice.advance(player);
-		    	player.getGameSessionInfo().addHistoryItem("went for "+playerChoice.getName());
-	    	}
-    	}
-    	si.saveBuffer();
-    	((CharDisplay)Display.thus).showBoxedMessage("LEVEL UP!",player.getLastIncrementString(), 3,4,30,10);
-    	player.resetLastIncrements();
-    	si.restore();
-    	si.refresh();
-    	
-    	/*
-    	showMessage("You gained a level!, [Press Space to continue]");
-    	si.waitKey(CharKey.SPACE);
+	public void levelUp() {
+		showMessage("You gained a level!, [Press Space to continue]");
+		si.waitKey(CharKey.SPACE);
+		if (player.deservesAdvancement(player.getPlayerLevel())) {
+			Vector advancements = player.getAvailableAdvancements();
+			if (advancements.size() != 0) {
+				Advancement playerChoice = Display.thus.showLevelUp(advancements);
+				playerChoice.advance(player);
+				player.getGameSessionInfo().addHistoryItem("went for "+playerChoice.getName());
+			}
+		}
+		if (player.deservesStatAdvancement(player.getPlayerLevel())) {
+			Vector advancements = player.getAvailableStatAdvancements();
+			if (advancements.size() != 0) {
+				Advancement playerChoice = Display.thus.showLevelUp(advancements);
+				playerChoice.advance(player);
+				player.getGameSessionInfo().addHistoryItem("went for "+playerChoice.getName());
+			}
+		}
+		si.saveBuffer();
+		((CharDisplay)Display.thus).showBoxedMessage("LEVEL UP!",player.getLastIncrementString(), 3,4,30,10);
+		player.resetLastIncrements();
+		si.restore();
+		si.refresh();
+		
+		/*
+		showMessage("You gained a level!, [Press Space to continue]");
+		si.waitKey(CharKey.SPACE);
     	int soulOptions = 5;
     	Vector soulIds = getLevelUpSouls();
     	int playerChoice = Display.thus.showLevelUp(soulIds);
@@ -1443,9 +1442,10 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
     		player.level.addItem(player.getPosition(), soul);
     	}
     	showMessage("You acquired a "+soul.getDescription());*/
-    }
+	}
 
-    public Action selectCommand (CharKey input){
+
+	public Action selectCommand(CharKey input) {
 		Debug.enterMethod(this, "selectCommand", input);
 		int com = getRelatedCommand(input.code);
 		informPlayerCommand(com);
@@ -1455,8 +1455,8 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		return ret;
 	}
 	
-	public void commandSelected (int commandCode){
-		switch (commandCode){
+	public void commandSelected(int commandCode) {
+		switch (commandCode) {
 			case CommandListener.PROMPTQUIT:
 				processQuit();
 				break;

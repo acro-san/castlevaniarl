@@ -40,12 +40,11 @@ public class Jump extends Action{
 
 	public String getSFX(){
 		Player p = (Player) performer;
-		if (p.getSex() == Player.MALE){
+		if (p.sex == Player.MALE) {
 			return "wav/jump_male.wav";
 		} else {
 			return "wav/jump_female.wav";
 		}
-		
 	}
 
 	public int getCost(){

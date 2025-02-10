@@ -21,7 +21,7 @@ public class NPC extends Monster {
 		NPC_MONSTER_DEFINITION.appearance = Main.appearances.get("VOID");
 		NPC_MONSTER_DEFINITION.defaultSelector = Main.selectors.get("NULL_SELECTOR");
 		NPC_MONSTER_DEFINITION.score = -100;
-		NPC_MONSTER_DEFINITION.maxHits = 2;
+		NPC_MONSTER_DEFINITION.maxHP = 2;
 		NPC_MONSTER_DEFINITION.attack = 0;
 		NPC_MONSTER_DEFINITION.sightRange = 5;
 		NPC_MONSTER_DEFINITION.bloodContent = 30;
@@ -33,7 +33,7 @@ public class NPC extends Monster {
 		defID = def.getID();
 		npcID = def.getID();
 		selector = getNDefinition().getDefaultSelector().derive();
-		hits = def.getHits();
+		hp = def.getHits();
 	}
 	
 	public Appearance getAppearance() {

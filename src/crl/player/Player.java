@@ -70,7 +70,7 @@ public class Player extends Actor {
 	
 	// Attributes
 	private String name;
-	private byte sex;
+	public byte sex;
 	public byte playerClass;	// damn java keyword!
 	
 	private String plot;
@@ -417,7 +417,7 @@ public class Player extends Actor {
 			level.addMessage("You are invincible!");
 			return;
 		}
-		if (getSex()==MALE) {
+		if (sex == MALE) {
 			if (Util.chance(50)) {
 				SFXManager.play("wav/hurt_male.wav");
 			} else {
@@ -600,7 +600,7 @@ public class Player extends Actor {
 		damage("The "+who.getDescription()+" hits you.", dam);
 		Main.ui.drawEffect(Main.efx.createLocatedEffect(getPosition(), "SFX_QUICK_WHITE_HIT"));
 		if (hits < 0) {
-			if (getSex() == MALE)
+			if (sex == MALE)
 				SFXManager.play("wav/die_male.wav");
 			else
 				SFXManager.play("wav/die_female.wav");
@@ -902,7 +902,7 @@ public class Player extends Actor {
 	public void increaseKeys(){
 		keys++;
 	}
-
+/*
 	public int getSex() {
 		return sex;
 	}
@@ -910,10 +910,10 @@ public class Player extends Actor {
 	public void setSex(byte value) {
 		sex = value;
 	}
-
-	public void updateStatus(){
-		
-		if (getCounter(Consts.C_BATMORPH) == 1 || getCounter(Consts.C_BATMORPH2) == 1){
+*/
+	
+	public void updateStatus() {
+		if (getCounter(Consts.C_BATMORPH) == 1 || getCounter(Consts.C_BATMORPH2) == 1) {
 			level.addMessage("You regain your human shape!");
 			land();
 		}
@@ -1636,7 +1636,7 @@ public class Player extends Actor {
 				classString = "Knight";
 				break;
 			case CLASS_MANBEAST:
-				if (getSex() == MALE)
+				if (sex == MALE)
 					classString = "Beast-Man";
 				else
 					classString = "Beast-Woman";
@@ -1676,7 +1676,7 @@ public class Player extends Actor {
 		else {
 			Appearance ret = super.appearance;
 			if (ret == null) {
-				if (getSex() == Player.MALE) {
+				if (sex == Player.MALE) {
 					setAppearance(Main.appearances.get(PlayerGenerator.getClassID(playerClass)));
 				} else {
 					setAppearance(Main.appearances.get(PlayerGenerator.getClassID(playerClass)+"_W"));

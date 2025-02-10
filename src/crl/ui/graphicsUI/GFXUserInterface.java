@@ -847,7 +847,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 	
 	private void drawBossHealthBar() {
 		int bossHP = player.level.boss.getHits();
-		int bossMHP = player.level.boss.getMaxHits();
+		int bossMHP = player.level.boss.getMaxHP();
 		int sixthiedBossHits = (int)Math.ceil( (bossHP * 60.0) / bossMHP );
 		// boss hp as proportion of a 60-element bar.
 		Image foreColorB;
@@ -1858,7 +1858,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		enterScreen();
 		si.drawImage(IMG_STATUSSCR_BGROUND);
 		si.print(1,1, player.getName()+" the level "+ player.getPlayerLevel()+" "+player.getClassString() + " "+player.getStatusString(), GFXDisplay.COLOR_BOLD);
-		si.print(1,2, "Sex: "+ (player.getSex() == Player.MALE ? "M" : "F"), Color.WHITE);
+		si.print(1,2, "Sex: "+ (player.sex == Player.MALE ? "M" : "F"), Color.WHITE);
 		si.print(1,3, "Hits: "+player.getHits()+ "/"+player.getHitsMax()+" Hearts: " + player.getHearts() +"/"+player.getHeartsMax()+
 				" Gold: "+player.getGold()+ " Keys: "+player.getKeys(), Color.WHITE);
 		si.print(1,4, "Carrying: "+player.getItemCount()+"/"+player.getCarryMax(), Color.WHITE);

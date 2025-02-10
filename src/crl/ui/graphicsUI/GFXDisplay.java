@@ -267,7 +267,7 @@ public class GFXDisplay extends Display {
 		si.drawImage(IMG_RESUME);
 		
 		GameSessionInfo gsi = player.getGameSessionInfo();
-		String heshe = (player.getSex() == Player.MALE ? "He" : "She");
+		String heshe = (player.sex == Player.MALE ? "He" : "She");
 		
 		si.setFont(FNT_TITLE);
 		si.print(2,3, "The chronicles of "+player.getName(), COLOR_BOLD);
@@ -302,7 +302,7 @@ public class GFXDisplay extends Display {
 		si.drawImage(IMG_ENDGAME);
 		si.setFont(FNT_TITLE);
 		si.printAtPixel(156,136, "Epilogue", Color.WHITE);
-		String heshe = (player.getSex() == Player.MALE ? "he" : "she");
+		String heshe = (player.sex == Player.MALE ? "he" : "she");
 		//String hisher = (player.getSex() == Player.MALE ? "his" : "her");
 		JTextArea t1 = createTempArea(150,170,conf.screenWidth - 300, 400);
 		
