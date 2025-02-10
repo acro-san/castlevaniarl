@@ -15,7 +15,7 @@ public class Vanish extends Action {
 		Level aLevel = performer.level;
 		aLevel.addMessage("Dracula disappears!");
 		Monster mon = (Monster)performer;
-		mon.setVisible(false);
+		mon.isVisible = false;
 		//drawEffect(new SplashEffect(performer.getPosition(), ".oO", Appearance.WHITE));
 		drawEffect(Main.efx.createLocatedEffect(performer.getPosition(), "SFX_VANISH"));
 		mon.setPosition(0,0,0);

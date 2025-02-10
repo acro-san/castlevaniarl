@@ -13,8 +13,9 @@ import crl.levelgen.StaticGenerator;
 import crl.ui.Display;
 
 public class Mummy1 extends Unleasher {
-	public void unleash(Level level, Game game){
-		if (level.getBoss() == null){
+	
+	public void unleash(Level level, Game game) {
+		if (level.boss == null) {
 			Display.thus.showScreen("As you destroy the mummy of Akmodan, the whole room trembles, and a cold hurricaned wind covers all the place, shredding everything on sight. All of a sudden, the floor under you collapses.");
 			level.getPlayer().reduceKeys(1);
 			level.setMusicKeyMorning("");
@@ -29,7 +30,7 @@ public class Mummy1 extends Unleasher {
 		}
 	}
 	
-	String [] newMap = new String[]{
+	public static final String [] newMap = {
 		"---wwwwwwwwwwwwwwwwwwwwwwwwwwwwww---",
 		"--ww------.....------------.....ww--",
 		"-ww.-----------..o------------...ww-",
@@ -55,8 +56,8 @@ public class Mummy1 extends Unleasher {
 		"---wwwwwwwwwwwwwwwwwwwwwwwwwwwwww---"
 	};
 	
-	private Hashtable charMap = new Hashtable();
-	{
+	private static Hashtable<String, String> charMap = new Hashtable<>();
+	static {
 		charMap.put("o", "RUINS_COLUMN");
 		charMap.put(".", "RUINS_FLOOR");
 		charMap.put("-", "AIR");

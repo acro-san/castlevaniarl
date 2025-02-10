@@ -19,7 +19,7 @@ public class Prelude2 extends Unleasher {
 		Display.thus.showChat("PRELUDE_DRACULA1", game);
 		level.getMapCell(level.getExitFor("#DRACPOS")).setAppearance(Main.appearances.get("DRACULA_THRONE2_X"));
 		((DraculaAI)dracula.selector).setOnBattle(true);
-		dracula.setVisible(true);
+		dracula.isVisible = true;
 		enabled = false;
 	}
 

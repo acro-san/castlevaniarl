@@ -83,7 +83,7 @@ public class Player extends Actor {
 	private int nextLevelXP = 1000; //5000
 	private int hearts;
 	private int heartMax;
-	private int score;
+	public int score;
 	private int keys;
 	private int carryMax;
 	private int hits;
@@ -170,7 +170,7 @@ public class Player extends Actor {
 
 	public void addGold(int x) {
 		gold += x;
-		addScore(x);
+		score += x;
 		gameSessionInfo.goldCount += x;	// why's it stored in 2 places though??
 	}
 	
@@ -179,18 +179,18 @@ public class Player extends Actor {
 		gold = x;
 	}
 
-	public int getGold(){
+	public int getGold() {
 		return gold;
 	}
 
 	public void reduceGold(int q){
 		gold -= q;
 	}
-
-	public void addScore(int x){
+/*
+	public void addScore(int x) {
 		score += x;
 	}
-	
+	*/
 	private int[] advancementLevels;
 	public boolean deservesAdvancement(int level){
 		for (int i = 0; i < advancementLevels.length; i++){
@@ -304,10 +304,11 @@ public class Player extends Actor {
 	/*public void finishLevel(){
 		playerEventListener.informEvent(EVT_FORWARD);
 	}*/
-
+/*
 	public int getScore(){
 		return score;
 	}
+	*/
 
 	public Player () {
 		hitsMax = 20;
@@ -1072,24 +1073,26 @@ public class Player extends Actor {
 		}
 		return null;
 	}
+	
 	/**
-	 * Lands on the destination point, steping on height changing triggers
+	 * Lands on the destination point, stepping on height changing triggers
 	 * @param destinationPoint
 	 * @param step
 	 */
-	public void landOn (Position destinationPoint){
+	public void landOn(Position destinationPoint) {
 		landOn(destinationPoint, true);
 	}
-		
+
+
 	/**
 	 * Lands on the destination point
 	 * @param destinationPoint
 	 * @param step If true, step on height changing triggers
 	 */
-	public void landOn (Position destinationPoint, boolean step){
+	public void landOn(Position destinationPoint, boolean step) {
 		Debug.enterMethod(this, "landOn", destinationPoint);
 		Cell destinationCell = level.getMapCell(destinationPoint);
-		if (destinationCell == null || destinationCell.isEthereal()){
+		if (destinationCell == null || destinationCell.isEthereal()) {
 			destinationPoint = level.getDeepPosition(destinationPoint);
 			if (destinationPoint == null) {
 				level.addMessage("You fall into a endless pit!");
@@ -1105,10 +1108,11 @@ public class Player extends Actor {
 		
 		setPosition(destinationPoint);
 		
+		
 		if (destinationCell.isSolid() && !isEthereal()) {
 			// Tries to land on a freesquare around
 			Position tryp = getFreeSquareAround(destinationPoint);
-			if (tryp == null){
+			if (tryp == null) {
 				level.addMessage("You are smashed inside the "+destinationCell.getShortDescription()+"!");
 				gameSessionInfo.setDeathCause(GameSessionInfo.SMASHED);
 				hits = -1;
@@ -1116,7 +1120,7 @@ public class Player extends Actor {
 				Debug.exitMethod();
 				return;
 			} else {
-				landOn(tryp);
+				landOn(tryp);	// RECURSIVELY CALLING landOn(tryp, true);	!!?!?!?!?? WHYYYYY!?
 				Debug.exitMethod();
 				return;
 			}
@@ -1192,25 +1196,24 @@ public class Player extends Actor {
 					}
 				}
 
-				if (destinationFeature.getHeightMod() != 0){
+				if (destinationFeature.getHeightMod() != 0) {
 					setPosition(Position.add(destinationPoint, new Position(0,0, destinationFeature.getHeightMod())));
 				}
-				if (destinationFeature.getHeartPrize() > 0){
+				if (destinationFeature.getHeartPrize() > 0) {
 					level.addMessage("You get "+destinationFeature.getHeartPrize()+" hearts");
 					addHearts(destinationFeature.getHeartPrize());
 					level.destroyFeature(destinationFeature);
-					if (!played){
+					if (!played) {
 						played = true;
 						SFXManager.play("wav/pickup.wav");
-						
 					}
 				}
-
-				if (destinationFeature.getScorePrize() > 0){
+				
+				if (destinationFeature.getScorePrize() > 0) {
 					level.addMessage("You pickup the "+destinationFeature.getDescription()+".");
 					addGold(destinationFeature.getScorePrize());
 					level.destroyFeature(destinationFeature);
-					if (!played){
+					if (!played) {
 						played = true;
 						SFXManager.play("wav/bonusblp.wav");
 					}
@@ -1297,16 +1300,15 @@ public class Player extends Actor {
 							aPlayer.informPlayerEvent(Player.OPENEDCASTLE);*/
 				Feature pred = destinationFeature;
 				destinationFeature = level.getFeatureAt(destinationPoint);
-				if (destinationFeature == pred)
+				if (destinationFeature == pred) {
 					destinationFeature = null;
+				}
 			}
 		}
 		
-			
-			
-		if (level.isExit(getPosition())){
+		if (level.isExit(getPosition())) {
 			String exit = level.getExitOn(getPosition());
-			if (exit.equals("_START") || exit.startsWith("#")){
+			if (exit.equals("_START") || exit.startsWith("#")) {
 				//Do nothing. This must be changed with startsWith("_");
 			} /*else if (exit.equals("_NEXT")){
 				informPlayerEvent(Player.EVT_NEXT_LEVEL);
@@ -1315,12 +1317,12 @@ public class Player extends Actor {
 			} */else {
 				informPlayerEvent(Player.EVT_GOTO_LEVEL, exit);
 			}
-			
 		}
 		Debug.exitMethod();
 	}
 
-	private void drown(){
+
+	private void drown() {
 		gameSessionInfo.setDeathCause(GameSessionInfo.DROWNED);
 		gameSessionInfo.deathLevel = level.levelNumber;
 		this.hits = -1;
@@ -1485,6 +1487,7 @@ public class Player extends Actor {
 	}
 	
 	public void increaseShot() {
+		// FIXME Shouldn't this be NOT vampirekiller? what's 'shotlevel'?
 		if (playerClass == CLASS_VAMPIREKILLER && shotLevel < 2) {
 			shotLevel++;
 		}
@@ -1541,7 +1544,7 @@ public class Player extends Actor {
 		defenseCounter = counter;
 	}
 
-	public boolean hasIncreasedDefense(){
+	public boolean hasIncreasedDefense() {
 		return defenseCounter > 0;
 	}
 
@@ -1555,11 +1558,11 @@ public class Player extends Actor {
 		return energyFieldCounter > 0;
 	}
 
-	public void heal(){
+	public void heal() {	// FULL heal.
 		hits = hitsMax;
 	}
 
-	public void reduceQuantityOf(Item what){
+	public void reduceQuantityOf(Item what) {
 		String toAddID = what.getFullID();
 		Equipment equipment = (Equipment)inventory.get(toAddID);
 		equipment.reduceQuantity();
@@ -1585,7 +1588,6 @@ public class Player extends Actor {
 
 	public boolean isEthereal(){
 		return hasCounter(Consts.C_MYSTMORPH) || hasCounter(Consts.C_MYSTMORPH2);
-		//return false;
 	}
 	
 	public boolean isFlying(){
@@ -1594,17 +1596,18 @@ public class Player extends Actor {
 
 	public void recoverHits(int i){
 		hits += i;
-		if (hits > hitsMax)
+		if (hits > hitsMax) {
 			hits = hitsMax;
-    }
+		}
+	}
 	
 	public void recoverHitsP(int p){
 		int recovery = (int)Math.round((double)getHitsMax() * (p/100.0D));
 		recoverHits(recovery);
 	}
 
-    public void reduceKeys(int k){
-		keys-=k;
+	public void reduceKeys(int k) {
+		keys -= k;
 	}
 
     /*public void regen() {
@@ -1615,7 +1618,8 @@ public class Player extends Actor {
     		recoverHits(1);
     	}
     }*/
-    
+	
+	// FIXME We have these values in Text, fixed, already, do we not!?
 	public void setPlayerClass(int value) {
 		playerClass = value;
 		switch (playerClass){
@@ -1630,9 +1634,9 @@ public class Player extends Actor {
 				break;
 			case CLASS_MANBEAST:
 				if (getSex() == MALE)
-					classString = "Man Beast";
+					classString = "Beast-Man";
 				else
-					classString = "Woman Beast";
+					classString = "Beast-Woman";
 				break;
 			case CLASS_RENEGADE:
 				classString = "Renegade";
@@ -1646,8 +1650,8 @@ public class Player extends Actor {
 	public Appearance getAppearance() {
 		if (hasCounter(Consts.C_BATMORPH))
 			return Main.appearances.get("MORPHED_BAT");
-    	else if (hasCounter(Consts.C_BATMORPH2))
-    		return Main.appearances.get("MORPHED_BAT2");
+		else if (hasCounter(Consts.C_BATMORPH2))
+			return Main.appearances.get("MORPHED_BAT2");
 		else if (hasCounter(Consts.C_LUPINEMORPH))
 			return Main.appearances.get("MORPHED_LUPINE");
 		else if (hasCounter(Consts.C_BEARMORPH))
@@ -1727,8 +1731,7 @@ public class Player extends Actor {
 			if (getFlag("PASIVE_BACKFLIP"))
 				availableSkills.add(skills.get("BACKFLIP"));
 			
-		} else
-		if (playerClass == CLASS_RENEGADE) {
+		} else if (playerClass == CLASS_RENEGADE) {
 			availableSkills.add(skills.get("FIREBALL"));
 			availableSkills.add(skills.get("SOULSTEAL"));
 			if (getFlag("SKILL_SUMMONSOUL"))
@@ -1758,8 +1761,7 @@ public class Player extends Actor {
 				availableSkills.add(skills.get("SKILL_BATMORPH2"));
 			else if (getFlag("SKILL_BATMORPH"))
 				availableSkills.add(skills.get("SKILL_BATMORPH"));
-		} else
-		if (playerClass == CLASS_INVOKER){
+		} else if (playerClass == CLASS_INVOKER) {
 			availableSkills.add(skills.get("INVOKE_BIRD"));
 			availableSkills.add(skills.get("INVOKE_TURTLE"));
 			if (getFlag("SKILL_CATSOUL"))
@@ -1787,8 +1789,7 @@ public class Player extends Actor {
 			
 			//availableSkills.add(skills.get("MAJOR_JINX"));
 			
-		} else
-		if (playerClass == CLASS_MANBEAST){
+		} else if (playerClass == CLASS_MANBEAST) {
 			if (getFlag("SKILL_POWERBLOW3"))
 				availableSkills.add(skills.get("IMPACT_BLOW3"));
 			else if (getFlag("SKILL_POWERBLOW2"))
@@ -1815,8 +1816,7 @@ public class Player extends Actor {
 				availableSkills.add(skills.get("SELFCONTROL"));
 			if (getFlag("HEALTH_REGENERATION"))
 				availableSkills.add(skills.get("REGEN"));
-		} else
-		if (playerClass == CLASS_VANQUISHER){
+		} else if (playerClass == CLASS_VANQUISHER) {
 			availableSkills.add(skills.get("HOMING_BALL"));
 			availableSkills.add(skills.get("CHARGE_BALL"));
 			if (getFlag(Consts.C_SPELL_FIRE))
@@ -1844,25 +1844,30 @@ public class Player extends Actor {
 			if (getFlag("SKILL_MAJORJINX"))
 				availableSkills.add(skills.get("MAJOR_JINX"));
 			
-		}else
-		if (playerClass == CLASS_KNIGHT){
+		}else if (playerClass == CLASS_KNIGHT) {
 			availableSkills.add(skills.get("SHIELD_GUARD"));
 		}
-		if (weaponSkill(ItemDefinition.CAT_RINGS) > 1){
+		if (weaponSkill(ItemDefinition.CAT_RINGS) > 1) {
 			availableSkills.add(skills.get("DIVING_SLIDE"));
 		}
-		if (weapon != null && weapon.getWeaponCategory().equals(ItemDefinition.CAT_RINGS) && weaponSkill(ItemDefinition.CAT_RINGS) == 10)
-			availableSkills.add(skills.get("SPINNING_SLICE"));
-		if (weapon != null && weapon.getWeaponCategory().equals(ItemDefinition.CAT_WHIPS) && weaponSkill(ItemDefinition.CAT_WHIPS) == 10)
-			availableSkills.add(skills.get("WHIRLWIND_WHIP"));
-		if (weapon != null && weapon.getWeaponCategory().equals(ItemDefinition.CAT_STAVES) && weaponSkill(ItemDefinition.CAT_STAVES) == 10)
-			availableSkills.add(skills.get("ENERGY_BEAM"));
-		if (weapon != null && weapon.getWeaponCategory().equals(ItemDefinition.CAT_SWORDS) && weaponSkill(ItemDefinition.CAT_SWORDS) == 10)
-			availableSkills.add(skills.get("FINAL_SLASH"));
-		if ((weapon == null || weapon.getWeaponCategory().equals(ItemDefinition.CAT_UNARMED)) && weaponSkill(ItemDefinition.CAT_UNARMED) == 10)
+		
+		if (weapon != null) {
+			final String wpnType = weapon.getWeaponCategory();
+			if (wpnType.equals(ItemDefinition.CAT_RINGS) && weaponSkill(ItemDefinition.CAT_RINGS) >= 10) {
+				availableSkills.add(skills.get("SPINNING_SLICE"));
+			} else if (wpnType.equals(ItemDefinition.CAT_WHIPS) && weaponSkill(ItemDefinition.CAT_WHIPS) >= 10) {
+				availableSkills.add(skills.get("WHIRLWIND_WHIP"));
+			} else if (wpnType.equals(ItemDefinition.CAT_STAVES) && weaponSkill(ItemDefinition.CAT_STAVES) >= 10) {
+				availableSkills.add(skills.get("ENERGY_BEAM"));
+			} else if (wpnType.equals(ItemDefinition.CAT_SWORDS) && weaponSkill(ItemDefinition.CAT_SWORDS) >= 10) {
+				availableSkills.add(skills.get("FINAL_SLASH"));
+			} else if (wpnType.equals(ItemDefinition.CAT_PISTOLS) && weaponSkill(ItemDefinition.CAT_PISTOLS) >= 10) {
+				availableSkills.add(skills.get("ENERGY_BURST"));
+			}
+		}
+		if ((weapon == null || weapon.getWeaponCategory().equals(ItemDefinition.CAT_UNARMED)) && weaponSkill(ItemDefinition.CAT_UNARMED) >= 10) {
 			availableSkills.add(skills.get("TIGER_CLAW"));
-		if (weapon != null && weapon.getWeaponCategory().equals(ItemDefinition.CAT_PISTOLS) && weaponSkill(ItemDefinition.CAT_PISTOLS) == 10)
-			availableSkills.add(skills.get("ENERGY_BURST"));
+		}
 		
 		return availableSkills;
 	}
@@ -1871,7 +1876,7 @@ public class Player extends Actor {
 		return ((Counter)weaponSkills.get(catID)).getCount();
 	}
 
-	public String getWeaponDescription(){
+	public String getWeaponDescription() {
 		if (getPlayerClass() == CLASS_VAMPIREKILLER)
 			if (getMysticWeapon() != -1)
 				return weaponName(getMysticWeapon());
@@ -1888,7 +1893,7 @@ public class Player extends Actor {
 
 	}
 
-	// SkillDEFINITIONS.
+	// Skill *DEFINITIONS*.
 	private final static Hashtable<String, Skill> skills = new Hashtable<>();
 	static {
 		skills.put("DIVING_SLIDE", new Skill("Diving Slide", new DivingSlide(), 8));
@@ -1902,7 +1907,6 @@ public class Player extends Actor {
 		
 		skills.put("DODGE", new Skill("Dodge"));
 		skills.put("DODGE2", new Skill("Mirror Dodge"));
-		
 		
 		/*skills.put("MYSTIC_WEAPON", new Skill("Mystic Weapons"));
 		skills.put("HMYSTIC_WEAPON", new Skill("Sacred Mystics"));*/
@@ -2076,7 +2080,7 @@ public class Player extends Actor {
 		shield = value;
 	}
 
-	public String getStatusString(){
+	public String getStatusString() {
 		String status = "";
 		if (isInvisible())
 			status +="Invisible ";
@@ -2235,20 +2239,25 @@ public class Player extends Actor {
 		justJumped = val;
 	}
 	
-	public int getHeartsMax(){return heartMax;}
+	public int getHeartsMax(){
+		return heartMax;
+	}
 	
-	public int getSightRange(){
+	public int getSightRange() {
 		int base = baseSightRange + 
 			(level.isDay()?3:0)+
 			(level.getMapCell(getPosition()) != null ? level.getMapCell(getPosition()).getHeight()>0?1:0:0)+
 			(hasCounter(Consts.C_MAGICLIGHT) ? 3 : 0) +
 			(hasCounter("LIGHT") ? 3 : 0);
-		if (getFlag(Consts.ENV_FOG))
+		if (getFlag(Consts.ENV_FOG)) {
 			base -= 2;
-		if (getFlag(Consts.ENV_RAIN) || getFlag(Consts.ENV_THUNDERSTORM))
+		}
+		if (getFlag(Consts.ENV_RAIN) || getFlag(Consts.ENV_THUNDERSTORM)) {
 			base -= 1;
-		if (base < 1)
+		}
+		if (base < 1) {
 			base = 1;
+		}
 		return base;
 	}
 	
@@ -2410,28 +2419,28 @@ public class Player extends Actor {
 	}
 	
 	public int getUnarmedAttack(){
-		return weaponSkill(ItemDefinition.CAT_UNARMED)+1;
+		return weaponSkill(ItemDefinition.CAT_UNARMED) + 1;
 	}
 	
-	 public int getXp(){
-		 return xp;
-	 }
-	 
-	 public int getNextXP(){
-		 return nextLevelXP;
-	 }
-	 
-	 public boolean sees(Position p){
-		 return level.isVisible(p.x, p.y);
-	 }
-	 
-	 public boolean sees(Monster m){
-		 return sees(m.getPosition());
-	 }
-	 
-	 public void setSoulPower(int sp){
-		 this.soulPower = sp;
-	 }
+	public int getXp() {
+		return xp;
+	}
+	
+	public int getNextXP(){
+		return nextLevelXP;
+	}
+	
+	public boolean sees(Position p) {
+		return level.isVisible(p.x, p.y);
+	}
+	
+	public boolean sees(Monster m){
+		return sees(m.getPosition());
+	}
+	
+	public void setSoulPower(int sp){
+		this.soulPower = sp;
+	}
 
 	public boolean isDoNotRecordScore() {
 		return doNotRecordScore;

@@ -558,10 +558,11 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 	
 	private boolean loadLevel(String levelID, int targetLevelNumber) {
 		Debug.enterMethod(this, "loadLevel", levelID+","+targetLevelNumber);
-		String formerLevelID = null; 
-		if (currentLevel != null){
-			if (currentLevel.getBoss() != null && !currentLevel.getBoss().isDead())
+		String formerLevelID = null;
+		if (currentLevel != null) {
+			if (currentLevel.boss != null && !currentLevel.boss.isDead()) {
 				return false;
+			}
 			formerLevelID = currentLevel.getID();
 			Level storedLevel = storedLevels.get(formerLevelID);
 			if (storedLevel == null){
@@ -640,10 +641,10 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 			currentLevel.populate();
 		}
 		
-		if (currentLevel.getBoss() != null){
-			currentLevel.getBoss().recoverHits();
+		if (currentLevel.boss != null) {
+			currentLevel.boss.recoverHits();
 		}
-		if (!dispatcher.contains(player)){
+		if (!dispatcher.contains(player)) {
 			dispatcher.addActor(player);
 		}
 		ui.levelChange();
@@ -651,26 +652,25 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 		return newLevel;
 	}
 	
-	public void setLevel(Level level){
+	
+	public void setLevel(Level level) {
 		currentLevel = level;
 		player.level = level;
 		dispatcher = currentLevel.getDispatcher();
-		if (currentLevel.hasNoonMusic() && !currentLevel.isDay()){
+		if (currentLevel.hasNoonMusic() && !currentLevel.isDay()) {
 			STMusicManagerNew.thus.playKey(currentLevel.getMusicKeyNoon());
 		} else {
 			STMusicManagerNew.thus.playKey(currentLevel.getMusicKeyMorning());
 		}
-		
 		//STMusicManager.thus.playForLevel(levelNumber, levelPath[levelNumber], currentLevel.isDay());
 		ui.levelChange();
-		
-		
 	}
-	public Player getPlayer(){
+	
+	public Player getPlayer() {
 		return player;
 	}
 	
-	public static String getVersion(){
+	public static String getVersion() {
 		return GameVersion.getCurrentVersion().getCode();
 	}
 	
@@ -704,8 +704,9 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 		return reports;
 	}
 
-	private static Vector uniqueRegister = new Vector();
-	private Vector uniqueRegisterObjectCopy = new Vector();
+	
+	private static Vector<String> uniqueRegister = new Vector<>();
+	private Vector<String> uniqueRegisterObjectCopy = new Vector<>();
 	
 	public void syncUniqueRegister() {
 		uniqueRegister = uniqueRegisterObjectCopy;

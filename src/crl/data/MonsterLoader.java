@@ -41,24 +41,24 @@ public class MonsterLoader {
 			while (line != null) {
 				String[] data = line.split(";");
 				MonsterDefinition def = new MonsterDefinition(data[0]);
-				def.setAppearance(Main.appearances.get(data[1]));
-				def.setDescription(data[2]);
-				def.setLongDescription(data[3]);
-				def.setWavOnHit(data[4]);
-				def.setBloodContent(Integer.parseInt(data[5]));
-				def.setUndead(data[6].equals("true"));
-				def.setEthereal(data[7].equals("true"));
-				def.setCanSwim(data[8].equals("true"));
-				def.setCanFly(data[9].equals("true"));
-				def.setScore(Integer.parseInt(data[10]));
-				def.setSightRange(Integer.parseInt(data[11]));
-				def.setMaxHits(Integer.parseInt(data[12]));
-				def.setAttack(Integer.parseInt(data[13]));
-				def.setWalkCost(Integer.parseInt(data[14]));
-				def.setAttackCost(Integer.parseInt(data[15]));
-				def.setEvadeChance(Integer.parseInt(data[16]));
-				def.setEvadeMessage(data[17]);
-				def.setAutorespawnCount(Integer.parseInt(data[18]));
+				def.appearance = Main.appearances.get(data[1]);
+				def.description = data[2];
+				def.longDescription = data[3];
+				def.wavOnHit = data[4];
+				def.bloodContent = Integer.parseInt(data[5]);
+				def.isUndead = Boolean.valueOf(data[6]);//.equals("true");
+				def.isEthereal = Boolean.valueOf(data[7]);//.equals("true"));
+				def.canSwim = Boolean.valueOf(data[8]);//.equals("true"));
+				def.canFly = Boolean.valueOf(data[9]);//.equals("true"));
+				def.score = Integer.parseInt(data[10]);
+				def.sightRange = Integer.parseInt(data[11]);
+				def.maxHits = Integer.parseInt(data[12]);
+				def.attack = Integer.parseInt(data[13]);
+				def.walkCost = Integer.parseInt(data[14]);
+				def.attackCost = Integer.parseInt(data[15]);
+				def.evadeChance = Integer.parseInt(data[16]);
+				def.evadeMessage = data[17];
+				def.autorespawnCount = Integer.parseInt(data[18]);
 				
 				vecMonsters.add(def);
 				line = br.readLine();
@@ -82,7 +82,7 @@ public class MonsterLoader {
 			MonsterDefinition[] monsters = getBaseMonsters(monsterDefFile);
 			HashMap<String, MonsterDefinition> monsterTable = new HashMap<>();
 			for (int i = 0; i < monsters.length; i++) {
-				monsterTable.put(monsters[i].getID(), monsters[i]);
+				monsterTable.put(monsters[i].ID, monsters[i]);
 			}
 			
 			DESEncrypter encrypter = new DESEncrypter("65csvlk3489585f9rjh");
@@ -211,7 +211,7 @@ public class MonsterLoader {
 				parseRangeAttacks(sai, ratks);
 			}
 			
-			md.setDefaultSelector(sai);
+			md.defaultSelector = sai;
 		}
 	}
 	

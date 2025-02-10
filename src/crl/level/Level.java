@@ -19,9 +19,12 @@ import crl.player.*;
 import crl.levelgen.*;
 
 public class Level implements FOVMap, Serializable {
+	// FIXME Why not just *have* an FOVMap as a member of the level???
+	
 	
 	private String ID;
-	public int levelNumber;
+	public int levelNumber;	// -1 is prologue / othermodes maybe?
+	// It controls not showing 'Stage' on the on-screen level name...
 	
 	private Unleasher[] unleashers = new Unleasher[]{};
 	private Cell[][][] map;
@@ -29,6 +32,9 @@ public class Level implements FOVMap, Serializable {
 	private boolean[][][] lit;
 	private boolean[][][] remembered;
 	private VMonster monsters;
+	public Monster boss;
+///	public boolean bossSeen = false;	// whether to show HPbar yet, etc. boss.wasSeen()!! EXISTS!
+	
 	private VFeatures features;
 	private Hashtable<String, SmartFeature> smartFeatures = new Hashtable<>();
 	private Player player;
@@ -58,7 +64,8 @@ public class Level implements FOVMap, Serializable {
 	private Vector<Feature> doomedFeatures = new Vector<>();
 	private Vector<Feature> lightSources = new Vector<>();
 	
-	public void addExit(Position where, String levelID){
+	
+	public void addExit(Position where, String levelID) {
 		exits.put(levelID, where);
 		/// int posHash = where.hashCode();	// This override of hashCode STILL uses STRING! why!?
 		// what's max map dims? Since large x,y values shouldn't be possible...
@@ -66,15 +73,15 @@ public class Level implements FOVMap, Serializable {
 		exitPositions.put(where.ihash(), levelID);
 	}
 	
-	public Position getExitFor(String levelID){
+	public Position getExitFor(String levelID) {
 		return (Position)exits.get(levelID);
 	}
 
-	public Position getAnExit(){
+	public Position getAnExit() {
 		return (Position)exits.get(exits.keys().nextElement());
 	}
 	
-	public void addItem(Position where, Item what){
+	public void addItem(Position where, Item what) {
 		Vector<Item> stack = items.get(where.toString());
 		if (stack == null) {
 			stack = new Vector<>(5);
@@ -83,7 +90,7 @@ public class Level implements FOVMap, Serializable {
 		stack.add(what);
 	}
 
-	public void removeItemFrom(Item what, Position where){
+	public void removeItemFrom(Item what, Position where) {
 		Vector<Item> stack = items.get(where.toString());
 		if (stack != null) {
 			stack.remove(what);
@@ -122,32 +129,27 @@ public class Level implements FOVMap, Serializable {
 	}
 
 	public int getFrostAt(Position where) {
-		Counter x = (Counter) frosts.get(where.toString());
-		if (x != null)
+		Counter x = (Counter)frosts.get(where.toString());
+		if (x != null) {
 			return 1;
-		else
-			return 0;
+		}
+		return 0;
 	}
 
-	//private VEffect effects;
 
 	public Level() {
 		monsters = new VMonster(20);
 		features = new VFeatures(20);
-		//effects = new VEffect(10);
 		messagesneffects = new SZQueue(50);
 	}
 
 
 	public void addMessage(Message what) {
-		/*what = null;
-		what.getText();*/
 		Main.ui.addMessage(what);
-		//dispatcher.addActor(what, true, what);
 	}
 
-	// Why add these to the MAP, rather than the player,ui,or gamestate??
-	public void addMessage(String what){
+	// Why add these to the MAP, rather than the player,ui,or gamestate?
+	public void addMessage(String what) {
 		addMessage(new Message(what, player.getPosition()));
 	}
 
@@ -192,11 +194,11 @@ public class Level implements FOVMap, Serializable {
 		return features.getFeatureAt(x, y);
 	}
 	
-	public Feature getFeatureAt(Position p){
+	public Feature getFeatureAt(Position p) {
 		return features.getFeatureAt(p);
 	}
 	
-	public Feature[] getFeaturesAt(Position p){
+	public Feature[] getFeaturesAt(Position p) {
 		return features.getFeaturesAt(p);
 	}
 	
@@ -208,27 +210,25 @@ public class Level implements FOVMap, Serializable {
 		return features.getFeatureAt(tempFeaturePosition);
 	}
 
-	public Monster getMonsterAt(Position x){
+	public Monster getMonsterAt(Position x) {
 		return monsters.getMonsterAt(x);
 	}
 
-	public Actor getActorAt(Position x){
-		Vector actors = dispatcher.getActors();
-		for (int i = 0; i < actors.size(); i++){
-			Actor a = (Actor) actors.elementAt(i);
-			/*Debug.say(a);
-			Debug.say(a.getPosition());*/
+	public Actor getActorAt(Position x) {
+		Vector<PriorityEnqueable> actors = dispatcher.getActors();
+		for (int i = 0; i < actors.size(); i++) {
+			Actor a = (Actor)actors.elementAt(i);
 			if (a.getPosition().equals(x))
-				return (Actor) actors.elementAt(i);
+				return (Actor)actors.elementAt(i);
 		}
 		return null;
 	}
 
-	public Monster getMonsterAt(int x, int y, int z){
+	public Monster getMonsterAt(int x, int y, int z) {
 		return monsters.getMonsterAt(new Position(x,y,z));
 	}
 
-	public void destroyFeature(Feature what){
+	public void destroyFeature(Feature what) {
 		//if (what.getLight()>0){
 		if (lightSources.contains(what)) {
 			lightSources.remove(what);
@@ -249,50 +249,43 @@ public class Level implements FOVMap, Serializable {
 
 	public boolean isWalkable(Position where){
 		return getMapCell(where) != null && !getMapCell(where).isSolid();
-		
-			//&&(!getMapCell(where).isWater() || getFrostAt(where) != 0);
-		
+		//&&(!getMapCell(where).isWater() || getFrostAt(where) != 0);
 	}
 	
-	public boolean isItemPlaceable(Position where){
-		return isWalkable(where) && 
+	public boolean isItemPlaceable(Position where) {
+		return isWalkable(where) &&
 			getFeatureAt(where) == null &&
 			!getMapCell(where).isShallowWater() && 
 			!getMapCell(where).isWater() &&
 			!getMapCell(where).isEthereal();
 	}
 	
-	public boolean isExitPlaceable(Position where){
+	public boolean isExitPlaceable(Position where) {
 		return !getMapCell(where).isSolid();
 	}
 
-	public void setCells(Cell[][][] what){
+	public void setCells(Cell[][][] what) {
 		map = what;
 		visible= new boolean[what.length][what[0].length][what[0][0].length];
 		lit= new boolean[what.length][what[0].length][what[0][0].length];
 		remembered= new boolean[what.length][what[0].length][what[0][0].length];
 	}
 
-	public int getWidth(){
+	public int getWidth() {
 		return map[0].length;
 	}
 
-	public int getHeight(){
+	public int getHeight() {
 		return map[0][0].length;
-
 	}
 	
-	public int getDepth(){
+	public int getDepth() {
 		return map.length;
 	}
 
 	private Respawner respawner;
-	//private int keyCounter;
-	/*public void keyInminent(){
-		keyCounter = Util.rand(1,5);
-	}*/
 
-	public void setRespawner(Respawner what){
+	public void setRespawner(Respawner what) {
 		Debug.enterMethod(this, "setRespawner", what);
 		if (respawner != null)
 			dispatcher.removeActor(respawner);
@@ -313,63 +306,65 @@ public class Level implements FOVMap, Serializable {
 		addMonster(x);
 	}
 
-	public void setBoss(Monster what){
+	
+	
+	public void setBoss(Monster what) {
 		boss = what;
 		addMonster(what);
 	}
 
-	public void addMonster(Monster what){
+	public void addMonster(Monster what) {
 		monsters.addMonster(what);
 		dispatcher.addActor(what);
 		what.level = this;
 	}
 	
-	public void removeBoss(){
+	public void removeBoss() {
 		monsters.remove(boss);
 		dispatcher.removeActor(boss);
 		boss = null;
 	}
 
-	public void removeMonster(Monster what){
+	public void removeMonster(Monster what) {
 		monsters.remove(what);
 		dispatcher.removeActor(what);
 		what.level = this;
 	}
 
-	public void removeSmartFeature(SmartFeature what){
+	public void removeSmartFeature(SmartFeature what) {
 		smartFeatures.remove(what.getPosition().toString());
 		dispatcher.removeActor(what);
 	}
 
-
-	public void addFeature(Feature what){
+	public void addFeature(Feature what) {
 		features.addFeature(what);
-		if (what.getFaint() > 0){
+		if (what.getFaint() > 0) {
 			doomedFeatures.add(what);
 		}
-		if (what.getLight()>0){
+		if (what.getLight() > 0) {
 			lightSources.add(what);
 			lightAt(what.getPosition(), what.getLight(), true);
 		}
 	}
 	
-	public void addFeature(Feature what, boolean doom){
+	public void addFeature(Feature what, boolean doom) {
 		features.addFeature(what);
-		if (doom && what.getFaint() > 0){
+		if (doom && what.getFaint() > 0) {
 			doomedFeatures.add(what);
 		}
 		
-		if (what.getLight()>0){
+		if (what.getLight() > 0) {
 			lightSources.add(what);
 			lightAt(what.getPosition(), what.getLight(), true);
 		}
 	}
 	
 	private Position lightRunner = new Position(0,0);
+	
 	private void lightAt(Position where, int intensity, boolean light) {
 		lightRunner.z = where.z;
-		for (int x = where.x-intensity; x <= where.x+intensity; x++){
-			for (int y = where.y-intensity; y <= where.y+intensity; y++){
+		for (int x = where.x-intensity; x <= where.x+intensity; x++) {
+			for (int y = where.y-intensity; y <= where.y+intensity; y++) {
 				lightRunner.x = x; lightRunner.y = y;
 				if (!isValidCoordinate(lightRunner))
 					continue;
@@ -407,7 +402,7 @@ public class Level implements FOVMap, Serializable {
 		}
 	}
 
-	public void setPlayer(Player what){
+	public void setPlayer(Player what) {
 		player = what;
 		if (!dispatcher.contains(what))
 			dispatcher.addActor(what, true);
@@ -415,28 +410,28 @@ public class Level implements FOVMap, Serializable {
 	}
 
 
-	public Cell[][][] getCells(){
+	public Cell[][][] getCells() {
 		return map;
 	}
 
-	public Cell[][] getVisibleCellsAround(int x, int y, int z, int xspan, int yspan){
+	public Cell[][] getVisibleCellsAround(int x, int y, int z, int xspan, int yspan) {
 		int xstart = x - xspan;
 		int ystart = y - yspan;
 		int xend = x + xspan;
 		int yend = y + yspan;
-		Cell [][] ret = new Cell [2 * xspan + 1][2 * yspan + 1];
+		Cell [][] ret = new Cell[2 * xspan + 1][2 * yspan + 1];
 		int px = 0;
-		for (int ix = xstart; ix <=xend; ix++){
+		for (int ix = xstart; ix <=xend; ix++) {
 			int py = 0;
-			for (int iy =  ystart ; iy <= yend; iy++){
-				if (ix >= 0 && ix < map[0].length && iy >= 0 && iy<map[0][0].length && isVisible(ix, iy)){
+			for (int iy =  ystart ; iy <= yend; iy++) {
+				if (ix >= 0 && ix < map[0].length && iy >= 0 && iy<map[0][0].length && isVisible(ix, iy)) {
 					//darken(ix, iy);
 					ret[px][py] = map[z][ix][iy];
 					/*Las celdas de abajo*/
-					if (isValidCoordinate(ix,iy,z) && (map[z][ix][iy] == null|| map[z][ix][iy].getID().equals("AIR"))){
+					if (isValidCoordinate(ix,iy,z) && (map[z][ix][iy] == null|| map[z][ix][iy].getID().equals("AIR"))) {
 						int pz = z;
-						while (pz < getDepth()-1){
-							if (map[pz+1][ix][iy] == null || map[pz+1][ix][iy].getID().equals("AIR")){
+						while (pz < getDepth()-1) {
+							if (map[pz+1][ix][iy] == null || map[pz+1][ix][iy].getID().equals("AIR")) {
 								pz++;
 							} else {
 								ret[px][py] = map[pz+1][ix][iy];
@@ -453,25 +448,26 @@ public class Level implements FOVMap, Serializable {
 		return ret;
 	}
 	
-	public Cell[][] getMemoryCellsAround(int x, int y, int z, int xspan, int yspan){
+	
+	public Cell[][] getMemoryCellsAround(int x, int y, int z, int xspan, int yspan) {
 		int xstart = x - xspan;
 		int ystart = y - yspan;
 		int xend = x + xspan;
 		int yend = y + yspan;
 		Cell [][] ret = new Cell [2 * xspan + 1][2 * yspan + 1];
 		int px = 0;
-		for (int ix = xstart; ix <=xend; ix++){
+		for (int ix = xstart; ix <=xend; ix++) {
 			int py = 0;
-			for (int iy =  ystart ; iy <= yend; iy++){
-				if (ix >= 0 && ix < map[0].length && iy >= 0 && iy<map[0][0].length && remembers(ix, iy)){
+			for (int iy =  ystart ; iy <= yend; iy++) {
+				if (ix >= 0 && ix < map[0].length && iy >= 0 && iy<map[0][0].length && remembers(ix, iy)) {
 					ret[px][py] = map[z][ix][iy];
 				}
 				/*Las celdas de abajo*/
-				//if (isValidCoordinate(ix,iy,z) && (map[z][ix][iy] == null || map[z][ix][iy].getID().equals("AIR"))){
-				if (isValidCoordinate(ix,iy,z) && (map[z][ix][iy] == null || map[z][ix][iy].getID().equals("AIR"))){
+				//if (isValidCoordinate(ix,iy,z) && (map[z][ix][iy] == null || map[z][ix][iy].getID().equals("AIR"))) {
+				if (isValidCoordinate(ix,iy,z) && (map[z][ix][iy] == null || map[z][ix][iy].getID().equals("AIR"))) {
 					int pz = z;
-					while (pz < getDepth()-1 && remembers(ix, iy, pz+1)){
-						if (map[pz+1][ix][iy] == null || map[pz+1][ix][iy].getID().equals("AIR")){
+					while (pz < getDepth()-1 && remembers(ix, iy, pz+1)) {
+						if (map[pz+1][ix][iy] == null || map[pz+1][ix][iy].getID().equals("AIR")) {
 							pz++;
 						} else {
 							ret[px][py] = map[pz+1][ix][iy];
@@ -507,17 +503,20 @@ public class Level implements FOVMap, Serializable {
 		return ret;
 	}*/
 
+
 	public Player getPlayer() {
 		return player;
 	}
 
-	public void setDispatcher(Dispatcher value) {
-		Debug.enterMethod(this, "setDispatcher", value);
-		dispatcher = value;
+
+	public void setDispatcher(Dispatcher d) {
+		Debug.enterMethod(this, "setDispatcher", d);
+		dispatcher = d;
 		Debug.exitMethod();
 	}
 
-	public void stopTime(int turns){
+
+	public void stopTime(int turns) {
 		dispatcher.setFixed(player, turns);
 	}
 
@@ -637,7 +636,7 @@ public class Level implements FOVMap, Serializable {
 	}
 
 
-	public void updateLevelStatus(){
+	public void updateLevelStatus() {
 		/*if (boss != null && boss.isDead())
 			player.informPlayerEvent(Player.EVT_FORWARD);*/
 		if (hashCounters.size() > 0){
@@ -686,13 +685,6 @@ public class Level implements FOVMap, Serializable {
 		}
 	}
 
-	private Monster boss;
-	//private Position startPosition, endPosition;
-
-	/*public void setPositions(Position start, Position end) {
-		startPosition = start;
-		endPosition = end;
-	}*/
 
 	public void setInhabitants(MonsterSpawnInfo[] value) {
 		inhabitants = value;
@@ -705,10 +697,9 @@ public class Level implements FOVMap, Serializable {
 
 	}
 
-	public Monster getBoss(){
-		return boss;
-	}
-
+	/*
+	 * public Monster getBoss() { return boss; }
+	 */
 	public VMonster getMonsters() {
 		return monsters;
 	}
@@ -928,16 +919,20 @@ public class Level implements FOVMap, Serializable {
 			//return map[player.getPosition().z][x][y] == null || map[player.getPosition().z][x][y].isSolid();
 	}
 	
+	
 	private Position tempSeen = new Position(0,0);
 	public void setSeen(int x, int y) {
-		if (!isValidCoordinate(x,y))
+		if (!isValidCoordinate(x,y)) {
 			return;
-		tempSeen.x = x; tempSeen.y = y; tempSeen.z = player.getPosition().z;
-		if (Position.distance(tempSeen, player.getPosition())<= player.getSightRange() || lit[tempSeen.z][tempSeen.x][tempSeen.y]){
-			visible[player.getPosition().z][x][y]= true;
-			remembered[player.getPosition().z][x][y]= true;
+		}
+		tempSeen.x = x;
+		tempSeen.y = y;
+		tempSeen.z = player.getPosition().z;
+		if (Position.distance(tempSeen, player.getPosition()) <= player.getSightRange() || lit[tempSeen.z][tempSeen.x][tempSeen.y]) {
+			visible[player.getPosition().z][x][y] = true;
+			remembered[player.getPosition().z][x][y] = true;
 			Monster m = getMonsterAt(x,y, player.getPosition().z);
-			if (m != null){
+			if (m != null) {
 				m.setWasSeen(true);
 			}
 		}
@@ -967,9 +962,10 @@ public class Level implements FOVMap, Serializable {
 		return remembered[z][x][y];
 	}
 	
-	public boolean isVisible(int x, int y){
-		if (!isValidCoordinate(x,y))
+	public boolean isVisible(int x, int y) {
+		if (!isValidCoordinate(x,y)) {
 			return false;
+		}
 		return visible[player.getPosition().z][x][y] /*|| lit[player.getPosition().z][x][y]*/;
 	}
 	

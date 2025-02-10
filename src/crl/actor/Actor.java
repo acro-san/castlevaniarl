@@ -107,16 +107,6 @@ public class Actor implements Cloneable, java.io.Serializable, PriorityEnqueable
 		return position;
 	}
 
-	/*
-	 * public void setLevel(Level what) { level = what; }
-	 * 
-	 * public Level getLevel() { return level; }
-	 * 
-	 * public ActionSelector getSelector() { return selector; }
-	 * 
-	 * public void setSelector(ActionSelector value) { selector = value; }
-	 */
-	
 	//Player has a complex override of getAppearance for form-changes etc!
 	public Appearance getAppearance() { return appearance; }
 	public void setAppearance(Appearance value) { appearance = value; }

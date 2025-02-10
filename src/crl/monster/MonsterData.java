@@ -24,8 +24,8 @@ public class MonsterData {
 	
 	public static void init(MonsterDefinition[] defs) {
 		for (int i = 0; i < defs.length; i++) {
-			defs[i].setAppearance(Main.appearances.get(defs[i].getID()));	// ???
-			definitions.put(defs[i].getID(), defs[i]);
+			defs[i].appearance = Main.appearances.get(defs[i].ID);	// ???
+			definitions.put(defs[i].ID, defs[i]);
 			vDefinitions.add(defs[i]);
 			
 		}
@@ -53,7 +53,7 @@ public class MonsterData {
 		Enumeration<String> x = definitions.keys();
 		while (x.hasMoreElements()) {
 			MonsterDefinition d = definitions.get(x.nextElement());
-			Debug.say("Monstero "+ d.getDescription()+" app "+d.getAppearance());
+			Debug.say("Monstero "+ d.description+" app "+d.appearance);
 		}
 	}
 }

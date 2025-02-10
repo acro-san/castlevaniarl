@@ -9,31 +9,32 @@ import crl.level.EmergerAI;
 import crl.npc.NPC;
 import crl.feature.*;
 import crl.ui.*;
-import crl.ui.effects.EffectFactory;
 import crl.ai.monster.boss.DraculaAI;
 import crl.player.Consts;
 import crl.player.Player;
 import crl.actor.*;
 
 public class Monster extends Actor implements Cloneable {
-	//Attributes
+
 	private transient MonsterDefinition definition;
 	private String defID;
 
-	protected int hits;
-	private int maxHits;
-	private String featurePrize;
-	private boolean visible = true;
+	protected int hits;	// HEALTHPOINTS / HP. 'hits' is ambiguous. like a question. 'hits'?
+	private int maxHits;	// MAX HP!
+	
+	
+	public String featurePrize;
+	public boolean isVisible = true;
 
 	private boolean wasSeen = false;
 	
-	private Monster enemy;
+	public Monster enemy;
 	
-	public String getWavOnHit(){
-		return getDefinition().getWavOnHit();
+	public String getWavOnHit() {
+		return getDefinition().wavOnHit;
 	}
 	
-	public void setWasSeen(boolean value){
+	public void setWasSeen(boolean value) {
 		wasSeen = true;
 	}
 	
@@ -71,7 +72,7 @@ public class Monster extends Actor implements Cloneable {
 	}
 
 	public Appearance getAppearance() {
-		return getDefinition().getAppearance();
+		return getDefinition().appearance;
 	}
 
 
@@ -81,10 +82,8 @@ public class Monster extends Actor implements Cloneable {
 		} catch (Exception x) {
 			return null;
 		}
-
 	}
 
-	
 
 	/*public boolean playerInRow(){
 		Position pp = level.getPlayer().getPosition();
@@ -99,27 +98,30 @@ public class Monster extends Actor implements Cloneable {
 		return false;
 	}*/
 
-	public int starePlayer(){
-		/** returns the direction in which the player is seen */
-		if (level.getPlayer() == null || level.getPlayer().isInvisible() || level.getPlayer().getPosition().z != getPosition().z)
+	/** returns the direction in which the player is seen */
+	public int starePlayer() {
+		Player pl = level.getPlayer();
+		if (pl == null || pl.isInvisible() || pl.getPosition().z != getPosition().z) {
 			return -1;
-		if (Position.flatDistance(level.getPlayer().getPosition(), getPosition()) <= getDefinition().getSightRange()){
-			Position pp = level.getPlayer().getPosition();
-			if (pp.x == getPosition().x){
-				if (pp.y > getPosition().y){
+		}
+		Position pp = level.getPlayer().getPosition();
+		//mp = my/monster pos...
+		if (Position.flatDistance(pp, getPosition()) <= getDefinition().sightRange) {
+			if (pp.x == getPosition().x) {
+				if (pp.y > getPosition().y) {
 					return Action.DOWN;
 				} else {
 					return Action.UP;
 				}
 			} else
-			if (pp.y == getPosition().y){
-				if (pp.x > getPosition().x){
+			if (pp.y == getPosition().y) {
+				if (pp.x > getPosition().x) {
 					return Action.RIGHT;
 				} else {
 					return Action.LEFT;
 				}
 			} else
-			if (pp.x < getPosition().x){
+			if (pp.x < getPosition().x) {
 				if (pp.y > getPosition().y)
 					return Action.DOWNLEFT;
 				else
@@ -161,11 +163,11 @@ public class Monster extends Actor implements Cloneable {
 		hits -= dam;
 		Main.ui.drawEffect(Main.efx.createLocatedEffect(getPosition(), "SFX_QUICK_WHITE_HIT"));
 		Player pl = level.getPlayer();
-		if (getDefinition().getBloodContent() > 0) {
+		if (getDefinition().isBleedable()) {
 			if (pl.hasCounter(Consts.C_BLOOD_THIRST) &&
 					Position.flatDistance(getPosition(), pl.getPosition()) < 3) {
-				int recover = (int)Math.ceil(getDefinition().getBloodContent()/30);
-				level.addMessage("You drink some of the "+getDefinition().getDescription()+" blood! (+"+recover+")");
+				int recover = (int)Math.ceil(getDefinition().bloodContent / 30);	// why 30?
+				level.addMessage("You drink some of the "+getDefinition().description+" blood! (+"+recover+")");
 				pl.recoverHits(recover);
 			}
 			if (Util.chance(40)) {
@@ -177,7 +179,7 @@ public class Monster extends Actor implements Cloneable {
 		}
 
 		if (isDead()) {
-			if (this == level.getBoss()) {
+			if (this == level.boss) {
 				//if (!level.isWalkable(getPosition())){
 					//level.addMessage("You get a castle key!");
 					pl.addKeys(1);
@@ -214,8 +216,8 @@ public class Monster extends Actor implements Cloneable {
 				}
 			}
 			die();
-			pl.addScore(getDefinition().getScore());
-			pl.addXP(getDefinition().getScore());
+			pl.score += getDefinition().score;
+			pl.addXP(getDefinition().score);
 			//pl.addSoulPower(Util.rand(0,3));
 			pl.getGameSessionInfo().addDeath(getDefinition());
 		}
@@ -223,7 +225,7 @@ public class Monster extends Actor implements Cloneable {
 
 
 	public int getScore() {
-		return getDefinition().getScore();
+		return getDefinition().score;
 	}
 	
 	public boolean isDead() {
@@ -232,7 +234,7 @@ public class Monster extends Actor implements Cloneable {
 
 	public String getDescription() {
 		// This may be flavored with specific monster daya
-		return getDefinition().getDescription() + (hasCounter(Consts.C_MONSTER_CHARM) ? " C ":"");
+		return getDefinition().description + (hasCounter(Consts.C_MONSTER_CHARM) ? " C ":"");
 	}
 
 	private MonsterDefinition getDefinition() {
@@ -245,39 +247,35 @@ public class Monster extends Actor implements Cloneable {
 		return definition;
 	}
 	
-	public boolean canSwim(){
-		return getDefinition().isCanSwim();
+	//swimming/ethereal/undead NPCs are the whole reason this has 'getDefinition()' as a method inside!???
+	public boolean canSwim() {
+		return getDefinition().canSwim;
 	}
 
-	public boolean isUndead(){
-		return getDefinition().isUndead();
+	public boolean isUndead() {
+		return getDefinition().isUndead;
 	}
 
-	public boolean isEthereal(){
-		return getDefinition().isEthereal();
+	public boolean isEthereal() {
+		return getDefinition().isEthereal;
 	}
 
-	public int getHits(){
+	// FIXME Rename as HEALTHPOINTS.
+	public int getHits() {
 		return hits;
 	}
 
- 	public Monster (MonsterDefinition md){
- 		definition = md;
- 		defID = md.getID();
- 		//selector = md.getDefaultSelector();
- 		selector = md.getDefaultSelector().derive();
- 		
- 		hits = md.getMaxHits();
- 		maxHits = md.getMaxHits();
+	public Monster(MonsterDefinition md) {
+		definition = md;
+		defID = md.ID;
+		//selector = md.getDefaultSelector();
+		selector = md.defaultSelector.derive();
+		
+		hits = md.maxHits;
+		maxHits = md.maxHits;
 	}
- 	
- 	
 
-	/*public ActionSelector getSelector(){
-		return selector;
-		//return definition.getDefaultSelector();
-	}*/
-
+/*
 	public String getFeaturePrize() {
 		return featurePrize;
 	}
@@ -285,43 +283,44 @@ public class Monster extends Actor implements Cloneable {
 	public void setFeaturePrize(String value) {
 		featurePrize = value;
 	}
-
-	public int getAttack(){
-		return getDefinition().getAttack();
+*/
+	
+	public int getAttack() {
+		return getDefinition().attack;
 	}
 
 	public int getLeaping(){
-		return getDefinition().getLeaping();
+		return getDefinition().leaping;
 	}
 	
-	public boolean waitsPlayer(){
+	
+	public boolean waitsPlayer() {
 		return false;
 	}
 
-	/*public ListItem getSightListItem(){
-		return definition.getSightListItem();
-	}*/
 
 	private void setPrize() {
 		Player p = level.getPlayer();
 		String [] prizeList = null;
 		
 		
-		if (p.deservesMUpgrade()){
-			setFeaturePrize("MUPGRADE");
+		if (p.deservesMUpgrade()) {
+			featurePrize = "MUPGRADE";
 			return;
 		}
 		
-		if (p.deservesUpgrade() && Util.chance(50))
-			setFeaturePrize("UPGRADE");
+		if (p.deservesUpgrade() && Util.chance(50)) {
+			featurePrize = "UPGRADE";
+		}
 		
-		if (Util.chance(60))
+		if (Util.chance(60)) {
 			return;
+		}
 		
-        if (p.getPlayerClass() == Player.CLASS_VAMPIREKILLER) {
-        	if (Util.chance(20)){
-        		//Will get a mystic weapon
-        		if (p.getFlag("MYSTIC_CRYSTAL") && Util.chance(20))
+		if (p.getPlayerClass() == Player.CLASS_VAMPIREKILLER) {
+			if (Util.chance(20)) {
+				// Will get a mystic weapon
+				if (p.getFlag("MYSTIC_CRYSTAL") && Util.chance(20))
         			prizeList = new String[]{"CRYSTALWP"};
         		else if (p.getFlag("MYSTIC_FIST") && Util.chance(20))
         			prizeList = new String[]{"FISTWP"};
@@ -372,54 +371,61 @@ public class Monster extends Actor implements Cloneable {
 				prizeList = new String[]{"SMALLHEART", "COIN"};
     	}
 
-		if (prizeList != null)
-			setFeaturePrize(Util.pick(prizeList));
+		if (prizeList != null) {
+			featurePrize = Util.pick(prizeList);
+		}
 	}
 	
 	public void die() {
 		super.die();
 		level.removeMonster(this);
 		if (getAutorespawncount() > 0) {
-			Emerger em = new Emerger(MonsterData.buildMonster(getDefinition().getID()), getPosition(), getAutorespawncount());
+			Emerger em = new Emerger(MonsterData.buildMonster(getDefinition().ID), getPosition(), getAutorespawncount());
 			level.addActor(em);
 			em.selector = new EmergerAI();
 			em.level = level;
 		}
 	}
 	
-	public void setVisible(boolean value){
+	
+	/*
+	public void setVisible(boolean value) {
 		visible = value;
 	}
 	
-	public boolean isVisible(){
+	public boolean isVisible() {
 		return visible;
 	}
+	*/
 	
 	public int getAttackCost() {
-		return getDefinition().getAttackCost();
+		return getDefinition().attackCost;
 	}
 
 	public int getWalkCost() {
-		return getDefinition().getWalkCost();
+		return getDefinition().walkCost;
 	}
 	
-	public String getID(){
-		return getDefinition().getID();
+	public String getID() {
+		return getDefinition().ID;
 	}
 	
-	public int getEvadeChance(){
-		return getDefinition().getEvadeChance();
+	public int getEvadeChance() {
+		return getDefinition().evadeChance;
 	}
 	
 	public String getEvadeMessage(){
-		return getDefinition().getEvadeMessage();
+		return getDefinition().evadeMessage;
 	}
 	
-	public int getAutorespawncount(){
-		return getDefinition().getAutorespawnCount();
+	public int getAutorespawncount() {
+		return getDefinition().autorespawnCount;
 	}
 	
-	public boolean tryMagicHit(Player attacker, int magicalDamage, int magicalHit, boolean showMsg, String attackDesc, boolean isWeaponAttack, Position attackOrigin){
+	public boolean tryMagicHit(Player attacker, int magicalDamage,
+			int magicalHit, boolean showMsg, String attackDesc, 
+			boolean isWeaponAttack, Position attackOrigin)
+	{
 		int hitChance = 100 - getEvadeChance();
 		hitChance = (int)Math.round((hitChance + magicalHit)/2.0d);
 		int penalty = 0;
@@ -457,14 +463,14 @@ public class Monster extends Actor implements Cloneable {
 			double damageMod = 1;
 			StringBuffer hitDesc = new StringBuffer();
 			int damage = (int)(baseDamage * damageMod);
-			double percent = (double)damage/(double)getDefinition().getMaxHits();
-			if (percent > 1.0d)
+			double percent = (double)damage / getDefinition().maxHits;
+			if (percent > 1.0)
 				hitDesc.append("The "+attackDesc+ " whacks the "+getDescription()+ " apart!!");
-			else if (percent > 0.7d)
+			else if (percent > 0.7)
 				hitDesc.append("The "+attackDesc+ " smashes the "+getDescription()+ "!");
-			else if (percent > 0.5d)
+			else if (percent > 0.5)
 				hitDesc.append("The "+attackDesc+ " grievously hits the "+getDescription()+ "!");
-			else if (percent> 0.3d)
+			else if (percent> 0.3)
 				hitDesc.append("The "+attackDesc+ " hits the "+getDescription()+ ".");
 			else
 				hitDesc.append("The "+attackDesc+ " barely scratches the "+getDescription()+ "...");
@@ -477,11 +483,11 @@ public class Monster extends Actor implements Cloneable {
 		}
 	}
 	
-	public String getLongDescription(){
-		return getDefinition().getLongDescription();
-		
+	public String getLongDescription() {
+		return getDefinition().longDescription;
 	}
 
+	/*
 	public Monster getEnemy() {
 		return enemy;
 	}
@@ -489,6 +495,7 @@ public class Monster extends Actor implements Cloneable {
 	public void setEnemy(Monster enemy) {
 		this.enemy = enemy;
 	}
+	*/
 	
 	/** Returns the direction in which the nearest monster is seen */
 	public int stareMonster(){
@@ -515,32 +522,31 @@ public class Monster extends Actor implements Cloneable {
 	}
 	
 	
-	public int stareMonster(Monster who){
-		if (who.getPosition().z != getPosition().z)
+	public int stareMonster(Monster who) {
+		if (who.getPosition().z != getPosition().z) {
 			return -1;
-		if (Position.flatDistance(who.getPosition(), getPosition()) <= getDefinition().getSightRange()){
+		}
+		if (Position.flatDistance(who.getPosition(), getPosition()) <= getDefinition().sightRange) {
 			Position pp = who.getPosition();
-			if (pp.x == getPosition().x){
-				if (pp.y > getPosition().y){
+			if (pp.x == getPosition().x) {
+				if (pp.y > getPosition().y) {
 					return Action.DOWN;
 				} else {
-                     return Action.UP;
+					return Action.UP;
 				}
-			} else
-			if (pp.y == getPosition().y){
+			} else if (pp.y == getPosition().y) {
 				if (pp.x > getPosition().x){
 					return Action.RIGHT;
 				} else {
 					return Action.LEFT;
 				}
-			} else
-			if (pp.x < getPosition().x){
+			} else if (pp.x < getPosition().x) {
 				if (pp.y > getPosition().y)
 					return Action.DOWNLEFT;
 				else
 					return Action.UPLEFT;
 			} else {
-                if (pp.y > getPosition().y)
+				if (pp.y > getPosition().y)
 					return Action.DOWNRIGHT;
 				else
 					return Action.UPRIGHT;
@@ -549,73 +555,77 @@ public class Monster extends Actor implements Cloneable {
 		return -1;
 	}
 	
-	public boolean seesPlayer(){
-		if (wasSeen()){
-			Line sight = new Line(getPosition(), level.getPlayer().getPosition());
-			Position point = sight.next();
-			while(!point.equals(level.getPlayer().getPosition())){
-				if (level.getMapCell(point)!= null && level.getMapCell(point).isOpaque()){
-					return false;
-				}
-				point = sight.next();
-				if (!level.isValidCoordinate(point))
-					return false;
-			}
-			return true;
-		} else {
+	
+	public boolean seesPlayer() {
+		if (!wasSeen()) {	// so if player can't see enemy, enemy can't see player?
+			// this seems very limiting. nothing can get the jump on you if you FoW-isolate them?
 			return false;
 		}
+		Line sight = new Line(getPosition(), level.getPlayer().getPosition());
+		Position point = sight.next();
+		while (!point.equals(level.getPlayer().getPosition())) {
+			if (level.getMapCell(point)!= null && level.getMapCell(point).isOpaque()){
+				return false;
+			}
+			point = sight.next();
+			if (!level.isValidCoordinate(point))
+				return false;
+		}
+		return true;
 	}
 	
-	public boolean tryHit(Monster attacker){
-		setEnemy(attacker);
+	
+	public boolean tryHit(Monster attacker) {
+		enemy = attacker;
 		int evasion = getEvadeChance();
 		//level.addMessage("Evasion "+evasion);
-		if (hasCounter("SLEEP"))
+		if (hasCounter("SLEEP")) {
 			evasion = 0;
+		}
 		//level.addMessage("Evasion "+evasion);
 		//see if evades it
-		int weaponAttack = attacker.getDefinition().getAttack();
-		if (Util.chance(evasion)){
+		int weaponAttack = attacker.getDefinition().attack;
+		if (Util.chance(evasion)) {
 			level.addMessage("The "+getDescription()+ " dodges the "+attacker.getDescription()+" attack!");
 			return false;
-		} else {
-			if (hasCounter(Consts.C_MONSTER_SLEEP)){
-				level.addMessage("The "+attacker.getDescription()+" wakes up the "+getDescription()+ "!");
-				setCounter(Consts.C_MONSTER_SLEEP, 0);
-			}
-			int baseDamage = weaponAttack;
-			double damageMod = 1;
-			 
-			StringBuffer hitDesc = new StringBuffer();
-			int damage = (int)(baseDamage * damageMod);
-			double percent = (double)damage/(double)getDefinition().getMaxHits();
-			if (percent > 1.0d)
-				hitDesc.append("The "+attacker.getDescription()+" whacks the "+getDescription()+ " apart!!");
-			else if (percent > 0.7d)
-				hitDesc.append("The "+attacker.getDescription()+" smashes the "+getDescription()+ "!");
-			else if (percent > 0.5d)
-				hitDesc.append("The "+attacker.getDescription()+" grievously hits the "+getDescription()+ "!");
-			else if (percent> 0.3d)
-				hitDesc.append("The "+attacker.getDescription()+" hits the "+getDescription()+ ".");
-			else
-				hitDesc.append("The "+attacker.getDescription()+" barely scratches the "+getDescription()+ "...");
-			
-			damage(hitDesc, (int)(baseDamage*damageMod));
-			level.addMessage(hitDesc.toString());
-			return true;
 		}
+		
+		if (hasCounter(Consts.C_MONSTER_SLEEP)) {
+			level.addMessage("The "+attacker.getDescription()+" wakes up the "+getDescription()+ "!");
+			setCounter(Consts.C_MONSTER_SLEEP, 0);
+		}
+		int baseDamage = weaponAttack;
+		double damageMod = 1;
+		StringBuffer hitDesc = new StringBuffer();
+		int damage = (int)(baseDamage * damageMod);
+		double percent = (double)damage / getDefinition().maxHits;
+		if (percent > 1.0d)
+			hitDesc.append("The "+attacker.getDescription()+" whacks the "+getDescription()+ " apart!!");
+		else if (percent > 0.7d)
+			hitDesc.append("The "+attacker.getDescription()+" smashes the "+getDescription()+ "!");
+		else if (percent > 0.5d)
+			hitDesc.append("The "+attacker.getDescription()+" grievously hits the "+getDescription()+ "!");
+		else if (percent> 0.3d)
+			hitDesc.append("The "+attacker.getDescription()+" hits the "+getDescription()+ ".");
+		else
+			hitDesc.append("The "+attacker.getDescription()+" barely scratches the "+getDescription()+ "...");
+		
+		damage(hitDesc, (int)(baseDamage*damageMod));
+		level.addMessage(hitDesc.toString());
+		return true;
+	
 	}
 	
-	public int getMaxHits(){
-		return getDefinition().getMaxHits();
+	// TODO Rename getMaxHP()
+	public int getMaxHits() {
+		return getDefinition().maxHits;
 	}
 	
-	public boolean isFlying(){
-		return getDefinition().isCanFly();
+	public boolean isFlying() {
+		return getDefinition().canFly;
 	}
 	
-	public void recoverHits(){
+	public void recoverHits() {
 		hits = maxHits;
 	}
 	

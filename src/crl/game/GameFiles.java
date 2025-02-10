@@ -252,7 +252,7 @@ public class GameFiles {
 	
 	private static void _saveHiScore(Player player, File scoreFile) {
 		Debug.enterStaticMethod("GameFiles", "saveHiscore");
-		int score = player.getScore();
+		int score = player.score;
 		String name = player.getName();
 		String playerClass = "NONE";
 		switch (player.getPlayerClass()){
@@ -321,15 +321,20 @@ public class GameFiles {
 			fileWriter.write(" CastlevaniaRL"+Game.getVersion()+ " Post Mortem");fileWriter.newLine();
 			fileWriter.write(" -----------------------------------/");fileWriter.newLine();
 			fileWriter.newLine();fileWriter.newLine();
-			fileWriter.write(player.getPlot()+", "+player.getDescription()+" journeys to the cursed castle.");fileWriter.newLine();fileWriter.newLine();
-			fileWriter.write(player.getName()+ ", the "+player.getClassString()+", "+gsi.getDeathString()+" on the "+gsi.deathLevelDescription+" (Level "+gsi.deathLevel+")...");fileWriter.newLine();
-			fileWriter.write(heshe+" survived for "+gsi.turns+" turns and scored "+player.getScore()+" points, collecting a total of "+gsi.goldCount+" gold.");fileWriter.newLine();
+			fileWriter.write(player.getPlot()+", "+player.getDescription()+" journeys to the cursed castle.");
+			fileWriter.newLine();
+			fileWriter.newLine();
+			fileWriter.write(player.getName()+ ", the "+player.getClassString()+", "+gsi.getDeathString()+" on the "+gsi.deathLevelDescription+" (Level "+gsi.deathLevel+")...");
+			fileWriter.newLine();
+			fileWriter.write(heshe+" survived for "+gsi.turns+" turns and scored "+player.score+" points, collecting a total of "+gsi.goldCount+" gold.");
+			fileWriter.newLine();
 			fileWriter.newLine();
 			fileWriter.write(heshe +" was able to use the following skills:");
 			fileWriter.newLine();
 			Vector<Skill> skills = player.getAvailableSkills();
-			for (int i = 0; i < skills.size(); i++){
-				fileWriter.write(((Skill)skills.elementAt(i)).getMenuDescription());fileWriter.newLine();
+			for (int i = 0; i < skills.size(); i++) {
+				fileWriter.write((skills.elementAt(i)).getMenuDescription());
+				fileWriter.newLine();
 			}
 			
 			fileWriter.newLine();
@@ -491,11 +496,16 @@ public class GameFiles {
 			fileWriter.write(" -----------------------------------/");fileWriter.newLine();
 			fileWriter.newLine();
 			fileWriter.newLine();
-			fileWriter.write(player.getPlot()+", "+player.getDescription()+" journeys to the cursed castle.");fileWriter.newLine();fileWriter.newLine();
-			fileWriter.write(player.getName()+ ", the "+player.getClassString()+", survives on the "+player.level.getDescription()+" (Level "+player.level.levelNumber+")...");fileWriter.newLine();
-			fileWriter.write(heshe+" has survived for "+gsi.turns+" turns and has scored "+player.getScore()+" points, collecting a total of "+gsi.goldCount+" gold.");fileWriter.newLine();
+			fileWriter.write(player.getPlot()+", "+player.getDescription()+" journeys to the cursed castle.");
 			fileWriter.newLine();
-			fileWriter.write(heshe +" is able to use the following skills:");fileWriter.newLine();
+			fileWriter.newLine();
+			fileWriter.write(player.getName()+ ", the "+player.getClassString()+", survives on the "+player.level.getDescription()+" (Level "+player.level.levelNumber+")...");
+			fileWriter.newLine();
+			fileWriter.write(heshe+" has survived for "+gsi.turns+" turns and has scored "+player.score+" points, collecting a total of "+gsi.goldCount+" gold.");
+			fileWriter.newLine();
+			fileWriter.newLine();
+			fileWriter.write(heshe +" is able to use the following skills:");
+			fileWriter.newLine();
 			Vector<Skill> skills = player.getAvailableSkills();
 			for (int i = 0; i < skills.size(); i++){
 				fileWriter.write(skills.elementAt(i).getMenuDescription());

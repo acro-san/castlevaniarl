@@ -30,8 +30,9 @@ public class Cheat {
 			player.heal();
 			break;
 		case CharKey.F6:
-			if (player.level.getBoss() != null)
-				player.level.getBoss().damage(new StringBuffer(), 15);
+			if (player.level.boss != null) {
+				player.level.boss.damage(new StringBuffer(), 15);
+			}
 			break;
 		case CharKey.F7:
 			player.level.setIsDay(!player.level.isDay());

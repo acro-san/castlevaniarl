@@ -75,17 +75,17 @@ public class BasicMonsterAI extends MonsterAI {
 		}
 		
 		// If monster has an enemy, check if he is still at the level
-		if (aMonster.getEnemy() != null) {
-			if (!aMonster.level.getMonsters().contains((Monster)aMonster.getEnemy())){
-				aMonster.setEnemy(null);
+		if (aMonster.enemy != null) {
+			if (!aMonster.level.getMonsters().contains(aMonster.enemy)) {
+				aMonster.enemy = null;
 			}
 		}
 		// If monster has an enemy, or is charmed
-		if (aMonster.getEnemy() != null || aMonster.hasCounter(Consts.C_MONSTER_CHARM)){
+		if (aMonster.enemy != null || aMonster.hasCounter(Consts.C_MONSTER_CHARM)) {
 			// Stare at your enemy or pick a enemy from nearby monsters
 			int directionToMonster = -1;
-			if (aMonster.getEnemy() != null){
-				directionToMonster = aMonster.stareMonster((Monster)aMonster.getEnemy());
+			if (aMonster.enemy != null) {
+				directionToMonster = aMonster.stareMonster(aMonster.enemy);
 			} else {
 				directionToMonster = aMonster.stareMonster();
 			}

@@ -276,12 +276,12 @@ public class GFXDisplay extends Display {
 		
 		// TODO use TxtTpl.t replacement here, perhaps? More keywords?
 		t1.setText("  ...And so it was that "+player.getDescription() + ", "+gsi.getDeathString()+" on the "+player.level.getDescription()+"...\n\n"+
-				heshe+ " scored "+ player.getScore() +" points and earned "+ player.getGold() +" gold \n\n"+
+				heshe+ " scored "+ player.score +" points and earned "+ player.getGold() +" gold \n\n"+
 				heshe + " survived for "+gsi.turns+" turns \n\n"+
 				heshe + " took "+gsi.getTotalDeathCount()+" monsters to the other world");
 		si.add(t1);
 /*
-        int i = 0;
+		int i = 0;
 		Enumeration monsters = gsi.getDeathCount().elements();
 		while (monsters.hasMoreElements()){
 			MonsterDeath mons = (MonsterDeath) monsters.nextElement();

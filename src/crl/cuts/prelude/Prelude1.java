@@ -1,15 +1,12 @@
 package crl.cuts.prelude;
 
-import sz.util.Position;
 import crl.Main;
 import crl.cuts.Unleasher;
-import crl.game.CRLException;
 import crl.game.Game;
-import crl.game.PlayerGenerator;
 import crl.level.Level;
-import crl.levelgen.LevelMaster;
 import crl.monster.Monster;
 import crl.ui.Display;
+import sz.util.Position;
 
 public class Prelude1 extends Unleasher {
 	public void unleash(Level level, Game game){
@@ -19,7 +16,7 @@ public class Prelude1 extends Unleasher {
 		Display.thus.showScreen("One by one, his companions fell to the atrocities of the castle, their sacrifice being the only way to aid their master unto the only chance at sight to save mankind, finally, wounded and tired, he was for the third time in the same place he had been fifteen years ago; the vampire killer whip, which should have been in the hands of his son, gave him the last strengths to face Dracula again, and so, the final face-off began.");
 		Monster dracula = level.getMonsterByID("PRELUDE_DRACULA");
 		dracula.setPosition(new Position(level.getExitFor("#DRACPOS")));
-		dracula.setVisible(false);
+		dracula.isVisible = false;
 		level.getMapCell(level.getExitFor("#DRACPOS")).setAppearance(Main.appearances.get("DRACULA_THRONE2"));
 		//level.removeExit("_START");
 		enabled = false;

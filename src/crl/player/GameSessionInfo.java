@@ -65,9 +65,9 @@ public class GameSessionInfo implements Serializable {
 	}
 
 	public void addDeath(MonsterDefinition who){
-		MonsterDeath md = deathCount.get(who.getID());
+		MonsterDeath md = deathCount.get(who.ID);
 		if (md == null) {
-			deathCount.put(who.getID(), new MonsterDeath(who.getDescription()));
+			deathCount.put(who.ID, new MonsterDeath(who.description));
 		} else {
 			md.increaseDeaths();
 		}

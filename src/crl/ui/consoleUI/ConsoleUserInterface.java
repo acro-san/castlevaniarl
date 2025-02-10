@@ -382,7 +382,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 					}
 					
 					Monster monster = level.getMonsterAt(runner);
-					if (monster != null && monster.isVisible()){
+					if (monster != null && monster.isVisible) {
 						BasicListItem li = null;
 						if (monster instanceof NPC){
 							li = (BasicListItem)sightListItems.get(((NPC)monster).getDescription());
@@ -538,7 +538,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		}
 		int rest = ((player.getHits()-1) % 20) + 1;
 		
-		si.print(0,0,"SCORE    "+player.getScore());
+		si.print(0,0,"SCORE    "+player.score);
 		si.print(0,1,"PLAYER   ");
 		
 		for (int i = 0; i < 20; i++) {
@@ -550,8 +550,9 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		}
 		
 		si.print(0,2,"ENEMY    ");
-		if (player.level.getBoss() != null) {	// TODO && bossSeen!
-			int sixthiedBossHits =  (int)Math.ceil((player.level.getBoss().getHits() * 60.0)/(double)player.level.getBoss().getMaxHits());
+		if (player.level.boss != null) {	// TODO && bossSeen!
+			// duplicate logic! see GFXUserInterface.drawBossHealthBar()!
+			int sixthiedBossHits = (int)Math.ceil((player.level.boss.getHits() * 60.0)/(double)player.level.boss.getMaxHits());
 			int foreColorB = 0;
 			int backColorB = 0;
 			switch (((sixthiedBossHits-1) / 20) + 1) {

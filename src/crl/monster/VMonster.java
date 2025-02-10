@@ -4,6 +4,7 @@ import java.util.*;
 
 import sz.util.*;
 
+@Deprecated
 public class VMonster implements java.io.Serializable{
 	private static final long serialVersionUID = -8389021604207397015L;
 	

@@ -7,7 +7,6 @@ import crl.ai.npc.VillagerAI;
 import crl.ui.*;
 import crl.monster.*;
 
-//public class NPC extends Actor{
 public class NPC extends Monster {
 	private transient NPCDef definition;	// only need set on init and reload. right?
 	private String defID;	// allows fetching definition from global def table
@@ -18,14 +17,14 @@ public class NPC extends Monster {
 	public final static MonsterDefinition
 		NPC_MONSTER_DEFINITION = new MonsterDefinition("NPC");
 	static {
-		NPC_MONSTER_DEFINITION.setDescription("Innocent Being");
-		NPC_MONSTER_DEFINITION.setAppearance(Main.appearances.get("VOID"));
-		NPC_MONSTER_DEFINITION.setDefaultSelector(Main.selectors.get("NULL_SELECTOR"));
-		NPC_MONSTER_DEFINITION.setScore(-100);
-		NPC_MONSTER_DEFINITION.setMaxHits(2);
-		NPC_MONSTER_DEFINITION.setAttack(0);
-		NPC_MONSTER_DEFINITION.setSightRange(5);
-		NPC_MONSTER_DEFINITION.setBloodContent(30);
+		NPC_MONSTER_DEFINITION.description = "Innocent Being";
+		NPC_MONSTER_DEFINITION.appearance = Main.appearances.get("VOID");
+		NPC_MONSTER_DEFINITION.defaultSelector = Main.selectors.get("NULL_SELECTOR");
+		NPC_MONSTER_DEFINITION.score = -100;
+		NPC_MONSTER_DEFINITION.maxHits = 2;
+		NPC_MONSTER_DEFINITION.attack = 0;
+		NPC_MONSTER_DEFINITION.sightRange = 5;
+		NPC_MONSTER_DEFINITION.bloodContent = 30;
 	}
 
 	public NPC(NPCDef def) {
@@ -71,22 +70,21 @@ public class NPC extends Monster {
 	@Override
 	public void message(String msg) {
 		try {
-			if (msg.equals("ATTACK_PLAYER"))
+			if (msg.equals("ATTACK_PLAYER")) {
 				((VillagerAI)getSelector()).setAttackPlayer(true);
-			else
-			if (msg.equals("EVT_MURDERER")){
-				if (getHits()>1)
+			} else if (msg.equals("EVT_MURDERER")) {
+				if (getHits() > 1)
 					((VillagerAI)getSelector()).setAttackPlayer(true);
 				else
 					((VillagerAI)getSelector()).setOnDanger(true);
 			}
-		} catch (ClassCastException cce){
+		} catch (ClassCastException cce) {
 
 		}
 	}
 
 	@Override
-	public void damage(StringBuffer buff, int dam){
+	public void damage(StringBuffer buff, int dam) {
 		try {
 			((VillagerAI)getSelector()).setOnDanger(true);
 			if (getHits() > 1)
@@ -129,7 +127,7 @@ public class NPC extends Monster {
 		return npcID;
 	}
 	
-	public void setTalkMessage(String message){
+	public void setTalkMessage(String message) {
 		talkMessage = message;
 	}
 }

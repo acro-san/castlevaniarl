@@ -17,7 +17,7 @@ public class Materialize extends Action {
 		Level aLevel = performer.level;
 		aLevel.addMessage("Dracula materializes!");
 		Monster mon = (Monster)performer;
-		mon.setVisible(true);
+		mon.isVisible = true;
 		Position var = new Position(Util.rand(-5,5),Util.rand(-5,5));
 		Position pum =Position.add(aLevel.getPlayer().getPosition(), var);
 		mon.setPosition(pum);

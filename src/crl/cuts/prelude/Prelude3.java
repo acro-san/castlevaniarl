@@ -29,7 +29,7 @@ public class Prelude3 extends Unleasher {
 		level.setFlag("CHRIS_DEAD", true);
 		((DraculaAI)level.getMonsterByID("PRELUDE_DRACULA").selector).reset();
 		dracula.setPosition(level.getExitFor("#DRACPOS"));
-		dracula.setVisible(true);
+		dracula.isVisible = true;
 		enabled = false;
 	}
 }

@@ -699,7 +699,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 					}
 					Monster monster = level.getMonsterAt(runner);
 					
-					if (monster != null && monster.isVisible()){
+					if (monster != null && monster.isVisible) {
 						GFXAppearance monsterApp = (GFXAppearance) monster.getAppearance();
 						int swimBonus = (monster.canSwim() && level.getMapCell(runner)!= null && level.getMapCell(runner).isShallowWater()) ? 16 : 0; //TODO: Overlap water on the monster, draw it lowly
 						drawImageVP(
@@ -790,11 +790,15 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 	
 	private boolean isCursorEnabled = false;
 	
-	private void drawPlayerStatus(){
-		Debug.enterMethod(this, "drawPlayerStatus");
-		Image foreColor;
-		Image backColor;
-		switch (((player.getHits()-1) / 20) + 1){
+	
+	private void drawPlayerHealthBar() {
+		// player weapon background in here too?
+		
+		si.drawImage(38, 35, TILE_HEALTH_BACK);
+		
+		BufferedImage foreColor;
+		BufferedImage backColor;
+		switch (((player.getHits()-1) / 20) + 1) {
 		case 1:
 			foreColor = HEALTH_RED;
 			backColor = HEALTH_WHITE;
@@ -808,9 +812,80 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 			backColor = HEALTH_DARK_RED;
 			break;
 		}
+		int rest = ((player.getHits()-1) % 20) + 1;
 		
-		Image timeTile = null;
-		switch (level.getDayTime()){
+		final int
+			barX = 41,
+			barY = 40;
+		
+		for (int i = 0; i < 20; i++) {
+			if (i+1 <= rest) {
+				si.drawImage(barX+(i*6), barY, foreColor);
+			} else {
+				si.drawImage(barX+(i*6), barY, backColor);
+			}
+		}
+
+	//	Graphics2D g = si.getGraphics2D();
+	//	Color b4 = g.getColor();
+	//	g.setColor(Color.CYAN);
+		
+		si.drawImage(166, 42-1, HEART_TILE);
+//		g.drawRect(166, 42, HEART_TILE.getWidth(), HEART_TILE.getHeight());//DEBUG!! REMOVE!!!
+		si.printAtPixel(182,51,""+player.getHearts(), Color.WHITE);
+		
+		si.drawImage(206, 42-2, GOLD_TILE);
+//		g.drawRect(206, 42-2, GOLD_TILE.getWidth(), GOLD_TILE.getHeight());//DEBUG!! REMOVE!!!
+		si.printAtPixel(219,51,""+player.getGold(), Color.WHITE);
+		
+		si.drawImage(249, 42-2, KEY_TILE);
+//		g.drawRect(249, 42-2, KEY_TILE.getWidth(), KEY_TILE.getHeight());//DEBUG!! REMOVE!!!
+		si.printAtPixel(269,51,""+player.getKeys(), Color.WHITE);
+	//	g.setColor(b4);
+		
+	}
+	
+	private void drawBossHealthBar() {
+		int bossHP = player.level.boss.getHits();
+		int bossMHP = player.level.boss.getMaxHits();
+		int sixthiedBossHits = (int)Math.ceil( (bossHP * 60.0) / bossMHP );
+		// boss hp as proportion of a 60-element bar.
+		Image foreColorB;
+		Image backColorB;
+		
+		switch (((sixthiedBossHits-1) / 20) + 1) {
+		case 1:
+			foreColorB = HEALTH_YELLOW;
+			backColorB = HEALTH_WHITE;
+			break;
+		case 2:
+			foreColorB = HEALTH_BROWN;
+			backColorB = HEALTH_YELLOW;
+			break;
+		default:
+			foreColorB = HEALTH_PURPLE;
+			backColorB = HEALTH_BROWN;
+			break;
+		}
+		
+		int restB = ((sixthiedBossHits-1) % 20) + 1;
+		int barWidth = 6 * 20;	// 20 steps, 6 pixels wide each.
+
+		// ( x of the 'timeOfDay' indicator, to the right of here)
+		int timeTileX = gfxConf.screenWidth - 77;
+		
+		int barX = timeTileX - 20 - barWidth,
+		//int barX = gfxConf.screenWidth - 135,
+			barY = 40;	// Same Y as player HP bar.
+		
+		for (int i = 0; i < 20; i++) {
+			si.drawImage(barX+(i*6), barY, (i+1<=restB) ? foreColorB : backColorB);
+		}
+	}
+	
+	private void drawTimeOfDayIndicator() {	// POSITION as params.
+		BufferedImage timeTile = null;
+		switch (level.getDayTime()) {
 		case Level.MORNING:
 			timeTile = TILE_MORNING_TIME;
 			break;
@@ -830,57 +905,75 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 			timeTile = TILE_DAWN_TIME;
 			break;
 		}
+		//1024... 759? That's 265px right from the right-edge.
+		int timeTileX = gfxConf.screenWidth - 77;
+		
+		// this seems obsolete feature code?
+//		si.drawImage(759, 35, TILE_TIME_BACK);	// WTF was this!?
+		
+		Graphics2D g = si.getGraphics2D();
+		Color b4 = g.getColor();
+		g.setColor(Color.MAGENTA);
+		
+		si.drawImage(timeTileX, 38, timeTile);
+		
+		// alignment hacks.
+//		g.drawRect(timeTileX, 38, timeTile.getWidth(), timeTile.getHeight());
+//		g.drawLine(10, 40, gfxConf.screenWidth-10, 40);
+		g.setColor(b4);
+		
+		if (player.getFlag(Consts.ENV_FOG)) {
+			si.printAtPixel(timeTileX, 30,"FOG",Color.GRAY);
+		}
+		if (player.getFlag(Consts.ENV_RAIN)) {
+			si.printAtPixel(timeTileX, 30,"RAIN",Color.BLUE);
+		}
+		if (player.getFlag(Consts.ENV_SUNNY)) {
+			si.printAtPixel(timeTileX, 30,"SUNNY",Color.YELLOW);
+		}
+		if (player.getFlag(Consts.ENV_THUNDERSTORM)) {
+			si.printAtPixel(timeTileX, 30,"STORM",Color.WHITE);
+		}
+		
+	}
+	
+	
+	private void drawHUD() {
+		Debug.enterMethod(this, "drawHUD");
 		
 		Image shotTile = TILE_NO_SHOT;
 		if (player.getShotLevel() == 1)
 			shotTile = TILE_SHOT_II;
 		if (player.getShotLevel() == 2)
 			shotTile = TILE_SHOT_III;
-		if (shotTile != null)
-			si.drawImage(18,80, shotTile);
-		int rest = ((player.getHits()-1) % 20) + 1;
-		
-		si.printAtPixel(14,30,player.getName()+", the Lv"+player.getPlayerLevel()+" "+player.getClassString()+" " + player.getScore() + " " + player.getStatusString(), Color.WHITE);
-		si.drawImage(14,35, TILE_WEAPON_BACK);
-		si.drawImage(38,35, TILE_HEALTH_BACK);
-		
-		for (int i = 0; i < 20; i++)
-			if (i+1 <= rest)
-				si.drawImage(41+ (i*6),40, foreColor);
-			else
-				si.drawImage(41+ (i*6),40, backColor);
-		
-		if (player.level.getBoss() != null) {
-			int sixthiedBossHits =  (int)Math.ceil((player.level.getBoss().getHits() * 60.0)/(double)player.level.getBoss().getMaxHits());
-			Image foreColorB;
-			Image backColorB;
-			//switch (((player.level.getBoss().getHits()-1) / 20) + 1){
-			switch (((sixthiedBossHits-1) / 20) + 1) {
-			case 1:
-				foreColorB = HEALTH_YELLOW;
-				backColorB = HEALTH_WHITE;
-				break;
-			case 2:
-				foreColorB = HEALTH_BROWN;
-				backColorB = HEALTH_YELLOW;
-				break;
-			default:
-				foreColorB = HEALTH_PURPLE;
-				backColorB = HEALTH_BROWN;
-				break;
-			}
-			
-			int restB = ((sixthiedBossHits-1) % 20) + 1;
-			
-			for (int i = 0; i < 20; i++) {
-				si.drawImage(gfxConf.screenWidth - 135 + (i*6),
-						gfxConf.screenHeight - 60,
-						(i+1 <= restB) ? foreColorB : backColorB);
-			}
+		//HAXXX
+		//shotTile = TILE_SHOT_III;	//haxx. i wanna see this.
+		if (shotTile != null) {
+			si.drawImage(18, 80, shotTile);
 		}
 		
-		//TODO: Add the background
-		if  (player.getPlayerClass() == Player.CLASS_VAMPIREKILLER) {
+		// Draw Player Name/Title / class / score / status-str.
+		final int CHARNAME_TXT_Y = 30;
+		String charStatus = String.format("%s, the Lv%d %s %d %s",
+			player.getName(), player.getPlayerLevel(), player.getClassString(),
+			player.score, player.getStatusString());
+		
+		si.printAtPixel(14, CHARNAME_TXT_Y, charStatus, Color.WHITE);
+		
+		si.drawImage(14, 35, TILE_WEAPON_BACK);
+		
+		drawPlayerHealthBar();
+		
+		if (player.level.boss != null) {
+			// && player.level.boss.wasSeen() -- no good as a check for this.
+			// Dracula etc can disappear, and when he does, 'wasSeen' goes false again!
+			// shouldn't it STAY 'seen' once FIRST seen? or: would need separate bool for "bossSeen"?
+			// also: 'wasSeen' check happens *far* too early for prologue, before he's visible on screen.
+			drawBossHealthBar();
+		}
+		
+		// TODO: Add the background
+		if (player.getPlayerClass() == Player.CLASS_VAMPIREKILLER) {
 			if (player.getMysticWeapon() != -1) {
 				si.drawImage(18,38, getImageForMystic(player.getMysticWeapon()));
 			}
@@ -890,35 +983,23 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 			}
 		}
 		
+		final int ww = gfxConf.screenWidth;
+		int w3 = ww / 3;	// was using just '276'.
+		// right inset of 276 is ASSUMING a screen size of... 1024x768? i.e. 1/3 OF THE SCREEN!
+		
+		final int MAPNAME_TXT_Y = CHARNAME_TXT_Y;	// SAME Y-coord. neater.
+		//was: 50;
+		
+		// Draw Map/Area Name
 		if (player.level.levelNumber != -1) {
-			si.printAtPixel(gfxConf.screenWidth - 276, 50, "STAGE  "+player.level.levelNumber+" "+player.level.getDescription(), Color.WHITE);
+			si.printAtPixel(ww-w3, MAPNAME_TXT_Y, "STAGE  "+player.level.levelNumber+" "+player.level.getDescription(), Color.WHITE);
 		} else {
-			si.printAtPixel(gfxConf.screenWidth - 276, 50, player.level.getDescription(), Color.WHITE);
+			si.printAtPixel(ww-w3, MAPNAME_TXT_Y, player.level.getDescription(), Color.WHITE);
 		}
 		
-		//si.drawImage(759, 35, TILE_TIME_BACK);
-		int timeTilePosition = gfxConf.screenWidth - 77;
-		si.drawImage(timeTilePosition, 38, timeTile);
-		if (player.getFlag(Consts.ENV_FOG)) {
-			si.printAtPixel(timeTilePosition,30,"FOG",Color.GRAY);
-		}
-		if (player.getFlag(Consts.ENV_RAIN)) {
-			si.printAtPixel(timeTilePosition,30,"RAIN",Color.BLUE);
-		}
-		if (player.getFlag(Consts.ENV_SUNNY)) {
-			si.printAtPixel(timeTilePosition,30,"SUNNY",Color.YELLOW);
-		}
-		if (player.getFlag(Consts.ENV_THUNDERSTORM)) {
-			si.printAtPixel(timeTilePosition,30,"STORM",Color.WHITE);
-		}
+		drawTimeOfDayIndicator();	// "and weather/field condition"
 		
-		si.drawImage(166, 42,HEART_TILE);
-		si.printAtPixel(182,51,""+player.getHearts(), Color.WHITE);
-		si.drawImage(206, 42,GOLD_TILE);
-		si.printAtPixel(219,51,""+player.getGold(), Color.WHITE);
-		si.drawImage(249,42,KEY_TILE);
-		si.printAtPixel(269,51,""+player.getKeys(), Color.WHITE);
-		if (player.getHostage() != null){
+		if (player.getHostage() != null) {
 			Hostage h = player.getHostage();
 			si.drawImage(18,64, ((GFXAppearance)h.getAppearance()).getImage());
 		}
@@ -975,10 +1056,9 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		
 		/*-- Load UI Images */
 		try {
-			// FIXME Load Graphhics. explicitly. overrideably.
+			// FIXME Load Graphics explicitly. overrideably.
 			// the graphics loaded should have NOTHING to do with CONFIG FILES...
 			// but named specific ones can be override sets for modding later if desired.
-			// ...
 			
 ///			loadGraphics();	// FUNCTION. that does the thing we want. please.
 			// will need now elaborated with animation frames.
@@ -1100,7 +1180,6 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		persistantMessageBox.setFont(FNT_PERSISTANTMESSAGEBOX);
 		persistantMessageBox.setForeground(Color.WHITE);
 		psi.add(persistantMessageBox);
-
 		
 		si.setVisible(true);
 		
@@ -1115,33 +1194,33 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 
 	/** 
 	 * Checks if the point, relative to the console coordinates, is inside the
-	 * ViewPort 
+	 * ViewPort
 	 */
-	public boolean insideViewPort(int x, int y){
-    	//return (x>=VP_START.x && x <= VP_END.x && y >= VP_START.y && y <= VP_END.y);
+	public boolean insideViewPort(int x, int y) {
+		//return (x>=VP_START.x && x <= VP_END.x && y >= VP_START.y && y <= VP_END.y);
 		return (x>=0 && x < FOVMask.length && y >= 0 && y < FOVMask[0].length) && FOVMask[x][y];
-    }
+	}
 
-	public boolean insideViewPort(Position what){
-    	return insideViewPort(what.x, what.y);
-    }
+	public boolean insideViewPort(Position what) {
+		return insideViewPort(what.x, what.y);
+	}
 
-	public boolean isDisplaying(Actor who){
-    	return insideViewPort(getAbsolutePosition(who.getPosition()));
-    }
+	public boolean isDisplaying(Actor who) {
+		return insideViewPort(getAbsolutePosition(who.getPosition()));
+	}
 
-	private Position getNearestMonsterPosition(){
+	private Position getNearestMonsterPosition() {
 		VMonster monsters = level.getMonsters();
 		Monster nearMonster = null;
 		int minDist = 150;
 		int maxDist = 15;
-		for (int i = 0; i < monsters.size(); i++){
+		for (int i = 0; i < monsters.size(); i++) {
 			Monster monster = (Monster) monsters.elementAt(i);
 			if (monster.getPosition().z != level.getPlayer().getPosition().z) {
 				continue;
 			}
 			int distance = Position.flatDistance(level.getPlayer().getPosition(), monster.getPosition());
-			if (distance < maxDist && distance< minDist && player.sees(monster)){
+			if (distance < maxDist && distance< minDist && player.sees(monster)) {
 				minDist = distance;
 				nearMonster = monster;
 			}
@@ -1152,7 +1231,8 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 			return null;
 	}
 	
-	private Position pickPosition(String prompt, int fireKeyCode) throws ActionCancelException{
+	
+	private Position pickPosition(String prompt, int fireKeyCode) throws ActionCancelException {
 		Debug.enterMethod(this, "pickPosition");
 		messageBox.setForeground(COLOR_LAST_MESSAGE);
 		messageBox.setText(prompt);
@@ -1167,7 +1247,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		Position browser = null;
 		Position offset = new Position (0,0);
 		if (lockedMonster != null) {
-			if (!player.sees(lockedMonster)  || lockedMonster.isDead()) {
+			if (!player.sees(lockedMonster) || lockedMonster.isDead()) {
 				lockedMonster = null;
 			} else {
 				defaultTarget = new Position(lockedMonster.getPosition());
@@ -1238,7 +1318,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 				si.refresh();
 				throw new ActionCancelException();
 			}
-			if (x.code == CharKey.SPACE || x.code == fireKeyCode){
+			if (x.code == CharKey.SPACE || x.code == fireKeyCode) {
 				si.restore();
 				if (level.getMonsterAt(browser) != null)
 					lockedMonster = level.getMonsterAt(browser);
@@ -1446,7 +1526,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		/*if (useMouse)
 			drawCursor();*/
 		drawLevel();
-		drawPlayerStatus();
+		drawHUD();
 		si.refresh();
 		leaveScreen();
 		if (dimMsg == 3){
@@ -1539,175 +1619,179 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 	public Action showInventory() throws ActionCancelException {
 		enterScreen();
 		Equipment.menuDetail = true;
-  		Vector inventory = player.getInventory();
+		Vector<Equipment> inventory = player.getInventory();
 		int xpos = 1, ypos = 0;
 		BorderedMenuBox menuBox = GetMenuBox();
-  		menuBox.setGap(35);
-  		menuBox.setItemsPerPage(10);
-  		menuBox.setWidth(75);
-  		menuBox.setPosition(3,8);
-  		menuBox.setTitle("Items");
-  		menuBox.setMenuItems(inventory);
-  		
-  		MenuBox itemUsageChoices = new MenuBox(si, this.gfxConf, null);
-  		itemUsageChoices.setItemsPerPage(6);
-  		itemUsageChoices.setWidth(20);
-  		itemUsageChoices.setPosition(52,15);
-  		itemUsageChoices.setMenuItems(vecItemUsageChoices);
-  		si.saveBuffer(1);
-  		//si.saveBuffer();
-  		
-  		JTextArea itemDescription = GFXDisplay.createTempArea(509,201,202,122);itemDescription.setVisible(true);
-  		si.add(itemDescription);
-  		//si.cls();
-  		
-  		int xx = 17; int yy = 22;
-  		int ww=750; int hh = 141;
-  		si.getGraphics2D().setColor(COLOR_WINDOW_BACKGROUND);
+		menuBox.setGap(35);
+		menuBox.setItemsPerPage(10);
+		menuBox.setWidth(75);
+		menuBox.setPosition(3,8);
+		menuBox.setTitle("Items");
+		menuBox.setMenuItems(inventory);
+		
+		MenuBox itemUsageChoices = new MenuBox(si, this.gfxConf, null);
+		itemUsageChoices.setItemsPerPage(6);
+		itemUsageChoices.setWidth(20);
+		itemUsageChoices.setPosition(52,15);
+		itemUsageChoices.setMenuItems(vecItemUsageChoices);
+		si.saveBuffer(1);
+		//si.saveBuffer();
+		
+		JTextArea itemDescription = GFXDisplay.createTempArea(509,201,202,122);
+		itemDescription.setVisible(true);
+		si.add(itemDescription);
+		//si.cls();
+		
+		int xx = 17,
+			yy = 22,
+			ww = 750,
+			hh = 141;
+		
+		si.getGraphics2D().setColor(COLOR_WINDOW_BACKGROUND);
 		si.getGraphics2D().fillRect(xx+6, yy+6, ww-14, hh-14);
 		si.getGraphics2D().setColor(COLOR_BORDER_OUT);
 		si.getGraphics2D().drawRect(xx+6,yy+6,ww-14,hh-14);
 		si.getGraphics2D().setColor(COLOR_BORDER_IN);
 		si.getGraphics2D().drawRect(xx+8,yy+8,ww-18,hh-18);
 		
-  		si.print(xpos+2,ypos+2,  "Inventory", GFXDisplay.COLOR_BOLD);
- 		si.print(xpos+2,ypos+3,  "1. Weapon:", Color.WHITE);
- 		si.print(xpos+2,ypos+4,  "2. Readied", Color.WHITE);
- 		si.print(xpos+2,ypos+5,  "3. Armor:", Color.WHITE);
- 		si.print(xpos+2,ypos+6,  "4. Shield:", Color.WHITE);
- 		
- 		si.print(xpos+10,ypos+3,  player.getEquipedWeaponDescription(), Color.WHITE);
- 		si.print(xpos+10,ypos+4,  player.getSecondaryWeaponDescription(), Color.WHITE);
- 		si.print(xpos+10,ypos+5,  player.getArmorDescription(), Color.WHITE);
- 		si.print(xpos+10,ypos+6,  player.getAccDescription(), Color.WHITE);
- 		//menuBox.draw();
- 		//si.print(xpos,24,  "[Space] to continue, Up and Down to browse", Color.WHITE);
- 		
- 		si.refresh();
- 		si.saveBuffer();
+		si.print(xpos+2,ypos+2,  "Inventory", GFXDisplay.COLOR_BOLD);
+		si.print(xpos+2,ypos+3,  "1. Weapon:", Color.WHITE);
+		si.print(xpos+2,ypos+4,  "2. Readied", Color.WHITE);
+		si.print(xpos+2,ypos+5,  "3. Armor:", Color.WHITE);
+		si.print(xpos+2,ypos+6,  "4. Shield:", Color.WHITE);
+		
+		si.print(xpos+10,ypos+3,  player.getEquipedWeaponDescription(), Color.WHITE);
+		si.print(xpos+10,ypos+4,  player.getSecondaryWeaponDescription(), Color.WHITE);
+		si.print(xpos+10,ypos+5,  player.getArmorDescription(), Color.WHITE);
+		si.print(xpos+10,ypos+6,  player.getAccDescription(), Color.WHITE);
+		//menuBox.draw();
+		//si.print(xpos,24,  "[Space] to continue, Up and Down to browse", Color.WHITE);
+		
+		si.refresh();
+		si.saveBuffer();
 		//---
 		Item selected = null;
- 		
- 		Action selectedAction = null;
- 		do {
-	 		try {
-	 			Equipment eqs = (Equipment) menuBox.getSelectionAKS(additionalKeys);
-	 			if (eqs == null)
-	 				break;
-	 			selected = eqs.getItem();
-	 		} catch (AdditionalKeysSignal aks){
-	 			switch (aks.getKeyCode()){
-	 			case CharKey.N1:
-	 				//Unequip Weapon
-	 				if (player.getWeapon() != null){
-	 					selectedAction = new Unequip();
-	 					selectedAction.setPerformer(player);
-	 					selectedAction.setEquipedItem(player.getWeapon());
-	 					exitInventory(itemDescription);
-	 		 			return selectedAction;
-	 				} else {
-	 					continue;
-	 				}
-	 			case CharKey.N2:
-	 				//Unequip Secondary Weapon
-	 				if (player.getSecondaryWeapon() != null){
-	 					selectedAction = new Unequip();
-	 					selectedAction.setPerformer(player);
-	 					selectedAction.setEquipedItem(player.getSecondaryWeapon());
-	 					exitInventory(itemDescription);
-	 		 			return selectedAction;
-	 				} else {
-	 					continue;
-	 				}
-	 			case CharKey.N3:
-	 				//Unequip Armor
-	 				if (player.getArmor() != null){
-	 					selectedAction = new Unequip();
-	 					selectedAction.setPerformer(player);
-	 					selectedAction.setEquipedItem(player.getArmor());
-	 					exitInventory(itemDescription);
-	 		 			return selectedAction;
-	 				} else {
-	 					continue;
-	 				}
-	 			case CharKey.N4:
-	 				//Unequip Shield
-	 				if (player.getShield() != null){
-	 					selectedAction = new Unequip();
-	 					selectedAction.setPerformer(player);
-	 					selectedAction.setEquipedItem(player.getShield());
-	 					exitInventory(itemDescription);
-	 		 			return selectedAction;
-	 				} else {
-	 					continue;
-	 				}
-	 			}
-	 		}
-	 		if (selected == null){
-	 			break;
-	 		}
-	 		si.print(52, 8, selected.getDescription(), GFXDisplay.COLOR_BOLD);
-	 		itemDescription.setText(selected.getDefinition().menuDescription);
-	 		si.refresh();
-	 		
-	 		itemUsageChoices.draw();
-	 		
-	 		SimpleGFXMenuItem choice = null;
-	 		try {
-	 			choice = (SimpleGFXMenuItem)itemUsageChoices.getUnpagedOrdinalSelectionAKS(itemUsageKeys);
-	 		} catch (AdditionalKeysSignal aks){
-	 			switch (aks.getKeyCode()){
-	 			case CharKey.u:
-	 				choice = (SimpleGFXMenuItem)vecItemUsageChoices.elementAt(0);
-	 				break;
-	 			case CharKey.e:
-	 				choice = (SimpleGFXMenuItem)vecItemUsageChoices.elementAt(1);
-	 				break;
-	 			case CharKey.t:
-	 				choice = (SimpleGFXMenuItem)vecItemUsageChoices.elementAt(2);
-	 				break;
-	 			case CharKey.d:
-		 			choice = (SimpleGFXMenuItem)vecItemUsageChoices.elementAt(3);
-		 			break;
-	 			}
-	 		}
-	 		if (choice != null){
-		 		switch (choice.getValue()){
-		 		case 1: // Use
-		 			Use use = new Use();
-		 			use.setPerformer(player);
-		 			use.setItem(selected);
- 					exitInventory(itemDescription);
-		 			return use;
-		 		case 2: //Equip
-		 			Equip equip = new Equip();
-		 			equip.setPerformer(player);
-		 			equip.setItem(selected);
- 					exitInventory(itemDescription);
-		 			return equip;
-		 		case 3: //Drop
-		 			Drop drop = new Drop();
-		 			drop.setPerformer(player);
-		 			drop.setItem(selected);
- 					exitInventory(itemDescription);
-		 			return drop;
-		 		case 4: // Throw
-		 			Throw throwx = new Throw();
-		 			throwx.setPerformer(player);
-		 			throwx.setItem(selected);
- 					exitInventory(itemDescription);
-		 			throwx.setPosition(pickPosition("Throw where?", CharKey.SPACE));
-		 			return throwx;
-		 		case 5: // Cancel
-		 			
-		 			break;
-		 		}
-	 		}
-	 		itemDescription.setText("");
-	 		si.restore();
-	 		si.refresh();
-	 		
- 		} while (selected != null);
+		
+		Action selectedAction = null;
+		do {
+			try {
+				Equipment eqs = (Equipment)menuBox.getSelectionAKS(additionalKeys);
+				if (eqs == null)
+					break;
+				selected = eqs.getItem();
+			} catch (AdditionalKeysSignal aks) {
+				switch (aks.getKeyCode()){
+				case CharKey.N1:
+					//Unequip Weapon
+					if (player.getWeapon() != null){
+						selectedAction = new Unequip();
+						selectedAction.setPerformer(player);
+						selectedAction.setEquipedItem(player.getWeapon());
+						exitInventory(itemDescription);
+						return selectedAction;
+					} else {
+						continue;
+					}
+				case CharKey.N2:
+					//Unequip Secondary Weapon
+					if (player.getSecondaryWeapon() != null){
+						selectedAction = new Unequip();
+						selectedAction.setPerformer(player);
+						selectedAction.setEquipedItem(player.getSecondaryWeapon());
+						exitInventory(itemDescription);
+						return selectedAction;
+					} else {
+						continue;
+					}
+				case CharKey.N3:
+					//Unequip Armor
+					if (player.getArmor() != null){
+						selectedAction = new Unequip();
+						selectedAction.setPerformer(player);
+						selectedAction.setEquipedItem(player.getArmor());
+						exitInventory(itemDescription);
+						return selectedAction;
+					} else {
+						continue;
+					}
+				case CharKey.N4:
+					//Unequip Shield
+					if (player.getShield() != null){
+						selectedAction = new Unequip();
+						selectedAction.setPerformer(player);
+						selectedAction.setEquipedItem(player.getShield());
+						exitInventory(itemDescription);
+						return selectedAction;
+					} else {
+						continue;
+					}
+				}
+			}
+			if (selected == null){
+				break;
+			}
+			si.print(52, 8, selected.getDescription(), GFXDisplay.COLOR_BOLD);
+			itemDescription.setText(selected.getDefinition().menuDescription);
+			si.refresh();
+			
+			itemUsageChoices.draw();
+			
+			SimpleGFXMenuItem choice = null;
+			try {
+				choice = (SimpleGFXMenuItem)itemUsageChoices.getUnpagedOrdinalSelectionAKS(itemUsageKeys);
+			} catch (AdditionalKeysSignal aks){
+				switch (aks.getKeyCode()){
+				case CharKey.u:
+					choice = (SimpleGFXMenuItem)vecItemUsageChoices.elementAt(0);
+					break;
+				case CharKey.e:
+					choice = (SimpleGFXMenuItem)vecItemUsageChoices.elementAt(1);
+					break;
+				case CharKey.t:
+					choice = (SimpleGFXMenuItem)vecItemUsageChoices.elementAt(2);
+					break;
+				case CharKey.d:
+					choice = (SimpleGFXMenuItem)vecItemUsageChoices.elementAt(3);
+					break;
+				}
+			}
+			if (choice != null){
+				switch (choice.getValue()){
+				case 1: // Use
+					Use use = new Use();
+					use.setPerformer(player);
+					use.setItem(selected);
+					exitInventory(itemDescription);
+					return use;
+				case 2: //Equip
+					Equip equip = new Equip();
+					equip.setPerformer(player);
+					equip.setItem(selected);
+					exitInventory(itemDescription);
+					return equip;
+				case 3: //Drop
+					Drop drop = new Drop();
+					drop.setPerformer(player);
+					drop.setItem(selected);
+					exitInventory(itemDescription);
+					return drop;
+				case 4: // Throw
+					Throw throwx = new Throw();
+					throwx.setPerformer(player);
+					throwx.setItem(selected);
+					exitInventory(itemDescription);
+					throwx.setPosition(pickPosition("Throw where?", CharKey.SPACE));
+					return throwx;
+				case 5: // Cancel
+					
+					break;
+				}
+			}
+			itemDescription.setText("");
+			si.restore();
+			si.refresh();
+			
+		} while (selected != null);
 //		si.waitKey(CharKey.SPACE);
 		si.restore();
 		si.refresh();
@@ -1726,13 +1810,13 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 	}
 
 
- 	/**
-     * Shows a message inmediately; useful for system
-     * messages.
-     *  
-     * @param x the message to be shown
-     */
-	public void showMessage(String x){
+	/**
+	 * Shows a message inmediately; useful for system
+	 * messages.
+	 * 
+	 * @param x the message to be shown
+	 */
+	public void showMessage(String x) {
 		messageBox.setForeground(COLOR_LAST_MESSAGE);
 		messageBox.setText(x);
 		messageBox.setVisible(true); // Force it!
@@ -1760,7 +1844,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		}
 	}
 	
-	public void showSystemMessage(String x){
+	public void showSystemMessage(String x) {
 		messageBox.setForeground(COLOR_LAST_MESSAGE);
 		messageBox.setText(x);
 		//si.refresh();
@@ -1769,26 +1853,25 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 	
 	
 
-	public void showPlayerStats (){
-		
+	public void showPlayerStats() {
 		si.saveBuffer();
 		enterScreen();
 		si.drawImage(IMG_STATUSSCR_BGROUND);
-	    si.print(1,1, player.getName()+" the level "+ player.getPlayerLevel()+" "+player.getClassString() + " "+player.getStatusString(), GFXDisplay.COLOR_BOLD);
-	    si.print(1,2, "Sex: "+ (player.getSex() == Player.MALE ? "M" : "F"), Color.WHITE);
-	    si.print(1,3, "Hits: "+player.getHits()+ "/"+player.getHitsMax()+" Hearts: " + player.getHearts() +"/"+player.getHeartsMax()+
-					  " Gold: "+player.getGold()+ " Keys: "+player.getKeys(), Color.WHITE);
-	    si.print(1,4, "Carrying: "+player.getItemCount()+"/"+player.getCarryMax(), Color.WHITE);
-	    si.print(1,6, "Attack: +"+player.getAttack(), Color.WHITE);
-	    si.print(1,7, "Soul Power: +"+player.getSoulPower(), Color.WHITE);
-	    si.print(1,8, "Evade: "+player.getEvadeChance()+"%", Color.WHITE);
-	    si.print(1,9, "Combat: "+(50-player.getAttackCost()), Color.WHITE);
-	    si.print(1,10, "Invokation: "+(50-player.getCastCost()), Color.WHITE);
-	    si.print(1,11, "Movement: "+(50-player.getWalkCost()), Color.WHITE);
-	    
-	    si.print(1,12, "Experience: "+player.getXp()+"/"+player.getNextXP(), Color.WHITE);
-	    
-	    /*si.print(1,2, "Skills", ConsoleSystemInterface.RED);
+		si.print(1,1, player.getName()+" the level "+ player.getPlayerLevel()+" "+player.getClassString() + " "+player.getStatusString(), GFXDisplay.COLOR_BOLD);
+		si.print(1,2, "Sex: "+ (player.getSex() == Player.MALE ? "M" : "F"), Color.WHITE);
+		si.print(1,3, "Hits: "+player.getHits()+ "/"+player.getHitsMax()+" Hearts: " + player.getHearts() +"/"+player.getHeartsMax()+
+				" Gold: "+player.getGold()+ " Keys: "+player.getKeys(), Color.WHITE);
+		si.print(1,4, "Carrying: "+player.getItemCount()+"/"+player.getCarryMax(), Color.WHITE);
+		si.print(1,6, "Attack: +"+player.getAttack(), Color.WHITE);
+		si.print(1,7, "Soul Power: +"+player.getSoulPower(), Color.WHITE);
+		si.print(1,8, "Evade: "+player.getEvadeChance()+"%", Color.WHITE);
+		si.print(1,9, "Combat: "+(50-player.getAttackCost()), Color.WHITE);
+		si.print(1,10, "Invokation: "+(50-player.getCastCost()), Color.WHITE);
+		si.print(1,11, "Movement: "+(50-player.getWalkCost()), Color.WHITE);
+		
+		si.print(1,12, "Experience: "+player.getXp()+"/"+player.getNextXP(), Color.WHITE);
+		
+		/*si.print(1,2, "Skills", ConsoleSystemInterface.RED);
 		Vector skills = player.getAvailableSkills();
 		int cont = 0;
 		for (int i = 0; i < skills.size(); i++){
@@ -1811,7 +1894,6 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		si.print(49,17, "Machinery", GFXDisplay.COLOR_BOLD);
 		si.print(49,18, "Shields", GFXDisplay.COLOR_BOLD);
 		
-
 		
 		String[] wskills = ItemDefinition.CATS;
 		int cont = 0;
@@ -1829,7 +1911,6 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		si.print(16,20, player.getArmorDefense()+(player.getDefenseBonus()!=0?"+"+player.getDefenseBonus():""), Color.WHITE);
 		si.print(16,21, "Block "+player.getShieldBlockChance()+"% Coverage "+player.getShieldCoverageChance()+"%", Color.WHITE);
 
-
 		si.print(1,23, "[ Press Space to continue ]", Color.WHITE);
 		si.refresh();
 		si.waitKey(CharKey.SPACE);
@@ -1837,6 +1918,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		si.refresh();
 		leaveScreen();
 	}
+	
 	
 	private BorderedMenuBox GetMenuBox() {
 		return GetMenuBox(false);
@@ -1854,7 +1936,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		Debug.enterMethod(this, "showSkills");
 		enterScreen();
 		si.saveBuffer();
-		Vector skills = player.getAvailableSkills();
+		Vector<Skill> skills = player.getAvailableSkills();
 		BorderedMenuBox menuBox = GetMenuBox(true);
 		menuBox.setItemsPerPage(14);
 		menuBox.setWidth(48);
@@ -1894,45 +1976,44 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 
 
 	public void levelUp() {
-		
 		showMessage("You gained a level!, [Press Space to continue]");
 		
 		si.waitKey(CharKey.SPACE);
-    	enterScreen();
-    	if (player.deservesAdvancement(player.getPlayerLevel())){
-	    	Vector advancements = player.getAvailableAdvancements();
-	    	if (advancements.size() != 0) {
-		    	Advancement playerChoice = Display.thus.showLevelUp(advancements);
-		    	playerChoice.advance(player);
-		    	player.getGameSessionInfo().addHistoryItem("went for "+playerChoice.getName());
-	    	}
-    	}
-    	if (player.deservesStatAdvancement(player.getPlayerLevel())){
-	    	Vector advancements = player.getAvailableStatAdvancements();
-	    	if (advancements.size() != 0) {
-		    	Advancement playerChoice = Display.thus.showLevelUp(advancements);
-		    	playerChoice.advance(player);
-		    	player.getGameSessionInfo().addHistoryItem("went for "+playerChoice.getName());
-	    	}
-    	}
-    	leaveScreen();
-    	((GFXDisplay)Display.thus).showTextBox("LEVEL UP!\n\n ["+player.getLastIncrementString()+"]",40,60,300,300);
-    	//showMessage("You gained a level!, ["+player.getLastIncrementString()+"]");
-    	player.resetLastIncrements();
-    	
-    	/*
-    	int soulOptions = 5;
-    	Vector soulIds = getLevelUpSouls();
-    	int playerChoice = Display.thus.showLevelUp(soulIds);
-    	Item soul = ItemFactory.getItemFactory().createItem((String)soulIds.elementAt(playerChoice));
-    	if (player.canCarry()){
-    		player.addItem(soul);
-    	} else {
-    		player.level.addItem(player.getPosition(), soul);
-    	}
-    	showMessage("You acquired a "+soul.getDescription());
-    	*/
-    }
+		enterScreen();
+		if (player.deservesAdvancement(player.getPlayerLevel())) {
+			Vector advancements = player.getAvailableAdvancements();
+			if (advancements.size() != 0) {
+				Advancement playerChoice = Display.thus.showLevelUp(advancements);
+				playerChoice.advance(player);
+				player.getGameSessionInfo().addHistoryItem("went for "+playerChoice.getName());
+			}
+		}
+		if (player.deservesStatAdvancement(player.getPlayerLevel())) {
+			Vector advancements = player.getAvailableStatAdvancements();
+			if (advancements.size() != 0) {
+				Advancement playerChoice = Display.thus.showLevelUp(advancements);
+				playerChoice.advance(player);
+				player.getGameSessionInfo().addHistoryItem("went for "+playerChoice.getName());
+			}
+		}
+		leaveScreen();
+		((GFXDisplay)Display.thus).showTextBox("LEVEL UP!\n\n ["+player.getLastIncrementString()+"]",40,60,300,300);
+		//showMessage("You gained a level!, ["+player.getLastIncrementString()+"]");
+		player.resetLastIncrements();
+		
+		/*
+		int soulOptions = 5;
+		Vector soulIds = getLevelUpSouls();
+		int playerChoice = Display.thus.showLevelUp(soulIds);
+		Item soul = ItemFactory.getItemFactory().createItem((String)soulIds.elementAt(playerChoice));
+		if (player.canCarry()){
+			player.addItem(soul);
+		} else {
+			player.level.addItem(player.getPosition(), soul);
+		}
+		showMessage("You acquired a "+soul.getDescription());
+		*/
+	}
 	
 	
 	public void setPlayer(Player pPlayer) {
@@ -2017,7 +2098,6 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 	}
 	
 	
-
 //	Runnable interface
 //	public void run (){}
 	
@@ -2043,10 +2123,9 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		}
 		
 	}
-	
-	
 
-	class MultiItemsBox extends AdornedBorderPanel{
+
+	class MultiItemsBox extends AdornedBorderPanel {
 		private JList lstInventory;
 		private GFXButton btnExit;
 		private GFXButton btnOk;
@@ -2134,7 +2213,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		}
 		
 		private void doOk(){
-			if (activeThread != null){
+			if (activeThread != null) {
 				choice = new Vector();
 				int[] indices = lstInventory.getSelectedIndices();
 				for (int i = 0; i < indices.length; i++){
@@ -2145,7 +2224,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		}
 		
 		private void doExit(){
-			if (activeThread != null){
+			if (activeThread != null) {
 				choice = null;
 				activeThread.interrupt();
 			}

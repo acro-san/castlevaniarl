@@ -152,7 +152,7 @@ public class CharDisplay extends Display {
 		tb.setText("  ...And so it was that "+player.getDescription() + ", "+gsi.getDeathString()+" on the "+player.level.getDescription()+"...");
 		tb.draw();
 		
-		si.print(2,9, heshe+ " scored "+ player.getScore() +" points and earned "+ player.getGold() +" gold", ConsoleSystemInterface.RED);
+		si.print(2,9, heshe+ " scored "+ player.score +" points and earned "+ player.getGold() +" gold", ConsoleSystemInterface.RED);
 		si.print(2,10, heshe + " survived for "+gsi.turns+" turns ", ConsoleSystemInterface.RED);
 
 		si.print(2,11, heshe + " took "+gsi.getTotalDeathCount()+" monsters to the other world", ConsoleSystemInterface.RED);
