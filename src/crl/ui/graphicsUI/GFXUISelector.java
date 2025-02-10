@@ -58,10 +58,11 @@ public class GFXUISelector extends UISelector
 				continue;
 			ret = ui().selectCommand(input);
 			if (ret != null){
-				if (ret.canPerform(player))
-            		return ret;
-            	else 
-            		return null;
+				if (ret.canPerform(player)) {
+					return ret;
+				} else {
+					return null;
+				}
 			}
 			if (input.code == DONOTHING1_KEY) {
 				Debug.exitMethod("null");
@@ -83,7 +84,7 @@ public class GFXUISelector extends UISelector
 						if (player.getPlayerClass() == Player.CLASS_VAMPIREKILLER) {
 							ret = player.getMysticAction();
 							try {
-				            	if (ret != null){
+				            	if (ret != null) {
 				                	ret.setPerformer(player);
 				                	if (ret.canPerform(player))
 				                		ret.setPosition(mousePosition);
@@ -237,28 +238,19 @@ public class GFXUISelector extends UISelector
 	public String getID(){
 		return "UI";
 	}
-    
-	public ActionSelector derive(){
- 		return null;
- 	}
+
+	public ActionSelector derive() {
+		return null;
+	}
 	
 	
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseClicked(MouseEvent e) { }
 
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseEntered(MouseEvent e) { }
 
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseExited(MouseEvent e) { }
 
-	int[] QDIRECTIONS = new int[]{
+	int[] QDIRECTIONS = {
 		Action.UPLEFT,
 		Action.UP,
 		Action.UPRIGHT,
@@ -281,23 +273,12 @@ public class GFXUISelector extends UISelector
 		}
 	}
 
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-	}
+	public void mouseReleased(MouseEvent e) { }
 
-	public void mouseDragged(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseDragged(MouseEvent e) { }
 
-	int x1 = (int)Math.round((800.0/9.0)*4.0);
-	int x2 = (int)Math.round((800.0/9.0)*5.0);
-	int y1 = (int)Math.round((600.0/9.0)*4.0);
-	int y2 = (int)Math.round((600.0/9.0)*5.0);
-
-	
 	public void mouseMoved(MouseEvent e) {
-		switch (defineQuadrant(e.getPoint().x, e.getPoint().y)){
+		switch (defineQuadrant(e.getX(), e.getY())) {
 		case 9:
 			si.setCursor(Cursor.getPredefinedCursor(Cursor.SE_RESIZE_CURSOR));
 			break;
@@ -330,7 +311,17 @@ public class GFXUISelector extends UISelector
 			drawCursor();*/
 	}
 	
-	private int defineQuadrant(int x, int y){
+
+	
+	// ??????? 800 x 600 !?? What about the other screen size(s)?!
+	int x1 = (int)Math.round((800.0/9.0)*4.0);
+	int x2 = (int)Math.round((800.0/9.0)*5.0);
+	
+	int y1 = (int)Math.round((600.0/9.0)*4.0);
+	int y2 = (int)Math.round((600.0/9.0)*5.0);
+
+
+	private int defineQuadrant(int x, int y) {
 		if (x > x2)
 			if (y > y2)
 				return 9;
@@ -353,40 +344,17 @@ public class GFXUISelector extends UISelector
 			else
 				return 1;
 	}
+	
 	private Position tempRel = new Position(0,0);
-	private void translatePosition(int x, int y){
+	private void translatePosition(int x, int y) {
 		int bigx = (int)Math.ceil(x/32.0);
 		int bigy = (int)Math.ceil(y/32.0);
 		tempRel.x = bigx-ui().PC_POS.x-1;
 		tempRel.y = bigy-ui().PC_POS.y-1;
 		mousePosition = Position.add(player.getPosition(), tempRel);
 	}
-	
-	/*
-	private Position tempCursorPosition = new Position(0,0);
-	private Position tempCursorPositionScr = new Position(0,0);
-	/*
-	private boolean updateCursorPosition(int x, int y) {
-		int bigx = (int)Math.ceil(x/32.0);
-		int bigy = (int)Math.ceil(y/32.0);
-		tempRel.x = bigx-ui().PC_POS.x-1;
-		tempRel.y = bigy-ui().PC_POS.y-1;
-		if (tempCursorPosition != null){
-			if (tempCursorPosition.x == player.getPosition().x + bigx-ui().PC_POS.x-1 && 
-				tempCursorPosition.y == player.getPosition().y + bigy-ui().PC_POS.y-1){
-				return false;
-			}
-			tempCursorPosition.x=player.getPosition().x + bigx-ui().PC_POS.x-1;
-			tempCursorPosition.y=player.getPosition().y + bigy-ui().PC_POS.y-1;
-		}
-		if (tempCursorPositionScr != null){
-			tempCursorPositionScr.x=tempRel.x;
-			tempCursorPositionScr.y=tempRel.y;
-		}
-		return true;
-	}
-	*/
-	
+
+
 	public static int toIntDirection(Position what) {
 		switch (what.x) {
 			case 1:
@@ -417,9 +385,6 @@ public class GFXUISelector extends UISelector
 		}
 		return -1;
 	}
-	
-	
-	
 
-	
+
 }

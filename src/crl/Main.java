@@ -138,6 +138,7 @@ public class Main {
 					initializeCAppearances();
 					break;
 				}
+				
 				System.out.println("Initializing Action Objects");
 				initializeActions();
 				initializeSelectors();
@@ -320,7 +321,7 @@ public class Main {
 		}
 	}
 	
-	private static void prologue(){
+	private static void prologue() {
 		if (currentGame != null){
 			ui.removeCommandListener(currentGame);
 		}
@@ -560,7 +561,10 @@ public class Main {
 			((ConsoleUISelector)uiSelector).init((ConsoleSystemInterface)si, userActions, walkAction, target, attack, keyBindings);
 			break;
 		case SWING_CONSOLE:
-			//((ConsoleUserInterface)ui).init((WSwingConsoleInterface)si, userActions, userCommands, walkAction, target, attack);
+			// Swing Console UI .. boots, opens, doesn't work. doesn't centre.
+			// ((ConsoleUserInterface)ui).init((WSwingConsoleInterface)si, userActions, userCommands, walkAction, target, attack);
+			//uiSelector = new ConsoleUISelector();	// ?OK?
+			
 			break;
 		}
 	}
@@ -712,9 +716,8 @@ public class Main {
 	
 	public static void main(String args[]) {
 		uiMode = SWING_GFX;
-		// mode = SWING_CONSOLE;
 		uiFile = "slash-barrett.ui";
-		if (args!= null && args.length > 0) {
+		if (args.length > 0) {	//args != null && ?!
 			if (args[0].equalsIgnoreCase("sgfx")) {
 				uiMode = SWING_GFX;
 				if (args.length > 1) {
@@ -722,6 +725,8 @@ public class Main {
 				} else {
 					uiFile = "slash-barrett.ui";
 				}
+				// TODO: Check/only use arbitrary input name if .ui file exists?
+				
 			} else if (args[0].equalsIgnoreCase("jc")) {
 				uiMode = JCURSES_CONSOLE;
 			} else if (args[0].equalsIgnoreCase("sc")) {

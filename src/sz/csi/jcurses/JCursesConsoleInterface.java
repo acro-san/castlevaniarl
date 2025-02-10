@@ -6,50 +6,55 @@ import sz.csi.CharKey;
 import sz.csi.ConsoleSystemInterface;
 import sz.util.Position;
 
-public class JCursesConsoleInterface implements ConsoleSystemInterface{
+public class JCursesConsoleInterface implements ConsoleSystemInterface {
 	private int[][] colors;
 	private char[][] chars;
 
 	private int[][] colorsBuffer;
 	private char[][] charsBuffer;
 	
-	public JCursesConsoleInterface(){
-            Toolkit.startPainting();
-            colors = new int[Toolkit.getScreenWidth()+1][Toolkit.getScreenHeight()+1];
-            chars = new char[Toolkit.getScreenWidth()+1][Toolkit.getScreenHeight()+1];
-            colorsBuffer = new int[Toolkit.getScreenWidth()+1][Toolkit.getScreenHeight()+1];
-            charsBuffer = new char[Toolkit.getScreenWidth()+1][Toolkit.getScreenHeight()+1];
+	public JCursesConsoleInterface() {
+		Toolkit.startPainting();
+		colors = new int[Toolkit.getScreenWidth()+1][Toolkit.getScreenHeight()+1];
+		chars = new char[Toolkit.getScreenWidth()+1][Toolkit.getScreenHeight()+1];
+		colorsBuffer = new int[Toolkit.getScreenWidth()+1][Toolkit.getScreenHeight()+1];
+		charsBuffer = new char[Toolkit.getScreenWidth()+1][Toolkit.getScreenHeight()+1];
 	}
 
-	public void print (int x, int y, char what, int color){
-            //if (isInsideBounds(x,y))
-            if (chars[x][y] == what && colors[x][y] == color)
-                return;
-            Toolkit.printString(what+"", x, y, getJCurseColor(color));
-            colors[x][y] = color;
-            chars[x][y] = what;
+
+	public void print(int x, int y, char what, int color){
+		//if (isInsideBounds(x,y))
+		if (chars[x][y] == what && colors[x][y] == color) {
+			return;
+		}
+		Toolkit.printString(what+"", x, y, getJCurseColor(color));
+		colors[x][y] = color;
+		chars[x][y] = what;
 	}
 
-	public void print (int x, int y, String what, int color){
-		for (int i = 0; i < what.length(); i++){
-			if (! isInsideBounds(x+i,y))
+	public void print(int x, int y, String what, int color){
+		for (int i = 0; i < what.length(); i++) {
+			if (!isInsideBounds(x+i, y)) {
 				break;
+			}
 			chars[x+i][y] = what.charAt(i);
 			colors[x+i][y] = color;
 		}
 		Toolkit.printString(what, x, y, getJCurseColor(color));
 	}
-	public void print (int x, int y, String what){
-		for (int i = 0; i < what.length(); i++){
-			if (!isInsideBounds(x+i,y))
+	
+	public void print(int x, int y, String what) {
+		for (int i = 0; i < what.length(); i++) {
+			if (!isInsideBounds(x+i, y)) {
 				break;
+			}
 			chars[x+i][y] = what.charAt(i);
 			colors[x+i][y] = ConsoleSystemInterface.WHITE;
 		}
 		Toolkit.printString(what, x, y, WHITE);
 	}
 
-	public char peekChar(int x, int y){
+	public char peekChar(int x, int y) {
 		return chars[x][y];
 	}
 
@@ -57,33 +62,34 @@ public class JCursesConsoleInterface implements ConsoleSystemInterface{
 		return colors[x][y];
 	}
 
-	public CharKey inkey(){
+	/**  Waits until a key is pressed and returns it */
+	public CharKey inkey() {
 		InputChar c = Toolkit.readCharacter();
 		return new CharKey(ASCtoCharKeyCode(c.getCode()));
 	}
 
-    /**  Waits until a key is pressed and returns it */
-    public void locateCaret (int x, int y){
-    	caretPosition.x = x;
-    	caretPosition.y = y;
-    }
 
-    private Position caretPosition = new Position(0,0);
+	public void locateCaret(int x, int y) {
+		caretPosition.x = x;
+		caretPosition.y = y;
+	}
 
-    public String input(){
-    	return input(999);
-    }
+	private Position caretPosition = new Position(0,0);
 
-    public String input(int l){
-	    String ret = "";
+	public String input() {
+		return input(999);
+	}
+
+	public String input(int l) {
+		String ret = "";
 		CharKey read = new CharKey(CharKey.NONE);
-		while (true){
+		while (true) {
 			while (read.code == CharKey.NONE)
 				read = inkey();
 			if (read.code == CharKey.ENTER)
 				break;
-			if (read.code == CharKey.BACKSPACE){
-				if (ret.equals("")){
+			if (read.code == CharKey.BACKSPACE) {
+				if (ret.equals("")) {
 					read.code = CharKey.NONE;
 					continue;
 				}
@@ -115,105 +121,97 @@ public class JCursesConsoleInterface implements ConsoleSystemInterface{
 
 		}
 		return ret;
-    }
+	}
 
-	public boolean isInsideBounds(Position p){
-		return p.x>=0 && p.x <= Toolkit.getScreenWidth() && p.y >=0 && p.y <=Toolkit.getScreenHeight();
+	public boolean isInsideBounds(Position p) {
+		return p.x >= 0 && p.x <= Toolkit.getScreenWidth() && p.y >=0 && p.y <=Toolkit.getScreenHeight();
 	}
 
 	public boolean isInsideBounds(int x, int y){
-		return x>=0 && x <= Toolkit.getScreenWidth() && y >=0 && y <=Toolkit.getScreenHeight();
+		return x >= 0 && x <= Toolkit.getScreenWidth() && y >=0 && y <=Toolkit.getScreenHeight();
 	}
 
 
-
-    public void cls(){
-    	Toolkit.clearScreen(BLACK);
-    	for (int x = 0; x < chars.length; x++)
-    		for (int y = 0; y < chars[0].length; y++) {
+	public void cls() {
+		Toolkit.clearScreen(BLACK);
+		for (int x = 0; x < chars.length; x++) {
+			for (int y = 0; y < chars[0].length; y++) {
 				chars[x][y] = '\u0000';
 				colors[x][y] = ConsoleSystemInterface.BLACK;
 			}
+		}
 	}
 
 
-    public void refresh(){
+	public void refresh() {
 		Toolkit.endPainting();
 		Toolkit.startPainting();
 		Toolkit.printString("", 79,24,BLACK);
 	}
-    public void refresh(Thread t){
+	
+	public void refresh(Thread t) {
 		refresh();
 	}
-    public void flash(int color){
+	
+	public void flash(int color) {
 /*		Toolkit.clearScreen(new CharColor(getJCurseColor(color).getForeground(), getJCurseColor(color).getForeground()));
 		try {
 			Thread.sleep(10);
-		}
-		 catch (InterruptedException ie){
-		}
+		} catch (InterruptedException ie) {  }
 		Toolkit.clearScreen(BLACK);   */
 		//Toolkit.changeColors(new Rectangle(Toolkit.UL_CORNER, Toolkit.LR_CORNER), new CharColor(getJCurseColor(color).getForeground(), CharColor.BLACK));
 	}
 
-    public void setAutoRefresh(boolean value){}
+	public void setAutoRefresh(boolean value) {}
 
-        private final CharColor BLACK = new CharColor(CharColor.BLACK, CharColor.BLACK);
-		private final CharColor DARK_BLUE = new CharColor(CharColor.BLACK, CharColor.BLUE);
-		private final CharColor GREEN = new CharColor(CharColor.BLACK, CharColor.GREEN);
-		private final CharColor TEAL = new CharColor(CharColor.BLACK, CharColor.CYAN);
-		private final CharColor DARK_RED = new CharColor(CharColor.BLACK, CharColor.RED);
-		private final CharColor PURPLE = new CharColor(CharColor.BLACK, CharColor.MAGENTA);
-		private final CharColor BROWN = new CharColor(CharColor.BLACK, CharColor.YELLOW);
-		private final CharColor LIGHT_GRAY  = new CharColor(CharColor.BLACK, CharColor.WHITE);
-        private final CharColor GRAY = new CharColor(CharColor.BLACK, CharColor.BLACK, CharColor.BOLD, CharColor.BOLD);
-		private final CharColor BLUE = new CharColor(CharColor.BLACK, CharColor.BLUE, CharColor.BOLD, CharColor.BOLD);
-		private final CharColor LEMON = new CharColor(CharColor.BLACK, CharColor.GREEN, CharColor.BOLD, CharColor.BOLD);
-		private final CharColor CYAN = new CharColor(CharColor.BLACK, CharColor.CYAN, CharColor.BOLD, CharColor.BOLD);
-		private final CharColor RED = new CharColor(CharColor.BLACK, CharColor.RED, CharColor.BOLD, CharColor.BOLD);
-		private final CharColor MAGENTA = new CharColor(CharColor.BLACK, CharColor.MAGENTA, CharColor.BOLD, CharColor.BOLD);
-		private final CharColor YELLOW = new CharColor(CharColor.BLACK, CharColor.YELLOW, CharColor.BOLD, CharColor.BOLD);
-		private final CharColor WHITE = new CharColor(CharColor.BLACK, CharColor.WHITE, CharColor.BOLD, CharColor.BOLD);
+	private static final CharColor
+		BLACK = new CharColor(CharColor.BLACK, CharColor.BLACK),
+		DARK_BLUE = new CharColor(CharColor.BLACK, CharColor.BLUE),
+		GREEN = new CharColor(CharColor.BLACK, CharColor.GREEN),
+		TEAL = new CharColor(CharColor.BLACK, CharColor.CYAN),
+		DARK_RED = new CharColor(CharColor.BLACK, CharColor.RED),
+		PURPLE = new CharColor(CharColor.BLACK, CharColor.MAGENTA),
+		BROWN = new CharColor(CharColor.BLACK, CharColor.YELLOW),
+		LIGHT_GRAY  = new CharColor(CharColor.BLACK, CharColor.WHITE),
+		GRAY = new CharColor(CharColor.BLACK, CharColor.BLACK, CharColor.BOLD, CharColor.BOLD),
+		BLUE = new CharColor(CharColor.BLACK, CharColor.BLUE, CharColor.BOLD, CharColor.BOLD),
+		LEMON = new CharColor(CharColor.BLACK, CharColor.GREEN, CharColor.BOLD, CharColor.BOLD),
+		CYAN = new CharColor(CharColor.BLACK, CharColor.CYAN, CharColor.BOLD, CharColor.BOLD),
+		RED = new CharColor(CharColor.BLACK, CharColor.RED, CharColor.BOLD, CharColor.BOLD),
+		MAGENTA = new CharColor(CharColor.BLACK, CharColor.MAGENTA, CharColor.BOLD, CharColor.BOLD),
+		YELLOW = new CharColor(CharColor.BLACK, CharColor.YELLOW, CharColor.BOLD, CharColor.BOLD),
+		WHITE = new CharColor(CharColor.BLACK, CharColor.WHITE, CharColor.BOLD, CharColor.BOLD);
+	
+	// In order that ConsoleSystemInterface defines their index constants:
+	private static final CharColor[] CHAR_COLORS = {
+		BLACK, DARK_BLUE, GREEN, TEAL, DARK_RED, PURPLE, BROWN, LIGHT_GRAY,
+		GRAY, BLUE, LEMON, CYAN, RED, MAGENTA, YELLOW, WHITE
+	};
 
-
-    private CharColor getJCurseColor(int crlColor){
-    	switch (crlColor){
-   	        case ConsoleSystemInterface.BLACK: return BLACK;
-			case ConsoleSystemInterface.DARK_BLUE: return DARK_BLUE;
-			case ConsoleSystemInterface.GREEN: return GREEN;
-			case ConsoleSystemInterface.TEAL: return TEAL;
-			case ConsoleSystemInterface.DARK_RED: return DARK_RED;
-			case ConsoleSystemInterface.PURPLE: return PURPLE;
-			case ConsoleSystemInterface.BROWN: return BROWN;
-			case ConsoleSystemInterface.LIGHT_GRAY: return LIGHT_GRAY;
-    	    case ConsoleSystemInterface.GRAY: return GRAY;
-			case ConsoleSystemInterface.BLUE: return BLUE;
-			case ConsoleSystemInterface.LEMON: return LEMON;
-			case ConsoleSystemInterface.CYAN: return CYAN;
-			case ConsoleSystemInterface.RED: return RED;
-			case ConsoleSystemInterface.MAGENTA: return MAGENTA;
-			case ConsoleSystemInterface.YELLOW: return YELLOW;
-			case ConsoleSystemInterface.WHITE: return WHITE;
+	private CharColor getJCurseColor(int crlColor) {
+		if (crlColor < ConsoleSystemInterface.BLACK ||
+			crlColor > ConsoleSystemInterface.WHITE) {
+			return null;
 		}
-		return null;
+		return CHAR_COLORS[crlColor];
 	}
 
-	private final static int KEY_BACKSPACE = InputChar.KEY_BACKSPACE;
-	private final static int KEY_UP = InputChar.KEY_UP;
-	private final static int KEY_DOWN = InputChar.KEY_DOWN;
-	private final static int KEY_F1 = InputChar.KEY_F1;
-	private final static int KEY_LEFT = InputChar.KEY_LEFT;
-	private final static int KEY_RIGHT = InputChar.KEY_RIGHT;
+	private final static int
+		KEY_BACKSPACE = InputChar.KEY_BACKSPACE,
+		KEY_UP = InputChar.KEY_UP,
+		KEY_DOWN = InputChar.KEY_DOWN,
+		KEY_F1 = InputChar.KEY_F1,
+		KEY_LEFT = InputChar.KEY_LEFT,
+		KEY_RIGHT = InputChar.KEY_RIGHT;
 
-	private int ASCtoCharKeyCode(int code){
-    	if (code >= 65 && code <= 90)
-	    	return code - (65 - CharKey.A);
-	    else
-    	if (code >= 97 && code <= 122)
-	    	return code- (97 - CharKey.a);
-
-		switch (code){
+	private int ASCtoCharKeyCode(int code) {
+		if (code >= 65 && code <= 90) {
+			return code - (65 - CharKey.A);
+		} else if (code >= 97 && code <= 122) {
+			return code- (97 - CharKey.a);
+		}
 		
+		switch (code) {
 			case 32:
 				return CharKey.SPACE;
 			case 63:
@@ -268,15 +266,17 @@ public class JCursesConsoleInterface implements ConsoleSystemInterface{
 		return -1;
 	}
 
-	public void safeprint (int x, int y, char what, int color){
-		if (isInsideBounds(x,y))
+	public void safeprint(int x, int y, char what, int color) {
+		if (isInsideBounds(x,y)) {
 			print(x,y,what,color);
+		}
 	}
 	
-	public void waitKey (int keyCode){
+	public void waitKey(int keyCode) {
 		CharKey x = new CharKey(CharKey.NONE);
-		while (x.code != keyCode)
+		while (x.code != keyCode) {
 			x = inkey();
+		}
 	}
 
 	public void restore() {

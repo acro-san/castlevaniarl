@@ -10,7 +10,7 @@ import sz.util.Position;
 import sz.util.FileUtil;
 
 
-public class WSwingConsoleInterface implements ConsoleSystemInterface, Runnable, ComponentListener{
+public class WSwingConsoleInterface implements ConsoleSystemInterface, ComponentListener {
     /** Provides Console IO.
 	 * Returns keystrokes as CharKeys.
 	 * Shows the characters in a Frame
@@ -329,7 +329,7 @@ public class WSwingConsoleInterface implements ConsoleSystemInterface, Runnable,
 
 	}
 
-	public void run() {}
+	///public void run() {}
 
 	public boolean isInsideBounds(Position p){
 		return p.x>=0 && p.x <= xdim && p.y >=0 && p.y <=ydim;
@@ -344,15 +344,9 @@ public class WSwingConsoleInterface implements ConsoleSystemInterface, Runnable,
 			print(x,y,what,color);
 	}
 
-	public void componentHidden(ComponentEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void componentHidden(ComponentEvent e) { }
 
-	public void componentMoved(ComponentEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void componentMoved(ComponentEvent e) { }
 
 	public void componentResized(ComponentEvent e) {
 		int fontSize = defineFontSize(((Component)e.getSource()).getHeight(), ((Component)e.getSource()).getWidth());
@@ -363,10 +357,7 @@ public class WSwingConsoleInterface implements ConsoleSystemInterface, Runnable,
 		
 	}
 
-	public void componentShown(ComponentEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void componentShown(ComponentEvent e) { }
 	
 	public void waitKey (int keyCode){
 		CharKey x = new CharKey(CharKey.NONE);
