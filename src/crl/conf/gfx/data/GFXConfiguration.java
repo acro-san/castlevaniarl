@@ -47,8 +47,7 @@ public class GFXConfiguration {
 		statusScreenBackground,
 		userInterfaceBackgroundImage;
 	
-	// TODO Rename this var 'textures'.
-	public Textures textures;
+//	public Textures textures;
 	
 	public double screenScale;
 
@@ -109,7 +108,9 @@ public class GFXConfiguration {
 			Game.crash(e.getMessage(), e);
 		}
 		
-		textures = new Textures(p);
+		//textures = new Textures(p);
+		Textures.load(p);	// it's all singular static image vars, now.
+		
 	}
 
 

@@ -3,7 +3,6 @@ package crl.ui.graphicsUI;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontFormatException;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -29,7 +28,9 @@ import crl.ui.graphicsUI.components.GFXChatBox;
 import crl.monster.Monster;
 import crl.npc.*;
 import crl.conf.gfx.data.GFXConfiguration;
-import crl.conf.gfx.data.GFXCuts;
+import crl.conf.gfx.data.Textures;
+import crl.cuts.Chat;
+import crl.cuts.CutsceneDialogue;
 import crl.data.Text;
 import crl.game.Game;
 import crl.game.MonsterRecord;
@@ -510,26 +511,46 @@ public class GFXDisplay extends Display {
 		}
 	}
 	
+	private static BufferedImage chatPortrait(Chat chat, int i) {
+		int prtIndex = chat.getPortraitIndex(i);
+		if (prtIndex == Textures.PRT_NONE) {	// no portrait auto shows player portrait..!?
+			return null;
+		}
+		return Textures.portraits[prtIndex];
+	}
+	
 	//private Color TRANSPARENT_BLUE = new Color(100,100,100,200);
+	
+	private static BufferedImage getPortraitForPlayer(Player p) {
+		int male0 = Textures.PRT_M1;
+		if (p.sex == Player.MALE) {
+			int idx = male0 + p.playerClass;
+			return Textures.portraits[idx];
+		} else {
+			int female0 = Textures.PRT_F1;
+			int idx = female0 + p.playerClass;
+			return Textures.portraits[idx];
+		}
+	}
 	
 	public void showChat(String chatID, Game game) {
 		si.saveBuffer();
-		GFXChat chat = GFXCuts.get(chatID);
+		Chat chat = CutsceneDialogue.get(chatID);
 		String[] marks = {"%NAME", "%%INTRO_1", "%%CLARA1"};
 		String[] replacements = {
 			game.getPlayer().getName(),
 			game.getPlayer().getCustomMessage("INTRO_1"),
 			game.getPlayer().getCustomMessage("CLARA1")
 		};
-		Image image = null;
+		BufferedImage image = null;
 		for (int i = 0; i < chat.getConversations(); i++) {
 			si.restore();
 			//si.setColor(TRANSPARENT_BLUE);
 			//si.getGraphics2D().fillRect(26,26,665,185);
-			if (chat.getPortrait(i) != null)
-				image = chat.getPortrait(i);
-			else
-				image = GFXCuts.getPortraitForPlayer(game.getPlayer());
+			image = chatPortrait(chat, i);
+			if (image == null) {
+				image = getPortraitForPlayer(game.getPlayer());
+			}
 			gfxChatBox.set(image, TxtTpl.replace(marks, replacements, chat.getName(i)), TxtTpl.replace(marks, replacements, chat.getConversation(i)));
 			gfxChatBox.setVisible(true);
 			si.waitKey(CharKey.SPACE);

@@ -44,6 +44,7 @@ import crl.feature.*;
 import crl.game.*;
 import crl.actor.*;
 import crl.conf.gfx.data.GFXConfiguration;
+import crl.conf.gfx.data.Textures;
 import crl.data.Text;
 import crl.ui.*;
 
@@ -1066,8 +1067,8 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 			// thx, i hate it. 2 levels of indirection to find out where/how the
 			// graphics are loaded? *WHAT FOR*!?
 			
-			BufferedImage userInterfaceTileset = gfxConf.textures.UserInterfaceTileset;
-			BufferedImage viewportUserInterfaceTileset = gfxConf.textures.ViewportUserInterfaceTileset;
+			BufferedImage userInterfaceTileset = Textures.UserInterfaceTileset;
+			BufferedImage viewportUserInterfaceTileset = Textures.ViewportUserInterfaceTileset;
 			int viewportUserInterfaceScale = gfxConf.viewportUserInterfaceScale;
 			HEALTH_WHITE = ImageUtils.crearImagen(userInterfaceTileset, 198, 1, 5, 16);
 			/*HEALTH_BLUE? unneeded*/

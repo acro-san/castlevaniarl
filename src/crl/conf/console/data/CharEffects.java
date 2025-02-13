@@ -230,8 +230,13 @@ public class CharEffects {
 		return effects;
 	}
 
+	// FIXME This has been declared in at least 2 other places, ffs.
+	// crl.action.vkiller.Bible
+	// crl.conf.console.data.CharEffects (this)
+	// crl.conf.gfx.data.GFXEffects
+	// FIXME De-duplicate this bloody mess. ffs.
+	// see GFXEffects for compact coordinate array so far.
 	private final static Vector SFX_BIBLE_STEPS = new Vector(10);
-
 	static {
 		SFX_BIBLE_STEPS.add(new Position(1,0));
 		SFX_BIBLE_STEPS.add(new Position(2,-1));

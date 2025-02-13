@@ -5,7 +5,8 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 import crl.Main;
-import crl.conf.console.data.CharCuts;
+import crl.cuts.Chat;
+import crl.cuts.CutsceneDialogue;
 import crl.data.Text;
 import crl.game.Game;
 import crl.game.MonsterRecord;
@@ -17,7 +18,6 @@ import crl.player.HiScore;
 import crl.player.Player;
 import crl.player.advancements.Advancement;
 import crl.ui.Display;
-import crl.ui.consoleUI.cuts.CharChat;
 import sz.csi.CharKey;
 import sz.csi.ConsoleSystemInterface;
 import sz.csi.textcomponents.TextBox;
@@ -169,7 +169,7 @@ public class CharDisplay extends Display {
 		return Main.ui.prompt();
 	}
 
-	public void showEndgame(Player player){
+	public void showEndgame(Player player) {
 		si.cls();
 		printBars();
 		String heshe = (player.sex == Player.MALE ? "he" : "she");
@@ -183,6 +183,7 @@ public class CharDisplay extends Display {
 		tb.setWidth(76);
 		tb.setForeColor(ConsoleSystemInterface.RED);
 		
+		//TODO TxtTpl replacements.
 		tb.setText(player.getName()+ " made many sacrifices, but now the long fight is over. Dracula is dead "+
 				"and all other spirits are asleep. In the shadows, a person watches the castle fall. "+
 				player.getName()+" must go for now but "+heshe+" hopes someday "+heshe+" will get the "+
@@ -202,9 +203,8 @@ public class CharDisplay extends Display {
 
 	}
 	
-	public void showHiscores(HiScore[] scores){
+	public void showHiscores(HiScore[] scores) {
 		si.cls();
-
 
 		si.print(2,1, "                      Castlevania RL "+Game.getVersion(), ConsoleSystemInterface.RED);
 		si.print(2,2, "                  ~ The most brave of Belmonts ~", ConsoleSystemInterface.RED);
@@ -468,7 +468,7 @@ public class CharDisplay extends Display {
 	
 	public void showChat(String chatID, Game game) {
 		si.saveBuffer();
-		CharChat chat = CharCuts.thus.get(chatID);
+		Chat chat = CutsceneDialogue.get(chatID);
 		TextBox tb = new TextBox(si);
 		tb.setBounds(3,4,40,10);
 		tb.setBorder(true);

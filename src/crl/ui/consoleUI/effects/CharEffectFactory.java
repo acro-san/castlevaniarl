@@ -7,11 +7,20 @@ import crl.game.Game;
 import crl.ui.effects.Effect;
 import crl.ui.effects.EffectFactory;
 
-public class CharEffectFactory extends EffectFactory{
-	private Hashtable effects = new Hashtable();
+public class CharEffectFactory extends EffectFactory {
 	
-	public void setEffects(Effect[] effectsA){
-		for (int i = 0; i < effectsA.length; i++){
+	// TODO id by short, not string. In fact, just make an array, not hashtable.
+	private Hashtable<String, Effect> effects = new Hashtable<>();
+	
+	// 3 Major type classifications appear to be:
+	// Directed.
+	// Directional.
+	// Located.
+	
+	// unknown what these mean as yet.
+	
+	public void setEffects(Effect[] effectsA) {
+		for (int i = 0; i < effectsA.length; i++) {
 			effects.put(effectsA[i].getID(), effectsA[i]);
 		}
 	}

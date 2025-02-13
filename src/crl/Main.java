@@ -35,12 +35,11 @@ import crl.ai.npc.PriestAI;
 import crl.ai.npc.VillagerAI;
 import crl.ai.player.WildMorphAI;
 import crl.conf.console.data.CharAppearances;
-import crl.conf.console.data.CharCuts;
 import crl.conf.console.data.CharEffects;
 import crl.conf.gfx.data.GFXAppearances;
 import crl.conf.gfx.data.GFXConfiguration;
-import crl.conf.gfx.data.GFXCuts;
 import crl.conf.gfx.data.GFXEffects;
+import crl.cuts.CutsceneDialogue;
 import crl.data.Cells;
 import crl.data.Features;
 import crl.data.Items;
@@ -179,7 +178,7 @@ public class Main {
 					}
 					System.out.println("Initializing Console User Interface");
 					ui = new ConsoleUserInterface();
-					CharCuts.initializeSingleton();
+					///CharCuts.initializeSingleton();
 					Display.thus = new CharDisplay(csi);
 					PlayerGenerator.thus = new CharPlayerGenerator(csi);
 					efx = new CharEffectFactory();
@@ -192,7 +191,7 @@ public class Main {
 					csi = new WSwingConsoleInterface();
 					System.out.println("Initializing Console User Interface");
 					ui = new ConsoleUserInterface();
-					CharCuts.initializeSingleton();
+					//CharCuts.initializeSingleton();
 					Display.thus = new CharDisplay(csi);
 					PlayerGenerator.thus = new CharPlayerGenerator(csi);
 					efx = new CharEffectFactory();

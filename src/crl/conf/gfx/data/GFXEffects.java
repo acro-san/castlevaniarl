@@ -33,8 +33,8 @@ public class GFXEffects {
 	
 	public GFXEffects(GFXConfiguration configuration) {
 		this.configuration = configuration;
-		IMG_EFFECTS = configuration.textures.effectsImage;
-		InitAnimations(configuration.textures);
+		IMG_EFFECTS = Textures.effectsImage;
+		InitAnimations();
 		LoadEffects();
 	}
 	
@@ -113,9 +113,9 @@ public class GFXEffects {
 		return new Position(baseX, baseY);
 	}
 
-	private void InitAnimations(Textures configuration) {
-		BufferedImage IMG_CURVEDSLASHES = configuration.curvedSlashesImage;
-		BufferedImage IMG_STRSLASHES = configuration.straightSlashesImage;
+	private void InitAnimations() {
+		BufferedImage IMG_CURVEDSLASHES = Textures.curvedSlashesImage;
+		BufferedImage IMG_STRSLASHES = Textures.straightSlashesImage;
 		
 		CURVED_FRAMES = new BufferedImage[8][5];
 		CURVED_FRAMES[4][0] = createSlashFrame(IMG_CURVEDSLASHES, 0,72,29,12);
@@ -417,8 +417,8 @@ public class GFXEffects {
 			new GFXSplashEffect("SFX_SHADOW_APOCALYPSE",load2(10,15),70, configuration), /*load 5 frames*/
 			new GFXSplashEffect("SFX_SHADOW_EXTINCTION",load2(12,15),70, configuration), /*load 4 frames*/
 			new GFXSplashEffect("SFX_HOLY_FLAME",load2(12,14),20, configuration), /*load 3 frames*/
-			new GFXSplashEffect("SFX_MANDRAGORA_SCREAM",loadSame(configuration.textures.MonstersImage, MandragoraScream.SCREAM_RANGE, 8,6),120, configuration),
-			new GFXSplashEffect("SFX_HOLY_RAINSPLASH",new Image[]{load1(4,0)[0], load1(5,0)[0],load1(4,0)[0],load1(5,0)[0]},50, configuration), /*loead 3 frames*/
+			new GFXSplashEffect("SFX_MANDRAGORA_SCREAM",loadSame(Textures.MonstersImage, MandragoraScream.SCREAM_RANGE, 8,6),120, configuration),
+			new GFXSplashEffect("SFX_HOLY_RAINSPLASH",new Image[]{load1(4,0)[0], load1(5,0)[0],load1(4,0)[0],load1(5,0)[0]},50, configuration), /*load 3 frames*/
 			new GFXSplashEffect("SFX_DOVE_BLAST",load8(8,13),20, configuration), 
 			new GFXSplashEffect("SFX_CRYSTAL_BLAST",load2(10,14),30, configuration), /*load 4 frames*/
 			
