@@ -15,7 +15,7 @@ public class StationaryAI extends MonsterAI {
 	public Action selectAction(Actor who) {
 		Monster aMonster = (Monster)who;
 		int directionToPlayer = aMonster.starePlayer();
-		int playerDistance = Position.flatDistance(aMonster.getPosition(), aMonster.level.getPlayer().getPosition());
+		int playerDistance = Position.flatDistance(aMonster.pos, aMonster.level.getPlayer().pos);
 		if (directionToPlayer == -1) {
 			return null;
 		}

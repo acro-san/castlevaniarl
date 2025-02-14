@@ -89,8 +89,8 @@ public class NPC extends Monster {
 			((VillagerAI)getSelector()).setOnDanger(true);
 			if (getHits() > 1)
 				((VillagerAI)getSelector()).setAttackPlayer(true);
-			level.signal(getPosition(), 8, "EVT_MURDERER");
-		} catch (ClassCastException cce){
+			level.signal(pos, 8, "EVT_MURDERER");
+		} catch (ClassCastException cce) {
 
 		}
 		super.damage(buff, dam);

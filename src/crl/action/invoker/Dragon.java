@@ -41,7 +41,7 @@ public class Dragon extends HeartAction {
 		int damage = 15 + 3 * aPlayer.getSoulPower();
 		int otherDir1 = 0;
 		int otherDir2 = 0;
-		final Position pp = performer.getPosition();
+		final Position pp = performer.pos;
 		switch (targetDirection) {
 			case Action.UP:
 				otherDir1 = Action.UPLEFT;

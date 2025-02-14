@@ -19,8 +19,10 @@ public class Monster extends Actor implements Cloneable {
 	private transient MonsterDefinition definition;
 	private String defID;
 
+	// FIXME: WTF?! NUH UH! NOPE! WHAAAAT!? Hits and HitMax...?? SEE @ACTOR!
 	protected int hp;
 	private int hpMax;
+	
 	
 	public String featurePrize;
 	public boolean isVisible = true;
@@ -56,8 +58,8 @@ public class Monster extends Actor implements Cloneable {
 	}
 
 	public boolean isInWater(){
-		if (level.getMapCell(getPosition())!= null)
-			return level.getMapCell(getPosition()).isShallowWater();
+		if (level.getMapCell(pos)!= null)
+			return level.getMapCell(pos).isShallowWater();
 		else
 			return false;
 	}
@@ -85,14 +87,14 @@ public class Monster extends Actor implements Cloneable {
 
 
 	/*public boolean playerInRow(){
-		Position pp = level.getPlayer().getPosition();
+		Position pp = level.getPlayer().pos;
 		/*if (!playerInRange())
 			return false;
 		//Debug.say("pp"+pp);
-		//Debug.say(getPosition());
-		if (pp.x == getPosition().x || pp.y == getPosition().y)
+		//Debug.say(pos);
+		if (pp.x == pos.x || pp.y == pos.y)
 			return true;
-		if (pp.x - getPosition().x == pp.y - getPosition().y)
+		if (pp.x - pos.x == pp.y - pos.y)
 			return true;
 		return false;
 	}*/
@@ -100,33 +102,33 @@ public class Monster extends Actor implements Cloneable {
 	/** returns the direction in which the player is seen */
 	public int starePlayer() {
 		Player pl = level.getPlayer();
-		if (pl == null || pl.isInvisible() || pl.getPosition().z != getPosition().z) {
+		if (pl == null || pl.isInvisible() || pl.pos.z != pos.z) {
 			return -1;
 		}
-		Position pp = level.getPlayer().getPosition();
+		Position pp = level.getPlayer().pos;
 		//mp = my/monster pos...
-		if (Position.flatDistance(pp, getPosition()) <= getDefinition().sightRange) {
-			if (pp.x == getPosition().x) {
-				if (pp.y > getPosition().y) {
+		if (Position.flatDistance(pp, pos) <= getDefinition().sightRange) {
+			if (pp.x == pos.x) {
+				if (pp.y > pos.y) {
 					return Action.DOWN;
 				} else {
 					return Action.UP;
 				}
 			} else
-			if (pp.y == getPosition().y) {
-				if (pp.x > getPosition().x) {
+			if (pp.y == pos.y) {
+				if (pp.x > pos.x) {
 					return Action.RIGHT;
 				} else {
 					return Action.LEFT;
 				}
 			} else
-			if (pp.x < getPosition().x) {
-				if (pp.y > getPosition().y)
+			if (pp.x < pos.x) {
+				if (pp.y > pos.y)
 					return Action.DOWNLEFT;
 				else
 					return Action.UPLEFT;
 			} else {
-				if (pp.y > getPosition().y)
+				if (pp.y > pos.y)
 					return Action.DOWNRIGHT;
 				else
 					return Action.UPRIGHT;
@@ -160,17 +162,17 @@ public class Monster extends Actor implements Cloneable {
 		}
 		message.append(" ("+dam+")");
 		hp -= dam;
-		Main.ui.drawEffect(Main.efx.createLocatedEffect(getPosition(), "SFX_QUICK_WHITE_HIT"));
+		Main.ui.drawEffect(Main.efx.createLocatedEffect(pos, "SFX_QUICK_WHITE_HIT"));
 		Player pl = level.getPlayer();
 		if (getDefinition().isBleedable()) {
 			if (pl.hasCounter(Consts.C_BLOOD_THIRST) &&
-					Position.flatDistance(getPosition(), pl.getPosition()) < 3) {
+					Position.flatDistance(pos, pl.pos) < 3) {
 				int recover = (int)Math.ceil(getDefinition().bloodContent / 30);	// why 30?
 				level.addMessage("You drink some of the "+getDefinition().description+" blood! (+"+recover+")");
 				pl.recoverHits(recover);
 			}
 			if (Util.chance(40)) {
-				level.addBlood(getPosition(), Util.rand(0,1));
+				level.addBlood(pos, Util.rand(0,1));
 			}
 		}
 		if (pl.getFlag("HEALTH_REGENERATION") && Util.chance(30)) {	// *RANDOM* regen?! Why not slow tickrate?
@@ -179,13 +181,13 @@ public class Monster extends Actor implements Cloneable {
 
 		if (isDead()) {
 			if (this == level.boss) {
-				//if (!level.isWalkable(getPosition())){
+				//if (!level.isWalkable(pos)){
 					//level.addMessage("You get a castle key!");
 					pl.addKeys(1);
 				/*} else
 					setFeaturePrize("KEY");*/
-				//level.addEffect(new DoubleSplashEffect(getPosition(), "O....,,..,.,.,,......", Appearance.RED, ".,,,,..,,.,.,..,,,,,,", Appearance.WHITE));
-				Main.ui.drawEffect(Main.efx.createLocatedEffect(getPosition(), "SFX_BOSS_DEATH"));
+				//level.addEffect(new DoubleSplashEffect(pos, "O....,,..,.,.,,......", Appearance.RED, ".,,,,..,,.,.,..,,,,,,", Appearance.WHITE));
+				Main.ui.drawEffect(Main.efx.createLocatedEffect(pos, "SFX_BOSS_DEATH"));
 				level.addMessage("The whole level trembles with holy energy!");
 				level.removeBoss();
 				pl.addHistoricEvent("vanquished the "+this.getDescription()+" on the "+level.getDescription());
@@ -196,20 +198,20 @@ public class Monster extends Actor implements Cloneable {
 				pl.increaseMUpgradeCount();
 				setPrize();
 			}
-			if (featurePrize != null && !level.getMapCell(getPosition()).isSolid())
-				if (level.getMapCell(getPosition()).isShallowWater()) {
-					level.addMessage("A "+FeatureFactory.getDescriptionForID(featurePrize) +" falls into the " + level.getMapCell(getPosition()).getDescription());
-					level.addFeature(featurePrize, getPosition());
+			if (featurePrize != null && !level.getMapCell(pos).isSolid())
+				if (level.getMapCell(pos).isShallowWater()) {
+					level.addMessage("A "+FeatureFactory.getDescriptionForID(featurePrize) +" falls into the " + level.getMapCell(pos).getDescription());
+					level.addFeature(featurePrize, pos);
 				} else {
-					level.addFeature(featurePrize, getPosition());
+					level.addFeature(featurePrize, pos);
 				}
 			
 			if (getDefinition().isBleedable()) {
-				Position runner = new Position(-1,-1,getPosition().z);
+				Position runner = new Position(-1,-1,pos.z);
 				for (runner.x = -1; runner.x <= 1; runner.x++) {
 					for (runner.y = -1; runner.y <= 1; runner.y++) {
 						if (Util.chance(70)) {
-							level.addBlood(Position.add(getPosition(), runner), Util.rand(0,1));
+							level.addBlood(Position.add(pos, runner), Util.rand(0,1));
 						}
 					}
 				}
@@ -380,7 +382,7 @@ public class Monster extends Actor implements Cloneable {
 		super.die();
 		level.removeMonster(this);
 		if (getAutorespawncount() > 0) {
-			Emerger em = new Emerger(MonsterData.buildMonster(getDefinition().ID), getPosition(), getAutorespawncount());
+			Emerger em = new Emerger(MonsterData.buildMonster(getDefinition().ID), pos, getAutorespawncount());
 			level.addActor(em);
 			em.selector = new EmergerAI();
 			em.level = level;
@@ -430,7 +432,7 @@ public class Monster extends Actor implements Cloneable {
 		hitChance = (int)Math.round((hitChance + magicalHit)/2.0d);
 		int penalty = 0;
 		if (isWeaponAttack) {
-			penalty = (int)(Position.distance(getPosition(), attackOrigin)/4);
+			penalty = (int)(Position.distance(pos, attackOrigin)/4);
 			if (attacker.getWeapon().isHarmsUndead() && isUndead()) {
 				magicalDamage *= 2;
 			}
@@ -512,7 +514,7 @@ public class Monster extends Actor implements Cloneable {
 		int minDist = 150;
 		for (int i = 0; i < monsters.size(); i++){
 			Monster monster = (Monster) monsters.elementAt(i);
-			int distance = Position.flatDistance(getPosition(), monster.getPosition());
+			int distance = Position.flatDistance(pos, monster.pos);
 			if (monster != this && distance < minDist){
 				minDist = distance;
 				nearMonster = monster;
@@ -523,30 +525,30 @@ public class Monster extends Actor implements Cloneable {
 	
 	
 	public int stareMonster(Monster who) {
-		if (who.getPosition().z != getPosition().z) {
+		if (who.pos.z != pos.z) {
 			return -1;
 		}
-		if (Position.flatDistance(who.getPosition(), getPosition()) <= getDefinition().sightRange) {
-			Position pp = who.getPosition();
-			if (pp.x == getPosition().x) {
-				if (pp.y > getPosition().y) {
+		if (Position.flatDistance(who.pos, pos) <= getDefinition().sightRange) {
+			Position pp = who.pos;
+			if (pp.x == pos.x) {
+				if (pp.y > pos.y) {
 					return Action.DOWN;
 				} else {
 					return Action.UP;
 				}
-			} else if (pp.y == getPosition().y) {
-				if (pp.x > getPosition().x){
+			} else if (pp.y == pos.y) {
+				if (pp.x > pos.x){
 					return Action.RIGHT;
 				} else {
 					return Action.LEFT;
 				}
-			} else if (pp.x < getPosition().x) {
-				if (pp.y > getPosition().y)
+			} else if (pp.x < pos.x) {
+				if (pp.y > pos.y)
 					return Action.DOWNLEFT;
 				else
 					return Action.UPLEFT;
 			} else {
-				if (pp.y > getPosition().y)
+				if (pp.y > pos.y)
 					return Action.DOWNRIGHT;
 				else
 					return Action.UPRIGHT;
@@ -561,9 +563,9 @@ public class Monster extends Actor implements Cloneable {
 			// this seems very limiting. nothing can get the jump on you if you FoW-isolate them?
 			return false;
 		}
-		Line sight = new Line(getPosition(), level.getPlayer().getPosition());
+		Line sight = new Line(pos, level.getPlayer().pos);
 		Position point = sight.next();
-		while (!point.equals(level.getPlayer().getPosition())) {
+		while (!point.equals(level.getPlayer().pos)) {
 			if (level.getMapCell(point)!= null && level.getMapCell(point).isOpaque()){
 				return false;
 			}

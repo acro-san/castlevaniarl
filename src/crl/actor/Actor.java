@@ -9,6 +9,7 @@ import sz.util.PriorityEnqueable;
 import crl.action.Action;
 import crl.ai.ActionSelector;
 import crl.game.SFXManager;
+import crl.level.Cell;
 import crl.level.Level;
 import crl.ui.Appearance;
 
@@ -17,7 +18,7 @@ public class Actor implements Cloneable, java.io.Serializable, PriorityEnqueable
 	protected /*transient*/ int positionx, positiony, positionz;
 	protected transient Appearance appearance;
 	public ActionSelector selector;
-	private /*transient*/ Position position = new Position(0,0,0);
+	public /*transient*/ Position pos = new Position(0,0,0);
 	private int hoverHeight;
 	private /*transient*/ int nextTime = 10;
 	
@@ -83,9 +84,9 @@ public class Actor implements Cloneable, java.io.Serializable, PriorityEnqueable
 	}
 
 	public void setPosition(int x, int y, int z){
-		position.x = x;
-		position.y = y;
-		position.z = z;
+		pos.x = x;
+		pos.y = y;
+		pos.z = z;
 	}
 
 	public void die() {
@@ -99,7 +100,7 @@ public class Actor implements Cloneable, java.io.Serializable, PriorityEnqueable
 
 	private boolean aWannaDie;
 
-
+/*
 	public void setPosition(Position p) {
 		position = p;
 	}
@@ -107,6 +108,7 @@ public class Actor implements Cloneable, java.io.Serializable, PriorityEnqueable
 	public Position getPosition() {
 		return position;
 	}
+	*/
 
 	//Player has a complex override of getAppearance for form-changes etc!
 	public Appearance getAppearance() { return appearance; }
@@ -115,8 +117,8 @@ public class Actor implements Cloneable, java.io.Serializable, PriorityEnqueable
 	public Object clone(){
 		try {
 			Actor x = (Actor) super.clone();
-			if (position != null)
-				x.setPosition(new Position(position.x, position.y, position.z));
+			if (pos != null)
+				x.pos = new Position(pos.x, pos.y, pos.z);
 			return x;
 		} catch (CloneNotSupportedException cnse){
 			Debug.doAssert(false, "failed class cast, Feature.clone()");
@@ -173,8 +175,9 @@ public class Actor implements Cloneable, java.io.Serializable, PriorityEnqueable
 		if (isJumping) {
 			return startingJumpingHeight+2;
 		}
-		if (level.getMapCell(getPosition()) != null) {
-			return level.getMapCell(getPosition()).getHeight()+getHoverHeight();
+		Cell mc = level.getMapCell(pos);
+		if (mc != null) {
+			return mc.getHeight()+getHoverHeight();
 		} else {
 			return getHoverHeight();
 		}

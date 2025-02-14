@@ -148,10 +148,10 @@ public class Main {
 				initializeCells();
 				initializeItems();
 				initializeMonsters();
-				initializeNPCs();
+				NPCData.init();	// init NPCs
 				initializeFeatures();
 				initializeSmartFeatures();
-				switch (uiMode){
+				switch (uiMode) {
 				case SWING_GFX:
 					System.out.println("Initializing Swing GFX System Interface");
 					SwingSystemInterface si = new SwingSystemInterface(gfx_configuration);
@@ -159,7 +159,6 @@ public class Main {
 					ui = new GFXUserInterface(gfx_configuration);
 					Display.thus = new GFXDisplay(si, UIconfiguration, gfx_configuration);
 					PlayerGenerator.thus = new GFXPlayerGenerator(si, gfx_configuration);
-					//EffectFactory.setSingleton(new GFXEffectFactory());
 					efx = new GFXEffectFactory();
 					
 					GFXEffect[] gef = new GFXEffects(gfx_configuration).getEffects();
@@ -178,7 +177,6 @@ public class Main {
 					}
 					System.out.println("Initializing Console User Interface");
 					ui = new ConsoleUserInterface();
-					///CharCuts.initializeSingleton();
 					Display.thus = new CharDisplay(csi);
 					PlayerGenerator.thus = new CharPlayerGenerator(csi);
 					efx = new CharEffectFactory();
@@ -187,18 +185,18 @@ public class Main {
 					break;
 				case SWING_CONSOLE:
 					System.out.println("Initializing Swing Console System Interface");
-					csi = null;
 					csi = new WSwingConsoleInterface();
+					
 					System.out.println("Initializing Console User Interface");
 					ui = new ConsoleUserInterface();
-					//CharCuts.initializeSingleton();
+					
 					Display.thus = new CharDisplay(csi);
 					PlayerGenerator.thus = new CharPlayerGenerator(csi);
 					efx = new CharEffectFactory();
 					((CharEffectFactory)efx).setEffects(new CharEffects().getEffects());
 					initializeUI(csi);
 				}
-			} catch (Exception e){
+			} catch (Exception e) {
 				crash("Error initializing", e);
 			}
 			STMusicManagerNew.initManager();
@@ -424,6 +422,7 @@ public class Main {
 	}
 
 	private static void initializeUI(Object si) throws CRLException {
+		// isn't this already done ? elsewhere?
 		Action walkAction = new Walk();
 		Action jump = new Jump();
 		Action thrown = new Throw();
@@ -565,10 +564,13 @@ public class Main {
 			((ConsoleUISelector)uiSelector).init((ConsoleSystemInterface)si, userActions, walkAction, target, attack, keyBindings);
 			break;
 		case SWING_CONSOLE:
+			((ConsoleUserInterface)ui).init((ConsoleSystemInterface)si, userCommands, target);
+			uiSelector = new ConsoleUISelector();
+			// ((WSwingConsoleInterface)uiSelector).in
+	//		uiSelector.init(si, userCommands, target);	// ...
 			// Swing Console UI .. boots, opens, doesn't work. doesn't centre.
-			// ((ConsoleUserInterface)ui).init((WSwingConsoleInterface)si, userActions, userCommands, walkAction, target, attack);
 			//uiSelector = new ConsoleUISelector();	// ?OK?
-			
+
 			break;
 		}
 	}
@@ -671,11 +673,6 @@ public class Main {
 		MonsterData.init(MonsterLoader.getMonsterDefinitions("data/monsters.ecsv","data/monsters.exml"));
 	}
 
-
-	private static void initializeNPCs() {
-		// check not already inited? or is this called only once at startup?
-		NPCData.init();
-	}
 
 	private static void initializeItems() {
 		// if loaded from asset/data file, could 'user-override' location

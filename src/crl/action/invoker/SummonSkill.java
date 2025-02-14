@@ -19,7 +19,7 @@ public abstract class SummonSkill extends HeartAction {
 		if (Util.chance(100)){ //TODO: This is related to soul
 			int count = 20;
 			out: while (count > 0){
-				randPos = Position.add(performer.getPosition(), new Position(Util.rand(-1,1), Util.rand(-1,1),0));
+				randPos = Position.add(performer.pos, new Position(Util.rand(-1,1), Util.rand(-1,1),0));
 				if (aLevel.isWalkable(randPos)){
 					break out;
 				}
@@ -29,7 +29,7 @@ public abstract class SummonSkill extends HeartAction {
 				Monster m = MonsterData.buildMonster(getMonsterID());
 				aLevel.addMessage("A "+m.getDescription()+" rises from the floor!");
 				m.setCounter(Consts.C_MONSTER_CHARM, 9999999);
-				m.setPosition(randPos);
+				m.pos = randPos;
 				m.increaseHits(getHitBonus());
 				aLevel.addMonster(m);
 			}

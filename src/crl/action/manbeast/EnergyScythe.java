@@ -72,12 +72,12 @@ public class EnergyScythe extends HeartAction {
 				aLevel.addMessage("Hitting yourself hard?");
 				return;
 		}
-		hit(Position.add(performer.getPosition(), Action.directionToVariation(otherDir1)), damage);
-		hit(Position.add(performer.getPosition(), Action.directionToVariation(targetDirection)), damage);
-		hit(Position.add(performer.getPosition(), Action.directionToVariation(otherDir2)), damage);
-		hit(Position.add(Position.add(performer.getPosition(), Action.directionToVariation(otherDir1)), Action.directionToVariation(targetDirection)), damage);
-		hit(Position.add(Position.add(performer.getPosition(), Action.directionToVariation(targetDirection)), Action.directionToVariation(targetDirection)), damage);
-		hit(Position.add(Position.add(performer.getPosition(), Action.directionToVariation(otherDir2)), Action.directionToVariation(targetDirection)), damage);
+		hit(Position.add(performer.pos, Action.directionToVariation(otherDir1)), damage);
+		hit(Position.add(performer.pos, Action.directionToVariation(targetDirection)), damage);
+		hit(Position.add(performer.pos, Action.directionToVariation(otherDir2)), damage);
+		hit(Position.add(Position.add(performer.pos, Action.directionToVariation(otherDir1)), Action.directionToVariation(targetDirection)), damage);
+		hit(Position.add(Position.add(performer.pos, Action.directionToVariation(targetDirection)), Action.directionToVariation(targetDirection)), damage);
+		hit(Position.add(Position.add(performer.pos, Action.directionToVariation(otherDir2)), Action.directionToVariation(targetDirection)), damage);
 	}
 
 	public String getSFX() {
@@ -89,7 +89,7 @@ public class EnergyScythe extends HeartAction {
 		return (int)(p.getAttackCost() * 1.4);
 	}
 	
-	private boolean hit (Position destinationPoint, int damage){
+	private boolean hit (Position destinationPoint, int damage) {
 		StringBuffer message = new StringBuffer();
 		Level aLevel = performer.level;
 		Player aPlayer = aLevel.getPlayer();
@@ -111,9 +111,9 @@ public class EnergyScythe extends HeartAction {
 		Cell destinationCell = performer.level.getMapCell(destinationPoint);
 		if (targetMonster != null &&
 			!(targetMonster.isInWater() && targetMonster.canSwim()) &&
-				(destinationCell.getHeight() == aLevel.getMapCell(aPlayer.getPosition()).getHeight() ||
-				destinationCell.getHeight() -1  == aLevel.getMapCell(aPlayer.getPosition()).getHeight() ||
-				destinationCell.getHeight() == aLevel.getMapCell(aPlayer.getPosition()).getHeight()-1)
+				(destinationCell.getHeight() == aLevel.getMapCell(aPlayer.pos).getHeight() ||
+				destinationCell.getHeight() -1  == aLevel.getMapCell(aPlayer.pos).getHeight() ||
+				destinationCell.getHeight() == aLevel.getMapCell(aPlayer.pos).getHeight()-1)
 			)
 		{
 			if (targetMonster.wasSeen()) {

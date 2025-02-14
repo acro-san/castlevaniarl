@@ -8,14 +8,11 @@ import crl.action.Action;
 import crl.actor.Actor;
 import crl.feature.Feature;
 import crl.feature.SmartFeature;
-import crl.feature.SmartFeatureFactory;
-import crl.feature.ai.CrossAI;
 import crl.level.Cell;
 import crl.level.Level;
 import crl.monster.Monster;
 import crl.player.Player;
 import crl.ui.effects.Effect;
-import crl.ui.effects.EffectFactory;
 
 public class CrossBack extends Action {
 	
@@ -27,12 +24,12 @@ public class CrossBack extends Action {
 		return true;
 	}
 
-	public void execute(){
+	public void execute() {
 		Level aLevel = performer.level;
 		aLevel.addMessage("The cross comes back!");
 		int damage = 3 + aLevel.getPlayer().getShotLevel() + aLevel.getPlayer().getSoulPower();
 		
-		if (targetPosition.equals(performer.getPosition())) {
+		if (targetPosition.equals(performer.pos)) {
 			if (Util.chance(50)) {
 				aLevel.addMessage("The cross falls heads! You catch the cross.");
 			} else {
@@ -41,14 +38,14 @@ public class CrossBack extends Action {
 			return;
 		}
 		
-		Line crossLine = new Line(performer.getPosition(), targetPosition);
+		Line crossLine = new Line(performer.pos, targetPosition);
 		int startHeight = ((SmartFeature)performer).height;
 		crossLine.next();
 		Position destinationPoint = null;
 		int i = 0;
 		for (i=0; i<20; i++) {
 			destinationPoint = crossLine.next();
-			if (destinationPoint.equals(aLevel.getPlayer().getPosition())){
+			if (destinationPoint.equals(aLevel.getPlayer().pos)){
 				aLevel.addMessage("You catch the cross");
 				break;
 			}
@@ -82,8 +79,8 @@ public class CrossBack extends Action {
 			}
 		}
 
-		Effect crossEffect = Main.efx.createDirectedEffect(performer.getPosition(), targetPosition, "SFX_CROSS", i);
-		crossEffect.setPosition(performer.level.getPlayer().getPosition());
+		Effect crossEffect = Main.efx.createDirectedEffect(performer.pos, targetPosition, "SFX_CROSS", i);
+		crossEffect.setPosition(performer.level.getPlayer().pos);
 		drawEffect(crossEffect);
 	}
 

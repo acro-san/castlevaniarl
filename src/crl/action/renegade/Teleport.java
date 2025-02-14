@@ -1,16 +1,12 @@
 package crl.action.renegade;
 
-import sz.util.Line;
-import sz.util.Position;
 import crl.Main;
-import crl.action.Action;
 import crl.action.HeartAction;
-import crl.actor.Actor;
 import crl.level.Cell;
 import crl.level.Level;
 import crl.player.Player;
-import crl.ui.UserInterface;
-import crl.ui.effects.EffectFactory;
+import sz.util.Line;
+import sz.util.Position;
 
 public class Teleport extends HeartAction {
 	
@@ -35,13 +31,13 @@ public class Teleport extends HeartAction {
 		Player player = (Player) performer;
 		Level level = player.level;
 		level.addMessage("You wrap in your cape and dissapear!");
-		if (targetPosition.equals(performer.getPosition())) {
+		if (targetPosition.equals(performer.pos)) {
 			level.addMessage("You appear in the same place!");
 			return;
 		}
 
-		//crl.ui.effects.FlashEffect x = new FlashEffect(player.getPosition(), Appearance.GRAY);
-		Line line = new Line(player.getPosition(), targetPosition);
+		//crl.ui.effects.FlashEffect x = new FlashEffect(player.pos, Appearance.GRAY);
+		Line line = new Line(player.pos, targetPosition);
 		Position runner = line.next();
 		Position prerunner = new Position(runner);
 		int i = 0;
@@ -52,13 +48,13 @@ public class Teleport extends HeartAction {
 			runner = line.next();
 			Cell destinationCell = performer.level.getMapCell(runner);
 			if (level.isWalkable(runner) && !level.isAir(runner) &&
-				destinationCell.getHeight() == level.getMapCell(player.getPosition()).getHeight()
+				destinationCell.getHeight() == level.getMapCell(player.pos).getHeight()
 			)
 				;
 			else
 				break;
 		}
-		drawEffect(Main.efx.createDirectedEffect(player.getPosition(), targetPosition, "SFX_TELEPORT", i));
+		drawEffect(Main.efx.createDirectedEffect(player.pos, targetPosition, "SFX_TELEPORT", i));
 		
 		player.landOn(prerunner);
 		player.see();

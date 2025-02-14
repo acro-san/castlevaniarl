@@ -27,17 +27,17 @@ public class MonsterWalk extends Action {
 		Debug.doAssert(performer instanceof Monster, "The player tried to MonsterWalk...");
 		Monster mon = (Monster)performer;
 		Position var = directionToVariation(targetDirection);
-		Position destinationPoint = Position.add(performer.getPosition(), var);
+		Position destinationPoint = Position.add(performer.pos, var);
 		Level aLevel = performer.level;
 		if (!aLevel.isValidCoordinate(destinationPoint)) {
 			return;
 		}
 		Cell destinationCell = aLevel.getMapCell(destinationPoint);
-		Cell currentCell = aLevel.getMapCell(performer.getPosition());
+		Cell currentCell = aLevel.getMapCell(performer.pos);
 		
 		Monster destinationMonster = aLevel.getMonsterAt(destinationPoint);
 		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-		SmartFeature standing = aLevel.getSmartFeature(performer.getPosition());
+		SmartFeature standing = aLevel.getSmartFeature(performer.pos);
 		if (standing != null) {
 			if (standing.getEffectOnStep() != null) {
 				String[] effects = standing.getEffectOnStep().split(" ");
@@ -79,14 +79,14 @@ public class MonsterWalk extends Action {
 						{
 							if (destinationCell.isShallowWater()) {
 								if (mon.canSwim() || mon.isEthereal()) {
-									performer.setPosition(destinationPoint);
+									performer.pos = destinationPoint;
 								}
 							} else if (destinationCell.isWater()) {
 								if (mon.canSwim() || mon.isEthereal()) {
-									performer.setPosition(destinationPoint);
+									performer.pos = destinationPoint;
 								}
 							} else {
-								if (aLevel.getPlayer().getPosition().equals(destinationPoint)) {
+								if (aLevel.getPlayer().pos.equals(destinationPoint)) {
 									if (aLevel.getPlayer().getStandingHeight() == mon.getStandingHeight()) {
 										if (mon.getWavOnHit() != null) {
 											SFXManager.play(mon.getWavOnHit());
@@ -94,7 +94,7 @@ public class MonsterWalk extends Action {
 										aLevel.getPlayer().damage("You are hit by the "+mon.getDescription()+"!", mon, new Damage(mon.getAttack(), false));
 									} else if (aLevel.getPlayer().getStandingHeight() > mon.getStandingHeight()){
 										aLevel.addMessage("The "+mon.getDescription()+ " walks beneath you");
-										performer.setPosition(destinationPoint);
+										performer.pos = destinationPoint;
 										/*Esto deberia estar en un landing*/
 										if (aLevel.getSmartFeature(destinationPoint) != null) {
 											SmartFeature sf = aLevel.getSmartFeature(destinationPoint);
@@ -106,7 +106,7 @@ public class MonsterWalk extends Action {
 										}
 									} else {
 										aLevel.addMessage("The "+mon.getDescription()+ " hovers over you!");
-										performer.setPosition(destinationPoint);
+										performer.pos = destinationPoint;
 										if (aLevel.getSmartFeature(destinationPoint) != null) {
 											SmartFeature sf = aLevel.getSmartFeature(destinationPoint);
 											if (sf.damageOnStep > 0) {
@@ -117,7 +117,7 @@ public class MonsterWalk extends Action {
 										}
 									}
 								} else {
-									performer.setPosition(destinationPoint);
+									performer.pos = destinationPoint;
 									if (aLevel.getSmartFeature(destinationPoint) != null) {
 										SmartFeature sf = aLevel.getSmartFeature(destinationPoint);
 										if (sf.damageOnStep > 0) {

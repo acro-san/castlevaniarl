@@ -21,6 +21,8 @@ public abstract class Action implements java.io.Serializable {
 	protected Position targetPosition;
 	protected Vector<Item> targetMultiItems;
 
+	// FIXME this ought to be in TRBL order. the better for indexing intuitive strings of chars, etc!
+	// i.e. UPLEFT==0,UP==1,UPRIGHT==2, and so on.
 	public final static int
 		UP = 0,
 		DOWN = 1,

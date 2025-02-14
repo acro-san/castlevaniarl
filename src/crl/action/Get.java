@@ -28,7 +28,7 @@ public class Get extends Action {
 			if (aPlayer.canCarry()) {
 				aLevel.addMessage("You pick up the "+destinationItem.getDescription()+".");
 				aPlayer.addItem(destinationItem);
-				aLevel.removeItemFrom(destinationItem, performer.getPosition());
+				aLevel.removeItemFrom(destinationItem, performer.pos);
 			} else {
 				// "You already have as many X as you can carry".
 				// "You can't carry any more X" <- briefest is best?

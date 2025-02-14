@@ -18,58 +18,60 @@ public class SpinningSlice extends Action {
 	public void execute() {
 		Player aPlayer = (Player) performer;
 		Level aLevel = performer.level;
-		if (!checkHearts(8))
-        	return;
-  		if (aPlayer.getWeapon() == null){
-  			aLevel.addMessage("You can't slice without a proper weapon");
-  			return;
-  		}
+		if (!checkHearts(8)) {
+			return;
+		}
+		if (aPlayer.getWeapon() == null) {
+			aLevel.addMessage("You can't slice without a proper weapon");
+			return;
+		}
 
-  		Position runner = new Position(aPlayer.getPosition().x-1, aPlayer.getPosition().y-1, aPlayer.getPosition().z);
-        for (; runner.x <= aPlayer.getPosition().x+1; runner.x++){
-        	for (; runner.y <= aPlayer.getPosition().y+1; runner.y++) {
+		Position runner = new Position(aPlayer.pos.x-1, aPlayer.pos.y-1, aPlayer.pos.z);
+		for (; runner.x <= aPlayer.pos.x+1; runner.x++) {
+			for (; runner.y <= aPlayer.pos.y+1; runner.y++) {
 				Cell destinationCell = aLevel.getMapCell(runner);
 				//aLevel.addBlood(runner, 8);
-	        	if (destinationCell == null)
-	        		continue;
+				if (destinationCell == null) {
+					continue;
+				}
 				hit(runner, aLevel, aPlayer);
 			}
-			runner.y = aPlayer.getPosition().y-1;
+			runner.y = aPlayer.pos.y-1;
 		}
 	}
 
-	private void hit(Position destinationPoint, Level aLevel, Player player){
+
+	private void hit(Position destinationPoint, Level aLevel, Player player) {
 		StringBuffer message = new StringBuffer();
 		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-		if (destinationFeature != null && destinationFeature.isDestroyable()){
+		if (destinationFeature != null && destinationFeature.isDestroyable()) {
 			message.append("You slice the "+destinationFeature.getDescription());
 			Feature prize = destinationFeature.damage(player, player.getWeapon().getAttack());
-			if (prize != null){
-		       	message.append(", and cut it apart!");
+			if (prize != null) {
+				message.append(", and cut it apart!");
 			}
 			aLevel.addMessage(message.toString());
 		}
-
+		
 		Monster targetMonster = performer.level.getMonsterAt(destinationPoint);
 		message = new StringBuffer();
-		if (
-			targetMonster != null &&
-			!(targetMonster.isInWater() && targetMonster.canSwim())
-		){
+		if (targetMonster != null &&
+			!(targetMonster.isInWater() && targetMonster.canSwim()) )
+		{
 			message.append("You slice the "+targetMonster.getDescription());
 			targetMonster.damageWithWeapon(message, player.getWeaponAttack()+player.getAttack());
-        	if (targetMonster.isDead()){
-	        	message.append(", and cut it apart!");
+			if (targetMonster.isDead()) {
+				message.append(", and cut it apart!");
 				//performer.level.removeMonster(targetMonster);
 			}
-        	if (targetMonster.wasSeen())
-        		aLevel.addMessage(message.toString());
+			if (targetMonster.wasSeen()) {
+				aLevel.addMessage(message.toString());
+			}
 		}
 	}
 	
-	public boolean canPerform(Actor a){
+	public boolean canPerform(Actor a) {
 		Player aPlayer = (Player) a;
-		//Level aLevel = performer.level;
 		if (aPlayer.getHearts() < 8) {
 			invalidationMessage = "You need more energy!";
 			return false;

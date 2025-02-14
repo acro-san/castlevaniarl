@@ -10,7 +10,7 @@ public class CharBeamMissileEffect extends CharDirectedEffect {
 	private String missile;
 	private int misColor;
 	
-	public void drawEffect(ConsoleUserInterface ui, ConsoleSystemInterface si){
+	public void drawEffect(ConsoleUserInterface ui, ConsoleSystemInterface si) {
 		Main.ui.getPlayer().see();
 		Main.ui.refresh();
 		// ?? Why not use console ui parameter?
@@ -24,7 +24,7 @@ public class CharBeamMissileEffect extends CharDirectedEffect {
 			if (too == missile.length())
 				too = 0;
 			char icon = missile.charAt(too);
-			Position relative = Position.subs(next, ui.getPlayer().getPosition());
+			Position relative = Position.subs(next, ui.getPlayer().pos);
 			Position toPrint = Position.add(ui.PC_POS, relative);
 			if (!ui.insideViewPort(toPrint))
 				break;

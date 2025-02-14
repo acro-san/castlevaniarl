@@ -9,12 +9,13 @@ import crl.level.Level;
 import crl.monster.Monster;
 import crl.player.Player;
 
-public class TigerClaw extends Action{
+public class TigerClaw extends Action {
+	
 	public String getID(){
 		return "TIGER_CLAW";
 	}
 	
-	public boolean needsDirection(){
+	public boolean needsDirection() {
 		return true;
 	}
 
@@ -22,16 +23,16 @@ public class TigerClaw extends Action{
 		return "Where do you want to jump at?";
 	}
 
-	public void execute(){
+	public void execute() {
 		Player aPlayer = (Player)performer;
 		Level aLevel = aPlayer.level;
-		if (!checkHearts(10)){
-	        aLevel.addMessage("You need more power!");
-	        return;
-	    }
-   		int otherDir1 = 0;
+		if (!checkHearts(10)) {
+			aLevel.addMessage("You need more power!");
+			return;
+		}
+		int otherDir1 = 0;
 		int otherDir2 = 0;
-		switch (targetDirection){
+		switch (targetDirection) {
 			case Action.UP:
 				otherDir1 = Action.UPLEFT;
 				otherDir2 = Action.UPRIGHT;
@@ -67,9 +68,9 @@ public class TigerClaw extends Action{
 		}
 		Position directionVar = Action.directionToVariation(targetDirection);
 		
-		Position runner1 = Position.add(performer.getPosition(), Action.directionToVariation(otherDir1));
-		Position runner2 = Position.add(performer.getPosition(), Action.directionToVariation(targetDirection));
-		Position runner3 = Position.add(performer.getPosition(), Action.directionToVariation(otherDir2));
+		Position runner1 = Position.add(performer.pos, Action.directionToVariation(otherDir1));
+		Position runner2 = Position.add(performer.pos, Action.directionToVariation(targetDirection));
+		Position runner3 = Position.add(performer.pos, Action.directionToVariation(otherDir2));
 		for (int i = 0; i < 7; i++) {
 			if (!performer.level.isWalkable(runner2)) {
 				runner2.add(Position.mul(directionVar, -1));
@@ -85,37 +86,39 @@ public class TigerClaw extends Action{
 		if (!performer.level.isWalkable(runner2)){
 			runner2.add(Position.mul(directionVar, -1));
 		}
-		performer.setPosition(runner2);
+		performer.pos = runner2;
 	}
 
-	private boolean hit (Position destinationPoint){
+
+	private boolean hit (Position destinationPoint) {
 		StringBuffer message = new StringBuffer();
 		Level aLevel = performer.level;
-        //UserInterface.getUI().drawEffect(new TileEffect(destinationPoint, 'o', Appearance.GREEN, 100));
+		//UserInterface.getUI().drawEffect(new TileEffect(destinationPoint, 'o', Appearance.GREEN, 100));
 		//aLevel.addBlood(destinationPoint, 8);
 		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-        if (destinationFeature != null && destinationFeature.isDestroyable()){
-	       	message.append("You slash through the "+destinationFeature.getDescription());
+		if (destinationFeature != null && destinationFeature.isDestroyable()) {
+			message.append("You slash through the "+destinationFeature.getDescription());
 			aLevel.addMessage(message.toString());
-        	return true;
+			return true;
 		}
-        Monster targetMonster = performer.level.getMonsterAt(destinationPoint);
-        if (
-			targetMonster != null &&
-			!(targetMonster.isInWater() && targetMonster.canSwim())
-			){
-				message.append("You slash thru the "+targetMonster.getDescription());
-				targetMonster.damageWithWeapon(message, aLevel.getPlayer().getPunchDamage());
-	        	if (targetMonster.isDead()){
-		        	message.append(", cutting it apart!");
-				}
-	        	if (targetMonster.wasSeen())
-	        		aLevel.addMessage(message.toString());
-				return true;
+		Monster targetMonster = performer.level.getMonsterAt(destinationPoint);
+		if (targetMonster != null &&
+			!(targetMonster.isInWater() && targetMonster.canSwim()) )
+		{
+			message.append("You slash thru the "+targetMonster.getDescription());
+			targetMonster.damageWithWeapon(message, aLevel.getPlayer().getPunchDamage());
+			if (targetMonster.isDead()) {
+				message.append(", cutting it apart!");
 			}
+			if (targetMonster.wasSeen()) {
+				aLevel.addMessage(message.toString());
+			}
+			return true;
+		}
 		return false;
 	}
-	
+
+
 	public boolean canPerform(Actor a) {
 		Player aPlayer = (Player) a;
 		if (aPlayer.getHearts() < 10) {
@@ -124,4 +127,5 @@ public class TigerClaw extends Action{
 		}
 		return true;
 	}
+
 }

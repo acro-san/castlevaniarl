@@ -20,9 +20,9 @@ public class VillagerAI implements ActionSelector{
 		Level lvl = who.level;
 		if (attackPlayer && aNPC.getHits() > 1){
 			if (Util.chance(10)) {
-				lvl.addMessage("The "+who.getDescription()+" yells: '"+aNPC.getAngryMessage()+"'", who.getPosition());
+				lvl.addMessage("The "+who.getDescription()+" yells: '"+aNPC.getAngryMessage()+"'", who.pos);
 			}
-			lvl.signal(who.getPosition(), 5, "ATTACK_PLAYER");
+			lvl.signal(who.pos, 5, "ATTACK_PLAYER");
 			int directionToPlayer = aNPC.starePlayer();
 			if (directionToPlayer != -1){
 				Action ret = new MonsterWalk();
@@ -30,8 +30,8 @@ public class VillagerAI implements ActionSelector{
 				return ret;
 			}
 		} else if (onDanger) {
-			lvl.addMessage("The "+who.getDescription()+" yells: '"+aNPC.getDangerMessage()+"'", who.getPosition());
-			lvl.signal(who.getPosition(), 7, "ATTACK_PLAYER");
+			lvl.addMessage("The "+who.getDescription()+" yells: '"+aNPC.getDangerMessage()+"'", who.pos);
+			lvl.signal(who.pos, 7, "ATTACK_PLAYER");
 			int directionToPlayer = aNPC.starePlayer();
 			if (directionToPlayer != -1){
 				Action ret = new MonsterWalk();
@@ -44,7 +44,7 @@ public class VillagerAI implements ActionSelector{
 				int tries = 100;
 				while (tries > 0) {
 					int direction = Util.rand(0,7);
-					Position destinationPoint = Position.add(aNPC.getPosition(), Action.directionToVariation(direction));
+					Position destinationPoint = Position.add(aNPC.pos, Action.directionToVariation(direction));
 					Cell cell = lvl.getMapCell(destinationPoint);
 					if (cell == null) {
 						tries--;

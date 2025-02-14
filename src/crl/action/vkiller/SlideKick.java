@@ -32,20 +32,20 @@ public class SlideKick extends HeartAction {
 		Player aPlayer = (Player) performer;
 		Level aLevel = aPlayer.level;
 		
-		if (targetPosition.equals(performer.getPosition())){
+		if (targetPosition.equals(performer.pos)){
 			aLevel.addMessage("You fall back.");
 			return;
 		}
 		aLevel.addMessage("You slide!");
 		int damage = 5 + aPlayer.getAttack();
 
-		Line fireLine = new Line(performer.getPosition(), targetPosition);
-		Position previousPoint = aPlayer.getPosition();
-		int projectileHeight = aLevel.getMapCell(aPlayer.getPosition()).getHeight();
+		Line fireLine = new Line(performer.pos, targetPosition);
+		Position previousPoint = aPlayer.pos;
+		int projectileHeight = aLevel.getMapCell(aPlayer.pos).getHeight();
 		for (int i=0; i<3; i++){
 			Position destinationPoint = fireLine.next();
 			if (aLevel.isSolid(destinationPoint)){
-				drawEffect(Main.efx.createDirectedEffect(performer.getPosition(), targetPosition, "SFX_SLIDEKICK", i));
+				drawEffect(Main.efx.createDirectedEffect(performer.pos, targetPosition, "SFX_SLIDEKICK", i));
 				aPlayer.landOn(previousPoint);
 				return;
 			}
@@ -58,7 +58,7 @@ public class SlideKick extends HeartAction {
 				Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
 				if (destinationFeature != null && destinationFeature.isDestroyable()) {
 					message = "You hit the "+destinationFeature.getDescription();
-					drawEffect(Main.efx.createDirectedEffect(performer.getPosition(), targetPosition, "SFX_SLIDEKICK", i));
+					drawEffect(Main.efx.createDirectedEffect(performer.pos, targetPosition, "SFX_SLIDEKICK", i));
 					Feature prize = destinationFeature.damage(aPlayer, damage);
 					if (prize != null) {
 						message += " and destroys it.";
@@ -73,8 +73,8 @@ public class SlideKick extends HeartAction {
 			if (targetMonster != null){
 				int monsterHeight = destinationHeight + targetMonster.getHoverHeight();
 				if (projectileHeight == monsterHeight){
-					if (targetMonster.tryMagicHit(aPlayer,damage, 100, targetMonster.wasSeen(), "dash", false, performer.getPosition())){
-						drawEffect(Main.efx.createDirectedEffect(aPlayer.getPosition(), targetPosition, "SFX_SLIDEKICK", i));
+					if (targetMonster.tryMagicHit(aPlayer,damage, 100, targetMonster.wasSeen(), "dash", false, performer.pos)){
+						drawEffect(Main.efx.createDirectedEffect(aPlayer.pos, targetPosition, "SFX_SLIDEKICK", i));
 						aPlayer.landOn(previousPoint);
 						return;
 					};
@@ -87,7 +87,7 @@ public class SlideKick extends HeartAction {
 			previousPoint = destinationPoint;
 		}
 		
-		drawEffect(Main.efx.createDirectedEffect(aPlayer.getPosition(), targetPosition, "SFX_SLIDEKICK", 4));
+		drawEffect(Main.efx.createDirectedEffect(aPlayer.pos, targetPosition, "SFX_SLIDEKICK", 4));
 		aPlayer.landOn(previousPoint);
 	}
 

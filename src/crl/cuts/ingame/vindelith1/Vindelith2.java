@@ -15,11 +15,11 @@ public class Vindelith2 extends Unleasher {
 		Display.thus.showChat("VINDELITH1", game);
 		NPC claw = level.getNPCByID("UNIDED_CLAW");
 		NPC vind = level.getNPCByID("UNIDED_VINDELITH");
-		Main.ui.drawEffect(Main.efx.createDirectionalEffect(claw.getPosition(), Action.RIGHT, 1, "SFX_WP_BASELARD"));
-		Main.ui.drawEffect(Main.efx.createDirectionalEffect(vind.getPosition(), Action.LEFT, 2, "SFX_WP_BASELARD"));
-		Main.ui.drawEffect(Main.efx.createDirectionalEffect(claw.getPosition(), Action.RIGHT, 1, "SFX_WP_BASELARD"));
-		Main.ui.drawEffect(Main.efx.createDirectionalEffect(vind.getPosition(), Action.LEFT, 2, "SFX_WP_BASELARD"));
-		Main.ui.drawEffect(Main.efx.createDirectionalEffect(claw.getPosition(), Action.RIGHT, 1, "SFX_WP_BASELARD"));
+		Main.ui.drawEffect(Main.efx.createDirectionalEffect(claw.pos, Action.RIGHT, 1, "SFX_WP_BASELARD"));
+		Main.ui.drawEffect(Main.efx.createDirectionalEffect(vind.pos, Action.LEFT, 2, "SFX_WP_BASELARD"));
+		Main.ui.drawEffect(Main.efx.createDirectionalEffect(claw.pos, Action.RIGHT, 1, "SFX_WP_BASELARD"));
+		Main.ui.drawEffect(Main.efx.createDirectionalEffect(vind.pos, Action.LEFT, 2, "SFX_WP_BASELARD"));
+		Main.ui.drawEffect(Main.efx.createDirectionalEffect(claw.pos, Action.RIGHT, 1, "SFX_WP_BASELARD"));
 		Display.thus.showChat("VINDELITH2", game);
 		level.removeMonster(level.getNPCByID("UNIDED_VINDELITH"));
 		level.removeMonster(claw);

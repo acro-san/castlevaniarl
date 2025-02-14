@@ -15,30 +15,34 @@ import crl.player.Damage;
 import crl.player.Player;
 import crl.ui.UserInterface;
 
-public class Jump extends Action{
-	private Player aPlayer; 
-	public String getID(){
+public class Jump extends Action {
+	
+	private Player aPlayer;
+	
+	public String getID() {
 		return "Jump";
 	}
 	
-   	public boolean needsDirection(){
-   		if (aPlayer.hasCounter(Consts.C_BATMORPH) || aPlayer.hasCounter(Consts.C_BATMORPH2) || aPlayer.isSwimming()){
-   			return false;
-   		} else
-   			return true;
-
+	public boolean needsDirection() {
+		if (aPlayer.hasCounter(Consts.C_BATMORPH) || aPlayer.hasCounter(Consts.C_BATMORPH2) || aPlayer.isSwimming()){
+			return false;
+		}
+		return true;
 	}
-   	
-   	public boolean canPerform(Actor a) {
-   		aPlayer = getPlayer(a);
-   		return super.canPerform(a);
-   	}
 
-	public String getPromptDirection(){
+
+	public boolean canPerform(Actor a) {
+		aPlayer = getPlayer(a);
+		return super.canPerform(a);
+	}
+
+
+	public String getPromptDirection() {
 		return "Where do you want to jump?";
 	}
 
-	public String getSFX(){
+
+	public String getSFX() {
 		Player p = (Player) performer;
 		if (p.sex == Player.MALE) {
 			return "wav/jump_male.wav";
@@ -47,21 +51,21 @@ public class Jump extends Action{
 		}
 	}
 
-	public int getCost(){
+	public int getCost() {
 		return (int)(aPlayer.getWalkCost()*1.3);
 	}
 
-	public void execute(){
+	public void execute() {
 		Debug.doAssert(performer instanceof Player, "Walk action, tried for not player");
 		aPlayer = (Player) performer;
 		Position var = directionToVariation(targetDirection);
 		Level aLevel = performer.level;
 		if (aPlayer.isSwimming()) {
-			if (aLevel.getMapCell(aPlayer.getPosition()).isShallowWater()){
+			if (aLevel.getMapCell(aPlayer.pos).isShallowWater()){
 				aLevel.addMessage("You are already floating");
 			} else {
-				if (aPlayer.getPosition().z != 0){
-					Position deep = new Position(aPlayer.getPosition());
+				if (aPlayer.pos.z != 0){
+					Position deep = new Position(aPlayer.pos);
 					deep.z--;
 					if (aLevel.getMapCell(deep).isShallowWater()){
 						aLevel.addMessage("You float to the surface");
@@ -77,12 +81,12 @@ public class Jump extends Action{
 		}
 		if (aPlayer.hasCounter(Consts.C_BATMORPH) || aPlayer.hasCounter(Consts.C_BATMORPH2)) {
 			if (aPlayer.getStandingHeight() > 3) {
-				if (aPlayer.getPosition().z != 0) {
-					Position deep = new Position(aPlayer.getPosition());
+				if (aPlayer.pos.z != 0) {
+					Position deep = new Position(aPlayer.pos);
 					deep.z--;
 					if (aLevel.getMapCell(deep).getID().equals("AIR")) {
 						aLevel.addMessage("You fly upward");
-						aPlayer.setPosition(deep);
+						aPlayer.pos = deep;
 						aPlayer.setHoverHeight(0);
 					} else {
 						aLevel.addMessage("You can't fly upward");
@@ -101,8 +105,8 @@ public class Jump extends Action{
 			aLevel.addMessage("You jump upward");
 			return;
 		}
-		int startingHeight = aLevel.getMapCell(performer.getPosition()).getHeight();
-		Position startingPosition = new Position(aPlayer.getPosition());
+		int startingHeight = aLevel.getMapCell(performer.pos).getHeight();
+		Position startingPosition = new Position(aPlayer.pos);
 		int jumpingRange = 4;
 		if (aPlayer.hasIncreasedJumping()) {
 			jumpingRange++;
@@ -112,45 +116,43 @@ public class Jump extends Action{
 		aPlayer.setJustJumped(true);
 		Cell currentCell = aLevel.getMapCell(startingPosition);
 		aPlayer.doJump(aPlayer.getStandingHeight());
-        out: for (int i = 1; i < jumpingRange; i++){
+		out: for (int i = 1; i < jumpingRange; i++) {
 			Position destinationPoint = Position.add(startingPosition, Position.mul(var, i));
-        	Cell destinationCell = aLevel.getMapCell(destinationPoint);
-        	/*if (destinationCell == null)
-        		break out;*/
-        	if (destinationCell == null){
-        		if (!aLevel.isValidCoordinate(destinationPoint)){
-        			destinationPoint = Position.subs(destinationPoint, var);
-        			aPlayer.landOn(destinationPoint);
-					break out;
-        		}
-        		if (i < jumpingRange-1){
-					aPlayer.setPosition(destinationPoint);
-					Main.ui.safeRefresh();
-					actionAnimationPause();
-					continue out;
-        		}
-				else{
+			Cell destinationCell = aLevel.getMapCell(destinationPoint);
+			/*if (destinationCell == null)
+				break out;*/
+			if (destinationCell == null){
+				if (!aLevel.isValidCoordinate(destinationPoint)) {
+					destinationPoint = Position.subs(destinationPoint, var);
 					aPlayer.landOn(destinationPoint);
 					break out;
 				}
-        		
-        	}
-        	Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-        	if (destinationFeature != null && destinationFeature.getKeyCost() > aPlayer.getKeys()){
-        		aPlayer.land();
-        		break out;
-        	}
-       		if (destinationCell.getHeight() > startingHeight+2){
+				if (i < jumpingRange-1) {
+					aPlayer.pos = destinationPoint;
+					Main.ui.safeRefresh();
+					actionAnimationPause();
+					continue out;
+				} else {
+					aPlayer.landOn(destinationPoint);
+					break out;
+				}
+			}
+			Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
+			if (destinationFeature != null && destinationFeature.getKeyCost() > aPlayer.getKeys()) {
+				aPlayer.land();
+				break out;
+			}
+			if (destinationCell.getHeight() > startingHeight+2) {
 				aPlayer.land();
 				break out;
 			} else {
-				if (!messaged && destinationCell.getHeight() < startingHeight){
+				if (!messaged && destinationCell.getHeight() < startingHeight) {
 					aLevel.addMessage("You fly from the "+currentCell.getShortDescription()+ "!");
 					messaged = true;
 				}
 				if (!destinationCell.isSolid()) {
 					if (i < jumpingRange-1) {
-						aPlayer.setPosition(destinationPoint);
+						aPlayer.pos = destinationPoint;
 						Main.ui.safeRefresh();
 						actionAnimationPause();
 					} else {
@@ -163,7 +165,7 @@ public class Jump extends Action{
 				}
 			}
 			Monster aMonster = aLevel.getMonsterAt(destinationPoint);
-			if (aMonster != null && !(aMonster instanceof Merchant || aMonster instanceof NPC)){
+			if (aMonster != null && !(aMonster instanceof Merchant || aMonster instanceof NPC)) {
 				// Damage the poor player and bounce him back
 				if (aPlayer.damage("You are bounced back by the "+aMonster.getDescription()+"!", aMonster, new Damage(aMonster.getAttack(), false)))
 					aLevel.getPlayer().bounceBack(Position.mul(var, -1), 3);
@@ -171,6 +173,6 @@ public class Jump extends Action{
 			}
 		}
 		aPlayer.stopJump();
-		aLevel.addMessage("You hold your breath.");
+		aLevel.addMessage("You hold your breath.");		// FIXME: What? this is confusing for the player.
 	}
 }

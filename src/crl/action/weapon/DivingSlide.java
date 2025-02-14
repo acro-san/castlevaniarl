@@ -38,8 +38,8 @@ public class DivingSlide extends Action {
 			return;
 		}
 		
-		int startingHeight = aLevel.getMapCell(performer.getPosition()).getHeight();
-		Position startingPosition = new Position(aPlayer.getPosition());
+		int startingHeight = aLevel.getMapCell(performer.pos).getHeight();
+		Position startingPosition = new Position(aPlayer.pos);
 		int jumpingRange = 3;
 		if (aPlayer.hasIncreasedJumping()) {
 			jumpingRange++;
@@ -48,7 +48,7 @@ public class DivingSlide extends Action {
 		for (int i = 1; i <= jumpingRange; i++) {
 			Position destinationPoint = Position.add(startingPosition, Position.mul(var, i));
 			Cell destinationCell = aLevel.getMapCell(destinationPoint);
-			Cell currentCell = aLevel.getMapCell(performer.getPosition());
+			Cell currentCell = aLevel.getMapCell(performer.pos);
 			if (destinationCell == null) {
 				return;
 			}

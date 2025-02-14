@@ -150,7 +150,7 @@ public class Level implements FOVMap, Serializable {
 
 	// Why add these to the MAP, rather than the player,ui,or gamestate?
 	public void addMessage(String what) {
-		addMessage(new Message(what, player.getPosition()));
+		addMessage(new Message(what, player.pos));
 	}
 
 	public void addMessage(String what, Position where) {
@@ -210,19 +210,23 @@ public class Level implements FOVMap, Serializable {
 		return features.getFeatureAt(tempFeaturePosition);
 	}
 
+
 	public Monster getMonsterAt(Position x) {
 		return monsters.getMonsterAt(x);
 	}
+
 
 	public Actor getActorAt(Position x) {
 		Vector<PriorityEnqueable> actors = dispatcher.getActors();
 		for (int i = 0; i < actors.size(); i++) {
 			Actor a = (Actor)actors.elementAt(i);
-			if (a.getPosition().equals(x))
+			if (a.pos.equals(x)) {
 				return (Actor)actors.elementAt(i);
+			}
 		}
 		return null;
 	}
+
 
 	public Monster getMonsterAt(int x, int y, int z) {
 		return monsters.getMonsterAt(new Position(x,y,z));
@@ -235,7 +239,7 @@ public class Level implements FOVMap, Serializable {
 			lightAt(what.getPosition(), what.getLight(), false);
 			for(int i = 0; i < lightSources.size(); i++){
 				Feature lightSource = (Feature) lightSources.elementAt(i);
-				if (Position.distance(what.getPosition(), lightSource.getPosition()) < 10){
+				if (Position.distance(what.getPosition(), lightSource.getPosition()) < 10) {
 					lightAt(lightSource.getPosition(), lightSource.getLight(), true); 
 				}
 			}
@@ -243,15 +247,18 @@ public class Level implements FOVMap, Serializable {
 		features.removeFeature(what);
 	}
 
-	public Cell getMapCell(Position where){
+
+	public Cell getMapCell(Position where) {
 		return getMapCell(where.x, where.y, where.z);
 	}
 
-	public boolean isWalkable(Position where){
+
+	public boolean isWalkable(Position where) {
 		return getMapCell(where) != null && !getMapCell(where).isSolid();
 		//&&(!getMapCell(where).isWater() || getFrostAt(where) != 0);
 	}
-	
+
+
 	public boolean isItemPlaceable(Position where) {
 		return isWalkable(where) &&
 			getFeatureAt(where) == null &&
@@ -299,7 +306,7 @@ public class Level implements FOVMap, Serializable {
 
 	public void createMonster(String who, Position where/*, String feat*/){
 		Monster x = MonsterData.buildMonster(who);
-		x.setPosition(where);
+		x.pos = where;	// Or: new Position(where), maybe?
 		/*if (!feat.equals(""))
 			x.setFeaturePrize(feat);
 		*/
@@ -332,7 +339,7 @@ public class Level implements FOVMap, Serializable {
 	}
 
 	public void removeSmartFeature(SmartFeature what) {
-		smartFeatures.remove(what.getPosition().toString());
+		smartFeatures.remove(what.pos.toString());	// FIXME: TERRIBLE way of indexing by position!
 		dispatcher.removeActor(what);
 	}
 
@@ -377,10 +384,11 @@ public class Level implements FOVMap, Serializable {
 
 
 	public void addSmartFeature(SmartFeature what) {
-		smartFeatures.put(what.getPosition().toString(), what);
+		smartFeatures.put(what.pos.toString(), what);	// FIXME: TERRIBLE way of indexing by position!
 		what.level = this;
 		dispatcher.addActor(what);
 	}
+
 
 	public void addSmartFeature(String featureID, Position location) {
 		SmartFeature x = SmartFeatureFactory.buildFeature(featureID);
@@ -388,24 +396,27 @@ public class Level implements FOVMap, Serializable {
 		addSmartFeature(x);
 	}
 
-	public void addFeature(String featureID, Position location){
+
+	public void addFeature(String featureID, Position location) {
 		//Debug.say("Add"+featureID);
 		Feature x = FeatureFactory.buildFeature(featureID);
 		x.setPosition(location.x, location.y, location.z);
 		addFeature(x);
-		if (x.getFaint() > 0){
+		if (x.getFaint() > 0) {
 			doomedFeatures.add(x);
 		}
-		if (x.getLight()>0){
+		if (x.getLight()>0) {
 			lightSources.add(x);
 			lightAt(x.getPosition(), x.getLight(), true);
 		}
 	}
 
+
 	public void setPlayer(Player what) {
 		player = what;
-		if (!dispatcher.contains(what))
+		if (!dispatcher.contains(what)) {
 			dispatcher.addActor(what, true);
+		}
 		player.level = this;
 	}
 
@@ -577,7 +588,7 @@ public class Level implements FOVMap, Serializable {
 			for (int i = 0; i < 30; i++){
 				add.x = Util.rand(-10,10);
 				add.y = Util.rand(-10,10);
-				nearPlayer = Position.add(player.getPosition(), add);
+				nearPlayer = Position.add(player.pos, add);
 				validate (nearPlayer);
 				if (getMapCell(nearPlayer) == null || 
 					getMapCell(nearPlayer).isEthereal() || 
@@ -590,12 +601,12 @@ public class Level implements FOVMap, Serializable {
 			}
 			break;
 		case MonsterSpawnInfo.WATER:
-			for (int i = 0; i < 30; i++){
+			for (int i = 0; i < 30; i++) {
 				add.x = Util.rand(-10,10);
 				add.y = Util.rand(-10,10);
-				nearPlayer = Position.add(player.getPosition(), add);
+				nearPlayer = Position.add(player.pos, add);
 				validate(nearPlayer);
-				if (getMapCell(nearPlayer) == null || 
+				if (getMapCell(nearPlayer) == null ||
 					(!getMapCell(nearPlayer).isWater())) {
 					continue;	// ?? water monsters dont spawn in shallow water??
 				}
@@ -604,7 +615,7 @@ public class Level implements FOVMap, Serializable {
 			}
 			break;
 		}
-			
+		
 		if (ok) {
 			Feature f = FeatureFactory.buildFeature("MOUND");
 			f.setPosition(nearPlayer.x, nearPlayer.y, nearPlayer.z);
@@ -616,21 +627,25 @@ public class Level implements FOVMap, Serializable {
 		}
 	}
 
-	private void validate(Position what){
+
+	private void validate(Position what) {
 		if (what.x < 0) what.x = 0;
 		if (what.y < 0) what.y = 0;
 		if (what.x > getWidth() - 1) what.x = getWidth() - 1;
 		if (what.y > getHeight() - 1) what.y = getHeight() - 1;
 	}
 
+
 	public boolean isValidCoordinate(Position what) {
 		return isValidCoordinate(what.x, what.y, what.z);
 	}
-	
+
+
 	public boolean isValidCoordinate(int x, int y) {
 		return x >= 0 && y >= 0 && x < getWidth() && y < getHeight();
 	}
-	
+
+
 	public boolean isValidCoordinate(int x, int y, int z){
 		return z >= 0 && z < getDepth() && isValidCoordinate(x,y);
 	}
@@ -707,7 +722,7 @@ public class Level implements FOVMap, Serializable {
 	public void spawnTreasure(){
 		Position nearPlayer = null;
 		while (true){
-			nearPlayer = Position.add(player.getPosition(), new Position(Util.rand(-5,5), Util.rand(-5,5), 0));
+			nearPlayer = Position.add(player.pos, new Position(Util.rand(-5,5), Util.rand(-5,5), 0));
 			validate (nearPlayer);
 			if (getMapCell(nearPlayer) == null)
 				continue;
@@ -751,11 +766,12 @@ public class Level implements FOVMap, Serializable {
 		return endPosition;
 	}*/
 
-	public void signal (Position center, int range, String message){
+	public void signal (Position center, int range, String message) {
 		Vector actors = dispatcher.getActors();
-		for (int i = 0; i < actors.size(); i++){
-			if (Position.flatDistance(center, ((Actor)actors.elementAt(i)).getPosition()) <= range)
+		for (int i = 0; i < actors.size(); i++) {
+			if (Position.flatDistance(center, ((Actor)actors.elementAt(i)).pos) <= range) {
 				((Actor)actors.elementAt(i)).message(message);
+			}
 		}
 	}
 	
@@ -912,10 +928,10 @@ public class Level implements FOVMap, Serializable {
 	public boolean blockLOS(int x, int y) {
 		if (!isValidCoordinate(x,y))
 			return true;
-		if (map[player.getPosition().z][x][y] == null)
+		if (map[player.pos.z][x][y] == null)
 			return false;
 		else
-			return map[player.getPosition().z][x][y].isOpaque();
+			return map[player.pos.z][x][y].isOpaque();
 			//return map[player.getPosition().z][x][y] == null || map[player.getPosition().z][x][y].isSolid();
 	}
 	
@@ -927,11 +943,11 @@ public class Level implements FOVMap, Serializable {
 		}
 		tempSeen.x = x;
 		tempSeen.y = y;
-		tempSeen.z = player.getPosition().z;
-		if (Position.distance(tempSeen, player.getPosition()) <= player.getSightRange() || lit[tempSeen.z][tempSeen.x][tempSeen.y]) {
-			visible[player.getPosition().z][x][y] = true;
-			remembered[player.getPosition().z][x][y] = true;
-			Monster m = getMonsterAt(x,y, player.getPosition().z);
+		tempSeen.z = player.pos.z;
+		if (Position.distance(tempSeen, player.pos) <= player.getSightRange() || lit[tempSeen.z][tempSeen.x][tempSeen.y]) {
+			visible[player.pos.z][x][y] = true;
+			remembered[player.pos.z][x][y] = true;
+			Monster m = getMonsterAt(x,y, player.pos.z);
 			if (m != null) {
 				m.setWasSeen(true);
 			}
@@ -947,16 +963,16 @@ public class Level implements FOVMap, Serializable {
 	public void darken(int x, int y){
 		if (!isValidCoordinate(x,y))
 			return;
-		visible[player.getPosition().z][x][y]= false;
+		visible[player.pos.z][x][y]= false;
 	}
 
 	public boolean remembers(int x, int y){
 		if (!isValidCoordinate(x,y))
 			return false;
-		return remembered[player.getPosition().z][x][y];
+		return remembered[player.pos.z][x][y];
 	}
 	
-	public boolean remembers(int x, int y, int z){
+	public boolean remembers(int x, int y, int z) {
 		if (!isValidCoordinate(x,y,z))
 			return false;
 		return remembered[z][x][y];
@@ -966,17 +982,19 @@ public class Level implements FOVMap, Serializable {
 		if (!isValidCoordinate(x,y)) {
 			return false;
 		}
-		return visible[player.getPosition().z][x][y] /*|| lit[player.getPosition().z][x][y]*/;
+		return visible[player.pos.z][x][y] /*|| lit[player.getPosition().z][x][y]*/;
 	}
 	
-	public Position getDeepPosition(Position where){
+	public Position getDeepPosition(Position where) {
 		Position ret = new Position(where);
-		if (!isValidCoordinate(where))
+		if (!isValidCoordinate(where)) {
 			return null;
-		if (map[ret.z][ret.x][ret.y] != null && !map[ret.z][ret.x][ret.y].isEthereal() )
+		}
+		if (map[ret.z][ret.x][ret.y] != null && !map[ret.z][ret.x][ret.y].isEthereal() ) {
 			return where;
-		while((map[ret.z][ret.x][ret.y] == null || map[ret.z][ret.x][ret.y].isEthereal()) && ret.z < getDepth()-1){
-			if (map[ret.z+1][ret.x][ret.y] != null && !map[ret.z+1][ret.x][ret.y].isEthereal()){
+		}
+		while((map[ret.z][ret.x][ret.y] == null || map[ret.z][ret.x][ret.y].isEthereal()) && ret.z < getDepth()-1) {
+			if (map[ret.z+1][ret.x][ret.y] != null && !map[ret.z+1][ret.x][ret.y].isEthereal()) {
 				ret.z++;
 				return ret;
 			}
@@ -1086,8 +1104,8 @@ public class Level implements FOVMap, Serializable {
 	
 	public int getDepthFromPlayer(int x, int y){
 		int ret = 0;
-		int zrunner = player.getPosition().z; 
-		while (map[zrunner][x][y] == null || map[zrunner][x][y].getID().equals("AIR")){
+		int zrunner = player.pos.z;
+		while (map[zrunner][x][y] == null || map[zrunner][x][y].getID().equals("AIR")) {
 			ret++;
 			zrunner--;
 			if (zrunner == -1)

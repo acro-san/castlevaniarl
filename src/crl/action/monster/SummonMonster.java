@@ -12,7 +12,7 @@ public class SummonMonster extends Action{
 	private String monsterId;
 	private String actionMessage;
 	
-	public void set(String pMonsterId, String pActionMessage){
+	public void set(String pMonsterId, String pActionMessage) {
 		monsterId = pMonsterId;
 		actionMessage = pActionMessage;
 	}
@@ -30,11 +30,11 @@ public class SummonMonster extends Action{
 		for (int i=0; i<monsters; i++){
 			int xvar = Util.rand(-8,8);
 			int yvar = Util.rand(-8,8);
-			Position destinationPoint = Position.add(performer.getPosition(),
+			Position destinationPoint = Position.add(performer.pos,
 				new Position(xvar, yvar));
 			if (aLevel.isWalkable(destinationPoint)){
 				Monster m = MonsterData.buildMonster(monsterId);
-				m.setPosition(destinationPoint);
+				m.pos = destinationPoint;
 				aLevel.addMonster(m);
 			}
 		}

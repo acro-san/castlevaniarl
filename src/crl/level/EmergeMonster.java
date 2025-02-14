@@ -16,7 +16,7 @@ public class EmergeMonster extends Action {
 		Level level = performer.level;
 		Emerger em = (Emerger)performer;
 		Monster monster = em.getMonster();
-		monster.setPosition(new Position(em.getPoint()));
+		monster.pos = new Position(em.getPoint());
 		level.addMonster(monster);
 		if (em.getMound() != null)
 			level.destroyFeature(em.getMound());

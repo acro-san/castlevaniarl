@@ -15,7 +15,7 @@ public class Prelude1 extends Unleasher {
 		Display.thus.showScreen("One day however, the bloody full moon reappeared on the dark skies of Transylvania, one by one the towns of the region fell to the wrath of the dark armies, as no one seemed to assume the responsibility of facing the count on his own castle. Christopher Belmont, which had become a renowned trainer, was feeling the weight of the years coming over him, still, he joined the most brave and skilled warriors he could and headed to Castlevania, the dwelling of chaos.");
 		Display.thus.showScreen("One by one, his companions fell to the atrocities of the castle, their sacrifice being the only way to aid their master unto the only chance at sight to save mankind, finally, wounded and tired, he was for the third time in the same place he had been fifteen years ago; the vampire killer whip, which should have been in the hands of his son, gave him the last strengths to face Dracula again, and so, the final face-off began.");
 		Monster dracula = level.getMonsterByID("PRELUDE_DRACULA");
-		dracula.setPosition(new Position(level.getExitFor("#DRACPOS")));
+		dracula.pos = new Position(level.getExitFor("#DRACPOS"));
 		dracula.isVisible = false;
 		level.getMapCell(level.getExitFor("#DRACPOS")).setAppearance(Main.appearances.get("DRACULA_THRONE2"));
 		//level.removeExit("_START");

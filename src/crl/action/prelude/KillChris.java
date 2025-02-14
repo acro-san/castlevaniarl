@@ -7,13 +7,8 @@ import crl.level.Level;
 import crl.player.Player;
 
 public class KillChris extends Action {
-/*
-	private int range;
-	private String message;
-	private String effectType;
-	private String effectString;
-	*/
-	public String getID(){
+
+	public String getID() {
 		return "PRELUDE_KILL_CHRIS";
 	}
 	
@@ -21,11 +16,10 @@ public class KillChris extends Action {
 		//Monster aMonster = (Monster)performer;
 		Level aLevel = performer.level;
 		Player aPlayer = aLevel.getPlayer();
-		aLevel.addMessage("Dracula invokes a deadly beam of chaos energy!!!");
-		Position pp = aPlayer.getPosition();
+		aLevel.addMessage("Dracula invokes a deadly beam of chaos energy!");
+		Position pp = aPlayer.pos;
 		drawEffect(Main.efx.createLocatedEffect(new Position(pp.x, pp.y), "SFX_KILL_CHRIS"));
 	}
-
 
 	public int getCost() {
 		return 50;

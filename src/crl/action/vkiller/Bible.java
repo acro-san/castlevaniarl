@@ -31,47 +31,51 @@ public class Bible extends HeartAction {
 		Level aLevel = performer.level;
 		Player aPlayer = (Player) performer;
 		aPlayer.level.addMessage("You open the bible!");
-		//drawEffect(new SequentialEffect(performer.getPosition(), steps, "?�", Appearance.CYAN, 10));
-		drawEffect(Main.efx.createLocatedEffect(performer.getPosition(), "SFX_BIBLE"));
+		//drawEffect(new SequentialEffect(performer.pos, steps, "?�", Appearance.CYAN, 10));
+		drawEffect(Main.efx.createLocatedEffect(performer.pos, "SFX_BIBLE"));
 
 		int damage = getDamage();
 		for (int i = 0; i < steps.size(); i++){
-			Position destinationPoint = Position.add(performer.getPosition(),
+			Position destinationPoint = Position.add(performer.pos,
 				(Position)steps.elementAt(i));
 			StringBuffer message = new StringBuffer();
-        	Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-        	if (destinationFeature != null && destinationFeature.isDestroyable()){
-	        	message.append("The "+destinationFeature.getDescription()+" is slashed");
+			Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
+			if (destinationFeature != null && destinationFeature.isDestroyable()) {
+				message.append("The "+destinationFeature.getDescription()+" is slashed");
 				Feature prize = destinationFeature.damage(aLevel.getPlayer(), damage);
-	        	if (prize != null){
-		        	message.append(" and thorn apart!");
-				}else
+				if (prize != null) {
+					message.append(" and thorn apart!");
+				} else {
 					message.append(".");
+				}
 				aLevel.addMessage(message.toString());
 			}
-
+			
 			Monster targetMonster = performer.level.getMonsterAt(destinationPoint);
 			message = new StringBuffer();
-			if (targetMonster != null){
+			if (targetMonster != null) {
 				message.append("The "+targetMonster.getDescription()+" is slashed");
 				//targetMonster.damage(player.getWhipLevel());
 				targetMonster.damage(message, damage);
-	        	if (targetMonster.isDead()){
-		        	message.append(" apart!");
+				if (targetMonster.isDead()) {
+					message.append(" apart!");
 					performer.level.removeMonster(targetMonster);
 				} else {
 					message.append(".");
 				}
-	        	if (targetMonster.wasSeen())
-	        		aLevel.addMessage(message.toString());
+				if (targetMonster.wasSeen()) {
+					aLevel.addMessage(message.toString());
+				}
 			}
 		}
 	}
-	public int getCost(){
+	
+	public int getCost() {
 		Player p = (Player) performer;
 		return (int)(25 / (p.getShotLevel()+1));
 	}
-	public String getPromptDirection(){
+	
+	public String getPromptDirection() {
 		return "Where do you want to throw the Cross?";
 	}
 

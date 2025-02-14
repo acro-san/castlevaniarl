@@ -23,13 +23,13 @@ public class ItemBreakHoly extends HeartAction {
 		Player aPlayer = (Player) performer;
 		Level aLevel = performer.level;
 		aLevel.addMessage("You jump! You unleash a rain of holy water!");
-		Main.ui.drawEffect(Main.efx.createLocatedEffect(aPlayer.getPosition(), "SFX_HOLY_RAINSPLASH"));
+		Main.ui.drawEffect(Main.efx.createLocatedEffect(aPlayer.pos, "SFX_HOLY_RAINSPLASH"));
 		int damage = 6 + getPlayer().getShotLevel() + getPlayer().getSoulPower();
 		
 		VMonster monsters = aLevel.getMonsters();
 		for (int i = 0; i < monsters.size(); i++){
 			
-			if (monsters.elementAt(i).getPosition().z == performer.getPosition().z && Position.distance(monsters.elementAt(i).getPosition(), performer.getPosition()) < 4){
+			if (monsters.elementAt(i).pos.z == performer.pos.z && Position.distance(monsters.elementAt(i).pos, performer.pos) < 4){
 				StringBuffer buff = new StringBuffer();
 				if (monsters.elementAt(i).wasSeen()) {
 					buff.append("The "+monsters.elementAt(i).getDescription()+" is splashed with holy water!");
@@ -45,7 +45,7 @@ public class ItemBreakHoly extends HeartAction {
 		for (int i = 0; i < drops; i++){
 			int xdif = 5-Util.rand(0,10);
 			int ydif = 5-Util.rand(0,10);
-			Position destinationPoint = Position.add(aPlayer.getPosition(), new Position(xdif,ydif));
+			Position destinationPoint = Position.add(aPlayer.pos, new Position(xdif,ydif));
 			if (aLevel.isValidCoordinate(destinationPoint)){
 				Main.ui.drawEffect(Main.efx.createLocatedEffect(destinationPoint, "SFX_HOLY_RAINDROP"));
 				Main.ui.refresh();

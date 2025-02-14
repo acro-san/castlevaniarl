@@ -19,8 +19,8 @@ public class Materialize extends Action {
 		Monster mon = (Monster)performer;
 		mon.isVisible = true;
 		Position var = new Position(Util.rand(-5,5),Util.rand(-5,5));
-		Position pum =Position.add(aLevel.getPlayer().getPosition(), var);
-		mon.setPosition(pum);
+		Position pum =Position.add(aLevel.getPlayer().pos, var);
+		mon.pos = pum;
 		//drawEffect(new SplashEffect(pum, "Oo.", Appearance.WHITE));
 		drawEffect(Main.efx.createLocatedEffect(pum, "SFX_MATERIALIZE"));
 	}

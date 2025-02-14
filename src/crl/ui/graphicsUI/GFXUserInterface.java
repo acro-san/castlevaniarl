@@ -1,10 +1,7 @@
-
 package crl.ui.graphicsUI;
-
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Graphics;
@@ -14,14 +11,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.*;
 
-import javax.swing.*;
+import java.util.Vector;
+//import java.util.Hashtable;//Map, plz
+
+import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import sz.csi.CharKey;
@@ -48,18 +47,21 @@ import crl.conf.gfx.data.Textures;
 import crl.data.Text;
 import crl.ui.*;
 
-/** 
- *  Shows the level using characters.
- *  Informs the Actions and Commands of the player.
- * 	Must be listening to a System Interface
+/**
+ * Shows the level using characters.
+ * Informs the Actions and Commands of the player.
+ * Must be listening to a System Interface
  */
 
-public class GFXUserInterface extends UserInterface {//implements Runnable {
-	private static final String BORDERS_FILE = "gfx/barrett-interface.gif"; //TODO: Move to GFXConfiguration
-	private static final int BORDERS_SCALE = 1; //TODO: Move to GFXConfiguration
-	private static final int BORDERS_SIZE = 32; //TODO: Move to GFXConfiguration
+public class GFXUserInterface extends UserInterface {
+	private static final String
+		BORDERS_FILE = "gfx/barrett-interface.gif"; //TODO: Move to GFXConfiguration
+	private static final int
+		BORDERS_SCALE = 1, //TODO: Move to GFXConfiguration
+		BORDERS_SIZE = 32; //TODO: Move to GFXConfiguration
 
-	int STANDARD_WIDTH;
+	// ??? Might be only for MultiItemsBox? Put in that class?
+	static int STANDARD_WIDTH = 0;
 
 	private int xrange;
 	private int yrange;
@@ -77,16 +79,14 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 	private boolean flipFacing;
 	private Vector<String> messageHistory = new Vector<>(10);
 	
-	// Relations
-
+	
 	private transient SwingSystemInterface si;
 
 	protected static Font
 		FNT_MESSAGEBOX,	// MerchantBox needs this in same package. Generalise further?
 		FNT_PERSISTANTMESSAGEBOX;
 	
-	// 
-	BufferedImage
+	static BufferedImage
 		HEALTH_RED,
 		HEALTH_DARK_RED,
 		HEALTH_MAGENTA,
@@ -136,12 +136,12 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		BLOOD1,
 		BLOOD2,
 		IMG_EXIT_BTN,
-		IMG_OK_BTN;
+		IMG_OK_BTN,
 	
-	BufferedImage IMG_BUY_BTN;
-	BufferedImage IMG_YES_BTN;
-	BufferedImage IMG_NO_BTN;
-	BufferedImage IMG_ICON;
+		IMG_BUY_BTN,
+		IMG_YES_BTN,
+		IMG_NO_BTN,
+		IMG_ICON;
 	
 	private Color
 		COLOR_BORDER_OUT, COLOR_BORDER_IN, COLOR_WINDOW_BACKGROUND;
@@ -174,27 +174,30 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 
 
 	public Position getAbsolutePosition(Position insideLevel) {
-		Position relative = Position.subs(insideLevel, player.getPosition());
+		Position relative = Position.subs(insideLevel, player.pos);
 		return Position.add(PC_POS, relative);
 	}
 
-	/*public Position
+	/*
+	public Position
 		VP_START = new Position(0,0),
 		VP_END = new Position (31,18),
-		PC_POS = new Position (12,9);*/
+		PC_POS = new Position (12,9);
+	*/
 	
 	public Position
 		VP_START = new Position(0,0),
 		VP_END = new Position (5,5),
 		PC_POS = new Position (3,3);
 
-	public void setFlipFacing(boolean val){
+	public void setFlipFacing(boolean val) {
 		flipFacing = val;
 	}
 
-	private boolean [][] FOVMask;
+///	private boolean [][] FOVMask;	// WHERE and WHEN does this get inited?
+	// ALREADY DECLARED IN ABSTRACT SUPERCLASS!!!
 	
-	private Image getImageForMystic(int mysticID){
+	private Image getImageForMystic(int mysticID) {
 		switch (mysticID){
 		case Player.AXE:
 			return IMG_AXE;
@@ -232,7 +235,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		g.setColor(TRANSPARENT_GRAY);
 		g.fillRect(0,0,sw,sh);
 		Color cellColor = null;
-		Position runner = new Position(0,0,player.getPosition().z);
+		Position runner = new Position(0,0,player.pos.z);
 		for (int x = 0; x < level.getWidth(); x++, runner.x++, runner.y = 0) {
 			for (int y = 0; y < level.getHeight(); y++, runner.y++) {
 				if (!level.remembers(x,y))
@@ -241,7 +244,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 				else {
 					Cell current = level.getMapCell(runner);
 					Feature currentF = level.getFeatureAt(runner);
-					if (level.isVisible(x,y)){
+					if (level.isVisible(x,y)) {
 						if (current == null)
 							//cellColor = Color.BLACK;
 							continue;
@@ -263,8 +266,9 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 						else  
 							cellColor = MAP_NOSOLID;
 					}
-					if (player.getPosition().x == x && player.getPosition().y == y)
+					if (player.pos.x == x && player.pos.y == y) {
 						cellColor = Color.RED;
+					}
 				}
 				g.setColor(cellColor);
 				//g.fillOval(30+remnantx+x*5, 30+remnanty+y*5, 5,5);
@@ -296,7 +300,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		Graphics2D g = si.getGraphics2D();
 		Color cellColor = null;
 		//long t0 = System.nanoTime();
-		Position pp = player.getPosition();
+		Position pp = player.pos;
 		final int
 			px = pp.x,
 			py = pp.y,
@@ -372,7 +376,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		leaveScreen();
 	}
 	
-	//Interactive Methods
+	
 	public void doLook() {
 		Position offset = new Position (0,0);
 		
@@ -381,7 +385,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		Monster lookedMonster = null;
 		while (true){
 			int cellHeight = 0;
-			Position browser = Position.add(player.getPosition(), offset);
+			Position browser = Position.add(player.pos, offset);
 			String looked = "";
 			si.restore();
 			if (FOVMask[PC_POS.x + offset.x][PC_POS.y + offset.y]){
@@ -483,7 +487,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 				if (player.canCarry())
 					player.addItem(choice);
 				else
-					level.addItem(player.getPosition(), choice);	// Or random position on floor around you?
+					level.addItem(player.pos, choice);	// Or random position on floor around you?
 				merchantBox.setPrompt(Text.MERCHANT_BUY_CONFIRM);
 			} else {
 				merchantBox.setPrompt(Text.MERCHANT_BUY_FAIL_NOGOLD);
@@ -533,9 +537,12 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		return FOVMask[x][y];
 	}
 
-	private void drawLevel(){
+	/**
+	 * Main Game field Rendering Function!!
+	 */
+	private void drawLevel() {
 		Debug.enterMethod(this, "drawLevel");
-		Position pp = player.getPosition();
+		Position pp = player.pos;
 		final int
 			px = pp.x,
 			py = pp.y,
@@ -552,8 +559,8 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		
 		/*for (int x = 0; x < vcells.length; x++){
 			for (int y=0; y<vcells[0].length; y++){*/
-		for (int y = 0; y < vcells[0].length; y++){
-			for (int x=0; x<vcells.length; x++){
+		for (int y = 0; y < vcells[0].length; y++) {
+			for (int x=0; x<vcells.length; x++) {
 				FOVMask[PC_POS.x-xrange+x][PC_POS.y-yrange+y] = false;
 				int cellHeight = 0;
 				if (vcells[x][y] == null || vcells[x][y].getID().equals("AIR")){
@@ -632,7 +639,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 				runner.x++;
 			}
 			runner.x = px - xrange;
-			for (int x=0; x<vcells.length; x++){
+			for (int x=0; x<vcells.length; x++) {
 				int cellHeight = 0;
 				if (vcells[x][y] != null){
 					cellHeight = vcells[x][y].getHeight();
@@ -676,21 +683,21 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 						}
 					}
 					
-					if (yrange == y && x == xrange){
-						if (player.isInvisible()){
+					if (yrange == y && x == xrange) {
+						if (player.isInvisible()) {
 							drawImageVP(
 								PC_POS.x * 32,
 								PC_POS.y * 32 - 4 * cellHeight,
 								((GFXAppearance)Main.appearances.get("SHADOW")).getImage()
 							);
-						}else{
+						} else {
 							GFXAppearance playerAppearance = (GFXAppearance)player.getAppearance();
 							BufferedImage playerImage = (BufferedImage)playerAppearance.getImage();
 							if (flipFacing){
 								playerImage = ImageUtils.vFlip(playerImage);
 								//flipFacing = false;
 							}
-							int waterBonus = (level.getMapCell(player.getPosition())!= null && level.getMapCell(player.getPosition()).isShallowWater()) ? 16 : 0;
+							int waterBonus = (level.getMapCell(player.pos) != null && level.getMapCell(player.pos).isShallowWater()) ? 16 : 0;
 							drawImageVP(
 								PC_POS.x * 32 - playerAppearance.getSuperWidth(),
 								PC_POS.y * 32 - 4 * player.getStandingHeight() - playerAppearance.getSuperHeight() + waterBonus,
@@ -713,12 +720,11 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 					Color mask = null;
 
 					// Water
-					if (vcells[x][y].isWater()){
-						if (level.canFloatUpward(runner)){
+					if (vcells[x][y].isWater()) {
+						if (level.canFloatUpward(runner)) {
 							mask = WATERCOLOR;
 						} else {
 							mask = WATERCOLOR_BLOCKED;
-							
 						}
 					}
 					if (mask != null) {
@@ -733,8 +739,8 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 			}
 			/*runner.y = player.getPosition().y-yrange;
 			runner.x ++;*/
-			runner.x = player.getPosition().x-xrange;
-			runner.y ++;
+			runner.x = player.pos.x - xrange;
+			runner.y++;
 		}
 		
 		//Overlay
@@ -754,8 +760,8 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		if (mask != null){
 			si.getGraphics2D().setColor(mask);
 			si.getGraphics2D().fillRect(0,0,
-					this.configuration.getScreenWidth(),
-					this.configuration.getScreenHeight());
+				this.configuration.getScreenWidth(),
+				this.configuration.getScreenHeight());
 		}*/
 		
 		Debug.exitMethod();
@@ -768,7 +774,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 			messageBox.setForeground(COLOR_LAST_MESSAGE);
 			eraseOnArrival = false;
 		}
-		if (message.location.z != player.getPosition().z || !insideViewPort(getAbsolutePosition(message.location))) {
+		if (message.location.z != player.pos.z || !insideViewPort(getAbsolutePosition(message.location))) {
 			Debug.exitMethod();
 			return;
 		}
@@ -1207,7 +1213,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 	}
 
 	public boolean isDisplaying(Actor who) {
-		return insideViewPort(getAbsolutePosition(who.getPosition()));
+		return insideViewPort(getAbsolutePosition(who.pos));
 	}
 
 	private Position getNearestMonsterPosition() {
@@ -1217,19 +1223,19 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		int maxDist = 15;
 		for (int i = 0; i < monsters.size(); i++) {
 			Monster monster = (Monster) monsters.elementAt(i);
-			if (monster.getPosition().z != level.getPlayer().getPosition().z) {
+			if (monster.pos.z != level.getPlayer().pos.z) {
 				continue;
 			}
-			int distance = Position.flatDistance(level.getPlayer().getPosition(), monster.getPosition());
+			int distance = Position.flatDistance(level.getPlayer().pos, monster.pos);
 			if (distance < maxDist && distance< minDist && player.sees(monster)) {
 				minDist = distance;
 				nearMonster = monster;
 			}
 		}
-		if (nearMonster != null)
-			return nearMonster.getPosition();
-		else
+		if (nearMonster == null) {
 			return null;
+		}
+		return nearMonster.pos;
 	}
 	
 	
@@ -1251,14 +1257,14 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 			if (!player.sees(lockedMonster) || lockedMonster.isDead()) {
 				lockedMonster = null;
 			} else {
-				defaultTarget = new Position(lockedMonster.getPosition());
+				defaultTarget = new Position(lockedMonster.pos);
 			}
 		}
 		
 		if (defaultTarget == null) {
 			offset = new Position (0,0);
 		} else {
-			offset = new Position(defaultTarget.x - player.getPosition().x, defaultTarget.y - player.getPosition().y);
+			offset = new Position(defaultTarget.x - player.pos.x, defaultTarget.y - player.pos.y);
 		}
 		
 		if (!insideViewPort(PC_POS.x + offset.x,PC_POS.y + offset.y)) {
@@ -1274,7 +1280,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		while (true){
 			si.restore();
 			int cellHeight = 0;
-			browser = Position.add(player.getPosition(), offset);
+			browser = Position.add(player.pos, offset);
 			String looked = "";
 			
 			if (FOVMask[PC_POS.x + offset.x][PC_POS.y + offset.y]){
@@ -1311,10 +1317,14 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 
 			si.refresh();
 			CharKey x = new CharKey(CharKey.NONE);
-			while (x.code != CharKey.SPACE && x.code != CharKey.ESC && x.code != fireKeyCode &&
-				   ! x.isArrow())
+			while ( x.code != CharKey.SPACE &&
+					x.code != CharKey.ESC &&
+					x.code != fireKeyCode &&
+					!x.isArrow())
+			{
 				x = si.inkey();
-			if (x.code == CharKey.ESC){
+			}
+			if (x.code == CharKey.ESC) {
 				si.restore();
 				si.refresh();
 				throw new ActionCancelException();
@@ -1332,33 +1342,35 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 			if (offset.y >= yrange) offset.y = yrange;
 			if (offset.y <= -yrange) offset.y = -yrange;
 		}
-		
 	}
 
-	private int pickDirection(String prompt) throws ActionCancelException{
+
+	private int pickDirection(String prompt) throws ActionCancelException {
 		Debug.enterMethod(this, "pickDirection");
-		//refresh();
+		// refresh();
 		leaveScreen();
 		messageBox.setText(prompt);
-		//si.refresh();
-		//refresh();
+		// si.refresh();
+		// refresh();
 
 		CharKey x = new CharKey(CharKey.NONE);
-		while (x.code == CharKey.NONE)
+		while (x.code == CharKey.NONE) {
 			x = si.inkey();
+		}
 		int ret = GFXUISelector.toIntDirection(x);
 		if (ret != -1) {
-        	Debug.exitMethod(ret);
-        	return ret;
+			Debug.exitMethod(ret);
+			return ret;
 		} else {
-			ActionCancelException ace = new ActionCancelException(); 
+			ActionCancelException ace = new ActionCancelException();
 			Debug.exitExceptionally(ace);
 			si.refresh();
-			throw ace; 
+			throw ace;
 		}
 	}
 
-	private Item pickEquipedItem(String prompt) throws ActionCancelException{
+
+	private Item pickEquipedItem(String prompt) throws ActionCancelException {
 		enterScreen();
 
 		Vector<Item> equipped = new Vector<>();
@@ -1401,7 +1413,8 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		return equiped;
 	}
 	
-	private Item pickItem(String prompt) throws ActionCancelException{
+	
+	private Item pickItem(String prompt) throws ActionCancelException {
 		enterScreen();
 		Vector inventory = player.getInventory();
 		BorderedMenuBox menuBox = GetMenuBox();
@@ -1570,13 +1583,15 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		}
 	}
 	
-	private Item pickUnderlyingItem(String prompt) throws ActionCancelException{
+	private Item pickUnderlyingItem(String prompt) throws ActionCancelException {
 		enterScreen();
-		Vector<Item> items = level.getItemsAt(player.getPosition());
-		if (items == null)
+		Vector<Item> items = level.getItemsAt(player.pos);
+		if (items == null) {
 			return null;
-		if (items.size() == 1)
-			return (Item) items.elementAt(0);
+		}
+		if (items.size() == 1) {
+			return items.elementAt(0);
+		}
 		BorderedMenuBox menuBox = GetMenuBox();
 		menuBox.setGap(35);
 		menuBox.setBounds(6,4,70,12);
@@ -1600,23 +1615,23 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		return item;
 	}
 	
-	private Vector<GFXMenuItem> vecItemUsageChoices = new Vector<>();
+	private Vector<SimpleGFXMenuItem> vecItemUsageChoices = new Vector<>();
 	{
 		vecItemUsageChoices.add(new SimpleGFXMenuItem("[u]se", 1));
 		vecItemUsageChoices.add(new SimpleGFXMenuItem("[e]quip", 2));
 		vecItemUsageChoices.add(new SimpleGFXMenuItem("[t]hrow",4 ));
 		vecItemUsageChoices.add(new SimpleGFXMenuItem("[d]rop", 3));
-		vecItemUsageChoices.add(new SimpleGFXMenuItem("[ ] Cancel",5));
-		
+		vecItemUsageChoices.add(new SimpleGFXMenuItem("[ ] Cancel",5));	// FIXME *NOT* 100% apparent that this means spacebar!
 	}
 	
 	private int[] additionalKeys = {
 		CharKey.N1, CharKey.N2, CharKey.N3, CharKey.N4,
 	};
 	
-	private int [] itemUsageKeys = new int[]{
-				CharKey.u, CharKey.e, CharKey.d, CharKey.t,
-		};
+	private int [] itemUsageKeys = {
+		CharKey.u, CharKey.e, CharKey.d, CharKey.t,
+	};
+	
 	public Action showInventory() throws ActionCancelException {
 		enterScreen();
 		Equipment.menuDetail = true;
@@ -1670,10 +1685,10 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 		
 		si.refresh();
 		si.saveBuffer();
-		//---
-		Item selected = null;
 		
+		Item selected = null;
 		Action selectedAction = null;
+		
 		do {
 			try {
 				Equipment eqs = (Equipment)menuBox.getSelectionAKS(additionalKeys);
@@ -1728,7 +1743,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 					}
 				}
 			}
-			if (selected == null){
+			if (selected == null) {
 				break;
 			}
 			si.print(52, 8, selected.getDescription(), GFXDisplay.COLOR_BOLD);
@@ -1743,20 +1758,20 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 			} catch (AdditionalKeysSignal aks){
 				switch (aks.getKeyCode()){
 				case CharKey.u:
-					choice = (SimpleGFXMenuItem)vecItemUsageChoices.elementAt(0);
+					choice = vecItemUsageChoices.elementAt(0);
 					break;
 				case CharKey.e:
-					choice = (SimpleGFXMenuItem)vecItemUsageChoices.elementAt(1);
+					choice = vecItemUsageChoices.elementAt(1);
 					break;
 				case CharKey.t:
-					choice = (SimpleGFXMenuItem)vecItemUsageChoices.elementAt(2);
+					choice = vecItemUsageChoices.elementAt(2);
 					break;
 				case CharKey.d:
-					choice = (SimpleGFXMenuItem)vecItemUsageChoices.elementAt(3);
+					choice = vecItemUsageChoices.elementAt(3);
 					break;
 				}
 			}
-			if (choice != null){
+			if (choice != null) {
 				switch (choice.getValue()){
 				case 1: // Use
 					Use use = new Use();
@@ -2047,7 +2062,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 				try {
 					actionSelectedByCommand = showInventory();
 				} catch (ActionCancelException ace){
-					addMessage(new Message("- Cancelled", player.getPosition()));
+					addMessage(new Message("- Cancelled", player.pos));
 					eraseOnArrival = true;
 					si.refresh();
 					actionSelectedByCommand = null;
@@ -2062,7 +2077,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 						throw new ActionCancelException();
 					}
 				} catch (ActionCancelException ace){
-					addMessage(new Message("- Cancelled", player.getPosition()));
+					addMessage(new Message("- Cancelled", player.pos));
 					eraseOnArrival = true;si.refresh();
 					actionSelectedByCommand = null;
 				}
@@ -2126,159 +2141,7 @@ public class GFXUserInterface extends UserInterface {//implements Runnable {
 	}
 
 
-	class MultiItemsBox extends AdornedBorderPanel {
-		private JList lstInventory;
-		private GFXButton btnExit;
-		private GFXButton btnOk;
-		private JLabel lblPrompt;
-		
-		private Thread activeThread;
-		
-		public void setVisible(boolean val){
-			super.setVisible(val);
-			if (val){
-				lstInventory.requestFocus();
-				if (lstInventory.getModel().getSize() > 0)
-					lstInventory.setSelectedIndex(0);
-			}
-		}
-		
-		public MultiItemsBox(Image UPRIGHT, 
-				Image UPLEFT, Image DOWNRIGHT, Image DOWNLEFT,
-				Color OUT_COLOR, Color IN_COLOR,
-				int borderWidth, int borderHeight) {
-			super(UPRIGHT, UPLEFT, DOWNRIGHT, DOWNLEFT, OUT_COLOR, IN_COLOR, borderWidth, borderHeight);
-			
-			lstInventory = new JList(new DefaultListModel());
-			lstInventory.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-			btnExit = new GFXButton(IMG_EXIT_BTN);
-			btnOk = new GFXButton(IMG_OK_BTN);
 
-			lstInventory.setOpaque(false);
-			lstInventory.setCellRenderer(new ItemsCellRenderer());
-			
-			setOpaque(false);
-			setBorder(new EmptyBorder(STANDARD_WIDTH,STANDARD_WIDTH,STANDARD_WIDTH,STANDARD_WIDTH));
-			
-			setLayout(new BorderLayout());
-			
-			lblPrompt = new JLabel("Inventory");
-			lblPrompt.setFont(FNT_MESSAGEBOX);
-			lblPrompt.setForeground(GFXDisplay.COLOR_BOLD);
-			
-			JPanel pnlButtons = new JPanel();
-			pnlButtons.add(btnExit);
-			pnlButtons.add(btnOk);
-			pnlButtons.setOpaque(false);
-			
-			add(lblPrompt, BorderLayout.NORTH);
-			add(lstInventory, BorderLayout.CENTER);
-			add(pnlButtons, BorderLayout.SOUTH);
-			
-			setBackground(Color.BLACK);
-			
-			btnExit.addActionListener(new ActionListener(){
-				public void actionPerformed(ActionEvent arg0) {
-					doExit();
-				}
-			});
-			btnOk.addActionListener(new ActionListener(){
-				
-				public void actionPerformed(ActionEvent arg0) {
-					doOk();
-				}
-			});
-			lstInventory.addKeyListener(new KeyListener(){
-
-				public void keyPressed(KeyEvent e) {
-					if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_SPACE){
-						doOk();
-					}else
-					if (e.getKeyCode() == KeyEvent.VK_ESCAPE){
-						doExit();
-					}else if (e.getKeyCode() == KeyEvent.VK_NUMPAD8){
-						if (lstInventory.getSelectedIndex() > 0)
-							lstInventory.setSelectedIndex(lstInventory.getSelectedIndex()-1);
-					} else if (e.getKeyCode() == KeyEvent.VK_NUMPAD2){
-						if (lstInventory.getSelectedIndex() < lstInventory.getModel().getSize()-1)
-							lstInventory.setSelectedIndex(lstInventory.getSelectedIndex()+1);
-					}
-				}
-
-				public void keyReleased(KeyEvent e) {}
-
-				public void keyTyped(KeyEvent e) {}
-				
-			});
-			
-		}
-		
-		private void doOk(){
-			if (activeThread != null) {
-				choice = new Vector();
-				int[] indices = lstInventory.getSelectedIndices();
-				for (int i = 0; i < indices.length; i++){
-					choice.add(((Equipment)inventory.elementAt(indices[i])).getItem());
-				}
-				activeThread.interrupt();
-			}
-		}
-		
-		private void doExit(){
-			if (activeThread != null) {
-				choice = null;
-				activeThread.interrupt();
-			}
-		}
-		private Vector choice;
-		private Vector inventory;
-		
-		public Vector getChoice(){
-			return choice;
-		}
-		
-		public void setPrompt(String prompt){
-			lblPrompt.setText(prompt);
-		}
-		public void setItems(Vector items){
-			inventory = (Vector) items.clone();
-			((DefaultListModel)lstInventory.getModel()).removeAllElements();
-			for (int i = 0; i < items.size(); i++){
-				((DefaultListModel)lstInventory.getModel()).addElement(items.elementAt(i));
-			}
-		}
-		
-		public void informChoice(Thread who){
-			activeThread = who;
-		}
-		
-		class ItemsCellRenderer extends DefaultListCellRenderer {
-			private JLabel ren;
-			
-			public ItemsCellRenderer(){
-				ren = new JLabel();
-				ren.setFont(FNT_MESSAGEBOX);
-				ren.setOpaque(false);
-				ren.setForeground(Color.WHITE);
-				ren.setBackground(GFXDisplay.COLOR_BOLD);
-
-			}
-			public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-				if (value instanceof Equipment){
-					Equipment smi = (Equipment) value;
-					ren.setText(smi.getMenuDescription());
-					ren.setIcon(new ImageIcon(((GFXAppearance)smi.getItem().getAppearance()).getIconImage()));
-				} else {
-					Item smi = (Item) value;
-					ren.setText(smi.getMenuDescription());
-					ren.setIcon(new ImageIcon(((GFXAppearance)smi.getAppearance()).getIconImage()));
-				}
-					
-				ren.setOpaque(isSelected);
-				return ren;
-			}
-		}
-	}
 
 
 	public Vector<String> getMessageBuffer() {

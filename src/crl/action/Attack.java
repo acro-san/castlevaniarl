@@ -13,7 +13,6 @@ import crl.monster.Monster;
 import crl.player.Consts;
 import crl.player.Player;
 import crl.ui.effects.Effect;
-import crl.ui.effects.EffectFactory;
 
 public class Attack extends Action {
 	
@@ -50,11 +49,11 @@ public class Attack extends Action {
 			weapon = null;*/
 		
 		if (weapon == null || weapon.getDefinition().weaponCategory.equals(ItemDefinition.CAT_UNARMED)) {
-			if (targetDirection == Action.SELF && aLevel.getMonsterAt(player.getPosition()) == null){
+			if (targetDirection == Action.SELF && aLevel.getMonsterAt(player.pos) == null){
 				aLevel.addMessage("Don't hit yourself");
 				return;
 			}
-			Position targetPosition = Position.add(player.getPosition(), Action.directionToVariation(targetDirection)); 
+			Position targetPosition = Position.add(player.pos, Action.directionToVariation(targetDirection)); 
 			Monster targetMonster = aLevel.getMonsterAt(targetPosition);
 			String attackDescription = player.getPunchDescription();
 			int punchDamage = player.getPunchDamage();
@@ -81,13 +80,13 @@ public class Attack extends Action {
 			return;
 		}
 
-		if (targetDirection == Action.SELF && aLevel.getMonsterAt(player.getPosition()) == null) {
+		if (targetDirection == Action.SELF && aLevel.getMonsterAt(player.pos) == null) {
 			aLevel.addMessage("That's a coward way to give up!");
 			return;
 		}
 		
-		targetPosition = Position.add(performer.getPosition(), Action.directionToVariation(targetDirection));
-		int startHeight = aLevel.getMapCell(player.getPosition()).getHeight() + player.getHoverHeight();
+		targetPosition = Position.add(performer.pos, Action.directionToVariation(targetDirection));
+		int startHeight = aLevel.getMapCell(player.pos).getHeight() + player.getHoverHeight();
 		ItemDefinition weaponDef = weapon.getDefinition();
 
 		if (weapon.getReloadTurns() > 0)
@@ -99,17 +98,17 @@ public class Attack extends Action {
 		String [] sfx = weaponDef.attackSFX.split(" ");
 		if (sfx.length > 0) {
 			if (sfx[0].equals("MELEE")) {
-				Effect me = Main.efx.createDirectionalEffect(performer.getPosition(), targetDirection, weapon.getRange(), "SFX_WP_"+weaponDef.getID());
+				Effect me = Main.efx.createDirectionalEffect(performer.pos, targetDirection, weapon.getRange(), "SFX_WP_"+weaponDef.getID());
 				Main.ui.drawEffect(me);
 			} else if (sfx[0].equals("BEAM")) {
-				Effect me = Main.efx.createDirectedEffect(performer.getPosition(), targetPosition, "SFX_WP_"+weaponDef.getID(), weapon.getRange());
+				Effect me = Main.efx.createDirectedEffect(performer.pos, targetPosition, "SFX_WP_"+weaponDef.getID(), weapon.getRange());
 				Main.ui.drawEffect(me);
 			} else if (sfx[0].equals("MISSILE")) {
-				Effect me = Main.efx.createDirectedEffect(performer.getPosition(), targetPosition, "SFX_WP_"+weaponDef.getID(), weapon.getRange());
+				Effect me = Main.efx.createDirectedEffect(performer.pos, targetPosition, "SFX_WP_"+weaponDef.getID(), weapon.getRange());
 				if (!weapon.isSlicesThrough()) {
 					int i = 0;
 					for (i=0; i<weapon.getRange(); i++) {
-						Position destinationPoint = Position.add(performer.getPosition(),
+						Position destinationPoint = Position.add(performer.pos,
 							Position.mul(var, i+1));
 						Cell destinationCell = aLevel.getMapCell(destinationPoint);
 						Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
@@ -120,13 +119,13 @@ public class Attack extends Action {
 						if (
 							targetMonster != null &&
 							!(targetMonster.isInWater() && targetMonster.canSwim()) &&
-							(destinationCell.getHeight() == aLevel.getMapCell(player.getPosition()).getHeight() ||
-							destinationCell.getHeight() -1  == aLevel.getMapCell(player.getPosition()).getHeight() ||
-							destinationCell.getHeight() == aLevel.getMapCell(player.getPosition()).getHeight()-1)
+							(destinationCell.getHeight() == aLevel.getMapCell(player.pos).getHeight() ||
+							destinationCell.getHeight() -1  == aLevel.getMapCell(player.pos).getHeight() ||
+							destinationCell.getHeight() == aLevel.getMapCell(player.pos).getHeight()-1)
 						)
 							break;
 					}
-					me = Main.efx.createDirectedEffect(performer.getPosition(), targetPosition, "SFX_WP_"+weaponDef.getID(), i);
+					me = Main.efx.createDirectedEffect(performer.pos, targetPosition, "SFX_WP_"+weaponDef.getID(), i);
 				}
 				Main.ui.drawEffect(me);
 			}
@@ -135,7 +134,7 @@ public class Attack extends Action {
 		boolean hitsSomebody = false;
 		boolean hits = false;
 		for (int i=0; i<weapon.getRange(); i++) {
-			Position destinationPoint = Position.add(performer.getPosition(),
+			Position destinationPoint = Position.add(performer.pos,
 				Position.mul(var, i+1));
 			Cell destinationCell = aLevel.getMapCell(destinationPoint);
 			/*aLevel.addMessage("You hit the "+destinationCell.getID());*/
@@ -167,7 +166,7 @@ public class Attack extends Action {
 			if (hits){
 				hits = false;
 				hitsSomebody = true;
-				int penalty = (int)(Position.distance(targetMonster.getPosition(), player.getPosition())/4);
+				int penalty = (int)(Position.distance(targetMonster.pos, player.pos)/4);
 				int attack = player.getWeaponAttack()+Util.rand(0,2);
 				attack -= penalty;
 				if (attack < 1)
@@ -238,13 +237,16 @@ public class Attack extends Action {
 		}
 	}
 
+
 	public String getPromptDirection() {
 		return "Where do you want to attack?";
 	}
 
+
 	public int getDirection(){
 		return targetDirection;
 	}
+
 
 	private boolean reload(Item weapon, Player aPlayer) {
 		if (weapon == null) {
@@ -269,7 +271,8 @@ public class Attack extends Action {
 		return true;
 	}
 	
-	public int getCost(){
+	
+	public int getCost() {
 		Player player = (Player) performer;
 		if (weapon != null){
 			return player.getAttackCost() + weapon.getAttackCost()+reloadTime;
@@ -277,6 +280,7 @@ public class Attack extends Action {
 			return (int)(player.getAttackCost() * 1.5);
 		}
 	}
+
 
 	public String getSFX() {
 		Player p = (Player)performer;
@@ -293,7 +297,7 @@ public class Attack extends Action {
 
 	private void pushMonster(Monster targetMonster, Level aLevel, int spaces) {
 		Position varP = Action.directionToVariation(targetDirection);
-		Position runner = Position.add(targetMonster.getPosition(), varP);
+		Position runner = Position.add(targetMonster.pos, varP);
 		for (int i = 0; i < spaces; i++) {
 			Cell fly = aLevel.getMapCell(runner);
 			if (fly == null)
@@ -302,9 +306,9 @@ public class Attack extends Action {
 				if (fly.isWater() || fly.isShallowWater()) {
 					if (targetMonster.canSwim()) {
 						if (i == spaces-1 ) aLevel.addMessage("You throw the "+targetMonster.getDescription()+" into the water!");
-						targetMonster.setPosition(runner);
+						targetMonster.pos = runner;
 					} else if (targetMonster.isEthereal()) {
-						targetMonster.setPosition(runner);
+						targetMonster.pos = runner;
 					} else {
 						aLevel.addMessage("You throw the "+targetMonster.getDescription()+" into the water!");
 						aLevel.addMessage("The "+targetMonster.getDescription()+" drowns!");
@@ -313,7 +317,7 @@ public class Attack extends Action {
 						return;
 					}
 				} else {
-					targetMonster.setPosition(runner);
+					targetMonster.pos = runner;
 				}
 			} else {
 				StringBuffer buff = new StringBuffer("You smash the "+targetMonster.getDescription()+" against the "+fly.getDescription()+"!");
@@ -334,7 +338,7 @@ public class Attack extends Action {
 		if (player.getWeapon() != null && player.getWeapon().getWeaponCategory() == ItemDefinition.CAT_BOWS){
 			Monster nearest = player.getNearestMonster();
 			if (nearest != null){
-				if (Position.distance(nearest.getPosition(), player.getPosition()) < 2){
+				if (Position.distance(nearest.pos, player.pos) < 2){
 					invalidationMessage = "You can't aim your "+player.getWeapon().getDescription()+" this close to the enemy, get away!";
 					return false;
 				}

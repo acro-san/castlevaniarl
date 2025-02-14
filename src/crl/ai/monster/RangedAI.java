@@ -18,7 +18,7 @@ public class RangedAI extends MonsterAI {
 	public Action selectAction(Actor who) {
 		Monster aMonster = (Monster) who;
 		int directionToPlayer = aMonster.starePlayer();
-		int playerDistance = Position.flatDistance(aMonster.getPosition(), aMonster.level.getPlayer().getPosition());
+		int playerDistance = Position.flatDistance(aMonster.pos, aMonster.level.getPlayer().pos);
 		if (directionToPlayer == -1){
 			//A stationary here would do nothing
 			int direction = Util.rand(0,7);
@@ -42,7 +42,7 @@ public class RangedAI extends MonsterAI {
 						//Perform the attack
 						Action ret = ActionFactory.getActionFactory().getAction(element.getAttackId());
 						ret.setDirection(directionToPlayer);
-						ret.setPosition(aMonster.level.getPlayer().getPosition());
+						ret.setPosition(aMonster.level.getPlayer().pos);
 						return ret;
 					}
 				}

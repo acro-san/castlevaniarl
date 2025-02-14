@@ -9,45 +9,44 @@ import crl.ai.monster.MonsterAI;
 import crl.level.Cell;
 import crl.monster.Monster;
 
-public class SickleAI extends MonsterAI{
-	public Action selectAction(Actor who){
+public class SickleAI extends MonsterAI {
+	
+	public Action selectAction(Actor who) {
 		Monster aMonster = (Monster) who;
 		int directionToPlayer = aMonster.starePlayer();
-		if (directionToPlayer == -1){
-	     	return null;
+		if (directionToPlayer == -1) {
+			return null;
 		} else {
-			int distanceToPlayer = Position.flatDistance(aMonster.getPosition(), aMonster.level.getPlayer().getPosition());
-			if (distanceToPlayer > 20)
+			int distanceToPlayer = Position.flatDistance(aMonster.pos, aMonster.level.getPlayer().pos);
+			if (distanceToPlayer > 20) {
 				return null;
-        	Action ret = new MonsterWalk();
-            ret.setDirection(directionToPlayer);
-            Cell currentCell = aMonster.level.getMapCell(aMonster.getPosition());
-            Cell destinationCell = aMonster.level.getMapCell(
+			}
+			Action ret = new MonsterWalk();
+			ret.setDirection(directionToPlayer);
+			Cell currentCell = aMonster.level.getMapCell(aMonster.pos);
+			Cell destinationCell = aMonster.level.getMapCell(
 				Position.add(
-					aMonster.getPosition(),
+					aMonster.pos,
 					Action.directionToVariation(directionToPlayer)
 				));
 
 			if (destinationCell == null || currentCell == null){
 				return null;
 			}
-	     	return ret;
+			return ret;
 		}
+	}
 
-	 }
+	public String getID() {
+		return "WANDER";
+	}
 
-	 public String getID(){
-		 return "WANDER";
-	 }
-
-     public ActionSelector derive(){
-    	 
- 		try {
-	 		return (ActionSelector) clone();
-	 	} catch (CloneNotSupportedException cnse){
+	public ActionSelector derive() {
+		try {
+			return (ActionSelector)clone();
+		} catch (CloneNotSupportedException cnse) {
 			return null;
-	 	}
- 	}
-
-     
+		}
+	}
+	
 }

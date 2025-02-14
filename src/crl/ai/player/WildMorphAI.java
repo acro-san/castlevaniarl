@@ -30,17 +30,17 @@ public class WildMorphAI implements ActionSelector {
 		if (directionToMonster == -1) {
 			return null;
 		} else {
-			Position destination = Position.add(who.getPosition(), Action.directionToVariation(directionToMonster));
+			Position destination = Position.add(who.pos, Action.directionToVariation(directionToMonster));
 			if (aPlayer.level.getMonsterAt(destination) != null)
 				aPlayer.setEnemy(aPlayer.level.getMonsterAt(destination));
-			if (aPlayer.getEnemy()!= null && destination.equals(aPlayer.getEnemy().getPosition())){
+			if (aPlayer.getEnemy()!= null && destination.equals(aPlayer.getEnemy().pos)){
 				Action ret = new Attack();
 				ret.setPerformer(aPlayer);
 				ret.setDirection(directionToMonster);
 				return ret;
 			} else {
 				Action ret = new Walk();
-				if (!who.level.isWalkable(Position.add(who.getPosition(), Action.directionToVariation(directionToMonster)))){
+				if (!who.level.isWalkable(Position.add(who.pos, Action.directionToVariation(directionToMonster)))){
 					directionToMonster = Util.rand(0,7); 
 					ret.setDirection(directionToMonster);
 				} else {

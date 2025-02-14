@@ -3,12 +3,13 @@ package crl.action;
 import crl.level.Level;
 import crl.player.Player;
 
-public class Drop extends Action{
-	public String getID(){
+public class Drop extends Action {
+	
+	public String getID() {
 		return "Drop";
 	}
 	
-	public boolean needsItem(){
+	public boolean needsItem() {
 		return true;
 	}
 
@@ -20,6 +21,6 @@ public class Drop extends Action{
 		Level aLevel = performer.level;
 		aLevel.addMessage("You drop a "+targetItem.getDescription());
 		((Player)performer).reduceQuantityOf(targetItem);
-		aLevel.addItem(performer.getPosition(), targetItem);			
+		aLevel.addItem(performer.pos, targetItem);
 	}
 }

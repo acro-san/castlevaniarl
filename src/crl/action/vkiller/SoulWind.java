@@ -19,7 +19,7 @@ public class SoulWind extends HeartAction {
 		super.execute();
 		Player aPlayer = (Player) performer;
 		Level x = performer.level;
-		Main.ui.drawEffect(Main.efx.createLocatedEffect(aPlayer.getPosition(), "SFX_SOUL_WIND"));
+		Main.ui.drawEffect(Main.efx.createLocatedEffect(aPlayer.pos, "SFX_SOUL_WIND"));
 		x.addMessage("Soul Wind!");
 		x.stopTime(20 + aPlayer.getShotLevel()*5+ 2*aPlayer.getSoulPower());
 	}

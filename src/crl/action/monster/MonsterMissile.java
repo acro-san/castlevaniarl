@@ -58,27 +58,26 @@ public class MonsterMissile extends Action {
 		Monster aMonster = (Monster)performer;
 		Level aLevel = performer.level;
 		Player aPlayer = aLevel.getPlayer();
-		//Cell playerCell = aLevel.getMapCell(aPlayer.getPosition());
-		//Cell monsterCell = aLevel.getMapCell(aMonster.getPosition());
-		int targetDirection = solveDirection(performer.getPosition(), targetPosition);
+
+		int targetDirection = solveDirection(performer.pos, targetPosition);
 		if (effectWav != null) {
 			SFXManager.play(effectWav);
 		}
 		if (effectType.equals("beam")) {
-			drawEffect(Main.efx.createDirectedEffect(aMonster.getPosition(), targetPosition, effectID,range));
+			drawEffect(Main.efx.createDirectedEffect(aMonster.pos, targetPosition, effectID,range));
 		} else if (effectType.equals("melee")) {
-			drawEffect(Main.efx.createDirectionalEffect(aMonster.getPosition(), targetDirection, range, effectID));
+			drawEffect(Main.efx.createDirectionalEffect(aMonster.pos, targetDirection, range, effectID));
 		} else if (effectType.equals("missile")) {
-			drawEffect(Main.efx.createDirectedEffect(aMonster.getPosition(), targetPosition, effectID, range));
+			drawEffect(Main.efx.createDirectedEffect(aMonster.pos, targetPosition, effectID, range));
 		} else if (effectType.equals("directionalmissile")) {
-			drawEffect(Main.efx.createDirectedEffect(aMonster.getPosition(), targetPosition, effectID , range));
+			drawEffect(Main.efx.createDirectedEffect(aMonster.pos, targetPosition, effectID , range));
 		}
-		Line line = new Line(aMonster.getPosition(), targetPosition);
+		Line line = new Line(aMonster.pos, targetPosition);
 		boolean hits = false;
 		for (int i=0; i<range; i++) {
 			Position destinationPoint = line.next();
-			if (aPlayer.getPosition().equals(destinationPoint)){
-				int penalty = (int)(Position.distance(aMonster.getPosition(), aPlayer.getPosition())/4);
+			if (aPlayer.pos.equals(destinationPoint)){
+				int penalty = (int)(Position.distance(aMonster.pos, aPlayer.pos)/4);
 				int attack = aMonster.getAttack();
 				attack -= penalty;
 				if (attack < 1)
@@ -87,7 +86,7 @@ public class MonsterMissile extends Action {
 					hits = true;
 				} else if (type.equals(TYPE_STRAIGHT)) {
 					//if (monsterCell.getHeight() == playerCell.getHeight()){
-					if (aMonster.getStandingHeight() == aPlayer.getStandingHeight()){
+					if (aMonster.getStandingHeight() == aPlayer.getStandingHeight()) {
 						hits = true;
 					} else {
 						hits = false;

@@ -15,9 +15,9 @@ public abstract class CharDirectedEffect extends CharEffect {
 		super(id, delay);
 	}
 	
-	public void set(Position loc, Position startPosition, Position pivotPosition, int depth){
+	public void set(Position loc, Position startPosition, Position endPosition, int depth){
 		super.set(loc);
-		effectLine = new Line(startPosition, pivotPosition);
+		effectLine = new Line(startPosition, endPosition);
 		setDepth(depth);
 	}
 	

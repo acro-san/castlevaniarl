@@ -17,18 +17,18 @@ public class Prelude3 extends Unleasher {
 			return;
 		
 		level.addMessage("Dracula invokes a deadly beam of chaos energy!!!");
-		Main.ui.drawEffect(Main.efx.createLocatedEffect(level.getPlayer().getPosition(), "SFX_KILL_CHRIS"));
+		Main.ui.drawEffect(Main.efx.createLocatedEffect(level.getPlayer().pos, "SFX_KILL_CHRIS"));
 		
 		Player p = level.getPlayer();
 		game.setPlayer(PlayerGenerator.thus.createSpecialPlayer("SOLEIYU"));
 		level.removeActor(p);
 		p.die();
-		level.getPlayer().setPosition(level.getExitFor("_START"));
+		level.getPlayer().pos = level.getExitFor("_START");
 		level.getPlayer().see();
 		Main.ui.refresh();
 		level.setFlag("CHRIS_DEAD", true);
 		((DraculaAI)level.getMonsterByID("PRELUDE_DRACULA").selector).reset();
-		dracula.setPosition(level.getExitFor("#DRACPOS"));
+		dracula.pos = level.getExitFor("#DRACPOS");
 		dracula.isVisible = true;
 		enabled = false;
 	}

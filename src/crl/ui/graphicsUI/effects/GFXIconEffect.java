@@ -22,7 +22,7 @@ public class GFXIconEffect extends GFXEffect{
 		int height = 0;
 		if (ui.getPlayer().level.getMapCell(getPosition()) != null)
 			height = ui.getPlayer().level.getMapCell(getPosition()).getHeight();
-		Position relative = Position.subs(getPosition(), ui.getPlayer().getPosition());
+		Position relative = Position.subs(getPosition(), ui.getPlayer().pos);
 		Position center = Position.add(ui.PC_POS, relative);
 		if (ui.insideViewPort(center))
 			ui.drawImageVP(center.x * 32, center.y * 32 - 4 * height, tile);

@@ -17,19 +17,19 @@ public class ShadowApocalypse extends Action {
 	
 	public void execute() {
 		Level aLevel = performer.level;
-		aLevel.addMessage("A voice thunders! 'SHADOW APOCALYPSE!!'");
+		aLevel.addMessage("A voice thunders! 'SHADOW APOCALYPSE!'");
 		int sickles = Util.rand(4,8);
 		for (int i=0; i<sickles; i++) {
 			int xvar = Util.rand(-10,10);
 			int yvar = Util.rand(-10,10);
-			int xgo = performer.getPosition().x + xvar - 4;
-			int ygo = performer.getPosition().y + yvar - 4;
-			//UserInterface.getUI().drawEffect(new SplashEffect(new Position(xvar+performer.getPosition().x, yvar+performer.getPosition().y), "Oo*'.", Appearance.CYAN));
-			Position pp = performer.getPosition();
+			int xgo = performer.pos.x + xvar - 4;
+			int ygo = performer.pos.y + yvar - 4;
+			//UserInterface.getUI().drawEffect(new SplashEffect(new Position(xvar+performer.pos.x, yvar+performer.pos.y), "Oo*'.", Appearance.CYAN));
+			Position pp = performer.pos;
 			drawEffect(Main.efx.createLocatedEffect(new Position(xvar+pp.x, yvar+pp.y, pp.z), "SFX_SHADOW_APOCALYPSE"));
 			for (int jx = xgo; jx <= xgo+4; jx++) {
 				for (int jy = ygo; jy <= ygo+4; jy++) {
-					hit(jx, jy, performer.getPosition().z);
+					hit(jx, jy, performer.pos.z);
 				}
 			}
 		}
@@ -43,8 +43,8 @@ public class ShadowApocalypse extends Action {
 		Level aLevel = performer.level;
 		Player aPlayer = aLevel.getPlayer();
 		Position destinationPoint = new Position(x,y,z);
-		if (destinationPoint.equals(aPlayer.getPosition())) {
-			aPlayer.damage("You feel pain all over your body!!", (Monster)performer, new Damage(4, false));
+		if (destinationPoint.equals(aPlayer.pos)) {
+			aPlayer.damage("You feel pain all over your body!", (Monster)performer, new Damage(4, false));
 		}
 	}
 }

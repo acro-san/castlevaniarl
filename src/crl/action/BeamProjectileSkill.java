@@ -21,20 +21,20 @@ public abstract class BeamProjectileSkill extends ProjectileSkill {
 	
 	private boolean[] deadLines = new boolean[3];
 	public void execute() {
-		if (targetPosition.equals(performer.getPosition()))
+		if (targetPosition.equals(performer.pos))
 			return;
 		reduceHearts();
 		Level aLevel = performer.level;
 		Player aPlayer = aLevel.getPlayer();
-		int attackHeight = aLevel.getMapCell(aPlayer.getPosition()).getHeight();
+		int attackHeight = aLevel.getMapCell(aPlayer.pos).getHeight();
 		if (showThrowMessage()) {
 			aLevel.addMessage(getShootMessage());
 		}
-		targetDirection = getGeneralDirection(performer.getPosition(), targetPosition);
+		targetDirection = getGeneralDirection(performer.pos, targetPosition);
 		
 		OutParameter outPosition1 = new OutParameter();
 		OutParameter outPosition2 = new OutParameter();
-		Action.fillNormalPositions(performer.getPosition(), targetDirection, outPosition1, outPosition2);
+		Action.fillNormalPositions(performer.pos, targetDirection, outPosition1, outPosition2);
 		
 		Position start1 = (Position) outPosition1.getObject();
 		Position start2 = (Position) outPosition2.getObject();
@@ -46,7 +46,7 @@ public abstract class BeamProjectileSkill extends ProjectileSkill {
 		/*aLevel.addFeature("SMALLHEART", start1);
 		aLevel.addFeature("SMALLHEART", start2);*/
 		
-		Line fireLine = new Line(performer.getPosition(), targetPosition);
+		Line fireLine = new Line(performer.pos, targetPosition);
 		Line fireLine1 = new Line(start1, end1);
 		Line fireLine2 = new Line(start2, end2);
 		deadLines[0] = false;
@@ -65,7 +65,7 @@ public abstract class BeamProjectileSkill extends ProjectileSkill {
 				switch (hits) {
 				case 0:
 					destinationPoint = fireLine.next();
-					originPoint = performer.getPosition();
+					originPoint = performer.pos;
 					finalPoint = targetPosition;
 					break;
 				case 1:
@@ -121,7 +121,7 @@ public abstract class BeamProjectileSkill extends ProjectileSkill {
 					int monsterHeight = destinationHeight + targetMonster.getHoverHeight();
 					
 					if (projectileHeight == monsterHeight){
-						if (targetMonster.tryMagicHit(aPlayer,getDamage(), getHit(), targetMonster.wasSeen(), getSpellAttackDesc(), isWeaponAttack(), performer.getPosition())) {
+						if (targetMonster.tryMagicHit(aPlayer,getDamage(), getHit(), targetMonster.wasSeen(), getSpellAttackDesc(), isWeaponAttack(), performer.pos)) {
 							if (!piercesThru()){
 								drawEffect(Main.efx.createDirectedEffect(originPoint, finalPoint, getSFXID(), i));
 								deadLines[hits] = true;
@@ -141,7 +141,7 @@ public abstract class BeamProjectileSkill extends ProjectileSkill {
 			Position finalPoint = null;
 			switch (hits){
 			case 0:
-				originPoint = performer.getPosition();
+				originPoint = performer.pos;
 				finalPoint = targetPosition;
 				break;
 			case 1:

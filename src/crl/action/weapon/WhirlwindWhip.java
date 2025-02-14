@@ -29,14 +29,14 @@ public class WhirlwindWhip extends Action {
 			attack = aPlayer.weaponSkill(ItemDefinition.CAT_WHIPS) + 
 				(int)Math.round(aPlayer.getAttack() * (aPlayer.getWeapon().getAttack()/2.0D));
 		}
-		hit(Position.add(performer.getPosition(), Action.directionToVariation(Action.UP)), attack);
-		hit(Position.add(performer.getPosition(), Action.directionToVariation(Action.UPLEFT)), attack);
-		hit(Position.add(performer.getPosition(), Action.directionToVariation(Action.LEFT)), attack);
-		hit(Position.add(performer.getPosition(), Action.directionToVariation(Action.DOWNLEFT)), attack);
-		hit(Position.add(performer.getPosition(), Action.directionToVariation(Action.DOWN)), attack);
-		hit(Position.add(performer.getPosition(), Action.directionToVariation(Action.DOWNRIGHT)), attack);
-		hit(Position.add(performer.getPosition(), Action.directionToVariation(Action.RIGHT)), attack);
-		hit(Position.add(performer.getPosition(), Action.directionToVariation(Action.UPRIGHT)), attack);
+		hit(Position.add(performer.pos, Action.directionToVariation(Action.UP)), attack);
+		hit(Position.add(performer.pos, Action.directionToVariation(Action.UPLEFT)), attack);
+		hit(Position.add(performer.pos, Action.directionToVariation(Action.LEFT)), attack);
+		hit(Position.add(performer.pos, Action.directionToVariation(Action.DOWNLEFT)), attack);
+		hit(Position.add(performer.pos, Action.directionToVariation(Action.DOWN)), attack);
+		hit(Position.add(performer.pos, Action.directionToVariation(Action.DOWNRIGHT)), attack);
+		hit(Position.add(performer.pos, Action.directionToVariation(Action.RIGHT)), attack);
+		hit(Position.add(performer.pos, Action.directionToVariation(Action.UPRIGHT)), attack);
 	}
 
 
@@ -60,8 +60,8 @@ public class WhirlwindWhip extends Action {
 		}
 		Monster targetMonster = performer.level.getMonsterAt(destinationPoint);
 		Cell destinationCell = performer.level.getMapCell(destinationPoint);
-		//Position pp = aPlayer.getPosition();
-		Cell playerCell = aLevel.getMapCell(aPlayer.getPosition());
+		//Position pp = aPlayer.pos;
+		Cell playerCell = aLevel.getMapCell(aPlayer.pos);
 		int pmcH = playerCell.getHeight();
 		if (targetMonster != null &&
 			!(targetMonster.isInWater() && targetMonster.canSwim()) &&

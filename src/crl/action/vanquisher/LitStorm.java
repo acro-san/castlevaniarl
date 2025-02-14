@@ -25,24 +25,24 @@ public class LitStorm extends HeartAction {
 		
 		for (int i = 0; i < 3; i++) {
 			Monster nearestMonster = aPlayer.getNearestMonster();
-			if (nearestMonster == null || Position.flatDistance(nearestMonster.getPosition(), aPlayer.getPosition())>10){
+			if (nearestMonster == null || Position.flatDistance(nearestMonster.pos, aPlayer.pos)>10){
 			} else {
 				StringBuffer buff = new StringBuffer();
 				if (nearestMonster.wasSeen())
 					buff.append("Lighting zaps the "+nearestMonster.getDescription()+"!");
 				nearestMonster.damage(buff, 5+aPlayer.getSoulPower()*2);
 				aLevel.addMessage(buff.toString());
-				drawEffect(Main.efx.createDirectedEffect(aPlayer.getPosition(), nearestMonster.getPosition(), "SFX_LIT_SPELL", Position.flatDistance(performer.getPosition(), nearestMonster.getPosition())));
+				drawEffect(Main.efx.createDirectedEffect(aPlayer.pos, nearestMonster.pos, "SFX_LIT_SPELL", Position.flatDistance(performer.pos, nearestMonster.pos)));
 				
 			}
 		}
 	}
 
+
 	public int getCost() {
 		Player p = (Player) performer;
 		return (int)(p.getCastCost() * 1.5);
 	}
-	
 
-	
+
 }

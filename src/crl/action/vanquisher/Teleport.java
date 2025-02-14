@@ -31,12 +31,12 @@ public class Teleport extends HeartAction {
 		Player player = (Player) performer;
 		Level level = player.level;
 		level.addMessage("You dematerialize!");
-		if (targetPosition.equals(performer.getPosition())) {
+		if (targetPosition.equals(performer.pos)) {
 			level.addMessage("You appear in the same place!");
 			return;
 		}
 
-		Line line = new Line(player.getPosition(), targetPosition);
+		Line line = new Line(player.pos, targetPosition);
 		Position runner = line.next();
 		Position prerunner = new Position(runner);
 		int i = 0;
@@ -47,13 +47,13 @@ public class Teleport extends HeartAction {
 			runner = line.next();
 			Cell destinationCell = performer.level.getMapCell(runner);
 			if (level.isWalkable(runner) &&
-				destinationCell.getHeight() == level.getMapCell(player.getPosition()).getHeight()
+				destinationCell.getHeight() == level.getMapCell(player.pos).getHeight()
 			)
 				;
 			else
 				break;
 		}
-		drawEffect(Main.efx.createDirectedEffect(player.getPosition(), targetPosition, "SFX_TELEPORT", i));
+		drawEffect(Main.efx.createDirectedEffect(player.pos, targetPosition, "SFX_TELEPORT", i));
 		
 		player.landOn(prerunner);
 		player.see();

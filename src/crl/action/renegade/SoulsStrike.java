@@ -25,13 +25,13 @@ public class SoulsStrike extends HeartAction {
 		
 		for (int i = 0; i < 3; i++) {
 			Monster nearestMonster = aPlayer.getNearestMonster();
-			if (nearestMonster == null || Position.flatDistance(nearestMonster.getPosition(), aPlayer.getPosition())>15){
+			if (nearestMonster == null || Position.flatDistance(nearestMonster.pos, aPlayer.pos)>15){
 			} else {
 				StringBuffer buff = new StringBuffer();
 				if (nearestMonster.wasSeen())
 					buff.append("The soul impacts the "+nearestMonster.getDescription()+"!");
 				nearestMonster.damage(buff, 10+aPlayer.getSoulPower()*2);
-				drawEffect(Main.efx.createDirectedEffect(aPlayer.getPosition(), nearestMonster.getPosition(), "SFX_SOULSSTRIKE", Position.flatDistance(performer.getPosition(), nearestMonster.getPosition())));
+				drawEffect(Main.efx.createDirectedEffect(aPlayer.pos, nearestMonster.pos, "SFX_SOULSSTRIKE", Position.flatDistance(performer.pos, nearestMonster.pos)));
 				aLevel.addMessage(buff.toString());
 			}
 		}

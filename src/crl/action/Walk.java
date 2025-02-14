@@ -38,11 +38,11 @@ public class Walk extends Action {
 			return;
 		}
 		Position var = directionToVariation(targetDirection);
-		Position destinationPoint = Position.add(performer.getPosition(), var);
+		Position destinationPoint = Position.add(performer.pos, var);
 		Level map = performer.level;
 		Cell destinationCell = map.getMapCell(destinationPoint);
 		Feature destinationFeature = map.getFeatureAt(destinationPoint);
-		Cell currentCell = map.getMapCell(performer.getPosition());
+		Cell currentCell = map.getMapCell(performer.pos);
 
 		if (destinationCell == null || destinationCell.isEthereal()) {
 			if (!map.isValidCoordinate(destinationPoint)) {
@@ -62,7 +62,7 @@ public class Walk extends Action {
 					currentCell = map.getMapCell(destinationPoint);
 				}
 			} else {
-				aPlayer.setPosition(destinationPoint);
+				aPlayer.pos = destinationPoint;
 				Debug.exitMethod();
 				return;
 			}
@@ -139,7 +139,7 @@ public class Walk extends Action {
 								} else {
 									if (aPlayer.damage("You bump with the "+aMonster.getDescription()+"!", aMonster, new Damage(aMonster.getAttack(), false))){
 										map.getPlayer().bounceBack(Position.mul(var, -1), 2);
-										if (aPlayer.getPosition().equals(aMonster.getPosition())){
+										if (aPlayer.pos.equals(aMonster.pos)){
 											//The player wasnt bounced back..
 											//aLevel.addMessage("You are hit by the "+aMonster.getDescription()+"!");
 										} else {
@@ -151,7 +151,7 @@ public class Walk extends Action {
 							}
 						} else {
 							// Trail blood forward as you step through some
-							if (map.getBloodAt(aPlayer.getPosition()) != null) {
+							if (map.getBloodAt(aPlayer.pos) != null) {
 								if (Util.chance(30)) {
 									map.addBlood(destinationPoint, Util.rand(0,1));
 								}
@@ -164,7 +164,7 @@ public class Walk extends Action {
 				// Trail blood forward into unoccupied tiles you walk into.
 				// (could perhaps consider doing as bloody footprints?)
 				// is there some gameplay detail reason for this or is it aesthetic only?
-				if (map.getBloodAt(aPlayer.getPosition()) != null) {
+				if (map.getBloodAt(aPlayer.pos) != null) {
 					if (Util.chance(30)) {
 						map.addBlood(destinationPoint, Util.rand(0,1));
 					}

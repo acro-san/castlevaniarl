@@ -37,7 +37,7 @@ public class AirDash extends HeartAction {
 		Player aPlayer = (Player) performer;
 		Level aLevel = aPlayer.level;
 		aLevel.addMessage("You jump and dash forward!");
-		if (targetPosition.equals(performer.getPosition())){
+		if (targetPosition.equals(performer.pos)){
 			aLevel.addMessage("You fall back.");
 			return;
 		}
@@ -45,16 +45,16 @@ public class AirDash extends HeartAction {
 		int damage = getDamage();
 
 //		boolean hit = false;
-		Line fireLine = new Line(performer.getPosition(), targetPosition);
+		Line fireLine = new Line(performer.pos, targetPosition);
 		
 //		boolean curved = false;
 //		int flyStart = 0, flyEnd = 0;
-		Position previousPoint = aPlayer.getPosition();
-		int projectileHeight = aLevel.getMapCell(aPlayer.getPosition()).getHeight();
+		Position previousPoint = aPlayer.pos;
+		int projectileHeight = aLevel.getMapCell(aPlayer.pos).getHeight();
 		for (int i=0; i<4; i++){
 			Position destinationPoint = fireLine.next();
 			if (aLevel.isSolid(destinationPoint)){
-				drawEffect(Main.efx.createDirectedEffect(performer.getPosition(), targetPosition, "SFX_AIRDASH", i));
+				drawEffect(Main.efx.createDirectedEffect(performer.pos, targetPosition, "SFX_AIRDASH", i));
 				aPlayer.landOn(previousPoint);
 				return;
 			}
@@ -67,7 +67,7 @@ public class AirDash extends HeartAction {
 				Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
 				if (destinationFeature != null && destinationFeature.isDestroyable()) {
 					message = "You hit the "+destinationFeature.getDescription();
-					drawEffect(Main.efx.createDirectedEffect(performer.getPosition(), targetPosition, "SFX_AIRDASH", i));
+					drawEffect(Main.efx.createDirectedEffect(performer.pos, targetPosition, "SFX_AIRDASH", i));
 					Feature prize = destinationFeature.damage(aPlayer, damage);
 					if (prize != null) {
 						message += " and destroys it.";
@@ -83,16 +83,16 @@ public class AirDash extends HeartAction {
 				//int monsterHeight = destinationHeight + (targetMonster.isFlying() ? 1 : 0);
 				int monsterHeight = destinationHeight + targetMonster.getHoverHeight();
 				if (projectileHeight == monsterHeight){
-					if (targetMonster.tryMagicHit(aPlayer,damage, 100, targetMonster.wasSeen(), "dash", false, performer.getPosition())){
-						drawEffect(Main.efx.createDirectedEffect(aPlayer.getPosition(), targetPosition, "SFX_AIRDASH", i));
+					if (targetMonster.tryMagicHit(aPlayer,damage, 100, targetMonster.wasSeen(), "dash", false, performer.pos)){
+						drawEffect(Main.efx.createDirectedEffect(aPlayer.pos, targetPosition, "SFX_AIRDASH", i));
 //						hit = true;
 						Position runner = new Position(destinationPoint);
-						outa: for (int ii = 0; ii < 2; ii++){
+						outa: for (int ii = 0; ii < 2; ii++) {
 							Cell fly = aLevel.getMapCell(runner);
 							if (fly == null)
-								break outa;
-							if (!fly.isSolid()){
-								targetMonster.setPosition(runner);
+								break outa;		// FIXME: puzzle out: why is this not CONTINUE? is it important it's restarting loop?
+							if (!fly.isSolid()) {
+								targetMonster.pos = runner;
 							} else {
 								StringBuffer byff = new StringBuffer("You smash the "+targetMonster.getDescription()+" against the "+fly.getDescription()+"!");
 								targetMonster.damage(byff, damage);
@@ -113,7 +113,7 @@ public class AirDash extends HeartAction {
 			previousPoint = destinationPoint;
 		}
 		
-		drawEffect(Main.efx.createDirectedEffect(aPlayer.getPosition(), targetPosition, "SFX_AIRDASH", 4));
+		drawEffect(Main.efx.createDirectedEffect(aPlayer.pos, targetPosition, "SFX_AIRDASH", 4));
 		aPlayer.landOn(previousPoint);
 	}
 

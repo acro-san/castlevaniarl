@@ -57,7 +57,7 @@ public class ClawAssault extends ProjectileSkill{
 	
 	public void execute() {
 		super.execute();
-		getPlayer().setPosition(finalPoint);
+		getPlayer().pos = finalPoint;
 		getPlayer().land();
 	}
 }

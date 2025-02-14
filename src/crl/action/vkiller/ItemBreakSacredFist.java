@@ -73,7 +73,7 @@ public class ItemBreakSacredFist extends BeamProjectileSkill {
 	
 	public void execute() {
 		super.execute();
-		Line line = new Line(getPlayer().getPosition(), targetPosition);
+		Line line = new Line(getPlayer().pos, targetPosition);
 		Player player = getPlayer();
 		Level level = getPlayer().level;
 		Position runner = line.next();
@@ -83,15 +83,15 @@ public class ItemBreakSacredFist extends BeamProjectileSkill {
 			Cell destinationCell = performer.level.getMapCell(runner);
 			if (
 				level.isWalkable(runner) &&
-				destinationCell.getHeight() == level.getMapCell(player.getPosition()).getHeight()
+				destinationCell.getHeight() == level.getMapCell(player.pos).getHeight()
 			)
 				;
 			else
 				break;
 		}
-		drawEffect(Main.efx.createDirectedEffect(player.getPosition(), targetPosition, "SFX_TELEPORT", i));
+		drawEffect(Main.efx.createDirectedEffect(player.pos, targetPosition, "SFX_TELEPORT", i));
 		
-		player.setPosition(new Position(runner));
+		player.pos = new Position(runner);
 		player.see();
 		Main.ui.refresh();
 	}

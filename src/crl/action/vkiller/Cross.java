@@ -8,10 +8,11 @@ import crl.feature.ai.CrossAI;
 import crl.player.Player;
 
 public class Cross extends ProjectileSkill {
+	
 	public int getDamage() {
 		return 5 + 
 			getPlayer().getShotLevel() + 
-			2* getPlayer().getSoulPower();
+			2 * getPlayer().getSoulPower();
 	}
 
 	public int getHit() {
@@ -52,7 +53,7 @@ public class Cross extends ProjectileSkill {
 	
 	public void execute(){
 		super.execute();
-		if (targetPosition.equals(performer.getPosition())) {
+		if (targetPosition.equals(performer.pos)) {
 			if (Util.chance(50)) {
 				performer.level.addMessage("The cross falls heads! You catch the cross.");
 			} else {
@@ -62,8 +63,8 @@ public class Cross extends ProjectileSkill {
 		}
 		if (performer instanceof Player) {
 			SmartFeature cross = SmartFeatureFactory.buildFeature("CROSS");
-			((CrossAI)cross.selector).setTargetPosition(getPlayer().getPosition());
-			cross.setPosition(finalPoint);
+			((CrossAI)cross.selector).setTargetPosition(getPlayer().pos);
+			cross.pos = finalPoint;
 			getPlayer().level.addSmartFeature(cross);
 		} else {
 			/*Effect crossEffect =EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(), targetPosition, "SFX_CROSS", i);

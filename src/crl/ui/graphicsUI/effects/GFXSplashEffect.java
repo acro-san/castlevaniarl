@@ -19,7 +19,7 @@ public class GFXSplashEffect extends GFXEffect {
 	public void drawEffect(GFXUserInterface ui, SwingSystemInterface si){
 		si.saveBuffer();
 		//ui.refresh();
-		Position relative = Position.subs(getPosition(), ui.getPlayer().getPosition());
+		Position relative = Position.subs(getPosition(), ui.getPlayer().pos);
 		Position center = Position.add(ui.PC_POS, relative);
 		int height = 0;
 		if (ui.getPlayer().level.getMapCell(getPosition()) != null)

@@ -11,7 +11,7 @@ import sz.util.FileUtil;
 
 
 public class WSwingConsoleInterface implements ConsoleSystemInterface, ComponentListener {
-    /** Provides Console IO.
+	/** Provides Console IO.
 	 * Returns keystrokes as CharKeys.
 	 * Shows the characters in a Frame
 	 */
@@ -326,10 +326,8 @@ public class WSwingConsoleInterface implements ConsoleSystemInterface, Component
 			return byHeight;
 		else
 			return byWidth;
-
 	}
 
-	///public void run() {}
 
 	public boolean isInsideBounds(Position p){
 		return p.x>=0 && p.x <= xdim && p.y >=0 && p.y <=ydim;
@@ -366,13 +364,11 @@ public class WSwingConsoleInterface implements ConsoleSystemInterface, Component
 	}
 
 	public void restore() {
-		/*for (int i = 0; i < colors.length; i++){
-			System.arraycopy(colorsBuffer[i], 0, colors[i], 0, colors[i].length-1);
-			System.arraycopy(charsBuffer[i], 0, chars[i], 0, colors[i].length-1);
-		}*/
-		for (int x = 0; x < colors.length; x++)
-			for (int y = 0; y < colors[0].length; y++)
+		for (int x = 0; x < colors.length; x++) {
+			for (int y = 0; y < colors[0].length; y++) {
 				this.print(x,y,charsBuffer[x][y], colorsBuffer[x][y]);
+			}
+		}
 	}
 
 	public void saveBuffer() {

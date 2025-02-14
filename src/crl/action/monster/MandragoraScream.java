@@ -36,7 +36,7 @@ public class MandragoraScream extends Action {
 		
 		SFXManager.play(SCREAM_WAV);
 		performer.level.addMessage("* The Mandragora emits an earth-shattering scream!!! *");
-		Main.ui.drawEffect(Main.efx.createLocatedEffect(performer.getPosition(), "SFX_MANDRAGORA_SCREAM"));
+		Main.ui.drawEffect(Main.efx.createLocatedEffect(performer.pos, "SFX_MANDRAGORA_SCREAM"));
 		
 		VMonster monsters = performer.level.getMonsters();
 		Vector<Monster> removables = new Vector<>();
@@ -45,7 +45,7 @@ public class MandragoraScream extends Action {
 			if (monster == performer) {
 				continue;
 			}
-			if (Position.flatDistance(performer.getPosition(), monster.getPosition()) < SCREAM_RANGE) {
+			if (Position.flatDistance(performer.pos, monster.pos) < SCREAM_RANGE) {
 				if (monster instanceof NPC || monster instanceof Hostage) {
 					
 				} else {
@@ -66,7 +66,7 @@ public class MandragoraScream extends Action {
 		}
 		monsters.removeAll(removables);
 		
-		if (Position.flatDistance(performer.getPosition(), performer.level.getPlayer().getPosition()) < SCREAM_RANGE) {
+		if (Position.flatDistance(performer.pos, performer.level.getPlayer().pos) < SCREAM_RANGE) {
 			performer.level.getPlayer().damage("You hear the mandragora scream!", (Monster)performer, new Damage(SCREAM_DAMAGE, true));
 		}
 		performer.die();

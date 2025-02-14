@@ -82,10 +82,10 @@ public class ClawSwipe extends HeartAction {
 				aLevel.addMessage("Hitting youself?");
 				return;
 		}
-		hit (Position.add(performer.getPosition(), Action.directionToVariation(otherDir1)), damage);
-		hit (Position.add(performer.getPosition(), Action.directionToVariation(targetDirection)),damage);
-		hit (Position.add(performer.getPosition(), Action.directionToVariation(otherDir2)),damage);
-
+		
+		hit(Position.add(performer.pos, Action.directionToVariation(otherDir1)), damage);
+		hit(Position.add(performer.pos, Action.directionToVariation(targetDirection)),damage);
+		hit(Position.add(performer.pos, Action.directionToVariation(otherDir2)),damage);
 	}
 
 	private boolean hit (Position destinationPoint, int damage){
@@ -109,12 +109,12 @@ public class ClawSwipe extends HeartAction {
 		}
 		Monster targetMonster = performer.level.getMonsterAt(destinationPoint);
 		Cell destinationCell = performer.level.getMapCell(destinationPoint);
-		if (
-			targetMonster != null &&
+		// FIXME This check/logic seems duplicated many places...!
+		if (targetMonster != null &&
 			!(targetMonster.isInWater() && targetMonster.canSwim()) &&
-				(destinationCell.getHeight() == aLevel.getMapCell(aPlayer.getPosition()).getHeight() ||
-				destinationCell.getHeight() -1  == aLevel.getMapCell(aPlayer.getPosition()).getHeight() ||
-				destinationCell.getHeight() == aLevel.getMapCell(aPlayer.getPosition()).getHeight()-1)
+				(destinationCell.getHeight() == aLevel.getMapCell(aPlayer.pos).getHeight() ||
+				destinationCell.getHeight() -1  == aLevel.getMapCell(aPlayer.pos).getHeight() ||
+				destinationCell.getHeight() == aLevel.getMapCell(aPlayer.pos).getHeight()-1)
 			)
 		{
 			if (targetMonster.wasSeen()) {

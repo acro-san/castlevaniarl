@@ -14,7 +14,7 @@ public class PriestAI extends VillagerAI {
 			return super.selectAction(who);
 		}
 		Player p = who.level.getPlayer();
-		if (Position.flatDistance(who.getPosition(), p.getPosition()) < 3) {
+		if (Position.flatDistance(who.pos, p.pos) < 3) {
 			if (p.getHits() < p.getHitsMax()) {
 				p.informPlayerEvent(crl.player.Player.EVT_CHAT, who);
 				//who.level.addMessage("The priest says: 'Rest here for a while'");

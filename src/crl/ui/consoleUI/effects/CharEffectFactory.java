@@ -13,7 +13,7 @@ public class CharEffectFactory extends EffectFactory {
 	private Hashtable<String, Effect> effects = new Hashtable<>();
 	
 	// 3 Major type classifications appear to be:
-	// Directed.
+	// Directed. (includes several other subclasses though)
 	// Directional.
 	// Located.
 	

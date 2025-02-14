@@ -12,7 +12,7 @@ import crl.player.Damage;
 import crl.player.Player;
 import crl.ui.UserInterface;
 
-public class MonsterCharge extends Action{
+public class MonsterCharge extends Action {
 	private int range;
 	private String message;
 	private String effectWav;
@@ -41,12 +41,12 @@ public class MonsterCharge extends Action{
         Level aLevel = performer.level;
         Player aPlayer = aLevel.getPlayer();
         aLevel.addMessage("The "+aMonster.getDescription()+" "+message+".");
-        Cell currentCell = aLevel.getMapCell(performer.getPosition());
+        Cell currentCell = aLevel.getMapCell(performer.pos);
         Position destinationPoint = null;
         if (effectWav != null)
         	SFXManager.play(effectWav);
         for (int i=0; i<range; i++){
-			destinationPoint = Position.add(aMonster.getPosition(), var);
+			destinationPoint = Position.add(aMonster.pos, var);
 			if (!aLevel.isValidCoordinate(destinationPoint))
 				break;
 			Position deepPoint  = aLevel.getDeepPosition(destinationPoint);
@@ -71,7 +71,7 @@ public class MonsterCharge extends Action{
 				performer.level.removeMonster(aMonster);
 				break;
 			}
-			if (aPlayer.getPosition().equals(destinationPoint)){
+			if (aPlayer.pos.equals(destinationPoint)){
 				if (aPlayer.getStandingHeight() == aMonster.getStandingHeight()){
 					aPlayer.damage("The "+aMonster.getDescription()+ " hits you!", aMonster, new Damage((damage==0?aMonster.getAttack():damage), false));
 				} else if (aPlayer.getStandingHeight() > aMonster.getStandingHeight()){
@@ -84,7 +84,7 @@ public class MonsterCharge extends Action{
 					break;
 				}
 			}
-			aMonster.setPosition(destinationPoint);
+			aMonster.pos = destinationPoint;
 			if (i < range - 1) {
 				Main.ui.safeRefresh(); // We need to show the player the enemy in the updated position
 				actionAnimationPause();

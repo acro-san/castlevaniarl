@@ -68,10 +68,10 @@ public class DrakeSoul extends BeamProjectileSkill {
 	}
 	
 	public void execute() {
-		if (targetPosition.equals(getPlayer().getPosition())) {
+		if (targetPosition.equals(getPlayer().pos)) {
 			reduceHearts();
 			getPlayer().level.addMessage("The dragonfire rises as a flaming column!");
-			final Position pp = performer.getPosition();
+			final Position pp = performer.pos;
 			hit(Position.add(pp, Action.directionToVariation(Action.UP)), getDamage());
 			hit(Position.add(pp, Action.directionToVariation(Action.UPLEFT)), getDamage());
 			hit(Position.add(pp, Action.directionToVariation(Action.LEFT)), getDamage());

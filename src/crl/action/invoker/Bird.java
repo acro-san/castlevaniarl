@@ -121,11 +121,11 @@ public class Bird extends ProjectileSkill{
 				break;
 			case Action.SELF:
 				aLevel.addMessage("The birds fly away!");
-	        	return;
+				return;
 		}
-		targetPosition = Position.add(aPlayer.getPosition(), directionToVariation(otherDir1));
+		targetPosition = Position.add(aPlayer.pos, directionToVariation(otherDir1));
 		super.execute();
-		targetPosition = Position.add(aPlayer.getPosition(), directionToVariation(otherDir2));
+		targetPosition = Position.add(aPlayer.pos, directionToVariation(otherDir2));
 		super.execute();
 		executing = false;
 	}

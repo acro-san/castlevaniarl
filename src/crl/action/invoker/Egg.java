@@ -33,11 +33,11 @@ public class Egg extends HeartAction {
 		int damage = 5 + aPlayer.getSoulPower()*3;
 		Position flameOrigin = null;
 		Cell destinationCell = null;
-		if (targetPosition.equals(performer.getPosition())){
-			flameOrigin = performer.getPosition();
+		if (targetPosition.equals(performer.pos)){
+			flameOrigin = performer.pos;
 			destinationCell = aLevel.getMapCell(flameOrigin);
 		} else {
-			Line holyLine = new Line(performer.getPosition(), targetPosition);
+			Line holyLine = new Line(performer.pos, targetPosition);
 			int i = 0;
 			for (; i < 3; i++) {
 				flameOrigin = holyLine.next();
@@ -46,7 +46,7 @@ public class Egg extends HeartAction {
 					break;
 				}
 			}
-			Main.ui.drawEffect(Main.efx.createDirectedEffect(performer.getPosition(), targetPosition, "SFX_EGG", i));
+			Main.ui.drawEffect(Main.efx.createDirectedEffect(performer.pos, targetPosition, "SFX_EGG", i));
 		}
 		
 		if (destinationCell == null) {

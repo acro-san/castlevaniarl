@@ -16,27 +16,29 @@ public class PeaceWalk extends Action{
 		return true;
 	}
 
-	public void execute(){
+	public void execute() {
 
-        Position var = directionToVariation(targetDirection);
-        Position destinationPoint = Position.add(performer.getPosition(), var);
-        Level aLevel = performer.level;
-        if (!aLevel.isValidCoordinate(destinationPoint))
-        	return;
-        Cell destinationCell = aLevel.getMapCell(destinationPoint);
-        Cell currentCell = aLevel.getMapCell(performer.getPosition());
-        Monster destinationMonster = aLevel.getMonsterAt(destinationPoint);
-        //SmartFeature standing = aLevel.getSmartFeature(performer.getPosition());
-        if (destinationCell != null)
+		Position var = directionToVariation(targetDirection);
+		Position destinationPoint = Position.add(performer.pos, var);
+		Level aLevel = performer.level;
+		if (!aLevel.isValidCoordinate(destinationPoint)) {
+			return;
+		}
+		Cell destinationCell = aLevel.getMapCell(destinationPoint);
+		Cell currentCell = aLevel.getMapCell(performer.pos);
+		Monster destinationMonster = aLevel.getMonsterAt(destinationPoint);
+		//SmartFeature standing = aLevel.getSmartFeature(performer.getPosition());
+		if (destinationCell != null)
 			if (!destinationCell.isSolid())
 				if (destinationMonster == null)
 					if (currentCell == null || destinationCell.getHeight() == currentCell.getHeight())
 						if (!destinationCell.isWater() && !destinationCell.isShallowWater())
-							if (!aLevel.getPlayer().getPosition().equals(destinationPoint))
-								if (destinationCell.isEthereal())
-									performer.setPosition(aLevel.getDeepPosition(destinationPoint));
-								else
-									performer.setPosition(destinationPoint);
+							if (!aLevel.getPlayer().pos.equals(destinationPoint))
+								if (destinationCell.isEthereal()) {
+									performer.pos = aLevel.getDeepPosition(destinationPoint);
+								} else {
+									performer.pos = destinationPoint;
+								}
 	}
 
 }

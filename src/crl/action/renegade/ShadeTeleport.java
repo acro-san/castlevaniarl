@@ -31,29 +31,29 @@ public class ShadeTeleport extends HeartAction {
 		Player player = (Player) performer;
 		Level level = player.level;
 		level.addMessage("You wrap in your cape and dissapear!");
-		if (targetPosition.equals(performer.getPosition())){
-        	level.addMessage("You appear in the same place!");
-        	return;
-        }
+		if (targetPosition.equals(performer.pos)){
+			level.addMessage("You appear in the same place!");
+			return;
+		}
 
-		//crl.ui.effects.FlashEffect x = new FlashEffect(player.getPosition(), Appearance.GRAY);
-		Line line = new Line(player.getPosition(), targetPosition);
+		//crl.ui.effects.FlashEffect x = new FlashEffect(player.pos, Appearance.GRAY);
+		Line line = new Line(player.pos, targetPosition);
 		Position runner = line.next();
 		int i = 0;
 		for (; i < 8; i++){
 			runner = line.next();
-        	Cell destinationCell = performer.level.getMapCell(runner);
+			Cell destinationCell = performer.level.getMapCell(runner);
 			if (
 				level.isWalkable(runner) &&	
-				destinationCell.getHeight() == level.getMapCell(player.getPosition()).getHeight() 
+				destinationCell.getHeight() == level.getMapCell(player.pos).getHeight() 
 			)
 				;
 			else
 				break;
 		}
-		drawEffect(Main.efx.createDirectedEffect(player.getPosition(), targetPosition, "SFX_SHADETELEPORT", i));
+		drawEffect(Main.efx.createDirectedEffect(player.pos, targetPosition, "SFX_SHADETELEPORT", i));
 		
-		player.setPosition(new Position(runner));
+		player.pos = new Position(runner);
 		player.see();
 		Main.ui.refresh();
 		

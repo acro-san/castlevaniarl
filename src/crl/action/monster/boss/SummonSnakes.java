@@ -23,7 +23,7 @@ public class SummonSnakes extends Action{
 		for (int i=0; i<sickles; i++) {
 			int xvar = Util.rand(-8,8);
 			int yvar = Util.rand(-8,8);
-			Position destinationPoint = Position.add(performer.getPosition(),
+			Position destinationPoint = Position.add(performer.pos,
 				new Position(xvar, yvar));
 			if (!aLevel.isWalkable(destinationPoint)) {
 				i--;
@@ -31,7 +31,7 @@ public class SummonSnakes extends Action{
 			}
 			
 			Monster snake = MonsterData.buildMonster("SNAKE");
-			snake.setPosition(destinationPoint);
+			snake.pos = destinationPoint;
 			aLevel.addMonster(snake);
 		}
 	}

@@ -7,17 +7,17 @@ import crl.monster.Monster;
 
 public class Vanish extends Action {
 	
-	public String getID(){
+	public String getID() {
 		return "VANISH";
 	}
 
-	public void execute(){
+	public void execute() {
 		Level aLevel = performer.level;
 		aLevel.addMessage("Dracula disappears!");
 		Monster mon = (Monster)performer;
 		mon.isVisible = false;
 		//drawEffect(new SplashEffect(performer.getPosition(), ".oO", Appearance.WHITE));
-		drawEffect(Main.efx.createLocatedEffect(performer.getPosition(), "SFX_VANISH"));
+		drawEffect(Main.efx.createLocatedEffect(performer.pos, "SFX_VANISH"));
 		mon.setPosition(0,0,0);
 	}
 	

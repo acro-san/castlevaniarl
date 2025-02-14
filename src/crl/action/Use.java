@@ -14,15 +14,16 @@ import crl.player.Player;
 
 
 public class Use extends Action {
-	public String getID(){
+	
+	public String getID() {
 		return "Use";
 	}
 	
-	public boolean needsItem(){
+	public boolean needsItem() {
 		return true;
 	}
 
-	public String getPromptItem(){
+	public String getPromptItem() {
 		return "What do you want to use?";
 	}
 
@@ -66,7 +67,7 @@ public class Use extends Action {
 		}
 		
 		if (def.getID().startsWith("ART_CARD_")) {
-			if (pLvl.getMapCell(aPlayer.getPosition()).getID().equals("WEIRD_MACHINE")){
+			if (pLvl.getMapCell(aPlayer.pos).getID().equals("WEIRD_MACHINE")){
 				pLvl.addMessage("You insert the card into the machine!");
 				aPlayer.setFlag("HAS_"+def.getID(), true);
 				if (aPlayer.getFlag("HAS_ART_CARD_SOL") &&

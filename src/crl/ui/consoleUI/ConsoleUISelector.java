@@ -20,9 +20,9 @@ import crl.ui.UISelector;
 import crl.ui.UserAction;
 
 public class ConsoleUISelector extends UISelector {
-	private ConsoleSystemInterface si;
+	private ConsoleSystemInterface si;	//transient?
 	
-	public ConsoleUserInterface ui(){
+	public ConsoleUserInterface ui() {
 		return (ConsoleUserInterface)Main.ui;
 	}
 	
@@ -33,16 +33,16 @@ public class ConsoleUISelector extends UISelector {
 	
 	/** 
 	 * Returns the Action that the player wants to perform.
-     * It may also forward a command instead
-     * 
-     */
-	public Action selectAction(Actor who){
-    	Debug.enterMethod(this, "selectAction", who);
-	    CharKey input = null;
-	    Action ret = null;
-	    while (ret == null){
-	    	if (ui().gameOver())
-	    		return null;
+	 * It may also forward a command instead
+	 */
+	public Action selectAction(Actor who) {
+		Debug.enterMethod(this, "selectAction", who);
+		CharKey input = null;
+		Action ret = null;
+		while (ret == null) {
+			if (ui().gameOver()) {
+				return null;
+			}
 			input = si.inkey();
 			ret = ui().selectCommand(input);
 			if (ret != null)
@@ -60,7 +60,7 @@ public class ConsoleUISelector extends UISelector {
 			}
 			if (isArrow(input)){
 				int direction = toIntDirection(input);
-				Monster vMonster = player.level.getMonsterAt(Position.add(player.getPosition(), Action.directionToVariation(direction)));
+				Monster vMonster = player.level.getMonsterAt(Position.add(player.pos, Action.directionToVariation(direction)));
 				if (vMonster != null && 
 					(!(vMonster instanceof NPC) || (vMonster instanceof NPC && ((NPC)vMonster).isHostile()))) {
 					if (attack.canPerform(player)){
@@ -114,7 +114,7 @@ public class ConsoleUISelector extends UISelector {
 				} catch (ActionCancelException ace) {
 					//si.cls();
 	 				//refresh();
-					ui().addMessage(new Message("Cancelled", player.getPosition()));
+					ui().addMessage(new Message("Cancelled", player.pos));
 					ret = null;
 				}
 				//refresh();

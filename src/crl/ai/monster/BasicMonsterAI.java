@@ -98,8 +98,8 @@ public class BasicMonsterAI extends MonsterAI {
 					return null;
 				} else {
 					// Ensure we are not bumping the player
-					Position targetPositionX = Position.add(who.getPosition(), Action.directionToVariation(directionToMonster));
-					if (who.level.getPlayer().getPosition().equals(targetPositionX)){
+					Position targetPositionX = Position.add(who.pos, Action.directionToVariation(directionToMonster));
+					if (who.level.getPlayer().pos.equals(targetPositionX)){
 						return null;
 					} else {
 						return tryWalking(aMonster, directionToMonster);
@@ -117,7 +117,7 @@ public class BasicMonsterAI extends MonsterAI {
 		// else, monster has no enemy, and is not charmed
 		// Stare to the player
 		int directionToPlayer = aMonster.starePlayer();
-		int playerDistance = Position.flatDistance(aMonster.getPosition(), aMonster.level.getPlayer().getPosition());
+		int playerDistance = Position.flatDistance(aMonster.pos, aMonster.level.getPlayer().pos);
 		// If monster is a patroller, and player distance is bigger than patrol range, continue patrolling 
 		if (patrolRange >0 && playerDistance > patrolRange){
 			if (lastDirection == -1 || changeDirection){
@@ -209,15 +209,15 @@ public class BasicMonsterAI extends MonsterAI {
 		}
 	 }
 	
-	private Action tryWalking (Monster aMonster, int direction){
-		if (isStationary){
+	private Action tryWalking (Monster aMonster, int direction) {
+		if (isStationary) {
 			return null;
 		} else {
 			Action ret = null;
 			// Check if must swim or walk
-			if (aMonster.canSwim() && aMonster.isInWater()){
+			if (aMonster.canSwim() && aMonster.isInWater()) {
 				ret = new Swim();
-			}else{
+			} else {
 				ret = new MonsterWalk();
 			}
 			
@@ -225,17 +225,17 @@ public class BasicMonsterAI extends MonsterAI {
 			OutParameter direction1 = new OutParameter();
 			OutParameter direction2 = new OutParameter();
 			fillAlternateDirections(direction1, direction2, direction);
-			if (canWalkTowards(aMonster, direction)){
+			if (canWalkTowards(aMonster, direction)) {
 				ret.setDirection(direction);
-			} else if (canWalkTowards(aMonster, direction1.getIntValue())){
+			} else if (canWalkTowards(aMonster, direction1.getIntValue())) {
 				ret.setDirection(direction1.getIntValue());
-			} else if (canWalkTowards(aMonster, direction2.getIntValue())){
+			} else if (canWalkTowards(aMonster, direction2.getIntValue())) {
 				ret.setDirection(direction2.getIntValue());
 			} else {
 				// Can't walk toward direction directly, so just bump around
 				ret.setDirection(Util.rand(0,7));
 			}
-            return ret;
+			return ret;
 		}
 	}
 	
@@ -285,7 +285,7 @@ public class BasicMonsterAI extends MonsterAI {
 	 * @return
 	 */
 	private boolean canWalkTowards(Monster aMonster, int direction) {
-		Position destination = Position.add(aMonster.getPosition(), Action.directionToVariation(direction));
+		Position destination = Position.add(aMonster.pos, Action.directionToVariation(direction));
 		if (!aMonster.level.isValidCoordinate(destination)) {
 			return false;
 		}

@@ -29,7 +29,7 @@ public class FlameAI implements ActionSelector, Cloneable {
 				activated = false;
 				return null;
 			}
-			Monster m = who.level.getMonsterAt(who.getPosition());
+			Monster m = who.level.getMonsterAt(who.pos);
 			if (m != null) {
 				m.damage(new StringBuffer(), 1);
 			}

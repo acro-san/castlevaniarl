@@ -23,12 +23,12 @@ public class SoulBlast extends HeartAction{
 		aLevel.addMessage("Soul Blast!");
 		int damage = 50 + aLevel.getPlayer().getShotLevel()*2 + aLevel.getPlayer().getSoulPower()*3;
 
-		Position pp = performer.getPosition();
+		Position pp = performer.pos;
 		Main.ui.drawEffect(Main.efx.createLocatedEffect(pp, "SFX_SOUL_BLAST"));
 		
 		VMonster monsters = aLevel.getMonsters();
 		for (int i = 0; i < monsters.size(); i++) {
-			Position mp = monsters.elementAt(i).getPosition();
+			Position mp = monsters.elementAt(i).pos;
 			if (mp.z == pp.z && Position.distance(mp, pp) < 5) {
 				StringBuffer buff = new StringBuffer();
 				if (monsters.elementAt(i).wasSeen()) {

@@ -9,20 +9,22 @@ import crl.conf.gfx.data.GFXConfiguration;
 import crl.ui.graphicsUI.GFXUserInterface;
 import crl.ui.graphicsUI.SwingSystemInterface;
 
-public class GFXSequentialEffect extends GFXEffect{
+public class GFXSequentialEffect extends GFXEffect {
+	
 	private Vector sequence;
 	private Image[] tiles;
 
-	public GFXSequentialEffect(String ID, Vector sequence, Image[] tiles, int delay, GFXConfiguration configuration){
-    	super(ID, configuration);
-    	setAnimationDelay(delay);
+	public GFXSequentialEffect(String ID, Vector sequence, Image[] tiles, int delay, GFXConfiguration configuration) {
+		super(ID, configuration);
+		setAnimationDelay(delay);
 		this.tiles = tiles;
 		this.sequence = sequence;
-    }
+	}
 
-	public void drawEffect(GFXUserInterface ui, SwingSystemInterface si){
+
+	public void drawEffect(GFXUserInterface ui, SwingSystemInterface si) {
 		si.saveBuffer();
-		Position relative = Position.subs(getPosition(), ui.getPlayer().getPosition());
+		Position relative = Position.subs(getPosition(), ui.getPlayer().pos);
 		Position center = Position.add(ui.PC_POS, relative);
 		int tileIndex = 0;
 		Enumeration seq = sequence.elements();

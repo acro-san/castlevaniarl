@@ -6,7 +6,8 @@ import crl.action.ProjectileSkill;
 import crl.game.SFXManager;
 import crl.player.Player;
 
-public class ItemBreakAxe extends ProjectileSkill{
+public class ItemBreakAxe extends ProjectileSkill {
+	
 	public int getDamage() {
 		return 8 + 
 		getPlayer().getShotLevel() + 
@@ -76,28 +77,30 @@ public class ItemBreakAxe extends ProjectileSkill{
 	public boolean showThrowMessage() {
 		return false;
 	}
-	public void execute(){
+	
+	public void execute() {
+		
 		getPlayer().reduceHearts(getHeartCost());
 		executing = true;
-		Position destinationPoint = Position.add(getPlayer().getPosition(), new Position(1,1));
+		Position destinationPoint = Position.add(getPlayer().pos, new Position(1,1));
 		setPosition(destinationPoint);
 		super.execute();
-		destinationPoint = Position.add(getPlayer().getPosition(), new Position(1,-1));
-		setPosition(destinationPoint);
-		SFXManager.play(getSFX());
-		super.execute();
-		destinationPoint = Position.add(getPlayer().getPosition(), new Position(-1,1));
+		destinationPoint = Position.add(getPlayer().pos, new Position(1,-1));
 		setPosition(destinationPoint);
 		SFXManager.play(getSFX());
 		super.execute();
-		destinationPoint = Position.add(getPlayer().getPosition(), new Position(-1,-1));
+		destinationPoint = Position.add(getPlayer().pos, new Position(-1,1));
+		setPosition(destinationPoint);
+		SFXManager.play(getSFX());
+		super.execute();
+		destinationPoint = Position.add(getPlayer().pos, new Position(-1,-1));
 		setPosition(destinationPoint);
 		SFXManager.play(getSFX());
 		super.execute();
 		for (int i = 0; i < 2; i++){
 			int xdif = 3-Util.rand(0,6);
 			int ydif = 3-Util.rand(0,6);
-			destinationPoint = Position.add(getPlayer().getPosition(), new Position(xdif,ydif));
+			destinationPoint = Position.add(getPlayer().pos, new Position(xdif,ydif));
 			setPosition(destinationPoint);
 			SFXManager.play(getSFX());
 			super.execute();

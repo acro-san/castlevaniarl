@@ -21,7 +21,7 @@ public class Dracul2 extends Unleasher {
 		player.informPlayerEvent(Player.EVT_GOTO_LEVEL, "VOID0");
 		player.see();
 		Main.ui.refresh();
-		player.setPosition(new Position(player.level.getExitFor("#START")));
+		player.pos = new Position(player.level.getExitFor("#START"));
 		enabled = false;
 	}
 }

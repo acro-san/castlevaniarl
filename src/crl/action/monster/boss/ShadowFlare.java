@@ -22,16 +22,16 @@ public class ShadowFlare extends Action {
 		if (targetDirection == -1)
 			return;
 		aLevel.addMessage("Dracula invokes shadow flares!");
-		Position runner1 = new Position(performer.getPosition());
+		Position runner1 = new Position(performer.pos);
 		Position runner2 = null;
 		Position runner3 = null;
 		int randy = Util.rand(1,2);
 		if (targetDirection == Action.UP || targetDirection == Action.DOWN){
-			runner2 = Position.add(performer.getPosition(), new Position(-1*randy,0));
-			runner3 = Position.add(performer.getPosition(), new Position(1*randy,0));
+			runner2 = Position.add(performer.pos, new Position(-1*randy,0));
+			runner3 = Position.add(performer.pos, new Position(1*randy,0));
 		} else {
-			runner2 = Position.add(performer.getPosition(), new Position(0,-1*randy));
-			runner3 = Position.add(performer.getPosition(), new Position(0,1*randy));
+			runner2 = Position.add(performer.pos, new Position(0,-1*randy));
+			runner3 = Position.add(performer.pos, new Position(0,1*randy));
 		}
 
 		Position directionVar = Action.directionToVariation(targetDirection);
@@ -66,7 +66,7 @@ public class ShadowFlare extends Action {
 			}
 			aLevel.addMessage(message);
 		}
-		if (destinationPoint.equals(aPlayer.getPosition())) {
+		if (destinationPoint.equals(aPlayer.pos)) {
 			aPlayer.damage("You are burned by the shadow flare!", (Monster)performer, new Damage(3, false));
 		}
 		//drawEffect(Main.efx.createLocatedEffect(destinationPoint, "SFX_SHADOW_FLARE"));

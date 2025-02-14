@@ -6,7 +6,8 @@ import crl.level.Cell;
 import crl.level.Level;
 import crl.player.Player;
 
-public class Dive extends Action{
+public class Dive extends Action {
+	
 	public String getID() {
 		return "DIVE";
 	}
@@ -14,10 +15,10 @@ public class Dive extends Action{
 	public void execute() {
 		Player aPlayer = (Player)performer;
 		Level aLevel = aPlayer.level;
-		Cell currentCell = aLevel.getMapCell(aPlayer.getPosition());
+		Cell currentCell = aLevel.getMapCell(aPlayer.pos);
 		if (currentCell.isShallowWater()){
-			if (aPlayer.getPosition().z != aLevel.getDepth()-1){
-				Position deep = new Position(aPlayer.getPosition());
+			if (aPlayer.pos.z != aLevel.getDepth()-1){
+				Position deep = new Position(aPlayer.pos);
 				deep.z++;
 				if (!aLevel.getMapCell(deep).isSolid()){
 					aLevel.addMessage("You dive into the water");
@@ -31,11 +32,11 @@ public class Dive extends Action{
 	}
 	
 	public boolean canPerform(Actor a) {
-		Player aPlayer = getPlayer(performer);		
+		Player aPlayer = getPlayer(performer);
 		Level aLevel = aPlayer.level;
-		Cell currentCell = aLevel.getMapCell(aPlayer.getPosition());
+		Cell currentCell = aLevel.getMapCell(aPlayer.pos);
 		if (currentCell.isShallowWater()){
-			if (aPlayer.getPosition().z == aLevel.getDepth()-1){
+			if (aPlayer.pos.z == aLevel.getDepth()-1) {
 				invalidationMessage = "You can't dive lower";
 				return false;
 			}

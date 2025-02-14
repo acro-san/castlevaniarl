@@ -5,23 +5,23 @@ import sz.util.Position;
 import crl.feature.CountDown;
 import crl.feature.SmartFeature;
 import crl.feature.SmartFeatureFactory;
-import crl.item.ItemDefinition;
 import crl.level.Level;
 
-public class Throw extends Action{
-	public String getID(){
+public class Throw extends Action {
+	
+	public String getID() {
 		return "Throw";
 	}
 	
-	public boolean needsItem(){
+	public boolean needsItem() {
 		return true;
-    }
-
-    public String getPromptItem(){
-    	return "What do you want to throw?";
 	}
 
-	public boolean needsPosition(){
+	public String getPromptItem() {
+		return "What do you want to throw?";
+	}
+
+	public boolean needsPosition() {
 		return true;
 	}
 
@@ -29,15 +29,15 @@ public class Throw extends Action{
 		Level aLevel = performer.level;
 		performer.level.addMessage("You throw the "+targetItem.getDescription());
 
-		//aLevel.addEffect(new PCMissileEffect(performer.getPosition(), "+x", Appearance.CYAN, targetDirection, 10));
-		int distance = Position.flatDistance(performer.getPosition(), targetPosition);
+		//aLevel.addEffect(new PCMissileEffect(performer.pos, "+x", Appearance.CYAN, targetDirection, 10));
+		int distance = Position.flatDistance(performer.pos, targetPosition);
 		Position destinationPoint = null;
 		if (distance > targetItem.getThrowRange()){
 			distance = targetItem.getThrowRange();
 		}
-		//aLevel.addEffect(new LineIconMissileEffect(performer.getPosition(), targetItem.getAppearance().getChar(), targetItem.getAppearance().getColor(), performer.getPosition(), targetPosition, distance, 30));
-		//Removed for not complexing the tier, would need to specifiy fx for each item aLevel.addEffect(EffectFactory.getSingleton().createTileMissileEffect(performer.getPosition(), destinationPoint, "SFX_RED_HIT", distance));
-		Line line = new Line(performer.getPosition(), targetPosition);
+		//aLevel.addEffect(new LineIconMissileEffect(performer.pos, targetItem.getAppearance().getChar(), targetItem.getAppearance().getColor(), performer.pos, targetPosition, distance, 30));
+		//Removed for not complexing the tier, would need to specifiy fx for each item aLevel.addEffect(EffectFactory.getSingleton().createTileMissileEffect(performer.pos, destinationPoint, "SFX_RED_HIT", distance));
+		Line line = new Line(performer.pos, targetPosition);
 		int i = 0;
 		Position runner = line.next();
 		for (i=0; i<distance; i++) {
@@ -57,40 +57,45 @@ public class Throw extends Action{
 			String placedSmartFeature = targetItem.getPlacedSmartFeature();
 			if (!placedSmartFeature.equals("")) {
 				SmartFeature feature = SmartFeatureFactory.buildFeature(placedSmartFeature);
-				feature.setPosition(destinationPoint);
+				feature.pos = destinationPoint;
 				((CountDown)feature.selector).setTurns(targetItem.getFeatureTurns());
 				aLevel.addSmartFeature(feature);
 				
 				feature = SmartFeatureFactory.buildFeature(placedSmartFeature);
-				feature.setPosition(Position.add(destinationPoint, Action.directionToVariation(Action.UP)));
+				feature.pos = Position.add(destinationPoint, Action.directionToVariation(Action.UP));
 				((CountDown)feature.selector).setTurns(targetItem.getFeatureTurns());
 				aLevel.addSmartFeature(feature);
 				
 				feature = SmartFeatureFactory.buildFeature(placedSmartFeature);
-				feature.setPosition(Position.add(destinationPoint, Action.directionToVariation(Action.DOWN)));
+				feature.pos = Position.add(destinationPoint, Action.directionToVariation(Action.DOWN));
 				((CountDown)feature.selector).setTurns(targetItem.getFeatureTurns());
 				aLevel.addSmartFeature(feature);
 				
 				feature = SmartFeatureFactory.buildFeature(placedSmartFeature);
-				feature.setPosition(Position.add(destinationPoint, Action.directionToVariation(Action.LEFT)));
+				feature.pos = Position.add(destinationPoint, Action.directionToVariation(Action.LEFT));
 				((CountDown)feature.selector).setTurns(targetItem.getFeatureTurns());
 				aLevel.addSmartFeature(feature);
 				
 				feature = SmartFeatureFactory.buildFeature(placedSmartFeature);
-				feature.setPosition(Position.add(destinationPoint, Action.directionToVariation(Action.RIGHT)));
+				feature.pos = Position.add(destinationPoint, Action.directionToVariation(Action.RIGHT));
 				((CountDown)feature.selector).setTurns(targetItem.getFeatureTurns());
 				aLevel.addSmartFeature(feature);
-			}else
+			} else {
 				aLevel.addItem(destinationPoint, targetItem);
+			}
 		}
 		performer.level.getPlayer().reduceQuantityOf(targetItem);
 	}
+
 
 	public String getPromptPosition() {
 		return "Where do you want to throw the "+targetItem.getDefinition().description+"?";
 	}
 
-	public String getSFX(){
+
+	public String getSFX() {
 		return "wav/rich_yah.wav";
 	}
+
+
 }

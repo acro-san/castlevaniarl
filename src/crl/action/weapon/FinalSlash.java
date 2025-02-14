@@ -8,29 +8,30 @@ import crl.level.Level;
 import crl.monster.Monster;
 import crl.player.Player;
 
-public class FinalSlash extends Action{
-	public String getID(){
+public class FinalSlash extends Action {
+	
+	public String getID() {
 		return "FINAL_SLASH";
 	}
 	
-	public boolean needsDirection(){
+	public boolean needsDirection() {
 		return true;
 	}
 
-	public String getPromptDirection(){
+	public String getPromptDirection() {
 		return "Where do you want to slash at?";
 	}
 
 	public void execute(){
 		Player aPlayer = (Player)performer;
 		Level aLevel = aPlayer.level;
-		if (!checkHearts(10)){
-	        aLevel.addMessage("You need more power!");
-	        return;
-	    }
-   		int otherDir1 = 0;
+		if (!checkHearts(10)) {
+			aLevel.addMessage("You need more power!");
+			return;
+		}
+		int otherDir1 = 0;
 		int otherDir2 = 0;
-		switch (targetDirection){
+		switch (targetDirection) {
 			case Action.UP:
 				otherDir1 = Action.UPLEFT;
 				otherDir2 = Action.UPRIGHT;
@@ -65,17 +66,17 @@ public class FinalSlash extends Action{
 				break;
 		}
 		Position directionVar = Action.directionToVariation(targetDirection);
-		Position runner1 = Position.add(performer.getPosition(), Action.directionToVariation(otherDir1));
-		Position runner2 = Position.add(performer.getPosition(), Action.directionToVariation(targetDirection));
-		Position runner3 = Position.add(performer.getPosition(), Action.directionToVariation(otherDir2));
-		for (int i = 0; i < 15; i++){
-			if (!performer.level.isWalkable(runner2)){
+		Position runner1 = Position.add(performer.pos, Action.directionToVariation(otherDir1));
+		Position runner2 = Position.add(performer.pos, Action.directionToVariation(targetDirection));
+		Position runner3 = Position.add(performer.pos, Action.directionToVariation(otherDir2));
+		for (int i = 0; i < 15; i++) {
+			if (!performer.level.isWalkable(runner2)) {
 				runner2.add(Position.mul(directionVar, -1));
 				break;
 			}
-			hit (runner1);
-			hit (runner2);
-			hit (runner3);
+			hit(runner1);
+			hit(runner2);
+			hit(runner3);
 			runner1.add(directionVar);
 			runner2.add(directionVar);
 			runner3.add(directionVar);
@@ -83,35 +84,35 @@ public class FinalSlash extends Action{
 		if (!performer.level.isWalkable(runner2)){
 			runner2.add(Position.mul(directionVar, -1));
 		}
-		performer.setPosition(runner2);
+		performer.pos = runner2;
 	}
 
-	private boolean hit (Position destinationPoint){
+	private boolean hit (Position destinationPoint) {
 		StringBuffer message = new StringBuffer();
 		Level aLevel = performer.level;
-        Player aPlayer = aLevel.getPlayer();
-        //UserInterface.getUI().drawEffect(new TileEffect(destinationPoint, 'o', Appearance.GREEN, 100));
+		Player aPlayer = aLevel.getPlayer();
+		//UserInterface.getUI().drawEffect(new TileEffect(destinationPoint, 'o', Appearance.GREEN, 100));
 		//aLevel.addBlood(destinationPoint, 8);
 		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-        if (destinationFeature != null && destinationFeature.isDestroyable()){
-	       	message.append("You slash through the "+destinationFeature.getDescription());
+		if (destinationFeature != null && destinationFeature.isDestroyable()) {
+			message.append("You slash through the "+destinationFeature.getDescription());
 			aLevel.addMessage(message.toString());
-        	return true;
+			return true;
 		}
-        Monster targetMonster = performer.level.getMonsterAt(destinationPoint);
-        if (
-			targetMonster != null &&
-			!(targetMonster.isInWater() && targetMonster.canSwim())
-			){
-				message.append("You slash thru the "+targetMonster.getDescription());
-				targetMonster.damageWithWeapon(message, 20+(int)(aPlayer.getWeaponAttack()*1.5));
-	        	if (targetMonster.isDead()){
-		        	message.append(", cutting it apart!");
-				}
-	        	if (targetMonster.wasSeen())
-	        		aLevel.addMessage(message.toString());
-				return true;
+		Monster targetMonster = performer.level.getMonsterAt(destinationPoint);
+		if (targetMonster != null &&
+			!(targetMonster.isInWater() && targetMonster.canSwim()) )
+		{
+			message.append("You slash thru the "+targetMonster.getDescription());
+			targetMonster.damageWithWeapon(message, 20+(int)(aPlayer.getWeaponAttack()*1.5));
+			if (targetMonster.isDead()) {
+				message.append(", cutting it apart!");
 			}
+			if (targetMonster.wasSeen()) {
+				aLevel.addMessage(message.toString());
+			}
+			return true;
+		}
 		return false;
 	}
 	

@@ -164,7 +164,7 @@ public class LevelMaster {
 			
 			if (pattern.getBoss() != null) {
 				Monster monsBoss = MonsterData.buildMonster(pattern.getBoss());
-				monsBoss.setPosition(pattern.getBossPosition());
+				monsBoss.pos = pattern.getBossPosition();
 				ret.setBoss(monsBoss);
 			}
 			if (pattern.getUnleashers() != null) {
@@ -285,7 +285,7 @@ public class LevelMaster {
 			ret.setInhabitants(BatLair.spawnInfo);
 			ret.setRespawner(x);
 			Monster monsBoss = MonsterData.buildMonster(BatLair.boss);
-			monsBoss.setPosition(BatLair.bossPosition);
+			monsBoss.pos = BatLair.bossPosition;
 			ret.setBoss(monsBoss);
 			ret.setDescription("Giant Bat Lair");
 			ret.setMusicKeyMorning("BOSS1");
@@ -402,7 +402,7 @@ public class LevelMaster {
 			ret.setDispatcher(new Dispatcher());
 			ret.setRespawner(x);
 			Monster monsBoss = MonsterData.buildMonster("DRAGON_KING");
-			monsBoss.setPosition(new Position(exit));
+			monsBoss.pos = new Position(exit);
 			ret.setBoss(monsBoss);
 			ret.setDescription("Dragon King Lair");
 			ret.setMusicKeyMorning("BOSS2");
@@ -664,7 +664,7 @@ public class LevelMaster {
 					Util.rand(0, ret.getDepth()));
 				
 				if (ret.isItemPlaceable(rand)) {
-					hostage.setPosition(rand);
+					hostage.pos = rand;
 					break;
 				}
 			}

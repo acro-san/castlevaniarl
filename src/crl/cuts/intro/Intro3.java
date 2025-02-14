@@ -16,7 +16,7 @@ public class Intro3 extends Unleasher {
 	public void unleash(Level level, Game game) {
 		if (level.getFlag("INTRO2") && level.getCounter("COUNTBACK_INTRO_2").isOver()) {
 			level.addMessage( Text.LEVEL3_INTRO_LINE0 );
-			Position playerFloor = new Position(level.getPlayer().getPosition());
+			Position playerFloor = new Position(level.getPlayer().pos);
 			playerFloor.z = 2;
 			while (true) {
 				int xpos = Util.rand(3,5) * (Util.chance(50) ? 1 : -1);
@@ -24,7 +24,7 @@ public class Intro3 extends Unleasher {
 				Position wargPosition = Position.add(playerFloor, new Position(xpos, ypos));
 				if (level.isWalkable(wargPosition)){
 					Monster warg = MonsterData.buildMonster("WARG");
-					warg.setPosition(wargPosition);
+					warg.pos = wargPosition;
 					level.addMonster(warg);
 					break;
 				}

@@ -372,27 +372,30 @@ public class Player extends Actor {
 		return 0;
 	}
 	
-	private void damage(String damageSource, Damage dam){
-		if (!level.isDay())
+	private void damage(String damageSource, Damage dam) {
+		if (!level.isDay()) {
 			dam.boostDamage(1);
-		if (getFlag(Consts.ENV_THUNDERSTORM))
+		}
+		if (getFlag(Consts.ENV_THUNDERSTORM)) {
 			dam.boostDamage(2);
-		if (getFlag(Consts.ENV_SUNNY)){
-			if (dam.getDamage() > 2)
+		}
+		if (getFlag(Consts.ENV_SUNNY)) {
+			if (dam.damage > 2) {
 				dam.reduceDamage(2);
+			}
 		}
 		
-		if (hasCounter(Consts.C_ENERGYSHIELD)){
+		if (hasCounter(Consts.C_ENERGYSHIELD)) {
 			level.addMessage("The energy shield covers you!");
-			dam.setDamage((int)Math.ceil(dam.getDamage() * 2.0d/3.0d));
+			dam.damage = (int)Math.ceil(dam.damage * 2.0/3.0);
 		}
 		
-		if (hasCounter(Consts.C_TURTLESHELL)){
+		if (hasCounter(Consts.C_TURTLESHELL)) {
 			level.addMessage("The turtle soul covers you!");
-			dam.setDamage((int)Math.ceil(dam.getDamage() * 2.0d/3.0d));
+			dam.damage = (int)Math.ceil(dam.damage * 2.0d/3.0d);
 		}
 		
-		if (!dam.ignoresArmor()) {
+		if (!dam.ignoresArmor) {
 			dam.reduceDamage(getArmorDefense());
 		}
 		dam.reduceDamage(getDefenseBonus());
@@ -406,13 +409,14 @@ public class Player extends Actor {
 			land();
 		}
 		
-		if (dam.getDamage() <= 0){
-			if (Util.chance(70)){
+		if (dam.damage <= 0) {
+			if (Util.chance(70)) {
 				level.addMessage("You withstand the attack.");
 				return;
 			} 
-			dam.setDamage(1);
+			dam.damage = 1;
 		}
+		
 		if (isInvincible()) {
 			level.addMessage("You are invincible!");
 			return;
@@ -431,17 +435,18 @@ public class Player extends Actor {
 			}
 		}
 		
-		hits -= dam.getDamage();
-		level.addMessage(damageSource + " {"+dam.getDamage()+"}");
+		hits -= dam.damage;
+		level.addMessage(damageSource + " {"+dam.damage+"}");
 		if (Util.chance(50)) {
 			decreaseWhip();
 		}
 		if (Util.chance(40)) {
-			level.addBlood(getPosition(), Util.rand(0,1));
+			level.addBlood(pos, Util.rand(0,1));
 		}
 	}
 
-	public void selfDamage(String damageSource, int damageType, Damage dam){
+
+	public void selfDamage(String damageSource, int damageType, Damage dam) {
 		damage(damageSource, dam);
 		if (hits < 0){
 			switch (damageType){
@@ -546,7 +551,7 @@ public class Player extends Actor {
 	}
 	
 	public boolean damage (String mxessage, Monster who, Damage dam){
-		int attackDirection = Action.getGeneralDirection(who.getPosition(), getPosition());
+		int attackDirection = Action.getGeneralDirection(who.pos, pos);
 		if (hasEnergyField()){
 			StringBuffer buff = new StringBuffer("The "+who.getDescription()+" is shocked!");
 			who.damage(buff, 1);
@@ -598,7 +603,7 @@ public class Player extends Actor {
 			}
 		}
 		damage("The "+who.getDescription()+" hits you.", dam);
-		Main.ui.drawEffect(Main.efx.createLocatedEffect(getPosition(), "SFX_QUICK_WHITE_HIT"));
+		Main.ui.drawEffect(Main.efx.createLocatedEffect(pos, "SFX_QUICK_WHITE_HIT"));
 		if (hits < 0) {
 			if (sex == MALE)
 				SFXManager.play("wav/die_male.wav");
@@ -836,40 +841,38 @@ public class Player extends Actor {
 
 	public void bounceBack(Position var, int dep){
 		Debug.enterMethod(this, "bounceBack", var +","+dep);
-		int startingHeight = level.getMapCell(getPosition()).getHeight();
-		out: for (int i = 1; i < dep; i++){
-        	Position destinationPoint = Position.add(getPosition(), var);
-        	Cell destinationCell = level.getMapCell(destinationPoint);
-        	/*if (destinationCell == null)
+		int startingHeight = level.getMapCell(pos).getHeight();
+		out: for (int i = 1; i < dep; i++) {
+			Position destinationPoint = Position.add(pos, var);
+			Cell destinationCell = level.getMapCell(destinationPoint);
+			/*if (destinationCell == null)
         		break out;*/
-        	if (destinationCell == null){
-        		if (!level.isValidCoordinate(destinationPoint)){
-        			destinationPoint = Position.subs(destinationPoint, var);
-        			landOn(destinationPoint);
-					break out;
-        		}
-        		if (i < dep-1){
-					setPosition(destinationPoint);
-					continue out;
-        		}
-				else{
+			if (destinationCell == null) {
+				if (!level.isValidCoordinate(destinationPoint)) {
+					destinationPoint = Position.subs(destinationPoint, var);
 					landOn(destinationPoint);
 					break out;
 				}
-        		
-        	}
-        	Feature destinationFeature = level.getFeatureAt(destinationPoint);
-        	if (destinationFeature != null && destinationFeature.getKeyCost() > getKeys()){
-        		land();
-        		break out;
-        	}
-       		if (destinationCell.getHeight() > startingHeight+2){
+				if (i < dep-1) {
+					pos = destinationPoint;
+					continue out;
+				} else {
+					landOn(destinationPoint);
+					break out;
+				}
+			}
+			Feature destinationFeature = level.getFeatureAt(destinationPoint);
+			if (destinationFeature != null && destinationFeature.getKeyCost() > getKeys()) {
+				land();
+				break out;
+			}
+			if (destinationCell.getHeight() > startingHeight+2) {
 				land();
 				break out;
 			} else {
 				if (!destinationCell.isSolid()) {
 					if (i < dep-1)
-						setPosition(destinationPoint);
+						pos = destinationPoint;
 					else
 						landOn(destinationPoint);
 				} else {
@@ -882,8 +885,9 @@ public class Player extends Actor {
 		Debug.exitMethod();
 	}
 	
-	public boolean isSwimming(){
-		Cell mapcell = level.getMapCell(getPosition());
+	
+	public boolean isSwimming() {
+		Cell mapcell = level.getMapCell(pos);
 		return mapcell != null && (mapcell.isWater() || mapcell.isShallowWater());
 	}
 
@@ -970,7 +974,7 @@ public class Player extends Actor {
     			;
     		else
     			setHoverHeight(getHoverHeight()-4);
-    	if (level.getMapCell(getPosition()) != null && level.getMapCell(getPosition()).isWater()){
+    	if (level.getMapCell(pos) != null && level.getMapCell(pos).isWater()){
     		if (getFlag("PLAYER_SWIMMING")){
     			if (getCounter("OXYGEN") == 0){
     				drown();
@@ -1047,7 +1051,7 @@ public class Player extends Actor {
 
 	public void land(){
 		Debug.enterMethod(this, "land");
-		landOn (getPosition());
+		landOn (pos);
 		Debug.exitMethod();
 	}
 
@@ -1106,7 +1110,7 @@ public class Player extends Actor {
 			}
 		}
 		
-		setPosition(destinationPoint);
+		pos = destinationPoint;
 		
 		
 		if (destinationCell.isSolid() && !isEthereal()) {
@@ -1134,7 +1138,7 @@ public class Player extends Actor {
 		}
 
 		if (step && destinationCell.getHeightMod() != 0) {
-			setPosition(Position.add(destinationPoint, new Position(0,0, destinationCell.getHeightMod())));
+			pos = Position.add(destinationPoint, new Position(0,0, destinationCell.getHeightMod()));
 		}
 		
 		if (destinationCell.isShallowWater()) {
@@ -1197,7 +1201,7 @@ public class Player extends Actor {
 				}
 
 				if (destinationFeature.getHeightMod() != 0) {
-					setPosition(Position.add(destinationPoint, new Position(0,0, destinationFeature.getHeightMod())));
+					pos = Position.add(destinationPoint, new Position(0,0, destinationFeature.getHeightMod()));
 				}
 				if (destinationFeature.getHeartPrize() > 0) {
 					level.addMessage("You get "+destinationFeature.getHeartPrize()+" hearts");
@@ -1306,8 +1310,8 @@ public class Player extends Actor {
 			}
 		}
 		
-		if (level.isExit(getPosition())) {
-			String exit = level.getExitOn(getPosition());
+		if (level.isExit(pos)) {
+			String exit = level.getExitOn(pos);
 			if (exit.equals("_START") || exit.startsWith("#")) {
 				//Do nothing. This must be changed with startsWith("_");
 			} /*else if (exit.equals("_NEXT")){
@@ -1362,9 +1366,9 @@ public class Player extends Actor {
 
 	private void invokeRosary() {
 		level.addMessage("A blast of holy light surrounds you!");
-		//level.addEffect(new SplashEffect(getPosition(), "****~~~~,,,,....", Appearance.WHITE));
+		//level.addEffect(new SplashEffect(pos, "****~~~~,,,,....", Appearance.WHITE));
 		SFXManager.play("wav/lazrshot.wav");
-		Main.ui.drawEffect(Main.efx.createLocatedEffect(getPosition(), "SFX_ROSARY_BLAST"));
+		Main.ui.drawEffect(Main.efx.createLocatedEffect(pos, "SFX_ROSARY_BLAST"));
 		
 		String message = "";
 
@@ -1372,7 +1376,7 @@ public class Player extends Actor {
 		Vector<Monster> removables = new Vector<>();
 		for (int i = 0; i < monsters.size(); i++) {
 			Monster monster = monsters.elementAt(i);
-			if (Position.flatDistance(getPosition(), monster.getPosition()) < 16){
+			if (Position.flatDistance(pos, monster.pos) < 16){
 				if (monster instanceof NPC || monster instanceof Hostage) {
 					
 				} else {
@@ -2248,7 +2252,7 @@ public class Player extends Actor {
 	public int getSightRange() {
 		int base = baseSightRange + 
 			(level.isDay()?3:0)+
-			(level.getMapCell(getPosition()) != null ? level.getMapCell(getPosition()).getHeight()>0?1:0:0)+
+			(level.getMapCell(pos) != null ? level.getMapCell(pos).getHeight()>0?1:0:0)+
 			(hasCounter(Consts.C_MAGICLIGHT) ? 3 : 0) +
 			(hasCounter("LIGHT") ? 3 : 0);
 		if (getFlag(Consts.ENV_FOG)) {
@@ -2264,7 +2268,7 @@ public class Player extends Actor {
 	}
 	
 	public int getDarkSightRange(){
-		int base = baseSightRange + 7 +(level.getMapCell(getPosition()) != null && level.getMapCell(getPosition()).getHeight()>0?1:0);
+		int base = baseSightRange + 7 +(level.getMapCell(pos) != null && level.getMapCell(pos).getHeight()>0?1:0);
 		if (getFlag(Consts.ENV_FOG))
 			base -= 6;
 		if (base < 1)
@@ -2288,8 +2292,8 @@ public class Player extends Actor {
 	private transient FOV fov;
 	
 	public void see(){
-		//fov.startCircle(getLevel(), getPosition().x, getPosition().y, getSightRange());
-		fov.startCircle(level, getPosition().x, getPosition().y, getDarkSightRange());
+		//fov.startCircle(getLevel(), pos.x, pos.y, getSightRange());
+		fov.startCircle(level, pos.x, pos.y, getDarkSightRange());
 	}
 	
 	public void darken(){
@@ -2299,7 +2303,7 @@ public class Player extends Actor {
 	public Position getNearestMonsterPosition(){
 		Monster nearMonster = getNearestMonster();
 		if (nearMonster != null)
-			return nearMonster.getPosition();
+			return nearMonster.pos;
 		else
 			return null;
 	}
@@ -2312,9 +2316,9 @@ public class Player extends Actor {
 			Monster monster = (Monster) monsters.elementAt(i);
 			if (monster instanceof NPC)
 				continue;
-			if (monster.getPosition().z != getPosition().z)
+			if (monster.pos.z != pos.z)
 				continue;
-			int distance = Position.flatDistance(level.getPlayer().getPosition(), monster.getPosition());
+			int distance = Position.flatDistance(level.getPlayer().pos, monster.pos);
 			if (distance < minDist){
 				minDist = distance;
 				nearMonster = monster;
@@ -2437,7 +2441,7 @@ public class Player extends Actor {
 	}
 	
 	public boolean sees(Monster m){
-		return sees(m.getPosition());
+		return sees(m.pos);
 	}
 	
 	public void setSoulPower(int sp){
@@ -2687,7 +2691,7 @@ public class Player extends Actor {
 		if (canCarry()) {
 			addItem(item);
 		} else {
-			level.addItem(getPosition(), item);
+			level.addItem(pos, item);
 		}
 	}
 	public void morph(String morphID, int count, boolean smallMorph,
@@ -2774,34 +2778,34 @@ public class Player extends Actor {
 
 
 	public int stareMonster(Monster who) {
-		if (who.getPosition().z != getPosition().z) {
+		if (who.pos.z != pos.z) {
 			return -1;
 		}
 		if (!who.wasSeen()) {
 			return -1;
 		}
-		Position pp = who.getPosition();
-		if (pp.x == getPosition().x){
-			if (pp.y > getPosition().y){
+		Position pp = who.pos;
+		if (pp.x == pos.x){
+			if (pp.y > pos.y){
 				return Action.DOWN;
 			} else {
 				return Action.UP;
 			}
 		} else
-		if (pp.y == getPosition().y){
-			if (pp.x > getPosition().x){
+		if (pp.y == pos.y){
+			if (pp.x > pos.x){
 				return Action.RIGHT;
 			} else {
 				return Action.LEFT;
 			}
 		} else
-		if (pp.x < getPosition().x){
-			if (pp.y > getPosition().y)
+		if (pp.x < pos.x){
+			if (pp.y > pos.y)
 				return Action.DOWNLEFT;
 			else
 				return Action.UPLEFT;
 		} else {
-			if (pp.y > getPosition().y)
+			if (pp.y > pos.y)
 				return Action.DOWNRIGHT;
 			else
 				return Action.UPRIGHT;
@@ -3023,13 +3027,14 @@ public class Player extends Actor {
 
 
 	public void abandonHostage() {
-		getHostage().setPosition(getPosition());
+		getHostage().pos = new Position(pos);	// TODO(testing): this was previously just hostage.pos = pos. is the deepcopy needed?
 		level.addMonster(getHostage());
 		addHistoricEvent("abandoned "+getHostage().getDescription()+" at the "+level.getDescription());
 		setHostage(null);
 	}
 	
-	public void putCustomMessage(String messageID, String text){
+	
+	public void putCustomMessage(String messageID, String text) {
 		customMessages.put(messageID, text);
 	}
 	
@@ -3040,12 +3045,12 @@ public class Player extends Actor {
 	
 	public Position getPreviousPosition() {
 		if (previousPosition == null)
-			return getPosition();
+			return pos;
 		else
 			return previousPosition;
 	}
 	
 	public void setPreviousPosition() {
-		previousPosition = getPosition();
+		previousPosition = pos;
 	}
 }

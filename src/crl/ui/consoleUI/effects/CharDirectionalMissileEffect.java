@@ -16,7 +16,7 @@ public class CharDirectionalMissileEffect extends CharDirectedEffect {
 			if (newP.y > old.y) {
 				return Action.DOWN;
 			} else {
-                 return Action.UP;
+				return Action.UP;
 			}
 		} else
 		if (newP.y == old.y){
@@ -32,7 +32,7 @@ public class CharDirectionalMissileEffect extends CharDirectedEffect {
 			else
 				return Action.UPLEFT;
 		} else {
-            if (newP.y > old.y)
+			if (newP.y > old.y)
 				return Action.DOWNRIGHT;
 			else
 				return Action.UPRIGHT;
@@ -51,7 +51,7 @@ public class CharDirectionalMissileEffect extends CharDirectedEffect {
 			Position next = effectLine.next();
 			int direction = solveDirection(oldPoint, next);
 			if (i != 0){
-				Position relative = Position.subs(oldPoint, ui.getPlayer().getPosition());
+				Position relative = Position.subs(oldPoint, ui.getPlayer().pos);
 				Position toPrint = Position.add(ui.PC_POS, relative);
 				si.safeprint(toPrint.x, toPrint.y, oldChar, oldColor);
 			}
@@ -84,7 +84,7 @@ public class CharDirectionalMissileEffect extends CharDirectedEffect {
 					icon = missile.charAt(7);
 					break;
 			}
-			Position relative = Position.subs(next, ui.getPlayer().getPosition());
+			Position relative = Position.subs(next, ui.getPlayer().pos);
 			Position toPrint = Position.add(ui.PC_POS, relative);
 			if (!ui.insideViewPort(toPrint))
 				break;

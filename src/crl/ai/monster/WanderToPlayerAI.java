@@ -43,11 +43,11 @@ public class WanderToPlayerAI extends MonsterAI{
 				if (directionToMonster == -1) {
 					return null;
 				} else {
-					Position targetPositionX = Position.add(who.getPosition(), Action.directionToVariation(directionToMonster));
+					Position targetPositionX = Position.add(who.pos, Action.directionToVariation(directionToMonster));
 					if (!who.level.isWalkable(targetPositionX)){
 						return null;
 					} else {
-						if (who.level.getPlayer().getPosition().equals(targetPositionX)) {
+						if (who.level.getPlayer().pos.equals(targetPositionX)) {
 							return null;
 						} else {
 							Action ret = new MonsterWalk();
@@ -58,10 +58,10 @@ public class WanderToPlayerAI extends MonsterAI{
 				}
 			} else {
 				Action ret = new MonsterWalk();
-				if (!who.level.isWalkable(Position.add(who.getPosition(), Action.directionToVariation(directionToMonster)))){
+				if (!who.level.isWalkable(Position.add(who.pos, Action.directionToVariation(directionToMonster)))){
 					directionToMonster = Util.rand(0,7); 
 					while (true){
-						if (!Position.add(who.getPosition(), Action.directionToVariation(directionToMonster)).equals(who.level.getPlayer().getPosition()))
+						if (!Position.add(who.pos, Action.directionToVariation(directionToMonster)).equals(who.level.getPlayer().pos))
 								break;
 					}
 					ret.setDirection(directionToMonster);
@@ -80,7 +80,7 @@ public class WanderToPlayerAI extends MonsterAI{
 			ret.setDirection(direction);
 			return ret;
 		} else {
-			int distanceToPlayer = Position.flatDistance(aMonster.getPosition(), aMonster.level.getPlayer().getPosition());
+			int distanceToPlayer = Position.flatDistance(aMonster.pos, aMonster.level.getPlayer().pos);
 			//Decide if will attack the player or walk to him
 			if (Util.chance(50)){
 				//Will try to attack the player
@@ -100,10 +100,10 @@ public class WanderToPlayerAI extends MonsterAI{
 			// Couldnt attack the player, move to him
 			Action ret = new MonsterWalk();
 			ret.setDirection(directionToPlayer);
-			Cell currentCell = aMonster.level.getMapCell(aMonster.getPosition());
+			Cell currentCell = aMonster.level.getMapCell(aMonster.pos);
 			Cell destinationCell = aMonster.level.getMapCell(
 				Position.add(
-					aMonster.getPosition(),
+					aMonster.pos,
 					Action.directionToVariation(directionToPlayer)
 				));
 

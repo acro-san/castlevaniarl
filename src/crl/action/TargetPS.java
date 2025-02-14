@@ -146,7 +146,7 @@ public class TargetPS extends ProjectileSkill {
 		if (player.getWeapon() != null && player.getWeapon().getWeaponCategory() == ItemDefinition.CAT_BOWS){
 			Monster nearest = player.getNearestMonster();
 			if (nearest != null){
-				if (Position.flatDistance(nearest.getPosition(), player.getPosition()) < 2){
+				if (Position.flatDistance(nearest.pos, player.pos) < 2){
 					invalidationMessage = "You can't aim your "+player.getWeapon().getDescription()+" this close to the enemy, get away!";
 					return false;
 				}

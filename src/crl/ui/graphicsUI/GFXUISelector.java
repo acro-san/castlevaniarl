@@ -45,6 +45,10 @@ public class GFXUISelector extends UISelector
 		return (GFXUserInterface)Main.ui;
 	}
 	
+	/** 
+	 * Returns the Action that the player wants to perform.
+	 * It may also forward a command instead
+	 */
 	public Action selectAction(Actor who) {
 		Debug.enterMethod(this, "selectAction", who);
 		CharKey input = null;
@@ -81,46 +85,46 @@ public class GFXUISelector extends UISelector
 				mouseDirection = -1;
 				if (level.isValidCoordinate(mousePosition)) {
 					//if (level.getMonsterAt(mousePosition) != null){
-						if (player.playerClass == Player.CLASS_VAMPIREKILLER) {
-							ret = player.getMysticAction();
-							try {
-				            	if (ret != null) {
-				                	ret.setPerformer(player);
-				                	if (ret.canPerform(player))
-				                		ret.setPosition(mousePosition);
-				                	else {
-				                		level.addMessage(ret.getInvalidationMessage());
-				            			throw new ActionCancelException();
-				                	}
-		        	                Debug.exitMethod(ret);
-		        	                mousePosition = null;
-		            	        	return ret;
+					if (player.playerClass == Player.CLASS_VAMPIREKILLER) {
+						ret = player.getMysticAction();
+						try {
+							if (ret != null) {
+								ret.setPerformer(player);
+								if (ret.canPerform(player))
+									ret.setPosition(mousePosition);
+								else {
+									level.addMessage(ret.getInvalidationMessage());
+									throw new ActionCancelException();
 								}
-							} catch (ActionCancelException ace) {
-								ui().addMessage(new Message("- Cancelled", player.getPosition()));
-								si.refresh();
-								ret = null;
+								Debug.exitMethod(ret);
+								mousePosition = null;
+								return ret;
 							}
-						} else {
-							ret = target;
-			            	try {
-			            		ret.setPerformer(player);
-			            		if (ret.canPerform(player))
-			            			ret.setPosition(mousePosition);
-			            		else {
-			            			level.addMessage(ret.getInvalidationMessage());
-			            			throw new ActionCancelException();
-			            		}
-		                     	Debug.exitMethod(ret);
-		                     	mousePosition = null;
-		                    	return ret;
-							}
-							catch (ActionCancelException ace){
-								ui().addMessage(new Message("- Cancelled", player.getPosition()));
-								si.refresh();
-								ret = null;
-							}
+						} catch (ActionCancelException ace) {
+							ui().addMessage(new Message("- Cancelled", player.pos));
+							si.refresh();
+							ret = null;
 						}
+					} else {
+						ret = target;
+						try {
+							ret.setPerformer(player);
+							if (ret.canPerform(player))
+								ret.setPosition(mousePosition);
+							else {
+								level.addMessage(ret.getInvalidationMessage());
+								throw new ActionCancelException();
+							}
+							Debug.exitMethod(ret);
+							mousePosition = null;
+							return ret;
+						}
+						catch (ActionCancelException ace){
+							ui().addMessage(new Message("- Cancelled", player.pos));
+							si.refresh();
+							ret = null;
+						}
+					}
 					//}
 				}
 				mousePosition = null;
@@ -135,7 +139,7 @@ public class GFXUISelector extends UISelector
 					direction = toIntDirection(input);
 				}
 				
-				Monster vMonster = player.level.getMonsterAt(Position.add(player.getPosition(), Action.directionToVariation(direction)));
+				Monster vMonster = player.level.getMonsterAt(Position.add(player.pos, Action.directionToVariation(direction)));
 				if (vMonster != null && vMonster.getStandingHeight() == player.getStandingHeight() &&
 					(!(vMonster instanceof NPC) || (vMonster instanceof NPC && ((NPC)vMonster).isHostile()))) {
 					if (attack.canPerform(player)){
@@ -180,7 +184,7 @@ public class GFXUISelector extends UISelector
 							return ret;
 						}
 					} catch (ActionCancelException ace) {
-						ui().addMessage(new Message("- Cancelled", player.getPosition()));
+						ui().addMessage(new Message("- Cancelled", player.pos));
 						si.refresh();
 						//si.cls();
 						//refresh();
@@ -199,7 +203,7 @@ public class GFXUISelector extends UISelector
 						Debug.exitMethod(ret);
 						return ret;
 					} catch (ActionCancelException ace) {
-						ui().addMessage(new Message("- Cancelled", player.getPosition()));
+						ui().addMessage(new Message("- Cancelled", player.pos));
 						si.refresh();
 						ret = null;
 					}
@@ -207,24 +211,22 @@ public class GFXUISelector extends UISelector
 			} else {
 				ret = getRelatedAction(input.code);
 				/*if (ret == target) {
-            		defaultTarget = player.getNearestMonsterPosition();
-            	}*/
-            	try {
-	            	if (ret != null){
-	            		ret.setPerformer(player);
-	            		if (ret.canPerform(player))
-	            			ui().setTargets(ret);
-	            		else {
-	            			level.addMessage(ret.getInvalidationMessage());
-		            		throw new ActionCancelException();
-	            		}
-                     	Debug.exitMethod(ret);
-                    	return ret;
+					defaultTarget = player.getNearestMonsterPosition();
+				}*/
+				try {
+					if (ret != null) {
+						ret.setPerformer(player);
+						if (ret.canPerform(player)) {
+							ui().setTargets(ret);
+						} else {
+							level.addMessage(ret.getInvalidationMessage());
+							throw new ActionCancelException();
+						}
+						Debug.exitMethod(ret);
+						return ret;
 					}
 				} catch (ActionCancelException ace) {
-					//si.cls();
-					//refresh();
-					ui().addMessage(new Message("- Cancelled", player.getPosition()));
+					ui().addMessage(new Message("- Cancelled", player.pos));
 					ret = null;
 				}
 				//refresh();
@@ -351,7 +353,7 @@ public class GFXUISelector extends UISelector
 		int bigy = (int)Math.ceil(y/32.0);
 		tempRel.x = bigx-ui().PC_POS.x-1;
 		tempRel.y = bigy-ui().PC_POS.y-1;
-		mousePosition = Position.add(player.getPosition(), tempRel);
+		mousePosition = Position.add(player.pos, tempRel);
 	}
 
 

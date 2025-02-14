@@ -16,11 +16,12 @@ public class CharAnimatedMissileEffect extends CharDirectedEffect {
 		int oldColor = ConsoleSystemInterface.WHITE;
 		char oldChar = ' ';
 		int too = 0;
-		
-		for (int i = 0; i < depth; i++){
+		// i'm a bit confused why it's looping over 'depth' and not all 
+		// the 'characters' in the animated missile? but kinda is over 'too'?
+		for (int i = 0; i < depth; i++) {
 			Position next = effectLine.next();
-			if (i != 0){
-				Position relative = Position.subs(oldPoint, ui.getPlayer().getPosition());
+			if (i != 0) {
+				Position relative = Position.subs(oldPoint, ui.getPlayer().pos);
 				Position toPrint = Position.add(ui.PC_POS, relative);
 				si.safeprint(toPrint.x, toPrint.y, oldChar, oldColor);
 			}
@@ -28,14 +29,14 @@ public class CharAnimatedMissileEffect extends CharDirectedEffect {
 			oldPoint = new Position(next);
 			char icon = missile.charAt(too);
 			too++;
-			if (too == missile.length())
-				too = 0;
+			too %= missile.length();
 			
-			Position relative = Position.subs(next, ui.getPlayer().getPosition());
+			Position relative = Position.subs(next, ui.getPlayer().pos);
 			Position toPrint = Position.add(ui.PC_POS, relative);
-			if (!ui.insideViewPort(toPrint))
+			if (!ui.insideViewPort(toPrint)) {
 				//break;
-				continue;
+				continue;	//
+			}
 			oldChar = si.peekChar(toPrint.x, toPrint.y);
 			oldColor = si.peekColor(toPrint.x, toPrint.y);
 			si.print(toPrint.x, toPrint.y, icon, misColor);
@@ -43,13 +44,13 @@ public class CharAnimatedMissileEffect extends CharDirectedEffect {
 		}
 	}
 
-	public CharAnimatedMissileEffect(String id, String missile, int misColor, int delay){
+	public CharAnimatedMissileEffect(String id, String missile, int misColor, int delay) {
 		super(id);
 		setMissile(missile);
 		setMisColor(misColor);
 		setAnimationDelay(delay);
 	}
-	
+
 	public void setMissile(String value) {
 		missile = value;
 	}

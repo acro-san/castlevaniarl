@@ -91,19 +91,19 @@ public class DraculaAI extends MonsterAI{
  	}
 	 
 	 private boolean playerOnLine(Monster me){
-		 Position mePosition = me.getPosition();
-		 Position pPosition = me.level.getPlayer().getPosition();
+		 Position mePosition = me.pos;
+		 Position pPosition = me.level.getPlayer().pos;
 		 return (pPosition.x == mePosition.x || pPosition.x == mePosition.x -1 || pPosition.x == mePosition.x + 1 ||
 				 pPosition.y == mePosition.y || pPosition.y == mePosition.y -1 || pPosition.y == mePosition.y + 1);
 	 }
 	 
 	 private int starePlayer(Monster me){
 		Player player = me.level.getPlayer();
-		Position mePosition = me.getPosition();
-		if (player.isInvisible() || player.getPosition().z != me.getPosition().z)
+		Position mePosition = me.pos;
+		if (player.isInvisible() || player.pos.z != me.pos.z)
 			return -1;
 		
-		Position pp = player.getPosition();
+		Position pp = player.pos;
 		if (pp.x >= mePosition.x-1 && pp.x <= mePosition.x+1)
 			if (pp.y >= mePosition.y+1)
 				return Action.DOWN;

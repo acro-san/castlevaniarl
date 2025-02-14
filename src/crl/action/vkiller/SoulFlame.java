@@ -25,13 +25,13 @@ public class SoulFlame extends HeartAction {
 		Level aLevel = performer.level;
 		aLevel.addMessage("Soul Flame!");
 		int damage = 16 + aLevel.getPlayer().getShotLevel() * 5 + aLevel.getPlayer().getSoulPower()*2;
-		Position pp = performer.getPosition();
+		Position pp = performer.pos;
 		Main.ui.drawEffect(Main.efx.createLocatedEffect(pp, "SFX_SOUL_FLAME"));
 		
 		VMonster monsters = aLevel.getMonsters();
 		// same code pattern as seen in other vkiller action classes.
 		for (int i = 0; i < monsters.size(); i++) {
-			Position mp = monsters.elementAt(i).getPosition();
+			Position mp = monsters.elementAt(i).pos;
 			if (mp.z == pp.z && Position.distance(mp, pp) < 5){
 				StringBuffer buff = new StringBuffer();
 				if (monsters.elementAt(i).wasSeen()) {

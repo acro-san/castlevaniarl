@@ -24,12 +24,12 @@ public class Mindblast extends HeartAction {
 
 		for (int i = 0; i < 5; i++){
 			Monster nearestMonster = aPlayer.getNearestMonster();
-			if (nearestMonster == null || Position.flatDistance(nearestMonster.getPosition(), aPlayer.getPosition())>15){
+			if (nearestMonster == null || Position.flatDistance(nearestMonster.pos, aPlayer.pos)>15) {
 				
 			} else {
 				StringBuffer buff = new StringBuffer();
 				if (nearestMonster.wasSeen()){
-					drawEffect(Main.efx.createDirectedEffect(aPlayer.getPosition(), nearestMonster.getPosition(), "SFX_LIT_SPELL", Position.flatDistance(performer.getPosition(), nearestMonster.getPosition())));
+					drawEffect(Main.efx.createDirectedEffect(aPlayer.pos, nearestMonster.pos, "SFX_LIT_SPELL", Position.flatDistance(performer.pos, nearestMonster.pos)));
 					buff.append("The "+nearestMonster.getDescription()+" mind is blasted!");
 				}
 				nearestMonster.damage(buff, 25+aPlayer.getSoulPower()*2);
@@ -39,7 +39,7 @@ public class Mindblast extends HeartAction {
 		}
 	}
 
-	public int getCost(){
+	public int getCost() {
 		Player p = (Player) performer;
 		return (int)(p.getCastCost() * 1.5);
 	}

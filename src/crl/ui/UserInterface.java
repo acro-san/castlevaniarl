@@ -48,7 +48,7 @@ public abstract class UserInterface implements CommandListener {
 		return gameOver;
 	}
 	
-	private boolean [][] FOVMask;
+	protected boolean[][] FOVMask;
 	//Interactive Methods
 	public abstract void doLook();
 	

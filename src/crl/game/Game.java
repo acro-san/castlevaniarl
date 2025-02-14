@@ -188,7 +188,7 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 		player.setGame(this);
 	}
 	
-	public void newGame(){
+	public void newGame() {
 		player = PlayerGenerator.thus.generatePlayer();
 		player.setGame(this);
 		player.setGameSessionInfo(new GameSessionInfo());
@@ -575,7 +575,7 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 		Level storedLevel = storedLevels.get(levelID);
 		if (storedLevel != null) {
 			currentLevel = storedLevel;
-			player.setPosition(currentLevel.getExitFor(formerLevelID));
+			player.pos = currentLevel.getExitFor(formerLevelID);
 			currentLevel.setIsDay(isDay);
 			currentLevel.setTimecounter(timeSwitch);
 			if (currentLevel.isCandled()){
@@ -602,19 +602,19 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 		player.level = currentLevel;
 		
 		if(currentLevel.getExitFor(formerLevelID) != null){
-			player.setPosition(currentLevel.getExitFor(formerLevelID));
+			player.pos = currentLevel.getExitFor(formerLevelID);
 		} else if(currentLevel.getExitFor("_START") != null) {
-			player.setPosition(currentLevel.getExitFor("_START"));
+			player.pos = currentLevel.getExitFor("_START");
 		} else { // We need to make sure the player is located somewhere
-			player.setPosition(currentLevel.getAnExit());
+			player.pos = currentLevel.getAnExit();
 		}
 		
-		if (currentLevel.isHostageSafe()){
+		if (currentLevel.isHostageSafe()) {
 			if (player.hasHostage()){
 				//player.setPosition(currentLevel.getExitFor("_NEXT"));
 				Hostage h = player.getHostage();
 				player.setHostage(null);
-				h.setPosition(player.getPosition().x - 3, player.getPosition().y, player.getPosition().z);
+				h.setPosition(player.pos.x - 3, player.pos.y, player.pos.z);
 				h.setRescued(true);
 				currentLevel.addMonster(h);
 				player.addHistoricEvent("brought "+h.getDescription()+" to safety");
@@ -625,7 +625,7 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 					if (player.canCarry()) {
 						player.addItem(reward);
 					} else {
-						player.level.addItem(player.getPosition(), reward);
+						player.level.addItem(player.pos, reward);
 					}
 				}
 			}

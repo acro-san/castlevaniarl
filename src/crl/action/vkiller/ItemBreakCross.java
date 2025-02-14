@@ -85,25 +85,25 @@ public class ItemBreakCross extends ProjectileSkill{
 	public void execute(){
 		getPlayer().reduceHearts(getHeartCost());
 		executing = true;
-		Position destinationPoint = Position.add(getPlayer().getPosition(), new Position(0,1));
+		Position destinationPoint = Position.add(getPlayer().pos, new Position(0,1));
 		setPosition(destinationPoint);
 		super.execute();
-		destinationPoint = Position.add(getPlayer().getPosition(), new Position(0,-1));
-		setPosition(destinationPoint);
-		SFXManager.play(getSFX());
-		super.execute();
-		destinationPoint = Position.add(getPlayer().getPosition(), new Position(1,0));
+		destinationPoint = Position.add(getPlayer().pos, new Position(0,-1));
 		setPosition(destinationPoint);
 		SFXManager.play(getSFX());
 		super.execute();
-		destinationPoint = Position.add(getPlayer().getPosition(), new Position(-1,0));
+		destinationPoint = Position.add(getPlayer().pos, new Position(1,0));
+		setPosition(destinationPoint);
+		SFXManager.play(getSFX());
+		super.execute();
+		destinationPoint = Position.add(getPlayer().pos, new Position(-1,0));
 		setPosition(destinationPoint);
 		SFXManager.play(getSFX());
 		super.execute();
 		for (int i = 0; i < 5; i++){
 			int xdif = 3-Util.rand(0,6);
 			int ydif = 3-Util.rand(0,6);
-			destinationPoint = Position.add(getPlayer().getPosition(), new Position(xdif,ydif));
+			destinationPoint = Position.add(getPlayer().pos, new Position(xdif,ydif));
 			setPosition(destinationPoint);
 			SFXManager.play(getSFX());
 			super.execute();

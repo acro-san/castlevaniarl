@@ -23,7 +23,7 @@ public class GFXCircleBlastEffect extends GFXEffect {
 	public void drawEffect(GFXUserInterface ui, SwingSystemInterface si){
 		ui.refresh();
 		si.saveBuffer();
-		Position relative = Position.subs(getPosition(), ui.getPlayer().getPosition());
+		Position relative = Position.subs(getPosition(), ui.getPlayer().pos);
 		Position center = Position.add(ui.PC_POS, relative);
 		Graphics2D g = si.getGraphics2D();
 		Stroke oldStroke = g.getStroke();

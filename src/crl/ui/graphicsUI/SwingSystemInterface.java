@@ -30,7 +30,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-//import javax.swing.border.LineBorder;
+
 import javax.swing.KeyStroke;
 
 import crl.conf.gfx.data.GFXConfiguration;
@@ -451,6 +451,7 @@ class SwingInterfacePanel extends JPanel {
 	private Image backImage;
 	private Graphics backGraphics;
 	
+	// What is this all about? Wtf are these for??
 	private Image[] backImageBuffers;
 	private Graphics[] backGraphicsBuffers;
 	
@@ -600,7 +601,7 @@ class StrokeInformer implements KeyListener {
 		if(x.isControlDown()) {
 			return CharKey.CTRL;
 		}
-		if (code >= KeyEvent.VK_A && code <= KeyEvent.VK_Z){
+		if (code >= KeyEvent.VK_A && code <= KeyEvent.VK_Z) {
 			if (x.getKeyChar() >= 'a'){
 				int diff = KeyEvent.VK_A - CharKey.a;
 				return code-diff;

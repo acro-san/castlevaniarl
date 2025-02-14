@@ -31,12 +31,12 @@ public class WarpDash extends HeartAction {
 		Player player = (Player) performer;
 		Level level = player.level;
 		level.addMessage("You dash and disappear!");
-		if (targetPosition.equals(performer.getPosition())) {
+		if (targetPosition.equals(performer.pos)) {
 			level.addMessage("You appear in the same place!");
 			return;
 		}
 
-		Line line = new Line(player.getPosition(), targetPosition);
+		Line line = new Line(player.pos, targetPosition);
 		Position runner = line.next();
 		int i = 0;
 		for (; i < 5; i++){
@@ -45,13 +45,13 @@ public class WarpDash extends HeartAction {
 			if (
 				destinationCell == null ||
 				destinationCell.isSolid() ||
-				destinationCell.getHeight() != level.getMapCell(player.getPosition()).getHeight()
+				destinationCell.getHeight() != level.getMapCell(player.pos).getHeight()
 			)
 				break;
 			
 		}
 		player.landOn(new Position(runner));
-		drawEffect(Main.efx.createDirectedEffect(performer.getPosition(), targetPosition, "SFX_WARPDASH", i));
+		drawEffect(Main.efx.createDirectedEffect(performer.pos, targetPosition, "SFX_WARPDASH", i));
 		player.see();
 		Main.ui.refresh();
 	}

@@ -7,7 +7,7 @@ import crl.level.Level;
 import crl.monster.Monster;
 import crl.monster.MonsterData;
 
-public class UnleashSickles extends Action{
+public class UnleashSickles extends Action {
 	public String getID(){
 		return "UNLEASH_SICKLES";
 	}
@@ -23,10 +23,10 @@ public class UnleashSickles extends Action{
 		for (int i=0; i<sickles; i++){
 			int xvar = Util.rand(-8,8);
 			int yvar = Util.rand(-8,8);
-			Position destinationPoint = Position.add(performer.getPosition(),
+			Position destinationPoint = Position.add(performer.pos,
 				new Position(xvar, yvar));
 			Monster sickle = MonsterData.buildMonster("SICKLE");
-			sickle.setPosition(destinationPoint);
+			sickle.pos = destinationPoint;
 			aLevel.addMonster(sickle);
 		}
 	}

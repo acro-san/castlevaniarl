@@ -13,7 +13,7 @@ public class Entrance1 extends Unleasher {
 
 	public void unleash(Level level, Game game) {
 		Monster clara = level.getNPCByID("UNIDED_CLAW");
-		int distance = Position.distance(clara.getPosition(), game.getPlayer().getPosition());
+		int distance = Position.distance(clara.pos, game.getPlayer().pos);
 		if (((VillagerAI)clara.selector).isHostile()) {
 			enabled = false;
 			return;

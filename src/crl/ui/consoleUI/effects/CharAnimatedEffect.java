@@ -31,7 +31,7 @@ public class CharAnimatedEffect extends CharEffect{
 	}
 
 	public void drawEffect(ConsoleUserInterface ui, ConsoleSystemInterface si){
-		Position relative = Position.subs(getPosition(), ui.getPlayer().getPosition());
+		Position relative = Position.subs(getPosition(), ui.getPlayer().pos);
 		Position absolute = Position.add(ui.PC_POS, relative);
 		if (!ui.insideViewPort(absolute))
 			return;

@@ -17,32 +17,32 @@ public class Dash extends Action{
 		return true;
 	}
 
-	public void execute(){
+	public void execute() {
 		Monster aMonster = (Monster) performer;
 		targetDirection = aMonster.starePlayer();
-        Position var = directionToVariation(targetDirection);
-        Level aLevel = performer.level;
-        Player aPlayer = aLevel.getPlayer();
-        StringBuffer message = new StringBuffer("The "+aMonster.getDescription()+" dives to you!");
-        //Cell currentCell = aLevel.getMapCell(performer.getPosition());
-        Position destinationPoint = null;
-        for (int i=0; i<5; i++){
-			destinationPoint = Position.add(performer.getPosition(), var);
-			//Cell destinationCell = aLevel.getMapCell(destinationPoint);
-			if (!aLevel.isValidCoordinate(destinationPoint) || aLevel.isSolid(destinationPoint))
+		Position var = directionToVariation(targetDirection);
+		Level aLevel = performer.level;
+		Player aPlayer = aLevel.getPlayer();
+		StringBuffer message = new StringBuffer("The "+aMonster.getDescription()+" dives to you!");
+		Position destinationPoint = null;
+		for (int i=0; i<5; i++) {
+			destinationPoint = Position.add(performer.pos, var);
+			if (!aLevel.isValidCoordinate(destinationPoint) || aLevel.isSolid(destinationPoint)) {
 				break;
-			if (aPlayer.getPosition().equals(destinationPoint) && 
-					aPlayer.getStandingHeight() == aMonster.getStandingHeight()){
+			}
+			if (aPlayer.pos.equals(destinationPoint) && 
+					aPlayer.getStandingHeight() == aMonster.getStandingHeight()) {
 				aPlayer.damage("The "+aMonster.getDescription()+ " slices you!", aMonster, new Damage(aMonster.getAttack(), false));
 			}
-
-			aMonster.setPosition(destinationPoint);
+			
+			aMonster.pos = destinationPoint;
 			//currentCell = aLevel.getMapCell(destinationPoint);
 		}
 		aLevel.addMessage(message.toString());
 	}
 
-	public String getPromptDirection(){
+
+	public String getPromptDirection() {
 		return "Where do you want to slice?";
 	}
 

@@ -23,14 +23,14 @@ public class ShadowExtinction  extends Action {
 		for (int i=0; i<sickles; i++) {
 			int xvar = Util.rand(-10,10);
 			int yvar = Util.rand(-10,10);
-			int xgo = performer.getPosition().x + xvar - 3;
-			int ygo = performer.getPosition().y + yvar - 3;
-			//UserInterface.getUI().drawEffect(new SplashEffect(new Position(xvar+performer.getPosition().x, yvar+performer.getPosition().y), "o*'", Appearance.RED));
-			Position pp = performer.getPosition();
+			int xgo = performer.pos.x + xvar - 3;
+			int ygo = performer.pos.y + yvar - 3;
+			//UserInterface.getUI().drawEffect(new SplashEffect(new Position(xvar+performer.pos.x, yvar+performer.pos.y), "o*'", Appearance.RED));
+			Position pp = performer.pos;
 			drawEffect(Main.efx.createLocatedEffect(new Position(xvar+pp.x, yvar+pp.y, pp.z), "SFX_SHADOW_EXTINCTION"));
 			for (int jx = xgo; jx <= xgo+3; jx++) {
 				for (int jy = ygo; jy <= ygo+3; jy++) {
-					hit (jx, jy,performer.getPosition().z);
+					hit (jx, jy,performer.pos.z);
 				}
 			}
 		}
@@ -54,7 +54,7 @@ public class ShadowExtinction  extends Action {
 			}
 			aLevel.addMessage(message);
 		}
-		if (destinationPoint.equals(aPlayer.getPosition())) {
+		if (destinationPoint.equals(aPlayer.pos)) {
 			aPlayer.damage("You are hit by the dark energy!", (Monster)performer, new Damage(2, false));
 		}
 	}

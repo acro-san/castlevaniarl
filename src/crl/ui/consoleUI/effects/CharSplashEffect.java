@@ -4,37 +4,35 @@ import sz.csi.ConsoleSystemInterface;
 import sz.util.*;
 import crl.ui.*;
 import crl.ui.consoleUI.ConsoleUserInterface;
-import crl.action.*;
 import crl.*;
 
-public class CharSplashEffect extends CharEffect{
+public class CharSplashEffect extends CharEffect {
 	private String tiles;
 	private int color;
 	private transient ConsoleSystemInterface si;
 	private transient UserInterface ui;
 
-    public CharSplashEffect(String ID, String tiles, int color, int delay){
-    	super(ID,delay);
+	public CharSplashEffect(String ID, String tiles, int color, int delay) {
+		super(ID,delay);
 		this.tiles = tiles;
 		this.color = color;
-    }
-    
-	public void drawEffect(ConsoleUserInterface ui, ConsoleSystemInterface si){
+	}
+	
+	
+	public void drawEffect(ConsoleUserInterface ui, ConsoleSystemInterface si) {
 		Main.ui.getPlayer().see();
 		Main.ui.refresh();
 		
 		si.setAutoRefresh(false);
 		//ui.refresh();
-		Position relative = Position.subs(getPosition(), ui.getPlayer().getPosition());
+		Position relative = Position.subs(getPosition(), ui.getPlayer().pos);
 		Position center = Position.add(ui.PC_POS, relative);
 		this.si = si;
 		this.ui = ui;
 
-		Position oldPoint = null;
-		int oldColor = -1;
-
-		Position helper = null;
-
+//		Position oldPoint = null;
+//		int oldColor = -1;
+//		Position helper = null;
 		si.safeprint(center.x, center.y, tiles.charAt(0), color);
 
 		for (int ring = 1; ring < tiles.length(); ring++){
@@ -64,56 +62,26 @@ public class CharSplashEffect extends CharEffect{
 			if (runner.y == 0)
 				break;
 		}
-		
 	}
 
 
-	private void drawCirclePixels(ConsoleUserInterface ui, Position center, int x, int y, char tile, int color){
+	private void drawCirclePixels(ConsoleUserInterface ui, Position center, int x, int y, char tile, int color) {
 		if (ui.insideViewPort(center.x+x, center.y + y))
 			si.safeprint(center.x + x, center.y + y, tile, color);
 		if (ui.insideViewPort(center.x+x, center.y - y))
 			si.safeprint(center.x + x, center.y - y, tile, color);
 		if (ui.insideViewPort(center.x-x, center.y + y))
-		si.safeprint(center.x - x, center.y + y, tile, color);
+			si.safeprint(center.x - x, center.y + y, tile, color);
 		if (ui.insideViewPort(center.x-x, center.y - y))
-		si.safeprint(center.x - x, center.y - y, tile, color);
+			si.safeprint(center.x - x, center.y - y, tile, color);
 		if (ui.insideViewPort(center.x+y, center.y + x))
-		si.safeprint(center.x + y, center.y + x, tile, color);
+			si.safeprint(center.x + y, center.y + x, tile, color);
 		if (ui.insideViewPort(center.x+y, center.y - x))
-		si.safeprint(center.x + y, center.y - x, tile, color);
+			si.safeprint(center.x + y, center.y - x, tile, color);
 		if (ui.insideViewPort(center.x-y, center.y + x))
-		si.safeprint(center.x - y, center.y + x, tile, color);
+			si.safeprint(center.x - y, center.y + x, tile, color);
 		if (ui.insideViewPort(center.x-y, center.y - x))
-		si.safeprint(center.x - y, center.y - x, tile, color);
+			si.safeprint(center.x - y, center.y - x, tile, color);
 	}
 
-
-
-	 /*
-
-		for (int i = 1; i < tiles.length(); i++){
-			helper = Position.add(center, Position.mul(Action.directionToVariation(Action.UP), i));
-			si.print(helper.x, helper.y, tiles.charAt(i), color);
-			helper = Position.add(center, Position.mul(Action.directionToVariation(Action.DOWN), i));
-			si.print(helper.x, helper.y, tiles.charAt(i), color);
-			helper = Position.add(center, Position.mul(Action.directionToVariation(Action.LEFT), i));
-			si.print(helper.x, helper.y, tiles.charAt(i), color);
-			helper = Position.add(center, Position.mul(Action.directionToVariation(Action.RIGHT), i));
-			si.print(helper.x, helper.y, tiles.charAt(i), color);
-
-			if (i == 1){
-
-				continue;
-			}
-
-			helper = Position.add(center, Position.mul(Action.directionToVariation(Action.UPLEFT), i-1));
-			si.print(helper.x, helper.y, tiles.charAt(i), color);
-			helper = Position.add(center, Position.mul(Action.directionToVariation(Action.DOWNRIGHT), i-1));
-			si.print(helper.x, helper.y, tiles.charAt(i), color);
-			helper = Position.add(center, Position.mul(Action.directionToVariation(Action.DOWNLEFT), i-1));
-			si.print(helper.x, helper.y, tiles.charAt(i), color);
-			helper = Position.add(center, Position.mul(Action.directionToVariation(Action.UPRIGHT), i-1));
-			si.print(helper.x, helper.y, tiles.charAt(i), color);
-			animationPause();
-		}*/
 }

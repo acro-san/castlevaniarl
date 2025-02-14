@@ -41,7 +41,7 @@ public class Holy extends HeartAction {
 		
 		int damage = getDamage();
 
-		if (targetPosition.equals(performer.getPosition())) {
+		if (targetPosition.equals(performer.pos)) {
 			aLevel.addMessage("The vial washes over you");
 			if (Util.chance(30)) {
 				aLevel.addMessage("You feel healed.");
@@ -52,7 +52,7 @@ public class Holy extends HeartAction {
 			return;
 		}
 		
-		Line holyLine = new Line(performer.getPosition(), targetPosition);
+		Line holyLine = new Line(performer.pos, targetPosition);
 		Position flameOrigin = null;
 		Cell destinationCell = null;
 		int i = 0;
@@ -64,7 +64,7 @@ public class Holy extends HeartAction {
 			}
 		}
 		
-		Main.ui.drawEffect(Main.efx.createDirectedEffect(performer.getPosition(), targetPosition, "SFX_HOLY", i));
+		Main.ui.drawEffect(Main.efx.createDirectedEffect(performer.pos, targetPosition, "SFX_HOLY", i));
 		
 		if (destinationCell == null){
 			flameOrigin = aLevel.getDeepPosition(flameOrigin);

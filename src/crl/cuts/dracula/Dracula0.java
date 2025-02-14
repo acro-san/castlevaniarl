@@ -11,7 +11,7 @@ public class Dracula0 extends Unleasher {
 	
 	public void unleash(Level level, Game game) {
 		Monster dracula = level.getMonsterByID("DRACULA");
-		dracula.setPosition(new Position(level.getExitFor("#DRACPOS")));
+		dracula.pos = new Position(level.getExitFor("#DRACPOS"));
 		dracula.isVisible = false;
 		level.getMapCell(level.getExitFor("#DRACPOS")).setAppearance(Main.appearances.get("DRACULA_THRONE2"));
 		enabled = false;

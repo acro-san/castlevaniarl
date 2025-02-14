@@ -13,8 +13,8 @@ public class SFX extends Action {
 
 	public void execute() {
 	///	Level level = performer.level;
-		//level.addEffect(new FlashEffect(performer.getLevel().getPlayer().getPosition(), Appearance.WHITE));
-		drawEffect(Main.efx.createLocatedEffect(performer.level.getPlayer().getPosition(), "SFX_THUNDER_FLASH"));
+		//level.addEffect(new FlashEffect(performer.getLevel().getPlayer().pos, Appearance.WHITE));
+		drawEffect(Main.efx.createLocatedEffect(performer.level.getPlayer().pos, "SFX_THUNDER_FLASH"));
 	}
 
 	private final static int THUNDER = 1;

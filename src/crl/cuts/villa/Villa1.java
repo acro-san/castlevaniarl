@@ -14,7 +14,7 @@ public class Villa1 extends Unleasher {
 		Monster maiden = level.getNPCByID("MAIDEN");
 		if (maiden == null)
 			return;
-		int distance = Position.distance(maiden.getPosition(), game.getPlayer().getPosition());
+		int distance = Position.distance(maiden.pos, game.getPlayer().pos);
 		if (((VillagerAI)maiden.selector).isHostile()) {
 			enabled = false;
 			return;

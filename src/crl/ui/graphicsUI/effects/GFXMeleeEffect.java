@@ -55,7 +55,7 @@ public class GFXMeleeEffect extends GFXDirectionalEffect {
 			int height = 0;
 			if (ui.getPlayer().level.getMapCell(runner) != null)
 				height = ui.getPlayer().level.getMapCell(runner).getHeight();
-			Position relative = Position.subs(runner, ui.getPlayer().getPosition());
+			Position relative = Position.subs(runner, ui.getPlayer().pos);
 			Position toPrint = Position.add(ui.PC_POS, relative);
 			/*if (!ui.insideViewPort(toPrint))
 				break;*/
