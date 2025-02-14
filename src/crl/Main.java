@@ -39,7 +39,6 @@ import crl.conf.console.data.CharEffects;
 import crl.conf.gfx.data.GFXAppearances;
 import crl.conf.gfx.data.GFXConfiguration;
 import crl.conf.gfx.data.GFXEffects;
-import crl.cuts.CutsceneDialogue;
 import crl.data.Cells;
 import crl.data.Features;
 import crl.data.Items;
@@ -113,7 +112,11 @@ public class Main {
 	
 	private static Game currentGame;
 	private static boolean createNew = true;
-
+	
+	private static Properties configuration;
+	private static Properties UIconfiguration;
+	private static String uiFile;
+	
 	
 	public static String getConfigurationVal(String key) {
 		return configuration.getProperty(key);
@@ -263,9 +266,6 @@ public class Main {
 		}
 	}
 	
-	private static Properties configuration;
-	private static Properties UIconfiguration;
-	private static String uiFile;
 	
 	private static void readConfiguration() {
 		configuration = new Properties();
@@ -719,7 +719,7 @@ public class Main {
 		uiMode = SWING_GFX;
 		uiFile = "slash-barrett.ui";
 		if (args.length > 0) {	//args != null && ?!
-			if (args[0].equalsIgnoreCase("sgfx")) {
+			if (args[0].equalsIgnoreCase("sgfx")) {	// Could allow 'sg'? swing graphical?
 				uiMode = SWING_GFX;
 				if (args.length > 1) {
 					uiFile = args[1];

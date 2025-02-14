@@ -9,14 +9,14 @@ import crl.ui.graphicsUI.*;
 
 public class GFXAppearances {
 	
-	private int WIDTH_BIG;
 	private int UI_SCALE;
 	private int WIDTH_HALF;
-//	private int WIDTH_QUARTER;
+	private int WIDTH_NORMAL;
+	private int WIDTH_BIG;
+	private int CELL_HEIGHT;
+
 	private final static int
 		ICON_SIZE = 16;	// hardcoded...
-	private int CELL_HEIGHT;
-	private int WIDTH_NORMAL;
 	
 	protected GFXConfiguration configuration;
 	

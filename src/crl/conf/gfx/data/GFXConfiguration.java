@@ -9,7 +9,6 @@ import java.util.Properties;
 
 import crl.game.Game;
 
-import sz.util.ImageUtils;
 import sz.util.Position;
 import sz.util.PropertyFilters;
 

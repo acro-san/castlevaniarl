@@ -43,7 +43,7 @@ public class TestMandragoraScream {
 		
 		playerPosition = new Position(8, 8);
 		player = new Player();
-		player.setPosition(playerPosition);
+		player.pos = playerPosition;
 		player.level = level;
 		player.setHitsMax(30);
 		player.setHits(30);
@@ -52,7 +52,7 @@ public class TestMandragoraScream {
 		performerPosition = new Position(10, 10);
 		performer = mock(Monster.class);
 		when(performer.level).thenReturn(level);
-		when(performer.getPosition()).thenReturn(performerPosition);
+		when(performer.pos).thenReturn(performerPosition);
 		
 		action = new MandragoraScream();
 		action.setPerformer(performer);

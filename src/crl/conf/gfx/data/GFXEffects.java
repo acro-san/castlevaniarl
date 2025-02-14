@@ -3,7 +3,6 @@ package crl.conf.gfx.data;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.util.Vector;
 
 import sz.util.ImageUtils;
 import sz.util.Position;
@@ -20,9 +19,10 @@ import crl.ui.graphicsUI.effects.GFXFlashEffect;
 import crl.ui.graphicsUI.effects.GFXSequentialEffect;
 import crl.ui.graphicsUI.effects.GFXSplashEffect;
 
+import static crl.action.vkiller.Bible.BIBLE_STEPS;
+
 public class GFXEffects {
 	
-	private Vector<Position> SFX_BIBLE_STEPS = new Vector<>(55);
 	private BufferedImage IMG_EFFECTS;
 	
 	private BufferedImage[][] CURVED_FRAMES;
@@ -34,8 +34,8 @@ public class GFXEffects {
 	public GFXEffects(GFXConfiguration configuration) {
 		this.configuration = configuration;
 		IMG_EFFECTS = Textures.effectsImage;
-		InitAnimations();
-		LoadEffects();
+		initAnimations();
+		loadEffects();
 	}
 	
 	private BufferedImage[][] readSlashes(BufferedImage source) {
@@ -113,7 +113,7 @@ public class GFXEffects {
 		return new Position(baseX, baseY);
 	}
 
-	private void InitAnimations() {
+	private void initAnimations() {
 		BufferedImage IMG_CURVEDSLASHES = Textures.curvedSlashesImage;
 		BufferedImage IMG_STRSLASHES = Textures.straightSlashesImage;
 		
@@ -264,18 +264,6 @@ public class GFXEffects {
 		STR_FRAMES[7][3] = ImageUtils.hFlip(STR_FRAMES[2][3]);
 		STR_FRAMES[7][4] = ImageUtils.hFlip(STR_FRAMES[2][4]);
 		
-		final int[] bibleCoords = new int[] {
-			 1,0,	2,-1,	1,-2,	0,-2,	-1,-2,	-2,-1,	-2,0,	-2,1,
-			-1,2,	0 ,2,	1, 2,	2,2,	3,1,	4,0,	4,-1,	4,-2,
-			4,-3,	3,-4,	2,-4,	1,-4,	0,-4,	-1,-4,	-2,-4,	-3,-3,
-			-4,-2,	-4,-1,	-4,0,	-4,1,	-4,2,	-3,3,	-2,4,	-1,4,
-			0,4,	1,4,	2,4,	3,4,	4,3,	5,2,	6,1,	6,0,
-			6,-1,	6,-2,	6,-3,	6,-4,	5,-5,	4,-6,	3,-7,	2,-8,
-			1,-9,	0,-10,	-1,-11,	-2,-12,	-3,-13,	-4,-14,	-5,-15,	-6,-16
-		};
-		for (int i=0; i<bibleCoords.length; i +=2) {
-			SFX_BIBLE_STEPS.add(new Position(bibleCoords[i], bibleCoords[i+1]));
-		}
 	}
 	
 	private BufferedImage[] load(int frames, int xpos, int ypos) {
@@ -341,26 +329,28 @@ public class GFXEffects {
 		return null;
 	}
 	
-	private Image[] load2(int xpos, int ypos){
+	// Shorthand Frame-Sequence loaders. An alternative would be: numerical indexing of graphic sheets pre-tiled for easy access?
+	// assumption: these are loading a sequence of 2,8,4,or 1 frame(s), at the given (16x16?) tile x,y position in the src sheet?
+	private Image[] load2(int xpos, int ypos) {
 		return load(2, xpos, ypos);
 	}
 	
-	private Image[] load8(int xpos, int ypos){
+	private Image[] load8(int xpos, int ypos) {
 		return load(8, xpos, ypos);
 	}
 	
-	private Image[] load4(int xpos, int ypos){
+	private Image[] load4(int xpos, int ypos) {
 		return load(4, xpos, ypos);
 	}
 	
-	private Image[] load1(int xpos, int ypos){
+	private Image[] load1(int xpos, int ypos) {
 		return load(1, xpos, ypos);
 	}
 	
 	private GFXEffect[] effects;
 	
 	
-	protected void LoadEffects() {
+	protected void loadEffects() {
 		effects = new GFXEffect[] {
 			// Animated Missile Effects
 			new GFXAnimatedMissileEffect("SFX_CHARGE_BALL", load2(0,0), 50, configuration),
@@ -372,7 +362,7 @@ public class GFXEffects {
 			new GFXAnimatedEffect("SFX_WHITE_HIT",load2(4,1), 50, configuration),
 			new GFXAnimatedEffect("SFX_QUICK_WHITE_HIT",load2(4,1), 10, configuration),
 			new GFXDirectionalMissileEffect("SFX_RENEGADE_BOD",load8(8,1), 20, configuration),
-			new GFXSequentialEffect("SFX_BIBLE", SFX_BIBLE_STEPS, load1(2,2), 5, configuration),
+			new GFXSequentialEffect("SFX_BIBLE", BIBLE_STEPS, load1(2,2), 5, configuration),
 			new GFXAnimatedMissileEffect("SFX_CAT",load1(3,2), 55, configuration),
 			
 			new GFXAnimatedMissileEffect("SFX_BIRD",load2(4,2), 20, configuration),
@@ -571,10 +561,11 @@ public class GFXEffects {
 		};
 	}
 
-	private GFXAnimatedMeleeEffect createAnimatedMeleeEffect(String id, String file, int delay){
+
+	private GFXAnimatedMeleeEffect createAnimatedMeleeEffect(String id, String file, int delay) {
 		try {
 			return new GFXAnimatedMeleeEffect(id,readSlashes(ImageUtils.createImage(file)), CURVED_VARS, delay, configuration);
-		} catch (Exception e){
+		} catch (Exception e) {
 			Game.crash("Error loading the animated effects", e);
 			return null;
 		}
@@ -584,4 +575,5 @@ public class GFXEffects {
 	public GFXEffect[] getEffects() {
 		return effects;
 	}
+
 }

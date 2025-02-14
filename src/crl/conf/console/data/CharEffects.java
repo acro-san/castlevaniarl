@@ -19,9 +19,12 @@ import crl.ui.consoleUI.effects.CharSplashEffect;
 import crl.ui.graphicsUI.effects.GFXCircleBlastEffect;
 import crl.ui.graphicsUI.effects.GFXSplashEffect;
 
+import static crl.action.vkiller.Bible.BIBLE_STEPS;
+
 public class CharEffects {
-	private CharEffect [] effects = new CharEffect[]{
-		//Animated Missile Effects			
+	
+	private CharEffect [] effects = {
+		//Animated Missile Effects
 		new CharAnimatedMissileEffect("SFX_FIREBALL", "*~", ConsoleSystemInterface.RED, 50),
 		new CharAnimatedMissileEffect("SFX_FLAMESSHOOT", "*~", ConsoleSystemInterface.RED, 50),
 		new CharAnimatedMissileEffect("SFX_SUMMON_SPIRIT", "sS",ConsoleSystemInterface.GRAY, 45),
@@ -80,7 +83,7 @@ public class CharEffects {
 		//En Attack.java : 116 "SFX_"+weaponDef.getID()
 		
 		//Sequential Effects
-		new CharSequentialEffect("SFX_BIBLE", SFX_BIBLE_STEPS, "?�", ConsoleSystemInterface.CYAN, 10),
+		new CharSequentialEffect("SFX_BIBLE", BIBLE_STEPS, "?�", ConsoleSystemInterface.CYAN, 10),
 		
 		//Tile Effects
 		new CharIconMissileEffect("SFX_CAT",'c', ConsoleSystemInterface.GRAY, 55),
@@ -230,69 +233,4 @@ public class CharEffects {
 		return effects;
 	}
 
-	// FIXME This has been declared in at least 2 other places, ffs.
-	// crl.action.vkiller.Bible
-	// crl.conf.console.data.CharEffects (this)
-	// crl.conf.gfx.data.GFXEffects
-	// FIXME De-duplicate this bloody mess. ffs.
-	// see GFXEffects for compact coordinate array so far.
-	private final static Vector SFX_BIBLE_STEPS = new Vector(10);
-	static {
-		SFX_BIBLE_STEPS.add(new Position(1,0));
-		SFX_BIBLE_STEPS.add(new Position(2,-1));
-		SFX_BIBLE_STEPS.add(new Position(1,-2));
-		SFX_BIBLE_STEPS.add(new Position(0,-2));
-		SFX_BIBLE_STEPS.add(new Position(-1,-2));
-		SFX_BIBLE_STEPS.add(new Position(-2,-1));
-		SFX_BIBLE_STEPS.add(new Position(-2,0));
-		SFX_BIBLE_STEPS.add(new Position(-2,1));
-		SFX_BIBLE_STEPS.add(new Position(-1,2));
-		SFX_BIBLE_STEPS.add(new Position(0,2));
-		SFX_BIBLE_STEPS.add(new Position(1,2));
-		SFX_BIBLE_STEPS.add(new Position(2,2));
-		SFX_BIBLE_STEPS.add(new Position(3,1));
-		SFX_BIBLE_STEPS.add(new Position(4,0));
-		SFX_BIBLE_STEPS.add(new Position(4,-1));
-		SFX_BIBLE_STEPS.add(new Position(4,-2));
-		SFX_BIBLE_STEPS.add(new Position(4,-3));
-		SFX_BIBLE_STEPS.add(new Position(3,-4));
-		SFX_BIBLE_STEPS.add(new Position(2,-4));
-		SFX_BIBLE_STEPS.add(new Position(1,-4));
-		SFX_BIBLE_STEPS.add(new Position(0,-4));
-		SFX_BIBLE_STEPS.add(new Position(-1,-4));
-		SFX_BIBLE_STEPS.add(new Position(-2,-4));
-		SFX_BIBLE_STEPS.add(new Position(-3,-3));
-		SFX_BIBLE_STEPS.add(new Position(-4,-2));
-		SFX_BIBLE_STEPS.add(new Position(-4,-1));
-		SFX_BIBLE_STEPS.add(new Position(-4,0));
-		SFX_BIBLE_STEPS.add(new Position(-4,1));
-		SFX_BIBLE_STEPS.add(new Position(-4,2));
-		SFX_BIBLE_STEPS.add(new Position(-3,3));
-		SFX_BIBLE_STEPS.add(new Position(-2,4));
-		SFX_BIBLE_STEPS.add(new Position(-1,4));
-		SFX_BIBLE_STEPS.add(new Position(0,4));
-		SFX_BIBLE_STEPS.add(new Position(1,4));
-		SFX_BIBLE_STEPS.add(new Position(2,4));
-		SFX_BIBLE_STEPS.add(new Position(3,4));
-		SFX_BIBLE_STEPS.add(new Position(4,3));
-		SFX_BIBLE_STEPS.add(new Position(5,2));
-		SFX_BIBLE_STEPS.add(new Position(6,1));
-		SFX_BIBLE_STEPS.add(new Position(6,0));
-		SFX_BIBLE_STEPS.add(new Position(6,-1));
-		SFX_BIBLE_STEPS.add(new Position(6,-2));
-		SFX_BIBLE_STEPS.add(new Position(6,-3));
-		SFX_BIBLE_STEPS.add(new Position(6,-4));
-		SFX_BIBLE_STEPS.add(new Position(5,-5));
-		SFX_BIBLE_STEPS.add(new Position(4,-6));
-		SFX_BIBLE_STEPS.add(new Position(3,-7));
-		SFX_BIBLE_STEPS.add(new Position(2,-8));
-		SFX_BIBLE_STEPS.add(new Position(1,-9));
-		SFX_BIBLE_STEPS.add(new Position(0,-10));
-		SFX_BIBLE_STEPS.add(new Position(-1,-11));
-		SFX_BIBLE_STEPS.add(new Position(-2,-12));
-		SFX_BIBLE_STEPS.add(new Position(-3,-13));
-		SFX_BIBLE_STEPS.add(new Position(-4,-14));
-		SFX_BIBLE_STEPS.add(new Position(-5,-15));
-		SFX_BIBLE_STEPS.add(new Position(-6,-16));
-	}
 }

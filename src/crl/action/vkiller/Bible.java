@@ -1,7 +1,5 @@
 package crl.action.vkiller;
 
-import java.util.Vector;
-
 import crl.Main;
 import crl.action.HeartAction;
 import crl.feature.Feature;
@@ -11,6 +9,26 @@ import crl.player.Player;
 import sz.util.Position;
 
 public class Bible extends HeartAction {
+	
+	public static final int[] BIBLE_COORDS = {
+		 1,0,	2,-1,	1,-2,	0,-2,	-1,-2,	-2,-1,	-2,0,	-2,1,
+		-1,2,	0 ,2,	1, 2,	2,2,	3,1,	4,0,	4,-1,	4,-2,
+		4,-3,	3,-4,	2,-4,	1,-4,	0,-4,	-1,-4,	-2,-4,	-3,-3,
+		-4,-2,	-4,-1,	-4,0,	-4,1,	-4,2,	-3,3,	-2,4,	-1,4,
+		0,4,	1,4,	2,4,	3,4,	4,3,	5,2,	6,1,	6,0,
+		6,-1,	6,-2,	6,-3,	6,-4,	5,-5,	4,-6,	3,-7,	2,-8,
+		1,-9,	0,-10,	-1,-11,	-2,-12,	-3,-13,	-4,-14,	-5,-15,	-6,-16
+	};
+	
+	// it doesn't change length a lot so should just be a simple array...!
+	public static final Position[] BIBLE_STEPS = new Position[BIBLE_COORDS.length/2];
+	static {
+		for (int i=0; i<BIBLE_STEPS.length; i+=2) {
+			int j = i / 2;
+			BIBLE_STEPS[j] = new Position(BIBLE_COORDS[i], BIBLE_COORDS[i+1]);
+		}
+	}
+	
 	
 	public int getHeartCost() {
 		return 2;
@@ -35,23 +53,22 @@ public class Bible extends HeartAction {
 		drawEffect(Main.efx.createLocatedEffect(performer.pos, "SFX_BIBLE"));
 
 		int damage = getDamage();
-		for (int i = 0; i < steps.size(); i++){
-			Position destinationPoint = Position.add(performer.pos,
-				(Position)steps.elementAt(i));
+		for (int i = 0; i < BIBLE_STEPS.length; i++) {
+			Position dest = Position.add(performer.pos, BIBLE_STEPS[i]);
 			StringBuffer message = new StringBuffer();
-			Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
-			if (destinationFeature != null && destinationFeature.isDestroyable()) {
-				message.append("The "+destinationFeature.getDescription()+" is slashed");
-				Feature prize = destinationFeature.damage(aLevel.getPlayer(), damage);
+			Feature destFeature = aLevel.getFeatureAt(dest);
+			if (destFeature != null && destFeature.isDestroyable()) {
+				message.append("The "+destFeature.getDescription()+" is slashed");
+				Feature prize = destFeature.damage(aLevel.getPlayer(), damage);
 				if (prize != null) {
-					message.append(" and thorn apart!");
+					message.append(" and torn apart!");
 				} else {
 					message.append(".");
 				}
 				aLevel.addMessage(message.toString());
 			}
 			
-			Monster targetMonster = performer.level.getMonsterAt(destinationPoint);
+			Monster targetMonster = performer.level.getMonsterAt(dest);
 			message = new StringBuffer();
 			if (targetMonster != null) {
 				message.append("The "+targetMonster.getDescription()+" is slashed");
@@ -79,68 +96,8 @@ public class Bible extends HeartAction {
 		return "Where do you want to throw the Cross?";
 	}
 
-	// bible_steps. isn't this duplicated elsewhere already!??
-	private final static Vector<Position> steps = new Vector<>(55);
-	static {
-		steps.add(new Position(1,0));
-		steps.add(new Position(2,-1));
-		steps.add(new Position(1,-2));
-		steps.add(new Position(0,-2));
-		steps.add(new Position(-1,-2));
-		steps.add(new Position(-2,-1));
-		steps.add(new Position(-2,0));
-		steps.add(new Position(-2,1));
-		steps.add(new Position(-1,2));
-		steps.add(new Position(0,2));
-		steps.add(new Position(1,2));
-		steps.add(new Position(2,2));
-		steps.add(new Position(3,1));
-		steps.add(new Position(4,0));
-		steps.add(new Position(4,-1));
-		steps.add(new Position(4,-2));
-		steps.add(new Position(4,-3));
-		steps.add(new Position(3,-4));
-		steps.add(new Position(2,-4));
-		steps.add(new Position(1,-4));
-		steps.add(new Position(0,-4));
-		steps.add(new Position(-1,-4));
-		steps.add(new Position(-2,-4));
-		steps.add(new Position(-3,-3));
-		steps.add(new Position(-4,-2));
-		steps.add(new Position(-4,-1));
-		steps.add(new Position(-4,0));
-		steps.add(new Position(-4,1));
-		steps.add(new Position(-4,2));
-		steps.add(new Position(-3,3));
-		steps.add(new Position(-2,4));
-		steps.add(new Position(-1,4));
-		steps.add(new Position(0,4));
-		steps.add(new Position(1,4));
-		steps.add(new Position(2,4));
-		steps.add(new Position(3,4));
-		steps.add(new Position(4,3));
-		steps.add(new Position(5,2));
-		steps.add(new Position(6,1));
-		steps.add(new Position(6,0));
-		steps.add(new Position(6,-1));
-		steps.add(new Position(6,-2));
-		steps.add(new Position(6,-3));
-		steps.add(new Position(6,-4));
-		steps.add(new Position(5,-5));
-		steps.add(new Position(4,-6));
-		steps.add(new Position(3,-7));
-		steps.add(new Position(2,-8));
-		steps.add(new Position(1,-9));
-		steps.add(new Position(0,-10));
-		steps.add(new Position(-1,-11));
-		steps.add(new Position(-2,-12));
-		steps.add(new Position(-3,-13));
-		steps.add(new Position(-4,-14));
-		steps.add(new Position(-5,-15));
-		steps.add(new Position(-6,-16));
-	}
-	
-	public String getSFX(){
+
+	public String getSFX() {
 		return "wav/loutwarp.wav";
 	}
 	

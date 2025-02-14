@@ -1,8 +1,6 @@
 package crl.ui.graphicsUI.effects;
 
 import java.awt.Image;
-import java.util.Enumeration;
-import java.util.Vector;
 
 import sz.util.Position;
 import crl.conf.gfx.data.GFXConfiguration;
@@ -11,10 +9,14 @@ import crl.ui.graphicsUI.SwingSystemInterface;
 
 public class GFXSequentialEffect extends GFXEffect {
 	
-	private Vector sequence;
+	private Position[] sequence;
 	private Image[] tiles;
+	//private String charTiles;	// ascii for same.
+	//private int color;	// FGC of the ascii chars.
 
-	public GFXSequentialEffect(String ID, Vector sequence, Image[] tiles, int delay, GFXConfiguration configuration) {
+	// KEY QUESTION: Why do the EFFECT DEFINITIONS require a 'GraphicsConfiguration'!?????
+	// That seems like a re-entrant (wrong direction) dependency.
+	public GFXSequentialEffect(String ID, Position[] sequence, Image[] tiles, int delay, GFXConfiguration configuration) {
 		super(ID, configuration);
 		setAnimationDelay(delay);
 		this.tiles = tiles;
@@ -27,14 +29,14 @@ public class GFXSequentialEffect extends GFXEffect {
 		Position relative = Position.subs(getPosition(), ui.getPlayer().pos);
 		Position center = Position.add(ui.PC_POS, relative);
 		int tileIndex = 0;
-		Enumeration seq = sequence.elements();
-		while (seq.hasMoreElements()){
-			Position nextPosition = Position.add(center, (Position) seq.nextElement());
+
+		for (Position p: sequence) {
+			Position nextPosition = Position.add(center, p);
 			tileIndex++;
-			if (tileIndex == tiles.length)
-				tileIndex = 0;
-			if (ui.insideViewPort(nextPosition))
+			tileIndex %= tiles.length;
+			if (ui.insideViewPort(nextPosition)) {
 				ui.drawImageVP(nextPosition.x * 32, nextPosition.y * 32, tiles[tileIndex]);
+			}
 			si.refresh();
 			animationPause();
 		}

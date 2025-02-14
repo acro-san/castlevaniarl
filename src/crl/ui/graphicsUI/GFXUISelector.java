@@ -125,7 +125,6 @@ public class GFXUISelector extends UISelector
 							ret = null;
 						}
 					}
-					//}
 				}
 				mousePosition = null;
 			}

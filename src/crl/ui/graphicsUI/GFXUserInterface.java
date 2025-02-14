@@ -52,10 +52,11 @@ import crl.ui.*;
  * Informs the Actions and Commands of the player.
  * Must be listening to a System Interface
  */
-
 public class GFXUserInterface extends UserInterface {
+	
 	private static final String
 		BORDERS_FILE = "gfx/barrett-interface.gif"; //TODO: Move to GFXConfiguration
+	
 	private static final int
 		BORDERS_SCALE = 1, //TODO: Move to GFXConfiguration
 		BORDERS_SIZE = 32; //TODO: Move to GFXConfiguration
