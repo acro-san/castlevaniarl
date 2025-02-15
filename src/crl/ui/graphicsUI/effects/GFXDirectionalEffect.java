@@ -1,6 +1,5 @@
 package crl.ui.graphicsUI.effects;
 
-import crl.conf.gfx.data.GFXConfiguration;
 import sz.util.Position;
 
 public abstract class GFXDirectionalEffect extends GFXEffect{
@@ -9,12 +8,12 @@ public abstract class GFXDirectionalEffect extends GFXEffect{
 	
 
 	
-	public GFXDirectionalEffect(String id, GFXConfiguration configuration){
-		super(id, configuration);
+	public GFXDirectionalEffect(String id) {
+		super(id);
 	}
 
-	public GFXDirectionalEffect(String id, int delay, GFXConfiguration configuration){
-		super(id, delay, configuration);
+	public GFXDirectionalEffect(String id, int delay) {
+		super(id, delay);
 	}
 	
 	public void set(Position position,int pDirection, int pDepth){

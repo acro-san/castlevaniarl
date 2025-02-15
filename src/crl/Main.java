@@ -133,7 +133,7 @@ public class Main {
 				switch (uiMode) {
 				case SWING_GFX:
 					gfx_configuration = new GFXConfiguration();
-					gfx_configuration.LoadConfiguration(UIconfiguration);
+					gfx_configuration.loadConfiguration(UIconfiguration);
 					System.out.println("Initializing Graphics Appearances");
 					initializeGAppearances(gfx_configuration);
 					break;
@@ -162,10 +162,12 @@ public class Main {
 					ui = new GFXUserInterface(gfx_configuration);
 					Display.thus = new GFXDisplay(si, UIconfiguration, gfx_configuration);
 					PlayerGenerator.thus = new GFXPlayerGenerator(si, gfx_configuration);
-					efx = new GFXEffectFactory();
 					
-					GFXEffect[] gef = new GFXEffects(gfx_configuration).getEffects();
+					// chicken-in-egg messy OOP init:
+					efx = new GFXEffectFactory();
+					GFXEffect[] gef = new GFXEffects(gfx_configuration).effects;
 					((GFXEffectFactory)efx).setEffects(gef);
+					
 					initializeUI(si);
 					break;
 				case JCURSES_CONSOLE:

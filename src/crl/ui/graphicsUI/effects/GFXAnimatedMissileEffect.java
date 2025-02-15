@@ -3,12 +3,17 @@ package crl.ui.graphicsUI.effects;
 import java.awt.Image;
 
 import sz.util.Position;
-import crl.conf.gfx.data.GFXConfiguration;
 import crl.ui.graphicsUI.GFXUserInterface;
 import crl.ui.graphicsUI.SwingSystemInterface;
 
 public class GFXAnimatedMissileEffect extends GFXDirectedEffect{
 	private Image[] missile;
+	
+	public GFXAnimatedMissileEffect(String id, Image[] missile, int delay) {
+		super(id, delay);
+		setMissile(missile);
+	}
+	
 
 	public void drawEffect(GFXUserInterface ui, SwingSystemInterface si){
 		si.saveBuffer();
@@ -34,11 +39,6 @@ public class GFXAnimatedMissileEffect extends GFXDirectedEffect{
 		}
 	}
 
-	public GFXAnimatedMissileEffect(String id, Image[] missile, int delay, GFXConfiguration configuration){
-		super(id,delay, configuration);
-		setMissile(missile);
-	}
-	
 	public void setMissile(Image[] value) {
 		missile = value;
 	}

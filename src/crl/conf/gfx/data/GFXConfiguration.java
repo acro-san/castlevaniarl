@@ -22,8 +22,8 @@ public class GFXConfiguration {
 	public int
 		bigTileWidth,
 		
-		halfTileWidth,	// "width of half tile" ?!
-		normalTileWidth,	//"width of normal tile" ?!
+		tileWidth,	//"width of normal tile" ?!
+//		halfTileWidth,	// "width of half tile" ?!
 		
 		cellHeight,
 		
@@ -58,15 +58,16 @@ public class GFXConfiguration {
 	public Position playerLocationOnScreen;
 
 
-	public void LoadConfiguration(Properties p) {
+	public void loadConfiguration(Properties p) {
 		//screenScale = 1.28;
 		screenScale = PropertyFilters.getDouble(p.getProperty("SCREEN_SCALE"));
 		effectsScale = PropertyFilters.inte(p.getProperty("EFFECTS_SCALE"));
 		viewportUserInterfaceScale = PropertyFilters.inte(p.getProperty("VIEWPORT_UI_SCALE"));
+		
 		bigTileWidth = PropertyFilters.inte(p.getProperty("BIG_TILESIZE"));
-		normalTileWidth = PropertyFilters.inte(p.getProperty("TILESIZE"));
-		halfTileWidth = PropertyFilters.inte(p.getProperty("HALF_TILESIZE"));
+		tileWidth = PropertyFilters.inte(p.getProperty("TILESIZE"));
 		cellHeight = PropertyFilters.inte(p.getProperty("CELL_HEIGHT"));
+		
 		
 		screenWidthInTiles = PropertyFilters.inte(p.getProperty("XRANGE"));
 		screenHeightInTiles = PropertyFilters.inte(p.getProperty("YRANGE"));

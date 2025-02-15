@@ -164,13 +164,14 @@ public class GFXUserInterface extends UserInterface {
 		MAP_SOLID = new Color(180,154,68),
 		MINIMAP_WATER = new Color(100,123,130),//new Color(65,103,135),
 		MINIMAP_WATER_FOW = new Color(67,92,102);//new Color(10,81,116);	// in 'fog of war' (non-LoS)
-
-
-	private GFXConfiguration gfxConf;
+	
+	
+	public GFXConfiguration conf;
 	
 	
 	public GFXUserInterface(GFXConfiguration configuration) {
-		this.gfxConf = configuration;
+		conf = configuration;
+		
 	}
 
 
@@ -179,13 +180,7 @@ public class GFXUserInterface extends UserInterface {
 		return Position.add(PC_POS, relative);
 	}
 
-	/*
-	public Position
-		VP_START = new Position(0,0),
-		VP_END = new Position (31,18),
-		PC_POS = new Position (12,9);
-	*/
-	
+
 	public Position
 		VP_START = new Position(0,0),
 		VP_END = new Position (5,5),
@@ -228,8 +223,8 @@ public class GFXUserInterface extends UserInterface {
 		//si.drawImage(GFXDisplay.IMG_FRAME);
 		int lw = level.getWidth();
 		int lh = level.getHeight();
-		int sw = gfxConf.screenWidth;
-		int sh = gfxConf.screenHeight;
+		int sw = conf.screenWidth;
+		int sh = conf.screenHeight;
 		int remnantx = (int)((sw - 60 - (lw * 3))/2.0d); 
 		int remnanty = (int)((sh - 120 - (lh * 3))/2.0d);
 		Graphics2D g = si.getGraphics2D();
@@ -294,8 +289,8 @@ public class GFXUserInterface extends UserInterface {
 	private void renderMiniMap() {
 		int lw = level.getWidth();
 		int lh = level.getHeight();
-		int sw = gfxConf.screenWidth;
-		int sh = gfxConf.screenHeight;
+		int sw = conf.screenWidth;
+		int sh = conf.screenHeight;
 		int mapX = sw - 60 - (lw * 3);
 		int mapY = sh - 60 - (lh * 3);
 		Graphics2D g = si.getGraphics2D();
@@ -493,7 +488,6 @@ public class GFXUserInterface extends UserInterface {
 			} else {
 				merchantBox.setPrompt(Text.MERCHANT_BUY_FAIL_NOGOLD);
 			}
-			
 		}
 		merchantBox.setVisible(false);
 		si.recoverFocus();
@@ -501,6 +495,7 @@ public class GFXUserInterface extends UserInterface {
 		Item.shopMode = false;
 		Debug.exitMethod();
 	}
+	
 	
 	public void chat(NPC who) {
 		Debug.enterMethod(this, "chat", who);
@@ -512,6 +507,7 @@ public class GFXUserInterface extends UserInterface {
 		Debug.exitMethod();
 	}
 
+
 	public boolean promptChat(NPC who) {
 		si.saveBuffer();
 		boolean ret = ((GFXDisplay)Display.thus).showTextBoxPrompt(who.getTalkMessage(), 280, 30, 330, 170);
@@ -520,6 +516,7 @@ public class GFXUserInterface extends UserInterface {
 		si.restore();
 		return ret;
 	}
+
 
 	// Drawing Methods
 	public void drawEffect(Effect what) {
@@ -533,8 +530,9 @@ public class GFXUserInterface extends UserInterface {
 			((GFXEffect)what).drawEffect(this, si);
 		}
 	}
-	
-	public boolean isOnFOVMask(int x, int y){
+
+
+	public boolean isOnFOVMask(int x, int y) {
 		return FOVMask[x][y];
 	}
 
@@ -731,8 +729,8 @@ public class GFXUserInterface extends UserInterface {
 					if (mask != null) {
 						si.getGraphics2D().setColor(mask);
 						si.getGraphics2D().fillRect(
-							(PC_POS.x-xrange+x)*STANDARD_WIDTH + gfxConf.cameraPosition.x,
-							(PC_POS.y-yrange+y)*STANDARD_WIDTH + gfxConf.cameraPosition.y,
+							(PC_POS.x-xrange+x)*STANDARD_WIDTH + conf.cameraPosition.x,
+							(PC_POS.y-yrange+y)*STANDARD_WIDTH + conf.cameraPosition.y,
 							STANDARD_WIDTH, STANDARD_WIDTH);
 					}
 				}
@@ -768,7 +766,8 @@ public class GFXUserInterface extends UserInterface {
 		Debug.exitMethod();
 	}
 	
-	public void addMessage(Message message){
+	
+	public void addMessage(Message message) {
 		Debug.enterMethod(this, "addMessage", message);
 		if (eraseOnArrival){
 			messageBox.clear();
@@ -880,7 +879,7 @@ public class GFXUserInterface extends UserInterface {
 		int barWidth = 6 * 20;	// 20 steps, 6 pixels wide each.
 
 		// ( x of the 'timeOfDay' indicator, to the right of here)
-		int timeTileX = gfxConf.screenWidth - 77;
+		int timeTileX = conf.screenWidth - 77;
 		
 		int barX = timeTileX - 20 - barWidth,
 		//int barX = gfxConf.screenWidth - 135,
@@ -914,7 +913,7 @@ public class GFXUserInterface extends UserInterface {
 			break;
 		}
 		//1024... 759? That's 265px right from the right-edge.
-		int timeTileX = gfxConf.screenWidth - 77;
+		int timeTileX = conf.screenWidth - 77;
 		
 		// this seems obsolete feature code?
 //		si.drawImage(759, 35, TILE_TIME_BACK);	// WTF was this!?
@@ -991,7 +990,7 @@ public class GFXUserInterface extends UserInterface {
 			}
 		}
 		
-		final int ww = gfxConf.screenWidth;
+		final int ww = conf.screenWidth;
 		int w3 = ww / 3;	// was using just '276'.
 		// right inset of 276 is ASSUMING a screen size of... 1024x768? i.e. 1/3 OF THE SCREEN!
 		
@@ -1020,18 +1019,18 @@ public class GFXUserInterface extends UserInterface {
 
 
 	private void initProperties() {
-		STANDARD_WIDTH = gfxConf.normalTileWidth;
+		STANDARD_WIDTH = conf.tileWidth;
 		
-		xrange = gfxConf.screenWidthInTiles;
-		yrange = gfxConf.screenHeightInTiles;
+		xrange = conf.screenWidthInTiles;
+		yrange = conf.screenHeightInTiles;
 
-		PC_POS = gfxConf.playerLocationOnScreen;
-		COLOR_WINDOW_BACKGROUND = gfxConf.windowBackgroundColour;
-		COLOR_BORDER_IN = gfxConf.borderColourInner;
-		COLOR_BORDER_OUT = gfxConf.borderColourOuter;
-		FNT_MESSAGEBOX = gfxConf.messageBoxFont;
-		FNT_PERSISTANTMESSAGEBOX = gfxConf.persistantMessageBoxFont;
-		IMG_STATUSSCR_BGROUND = gfxConf.statusScreenBackground;
+		PC_POS = conf.playerLocationOnScreen;
+		COLOR_WINDOW_BACKGROUND = conf.windowBackgroundColour;
+		COLOR_BORDER_IN = conf.borderColourInner;
+		COLOR_BORDER_OUT = conf.borderColourOuter;
+		FNT_MESSAGEBOX = conf.messageBoxFont;
+		FNT_PERSISTANTMESSAGEBOX = conf.persistantMessageBoxFont;
+		IMG_STATUSSCR_BGROUND = conf.statusScreenBackground;
 	}
 	
 	
@@ -1076,7 +1075,7 @@ public class GFXUserInterface extends UserInterface {
 			
 			BufferedImage userInterfaceTileset = Textures.UserInterfaceTileset;
 			BufferedImage viewportUserInterfaceTileset = Textures.ViewportUserInterfaceTileset;
-			int viewportUserInterfaceScale = gfxConf.viewportUserInterfaceScale;
+			int viewportUserInterfaceScale = conf.viewportUserInterfaceScale;
 			HEALTH_WHITE = ImageUtils.crearImagen(userInterfaceTileset, 198, 1, 5, 16);
 			/*HEALTH_BLUE? unneeded*/
 			HEALTH_RED = ImageUtils.crearImagen(userInterfaceTileset, 210, 1, 5, 16); 
@@ -1111,7 +1110,7 @@ public class GFXUserInterface extends UserInterface {
 			TILE_HEALTH_BACK = ImageUtils.crearImagen(userInterfaceTileset, 3, 34, 261, 24);
 			TILE_TIME_BACK  = ImageUtils.crearImagen(userInterfaceTileset, 246, 1, 22, 21);
 			
-			IMG_STATUSSCR_BGROUND = gfxConf.userInterfaceBackgroundImage;
+			IMG_STATUSSCR_BGROUND = conf.userInterfaceBackgroundImage;
 			//ImageUtils.createImage("gfx/barrett-moon_2x.gif");
 			
 			BORDER1 = ImageUtils.crearImagen(BORDERS_FILE, 34 * BORDERS_SCALE, 1 * BORDERS_SCALE, BORDERS_SIZE, BORDERS_SIZE);
@@ -1154,8 +1153,8 @@ public class GFXUserInterface extends UserInterface {
 		/*-- Init Components*/
 		messageBox = new SwingInformBox();
 
-		messageBox.setBounds(16, gfxConf.screenHeight - 10 * 24,
-			gfxConf.screenWidth - 32, 10 * 24);
+		messageBox.setBounds(16, conf.screenHeight - 10 * 24,
+			conf.screenWidth - 32, 10 * 24);
 		messageBox.setForeground(COLOR_LAST_MESSAGE);
 		messageBox.setBackground(Color.BLACK);
 		messageBox.setFont(FNT_MESSAGEBOX);
@@ -1183,7 +1182,7 @@ public class GFXUserInterface extends UserInterface {
 		psi.add(helpBox);
 		
 		persistantMessageBox = new AdornedBorderTextArea(BORDER1, BORDER2, BORDER3, BORDER4, COLOR_BORDER_IN, COLOR_BORDER_OUT, BORDERS_SIZE, BORDERS_SIZE);
-		persistantMessageBox.setBounds(gfxConf.screenWidth - 280, 90, 260, 400);
+		persistantMessageBox.setBounds(conf.screenWidth - 280, 90, 260, 400);
 		persistantMessageBox.setVisible(false);
 		persistantMessageBox.setFont(FNT_PERSISTANTMESSAGEBOX);
 		persistantMessageBox.setForeground(Color.WHITE);
@@ -1646,7 +1645,7 @@ public class GFXUserInterface extends UserInterface {
 		menuBox.setTitle("Items");
 		menuBox.setMenuItems(inventory);
 		
-		MenuBox itemUsageChoices = new MenuBox(si, this.gfxConf, null);
+		MenuBox itemUsageChoices = new MenuBox(si, this.conf, null);
 		itemUsageChoices.setItemsPerPage(6);
 		itemUsageChoices.setWidth(20);
 		itemUsageChoices.setPosition(52,15);
@@ -2273,8 +2272,8 @@ public class GFXUserInterface extends UserInterface {
 
 	public void drawImageVP(int scrX, int scrY, Image img) {
 		si.drawImage(
-			gfxConf.cameraPosition.x + scrX * this.gfxConf.cameraScale,
-			gfxConf.cameraPosition.y + scrY * this.gfxConf.cameraScale,
+			conf.cameraPosition.x + scrX * this.conf.cameraScale,
+			conf.cameraPosition.y + scrY * this.conf.cameraScale,
 			img
 		);
 	}

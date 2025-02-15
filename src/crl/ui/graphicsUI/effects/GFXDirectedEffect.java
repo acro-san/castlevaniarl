@@ -1,20 +1,20 @@
 package crl.ui.graphicsUI.effects;
 
-import crl.conf.gfx.data.GFXConfiguration;
 import sz.util.Line;
 import sz.util.Position;
 
 public abstract class GFXDirectedEffect extends GFXEffect {
+	
 	protected Line effectLine;
 	protected int depth;
 //	private Position startPosition;
 	
-	public GFXDirectedEffect(String id, GFXConfiguration configuration){
-		super(id, configuration);
+	public GFXDirectedEffect(String id) {
+		super(id);
 	}
 
-	public GFXDirectedEffect(String id, int delay, GFXConfiguration configuration){
-		super(id, delay, configuration);
+	public GFXDirectedEffect(String id, int delay) {
+		super(id, delay);
 	}
 	
 	/*public void drawEffect(GFXUserInterface ui, SwingSystemInterface si){
@@ -33,7 +33,7 @@ public abstract class GFXDirectedEffect extends GFXEffect {
 		effectLine = new Line(startPosition, toPrint);
 	}*/
 	
-	public void set(Position loc, Position startPosition, Position pivotPosition, int depth){
+	public void set(Position loc, Position startPosition, Position pivotPosition, int depth) {
 		super.set(loc);
 	///	this.startPosition = new Position(loc);
 		effectLine = new Line(startPosition, pivotPosition);

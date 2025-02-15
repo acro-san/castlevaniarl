@@ -32,8 +32,8 @@ public class GFXBeamEffect extends GFXDirectedEffect {
 		si.restore();
 	}
 
-	public GFXBeamEffect(String ID, Image[] missile, int delay, GFXConfiguration configuration){
-		super(ID, configuration);
+	public GFXBeamEffect(String ID, Image[] missile, int delay) {
+		super(ID);
 		setMissile(missile);
 		setAnimationDelay(delay);
 		

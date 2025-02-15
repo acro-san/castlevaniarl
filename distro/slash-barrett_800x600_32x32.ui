@@ -7,7 +7,6 @@ TILESET = dragontileset.gif
 TILESET_DARK = dragontileset_dark.gif
 TILESIZE = 32
 BIG_TILESIZE = 48
-HALF_TILESIZE = 16
 CELL_HEIGHT = 49
 
 PC_POS = 12,9
@@ -15,7 +14,11 @@ XRANGE = 12
 YRANGE = 9
 UPLEFTBORDER = 0
 CAMERA_POS = -24,0
+
+# *bad* that these are redeclarations of same number.
 CAMERA_SCALE = 1
+EFFECTS_SCALE = 1
+VIEWPORT_UI_SCALE = 1
 
 # Message Box 
 FNT_MESSAGEBOX = res/v5easter.ttf
@@ -97,8 +100,6 @@ SFX_EFFECTS = gfx/crl_effects.gif
 SFX_SLASHES = gfx/tempSlashes.gif
 SFX_CURVED_SLASHES = gfx/crl_slashes1.gif
 SFX_STRAIGHT_SLASHES = gfx/crl_slashes2.gif
-EFFECTS_SCALE = 1
 
 UI_TILES = gfx/barrett-interface.gif
 VIEWPORT_UI_TILES = gfx/barrett-interface.gif
-VIEWPORT_UI_SCALE = 1

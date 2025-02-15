@@ -4,15 +4,19 @@ import java.awt.Image;
 
 import sz.util.Position;
 import crl.action.Action;
-import crl.conf.gfx.data.GFXConfiguration;
 import crl.ui.graphicsUI.GFXUserInterface;
 import crl.ui.graphicsUI.SwingSystemInterface;
 
 public class GFXMeleeEffect extends GFXDirectionalEffect {
-	private Image[] missile;
-
 	
-	public void drawEffect(GFXUserInterface ui, SwingSystemInterface si){
+	private Image[] missile;
+	
+	public GFXMeleeEffect(String ID, Image[] missile, int delay) {
+		super(ID, delay);
+		setMissile(missile);
+	}
+
+	public void drawEffect(GFXUserInterface ui, SwingSystemInterface si) {
 		Image icon = null;
 		si.saveBuffer();
 		setAnimationDelay(animationDelay);
@@ -50,11 +54,12 @@ public class GFXMeleeEffect extends GFXDirectionalEffect {
 		}
 			
 		Position runner = new Position(getPosition());
-		for (int i = 0; i < depth; i++){
+		for (int i = 0; i < depth; i++) {
 			runner.add(var);
 			int height = 0;
-			if (ui.getPlayer().level.getMapCell(runner) != null)
+			if (ui.getPlayer().level.getMapCell(runner) != null) {
 				height = ui.getPlayer().level.getMapCell(runner).getHeight();
+			}
 			Position relative = Position.subs(runner, ui.getPlayer().pos);
 			Position toPrint = Position.add(ui.PC_POS, relative);
 			/*if (!ui.insideViewPort(toPrint))
@@ -67,12 +72,10 @@ public class GFXMeleeEffect extends GFXDirectionalEffect {
 		
 	}
 
-	public GFXMeleeEffect(String ID, Image[] missile, int delay, GFXConfiguration configuration){
-		super(ID, delay, configuration);
-		setMissile(missile);
-	}
 
 	public void setMissile(Image[] value) {
 		missile = value;
-	} 
+	}
+
+
 }

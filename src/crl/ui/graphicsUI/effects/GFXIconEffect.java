@@ -3,18 +3,17 @@ package crl.ui.graphicsUI.effects;
 import java.awt.Image;
 
 import sz.util.Position;
-import crl.conf.gfx.data.GFXConfiguration;
 import crl.ui.graphicsUI.GFXUserInterface;
 import crl.ui.graphicsUI.SwingSystemInterface;
 
 public class GFXIconEffect extends GFXEffect{
 	private Image tile;
 
-    public GFXIconEffect(String ID, Image tile, int delay, GFXConfiguration configuration){
-    	super(ID, configuration);
+	public GFXIconEffect(String ID, Image tile, int delay) {
+		super(ID);
 		this.tile = tile;
 		setAnimationDelay(delay);
-    }
+	}
 
 	public void drawEffect(GFXUserInterface ui, SwingSystemInterface si){
 		si.saveBuffer();

@@ -105,8 +105,8 @@ public class GFXDirectionalMissileEffect extends GFXDirectedEffect {
 		setAnimationDelay(animationDelay * 36);*/
 	}
 
-	public GFXDirectionalMissileEffect(String ID, Image[] missile, int delay, GFXConfiguration configuration){
-		super(ID, delay, configuration);
+	public GFXDirectionalMissileEffect(String ID, Image[] missile, int delay) {
+		super(ID, delay);
 		setMissile(missile);
 	}
 

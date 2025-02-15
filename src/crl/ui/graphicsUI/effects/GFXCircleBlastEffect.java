@@ -13,14 +13,19 @@ import crl.ui.graphicsUI.SwingSystemInterface;
 public class GFXCircleBlastEffect extends GFXEffect {
 	private Color blastColor;
 	private static final int ADVANCE = 9;
+	
+	// Only needed at render time to draw the effect at proper position on
+	// screen. So: UNIMPORTANT for the *data definition* of the EFFECT.
+///	private GFXConfiguration conf;
 
-	public GFXCircleBlastEffect(String ID, Color blastColor, int delay, GFXConfiguration configuration) {
-		super(ID, delay, configuration);
+	public GFXCircleBlastEffect(String ID, Color blastColor, int delay) {
+		super(ID, delay);
 		this.blastColor = blastColor;
+	//	conf = configuration;
 	}
 
 
-	public void drawEffect(GFXUserInterface ui, SwingSystemInterface si){
+	public void drawEffect(GFXUserInterface ui, SwingSystemInterface si) {
 		ui.refresh();
 		si.saveBuffer();
 		Position relative = Position.subs(getPosition(), ui.getPlayer().pos);
@@ -29,8 +34,13 @@ public class GFXCircleBlastEffect extends GFXEffect {
 		Stroke oldStroke = g.getStroke();
 		g.setStroke(new BasicStroke(10));
 		g.setColor(blastColor);
-		int xcenter = center.x * configuration.normalTileWidth + configuration.halfTileWidth;
-		int ycenter = center.y * configuration.normalTileWidth + configuration.halfTileWidth;
+		
+		final int
+			tw = ui.conf.tileWidth,
+			halfw = tw / 2;
+		
+		int xcenter = center.x * tw + halfw;
+		int ycenter = center.y * tw + halfw;
 		for (int i = 0; i < 30; i++){
 			g.fillOval(xcenter-i*(ADVANCE+i), ycenter-i*(ADVANCE+i),i*(ADVANCE+i)*2,i*(ADVANCE+i)*2);
 			si.refresh();

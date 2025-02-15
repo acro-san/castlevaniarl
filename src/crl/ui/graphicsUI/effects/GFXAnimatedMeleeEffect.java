@@ -4,15 +4,22 @@ import java.awt.image.BufferedImage;
 
 import sz.util.Position;
 import crl.action.Action;
-import crl.conf.gfx.data.GFXConfiguration;
 import crl.ui.graphicsUI.GFXUserInterface;
 import crl.ui.graphicsUI.SwingSystemInterface;
 
-public class GFXAnimatedMeleeEffect extends GFXDirectionalEffect{
+public class GFXAnimatedMeleeEffect extends GFXDirectionalEffect {
+	
 	private BufferedImage[][] frames;
 	private Position[][] variations;
 
-	public void drawEffect(GFXUserInterface ui, SwingSystemInterface si){
+	public GFXAnimatedMeleeEffect(String ID, BufferedImage[][] frames, Position vars[][], int delay) {
+		super(ID, delay);
+		setMissile(frames);
+		variations = vars;
+	}
+	
+	
+	public void drawEffect(GFXUserInterface ui, SwingSystemInterface si) {
 		BufferedImage[] sequence = null;
 		Position[] vars = null;
 		si.saveBuffer();
@@ -77,13 +84,10 @@ public class GFXAnimatedMeleeEffect extends GFXDirectionalEffect{
 		}
 	}
 
-	public GFXAnimatedMeleeEffect(String ID, BufferedImage[][] frames, Position vars[][], int delay, GFXConfiguration configuration){
-		super(ID, delay, configuration);
-		setMissile(frames);
-		variations = vars;
-	}
 
 	public void setMissile(BufferedImage[][] frames) {
 		this.frames = frames;
-	} 
+	}
+
+
 }

@@ -3,7 +3,6 @@ package crl.ui.graphicsUI.effects;
 import java.awt.Image;
 
 import sz.util.Position;
-import crl.conf.gfx.data.GFXConfiguration;
 import crl.ui.graphicsUI.GFXUserInterface;
 import crl.ui.graphicsUI.SwingSystemInterface;
 
@@ -12,13 +11,13 @@ public class GFXAnimatedEffect extends GFXEffect {
 	
 	private int xoff, yoff;
 	
-	public GFXAnimatedEffect(String ID, Image[] frames, int delay, GFXConfiguration configuration){
-		super (ID, delay, configuration);
+	public GFXAnimatedEffect(String ID, Image[] frames, int delay) {
+		super (ID, delay);	//configurationGFXConfiguration configuration
 		this.frames = frames;
 	}
 	
-	public GFXAnimatedEffect(String ID, Image[] frames, int delay, int xoff, int yoff, GFXConfiguration configuration){
-		this (ID, frames, delay, configuration);
+	public GFXAnimatedEffect(String ID, Image[] frames, int delay, int xoff, int yoff) {
+		this (ID, frames, delay);	//GFXConfiguration configuration
 		this.xoff = xoff;
 		this.yoff = yoff;
 	}

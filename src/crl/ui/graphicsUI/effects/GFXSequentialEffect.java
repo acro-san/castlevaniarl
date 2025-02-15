@@ -3,7 +3,6 @@ package crl.ui.graphicsUI.effects;
 import java.awt.Image;
 
 import sz.util.Position;
-import crl.conf.gfx.data.GFXConfiguration;
 import crl.ui.graphicsUI.GFXUserInterface;
 import crl.ui.graphicsUI.SwingSystemInterface;
 
@@ -16,8 +15,8 @@ public class GFXSequentialEffect extends GFXEffect {
 
 	// KEY QUESTION: Why do the EFFECT DEFINITIONS require a 'GraphicsConfiguration'!?????
 	// That seems like a re-entrant (wrong direction) dependency.
-	public GFXSequentialEffect(String ID, Position[] sequence, Image[] tiles, int delay, GFXConfiguration configuration) {
-		super(ID, configuration);
+	public GFXSequentialEffect(String ID, Position[] sequence, Image[] tiles, int delay) {
+		super(ID);
 		setAnimationDelay(delay);
 		this.tiles = tiles;
 		this.sequence = sequence;

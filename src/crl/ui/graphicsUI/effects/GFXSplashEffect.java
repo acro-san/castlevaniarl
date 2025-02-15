@@ -3,7 +3,6 @@ package crl.ui.graphicsUI.effects;
 import java.awt.Image;
 
 import sz.util.Position;
-import crl.conf.gfx.data.GFXConfiguration;
 import crl.ui.graphicsUI.GFXUserInterface;
 import crl.ui.graphicsUI.SwingSystemInterface;
 
@@ -11,8 +10,8 @@ public class GFXSplashEffect extends GFXEffect {
 
 	private Image[] tiles;
 
-	public GFXSplashEffect(String ID, Image[] tiles, int delay, GFXConfiguration configuration){
-		super(ID, delay, configuration);
+	public GFXSplashEffect(String ID, Image[] tiles, int delay) {
+		super(ID, delay);
 		this.tiles = tiles;
 	}
 	

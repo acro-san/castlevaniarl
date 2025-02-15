@@ -9,35 +9,40 @@ import crl.ui.graphicsUI.*;
 
 public class GFXAppearances {
 	
-	private int UI_SCALE;
-	private int WIDTH_HALF;
-	private int WIDTH_NORMAL;
-	private int WIDTH_BIG;
-	private int CELL_HEIGHT;
+//	private int UI_SCALE;
+///	private int WIDTH_HALF;
+	//private int WIDTH_NORMAL;
+//	private int WIDTH_BIG;
+//	private int CELL_HEIGHT;
 
 	private final static int
 		ICON_SIZE = 16;	// hardcoded...
 	
-	protected GFXConfiguration configuration;
+	protected GFXConfiguration conf;
+	
+	private Appearance[] defs;
 	
 	public GFXAppearances(GFXConfiguration configuration) {
-		this.configuration = configuration;
+		this.conf = configuration;
 		
-		WIDTH_BIG = configuration.bigTileWidth;
-		WIDTH_HALF = configuration.halfTileWidth;
-		UI_SCALE = configuration.viewportUserInterfaceScale;
+	//	WIDTH_BIG = configuration.bigTileWidth;
+	//	WIDTH_NORMAL = configuration.tileWidth;
+
+//		UI_SCALE = configuration.viewportUserInterfaceScale;
 //		WIDTH_QUARTER = (int)Math.floor(configuration.halfTileWidth / 2);
-		CELL_HEIGHT = configuration.cellHeight;
-		WIDTH_NORMAL = configuration.normalTileWidth;
+//		CELL_HEIGHT = configuration.cellHeight;
 		
 		setAppearances();
 	}
 	
 	
-	private Appearance[] defs;
 	
 	
 	protected void setAppearances() {
+		final int
+			tw = conf.tileWidth,
+			halfw = conf.tileWidth / 2;
+		
 	///	Textures imgConfig = configuration.textures;
 		defs = new Appearance[] {
 		createTAppearance("VOID", 4,5),
@@ -500,7 +505,6 @@ public class GFXAppearances {
 		createAppearance("DOPPELGANGER", Textures.MonstersImage, 6, 5), /*Pending*/
 		
 		
-		
 		createAppearance("S_CAT", Textures.MonstersImage, 5, 9),
 		createAppearance("S_BIRD", Textures.MonstersImage, 6, 9),
 		createAppearance("S_TURTLE", Textures.MonstersImage, 7, 9),
@@ -513,24 +517,24 @@ public class GFXAppearances {
 		createXAppearance("CANDLE",
 			Textures.FeaturesImage,
 			0,
-			7 * WIDTH_HALF,
-			WIDTH_HALF,
-			WIDTH_NORMAL
-		), 
+			7 * halfw,
+			halfw,
+			tw
+		),
 		createXAppearance("URN_FLAME",
 			Textures.FeaturesImage,
-			2 * WIDTH_HALF,
-			7 * WIDTH_HALF,
-			WIDTH_HALF,
-			WIDTH_NORMAL,
+			2 * halfw,
+			7 * halfw,
+			halfw,
+			tw,
 			12
 		),
 		createAppearance("FLAME",
 			Textures.EffectsImage,
-			13 * WIDTH_NORMAL,
-			14 * WIDTH_NORMAL,
-			WIDTH_NORMAL,
-			WIDTH_NORMAL,
+			13 * tw,
+			14 * tw,
+			tw,
+			tw,
 			0,
 			0
 		),
@@ -628,10 +632,11 @@ public class GFXAppearances {
 		xpos--;
 		ypos--;
 		
+		final int TW = conf.tileWidth;
+		
 		try {
 			BufferedImage img = ImageUtils.crearImagen(bigImage,
-					xpos*WIDTH_NORMAL, ypos*WIDTH_NORMAL,
-					WIDTH_NORMAL, WIDTH_NORMAL);
+				xpos*TW, ypos*TW, TW, TW);
 			GFXAppearance ret = new GFXAppearance(ID, img, 0, 0);
 			return ret;
 		} catch (Exception e) {
@@ -679,14 +684,18 @@ public class GFXAppearances {
 		BufferedImage bigNiteImage = Textures.NightTerrainImage;
 		BufferedImage bigDarkNiteImage = Textures.DarkNightTerrainImage;
 		
+		final int
+			TW = conf.tileWidth,
+			CH = conf.cellHeight;
 		try {
-			BufferedImage img = ImageUtils.crearImagen(bigImage, xpos*WIDTH_NORMAL, ypos*CELL_HEIGHT, WIDTH_NORMAL, CELL_HEIGHT);
-			BufferedImage darkimg = ImageUtils.crearImagen(bigDarkImage, xpos*WIDTH_NORMAL, ypos*CELL_HEIGHT, WIDTH_NORMAL, CELL_HEIGHT);
-			BufferedImage niteimg = ImageUtils.crearImagen(bigNiteImage, xpos*WIDTH_NORMAL, ypos*CELL_HEIGHT, WIDTH_NORMAL, CELL_HEIGHT);
-			BufferedImage darkniteimg = ImageUtils.crearImagen(bigDarkNiteImage, xpos*WIDTH_NORMAL, ypos*CELL_HEIGHT, WIDTH_NORMAL, CELL_HEIGHT);
-			GFXAppearance ret = new GFXAppearance(ID, img, darkimg, niteimg, darkniteimg, 0,0);
-			return ret;
-		} catch (Exception e){
+			BufferedImage
+				img = ImageUtils.crearImagen(bigImage, xpos*TW, ypos*CH, TW, CH),
+			darkimg = ImageUtils.crearImagen(bigDarkImage, xpos*TW, ypos*CH, TW, CH),
+			niteimg = ImageUtils.crearImagen(bigNiteImage, xpos*TW, ypos*CH, TW, CH),
+			darkniteimg = ImageUtils.crearImagen(bigDarkNiteImage, xpos*TW, ypos*CH, TW, CH);
+			return new GFXAppearance(ID, img, darkimg, niteimg, darkniteimg, 0,0);
+			
+		} catch (Exception e) {
 			Game.crash("Error loading terrain image ", e);
 		}
 		return null;
@@ -701,15 +710,18 @@ public class GFXAppearances {
 		BufferedImage bigDarkImage = Textures.DarkTerrainImage;
 		BufferedImage bigNiteImage = Textures.NightTerrainImage;
 		BufferedImage bigDarkNiteImage = Textures.DarkNightTerrainImage;
-		
+		final int
+			TW = conf.tileWidth,
+			CH = conf.cellHeight,
+			UIS= conf.viewportUserInterfaceScale;
 		try {
-			BufferedImage img = ImageUtils.crearImagen(bigImage, xpos*WIDTH_NORMAL, ypos*CELL_HEIGHT, WIDTH_NORMAL, CELL_HEIGHT);
-			BufferedImage darkimg = ImageUtils.crearImagen(bigDarkImage, xpos*WIDTH_NORMAL, ypos*CELL_HEIGHT, WIDTH_NORMAL, CELL_HEIGHT);
-			BufferedImage niteimg = ImageUtils.crearImagen(bigNiteImage, xpos*WIDTH_NORMAL, ypos*CELL_HEIGHT, WIDTH_NORMAL, CELL_HEIGHT);
-			BufferedImage darkniteimg = ImageUtils.crearImagen(bigDarkNiteImage, xpos*WIDTH_NORMAL, ypos*CELL_HEIGHT, WIDTH_NORMAL, CELL_HEIGHT);
-			GFXAppearance ret = new GFXAppearance(ID, img, darkimg, niteimg, darkniteimg, xoff * UI_SCALE, yoff * UI_SCALE);
-			return ret;
-		} catch (Exception e){
+			BufferedImage
+				img = ImageUtils.crearImagen(bigImage, xpos*TW, ypos*CH, TW, CH),
+				darkimg = ImageUtils.crearImagen(bigDarkImage, xpos*TW, ypos*CH, TW, CH);
+			BufferedImage niteimg = ImageUtils.crearImagen(bigNiteImage, xpos*TW, ypos*CH, TW, CH);
+			BufferedImage darkniteimg = ImageUtils.crearImagen(bigDarkNiteImage, xpos*TW, ypos*CH, TW, CH);
+			return new GFXAppearance(ID, img, darkimg, niteimg, darkniteimg, xoff * UIS, yoff * UIS);
+		} catch (Exception e) {
 			Game.crash("Error loading terrain image ", e);
 		}
 		return null;
@@ -719,11 +731,12 @@ public class GFXAppearances {
 	public GFXAppearance createBAppearance(String ID, BufferedImage bigImage, int xpos, int ypos) {
 		xpos--;
 		ypos--;
+		final int BTW = conf.bigTileWidth;
 		try {
-			BufferedImage img = ImageUtils.crearImagen(bigImage, xpos*WIDTH_BIG, ypos*WIDTH_BIG, WIDTH_BIG, WIDTH_BIG);
-			GFXAppearance ret = new GFXAppearance(ID, img, 8, 16);
+			BufferedImage img = ImageUtils.crearImagen(bigImage, xpos*BTW, ypos*BTW, BTW, BTW);
+			GFXAppearance ret = new GFXAppearance(ID, img, 8, 16);	// ?!?!
 			return ret;
-		} catch (Exception e){
+		} catch (Exception e) {
 			Game.crash("Error loading image ", e);
 		}
 		return null;
@@ -741,8 +754,9 @@ public class GFXAppearances {
 		
 		xpos--;
 		ypos--;
+		final int HW = conf.tileWidth / 2;	// halfw
 		try {
-			BufferedImage img = ImageUtils.crearImagen(bigImage, xpos*WIDTH_HALF, ypos*WIDTH_HALF, WIDTH_HALF, WIDTH_HALF);
+			BufferedImage img = ImageUtils.crearImagen(bigImage, xpos*HW, ypos*HW, HW, HW);
 			BufferedImage iconImg = ImageUtils.crearImagen(
 				iconImage, xpos * ICON_SIZE, ypos * ICON_SIZE, ICON_SIZE, ICON_SIZE);
 			GFXAppearance ret = new GFXAppearance(ID, img, iconImg, -8, -8);
