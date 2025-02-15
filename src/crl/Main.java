@@ -15,8 +15,6 @@ import java.util.Properties;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 
-import org.apache.commons.httpclient.HttpException;
-
 import sz.csi.CharKey;
 import sz.csi.ConsoleSystemInterface;
 import sz.csi.jcurses.JCursesConsoleInterface;
@@ -165,8 +163,8 @@ public class Main {
 					
 					// chicken-in-egg messy OOP init:
 					efx = new GFXEffectFactory();
-					GFXEffect[] gef = new GFXEffects(gfx_configuration).effects;
-					((GFXEffectFactory)efx).setEffects(gef);
+					GFXEffect[] fxDefs = new GFXEffects(gfx_configuration.effectsScale).effects;
+					((GFXEffectFactory)efx).setEffects(fxDefs);
 					
 					initializeUI(si);
 					break;
@@ -184,8 +182,9 @@ public class Main {
 					ui = new ConsoleUserInterface();
 					Display.thus = new CharDisplay(csi);
 					PlayerGenerator.thus = new CharPlayerGenerator(csi);
+					//messy oop init:
 					efx = new CharEffectFactory();
-					((CharEffectFactory)efx).setEffects(new CharEffects().getEffects());
+					((CharEffectFactory)efx).setEffects(CharEffects.effects);
 					initializeUI(csi);
 					break;
 				case SWING_CONSOLE:
@@ -197,8 +196,9 @@ public class Main {
 					
 					Display.thus = new CharDisplay(csi);
 					PlayerGenerator.thus = new CharPlayerGenerator(csi);
+					//messy oop init:
 					efx = new CharEffectFactory();
-					((CharEffectFactory)efx).setEffects(new CharEffects().getEffects());
+					((CharEffectFactory)efx).setEffects(CharEffects.effects);
 					initializeUI(csi);
 				}
 			} catch (Exception e) {
@@ -246,22 +246,14 @@ public class Main {
 			Player.initializeWhips("LEATHER_WHIP", "CHAIN_WHIP", "VKILLERW","THORN_WHIP", "FLAME_WHIP", "LIT_WHIP");
 			
 			if (CHECK_WEB_FOR_NEW_VERSION) {
-				try {
-					GameVersion latestVersion = GameVersion.getLatestVersion();
-					if (latestVersion == null){
-						ui.showVersionDialog("Error checking for updates.", true);
-						System.err.println("null latest version");
-					} else if (latestVersion.equals(GameVersion.getCurrentVersion())){
-						ui.showVersionDialog("You are using the latest available version", false);
-					} else {
-						ui.showVersionDialog("A newer version, "+latestVersion.getCode()+" from "+latestVersion.getFormattedDate()+" is available!", true);
-					}
-				} catch (HttpException ex) {
-					ui.showVersionDialog("Error checking for updates.", true);
-					ex.printStackTrace();
-				} catch (IOException ex) {
-					ui.showVersionDialog("Error checking for updates.", true);
-					ex.printStackTrace();
+				GameVersion webVersion = GameVersion.getWebLatestVersion();
+				if (webVersion == null) {
+					ui.showVersionDialog("Error checking web for updates.", true);
+					//System.err.println("null latest version");
+				} else if (webVersion.equals(GameVersion.currentVersion)) {
+					ui.showVersionDialog("You are using the latest available version", false);
+				} else {
+					ui.showVersionDialog("A newer version, "+webVersion.getCode()+" from "+webVersion.getFormattedDate()+" is available!", true);
 				}
 			}
 			createNew = false;
@@ -278,7 +270,7 @@ public class Main {
 			System.exit(-1);
 		}
 
-		if (uiMode == SWING_GFX){
+		if (uiMode == SWING_GFX) {
 			UIconfiguration = new Properties();
 			try {
 				UIconfiguration.load(new FileInputStream(uiFile));
@@ -287,9 +279,7 @@ public class Main {
 				System.exit(-1);
 			}
 		}
-
 	}
-	
 	
 	
 	private static void title() {
@@ -516,7 +506,7 @@ public class Main {
 				new UserAction(get, i(keyBindings.getProperty("GET2_KEY"))),
 			};
 
-			userCommands = new UserCommand[]{
+			userCommands = new UserCommand[] {
 				new UserCommand(CommandListener.PROMPTQUIT, i(keyBindings.getProperty("QUIT_KEY"))),
 				new UserCommand(CommandListener.HELP, i(keyBindings.getProperty("HELP1_KEY"))),
 				new UserCommand(CommandListener.LOOK, i(keyBindings.getProperty("LOOK_KEY"))),
@@ -531,7 +521,6 @@ public class Main {
 				new UserCommand(CommandListener.EXAMINELEVELMAP, i(keyBindings.getProperty("EXAMINE_LEVEL_MAP_KEY"))),
 				new UserCommand(CommandListener.SWITCHMUSIC, i(keyBindings.getProperty("SWITCH_MUSIC_KEY"))),
 			};
-			
 			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -616,8 +605,7 @@ public class Main {
 	}
 	
 	private static void initializeCAppearances() {
-		Appearance[] definitions = new CharAppearances().getAppearances();
-		for (Appearance a: definitions) {
+		for (Appearance a: CharAppearances.defs) {
 			appearances.put(a.getID(), a);
 		}
 	}
@@ -636,8 +624,9 @@ public class Main {
 			new Teleport(),
 			new MandragoraScream()
 		};
-		for (int i = 0; i < definitions.length; i++)
+		for (int i = 0; i < definitions.length; i++) {
 			af.addDefinition(definitions[i]);
+		}
 	}
 	
 	private static void initializeCells() {
@@ -704,7 +693,7 @@ public class Main {
 
 	private static Hashtable<String,MonsterRecord> monsterRecord;
 
-	public static MonsterRecord getMonsterRecordFor(String monsterID){
+	public static MonsterRecord getMonsterRecordFor(String monsterID) {
 		return monsterRecord.get(monsterID);
 	}
 

@@ -1,34 +1,33 @@
 package crl.game;
 
-import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
-
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.methods.GetMethod;
-
+import javax.net.ssl.HttpsURLConnection;
 
 public class GameVersion {
-	private static final GameVersion currentVersion = new GameVersion("0.8.3", 2024, 4, 22);
 	
-	public static GameVersion getCurrentVersion(){
-		return currentVersion;
-	}
-
-	public GameVersion(String code, int year, int month, int date) {
+	public static final GameVersion
+		currentVersion = new GameVersion("0.8.3", 2024, 4, 22);
+	
+	
+	public GameVersion(String code, int year, int month, int day) {
 		this.code = code;
 		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-		c.set(year, month, date);
+		c.set(year, month, day);
 		this.date = c.getTime();
 	}
 
 	@Override
-	public boolean equals(Object arg0)
-	{
-		return ((GameVersion) arg0).getCode().equals(code);
+	public boolean equals(Object o) {
+		return ((GameVersion)o).getCode().equals(code);
 	}
 
 	private String code;
@@ -40,25 +39,57 @@ public class GameVersion {
 
 	private DateFormat sdf = DateFormat.getDateInstance(DateFormat.MEDIUM);
 
-	public String getFormattedDate(){
+	public String getFormattedDate() {
 		return sdf.format(date);
 	}
 
-	public static GameVersion getLatestVersion() throws HttpException, IOException
-	{
-		String url = "http://slashie.net/cvrl/latestVersion.txt";
-		HttpClient client = new HttpClient();
-		GetMethod latestVersion = new GetMethod(url);
-		client.executeMethod(latestVersion);
-		String str = latestVersion.getResponseBodyAsString();
-		String[] info = str.split(",");
-		latestVersion.releaseConnection();
-		try {
-			return new GameVersion(info[0], Integer.parseInt(info[1]), Integer.parseInt(info[2]), Integer.parseInt(info[3]));
+
+	public static GameVersion getWebLatestVersion() {
+		String uri = "http://slashie.net/cvrl/latestVersion.txt";
+		String str = httpsGet(uri);
+		if (str == null) {
+			return null;
 		}
-		catch (NumberFormatException e) {
+		String[] info = str.split(",");
+		try {
+			return new GameVersion(
+				info[0],
+				Integer.parseInt(info[1]),	// year
+				Integer.parseInt(info[2]),	// month
+				Integer.parseInt(info[3]));	// day of month
+		} catch (NumberFormatException e) {
 			System.out.println("Invalid content for latest version URL: " + str);
 			return null;
 		}
 	}
+	
+	private static final String httpsGet(String targetURI) {
+		HttpsURLConnection conn = null;
+		try {
+			URI uri = new URI(targetURI);
+			URL url = uri.toURL();
+			conn = (HttpsURLConnection)url.openConnection();
+			InputStream is = conn.getInputStream();
+			BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+			StringBuilder response = new StringBuilder();
+			String line;
+			while ((line = rd.readLine()) != null) {
+				response.append(line);
+				response.append('\r');
+			}
+			rd.close();
+			return response.toString();
+		} catch (URISyntaxException urise) {
+			urise.printStackTrace();
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (conn != null) {
+				conn.disconnect();
+			}
+		}
+	}
+	
 }

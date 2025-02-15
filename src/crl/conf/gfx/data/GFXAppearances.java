@@ -9,12 +9,6 @@ import crl.ui.graphicsUI.*;
 
 public class GFXAppearances {
 	
-//	private int UI_SCALE;
-///	private int WIDTH_HALF;
-	//private int WIDTH_NORMAL;
-//	private int WIDTH_BIG;
-//	private int CELL_HEIGHT;
-
 	private final static int
 		ICON_SIZE = 16;	// hardcoded...
 	
@@ -24,13 +18,6 @@ public class GFXAppearances {
 	
 	public GFXAppearances(GFXConfiguration configuration) {
 		this.conf = configuration;
-		
-	//	WIDTH_BIG = configuration.bigTileWidth;
-	//	WIDTH_NORMAL = configuration.tileWidth;
-
-//		UI_SCALE = configuration.viewportUserInterfaceScale;
-//		WIDTH_QUARTER = (int)Math.floor(configuration.halfTileWidth / 2);
-//		CELL_HEIGHT = configuration.cellHeight;
 		
 		setAppearances();
 	}

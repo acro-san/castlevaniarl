@@ -671,7 +671,7 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 	}
 	
 	public static String getVersion() {
-		return GameVersion.getCurrentVersion().getCode();
+		return GameVersion.currentVersion.getCode();
 	}
 	
 	public void setInterfaces(UserInterface pui, UISelector ps) {

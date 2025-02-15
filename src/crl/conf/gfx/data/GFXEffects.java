@@ -32,10 +32,13 @@ public class GFXEffects {
 	private BufferedImage[][] STR_FRAMES;
 	private Position[][] CURVED_VARS;
 	
-	private GFXConfiguration configuration;
+//	private GFXConfiguration configuration;
+	private int effectsScale = 1;
 	
-	public GFXEffects(GFXConfiguration configuration) {
-		this.configuration = configuration;
+	// GFXConfiguration configuration
+	public GFXEffects(int fxScale) {
+		this.effectsScale = fxScale;
+		//this.configuration = configuration;
 		IMG_EFFECTS = Textures.effectsImage;
 		initAnimations();
 		loadEffects();
@@ -98,7 +101,7 @@ public class GFXEffects {
 	}
 
 	private BufferedImage createSlashFrame(BufferedImage tileset, int baseX, int baseY, int baseWidth, int baseHeight) {
-		int effectsScale = configuration.effectsScale;
+		//int effectsScale = configuration.effectsScale;
 		try {
 			return ImageUtils.crearImagen(
 				tileset,
@@ -267,7 +270,7 @@ public class GFXEffects {
 	}
 	
 	private BufferedImage[] load(int frames, int xpos, int ypos) {
-		int effectsScale = configuration.effectsScale;
+		///int effectsScale = configuration.effectsScale;
 		BufferedImage[] ret = new BufferedImage[frames];
 		for (int x = 0; x < frames; x++) {
 			try {
@@ -285,7 +288,7 @@ public class GFXEffects {
 	}
 	
 	private BufferedImage[] loadSame(BufferedImage file, int times, int xpos, int ypos) {
-		int effectsScale = this.configuration.effectsScale;
+		///int effectsScale = configuration.effectsScale;
 		BufferedImage[] ret = new BufferedImage[times];
 		for (int x = 0; x < times; x++){
 			try {
@@ -300,7 +303,7 @@ public class GFXEffects {
 
 	
 	private BufferedImage[] loadMaterialize() {
-		int effectsScale = configuration.effectsScale;
+		//int effectsScale = configuration.effectsScale;
 		try {
 			BufferedImage[] ret = {
 				ImageUtils.crearImagen(IMG_EFFECTS, 0 * effectsScale, 485 * effectsScale, 40 * effectsScale,59 * effectsScale),
@@ -315,7 +318,7 @@ public class GFXEffects {
 	}
 	
 	private BufferedImage[] loadVanish() {
-		int effectsScale = this.configuration.effectsScale;
+		///int effectsScale = configuration.effectsScale;
 		try {
 			BufferedImage[] ret = {
 				ImageUtils.crearImagen(IMG_EFFECTS, 129 * effectsScale, 485 * effectsScale, 40 * effectsScale,59 * effectsScale),
@@ -380,6 +383,7 @@ public class GFXEffects {
 			new GFXAnimatedMissileEffect("SFX_AXE", load8(0,11), 30),
 			
 			new GFXAnimatedEffect("SFX_HOLY_RAINDROP",load2(4,0), 25),
+			new GFXSplashEffect("SFX_HOLY_RAINSPLASH",new Image[]{load1(4,0)[0], load1(5,0)[0],load1(4,0)[0],load1(5,0)[0]},50), /*load 3 frames*/
 			// En Target.java : 60 "SFX_"+weaponDef.getID()
 			// En MonsterMissile.java : 48 "SFX_MONSTER_ID_"+aMonster.getID()
 			
@@ -409,14 +413,9 @@ public class GFXEffects {
 			new GFXSplashEffect("SFX_SHADOW_EXTINCTION",load2(12,15),70), /*load 4 frames*/
 			new GFXSplashEffect("SFX_HOLY_FLAME",load2(12,14),20), /*load 3 frames*/
 			new GFXSplashEffect("SFX_MANDRAGORA_SCREAM",loadSame(Textures.MonstersImage, MandragoraScream.SCREAM_RANGE, 8,6),120),
-			new GFXSplashEffect("SFX_HOLY_RAINSPLASH",new Image[]{load1(4,0)[0], load1(5,0)[0],load1(4,0)[0],load1(5,0)[0]},50), /*load 3 frames*/
 			new GFXSplashEffect("SFX_DOVE_BLAST",load8(8,13),20),
 			new GFXSplashEffect("SFX_CRYSTAL_BLAST",load2(10,14),30), /*load 4 frames*/
-			
-			// OK. These circleblast effects need the gfxConfiguration...
-			// purely so they get a ref to find out the gfx 'Normal Tile Size'
-			// later (at render time). That's baloney. must be able to get that
-			// conf at render time, somehow.
+
 			new GFXCircleBlastEffect("SFX_BOSS_DEATH",Color.YELLOW,10), /*pending*/
 			new GFXCircleBlastEffect("SFX_ROSARY_BLAST",Color.WHITE,10), /*pending*/
 			new GFXCircleBlastEffect("SFX_KILL_CHRIS",Color.MAGENTA,20), /*pending*/
@@ -425,22 +424,18 @@ public class GFXEffects {
 			new GFXCircleBlastEffect("SFX_SOUL_FLAME",Color.RED,20), /*pending*/
 			new GFXCircleBlastEffect("SFX_SOUL_BLAST",Color.WHITE,20), /*pending*/
 			
-			
 			//Melee Effects
 			//En MonsterMissile.java  : 45 "SFX_MONSTER_ID_"+aMonster.getID()
 			//En Attack.java : 116 "SFX_"+weaponDef.getID()
 			
-			//Sequential Effects
-			
-			
-			//Tile Effects
-			//new GFXIconEffect("SFX_SHADOW_FLARE",load1(8,15)[0], 150),
+			// Tile Effects
+			// new GFXIconEffect("SFX_SHADOW_FLARE",load1(8,15)[0], 150),
 			new GFXDirectionalMissileEffect("SFX_SHADOW_FLARE", load8(8,1), 20),
 			new GFXDirectionalMissileEffect("SFX_HELLFIRE", load8(8,1), 20),
 			
 			new GFXAnimatedEffect("SFX_MONSTER_CRAWLING",load2(10,16), 20),
 			
-			//Tile Missile Effects
+			// Tile Missile Effects
 			new GFXAnimatedMissileEffect("SFX_MISSILE_HOMING_BALL",load2(2,0), 20),
 			
 //			En Attack.java : 128 "SFX_"+weaponDef.getID()
@@ -448,7 +443,7 @@ public class GFXEffects {
 			//Flash Effects
 			new GFXFlashEffect("SFX_THUNDER_FLASH", Color.WHITE),
 			
-			//Weapons
+			// Weapons
 			/*new GFXBeamMissileEffect("SFX_WP_AGUEN", "/\\", ConsoleSystemInterface.BLUE, 46),*/
 
 			new GFXAnimatedMeleeEffect("SFX_WP_BASELARD",CURVED_FRAMES, CURVED_VARS, 30),
@@ -514,7 +509,6 @@ public class GFXEffects {
 			new GFXAnimatedMeleeEffect("SFX_WP_CRISSAEGRIM",CURVED_FRAMES, CURVED_VARS, 30),
 			new GFXAnimatedMeleeEffect("SFX_WP_MASAMUNE",CURVED_FRAMES, CURVED_VARS, 30),
 			new GFXAnimatedMeleeEffect("SFX_WP_HAMMER_JUSTICE",CURVED_FRAMES, CURVED_VARS, 30),
-
 			
 			new GFXDirectionalMissileEffect("SFX_WP_HANDGUN", load8(8,6), 10),
 			new GFXDirectionalMissileEffect("SFX_WP_SILVER_HANDGUN", load8(8,6), 10),
@@ -528,8 +522,9 @@ public class GFXEffects {
 			new GFXDirectionalMissileEffect("SFX_WP_BWAKA_KNIFE", load8(0,8), 5),
 			new GFXDirectionalMissileEffect("SFX_WP_THROWING_KNIFE", load8(0,8), 5),
 
-			//Monsters
+			// Monsters
 			new GFXAnimatedMissileEffect("SFX_ROTATING_BONE", load4(8,3), 20),
+			new GFXAnimatedMissileEffect("SFX_ROTATING_AXE", load8(0,12), 40),
 			new GFXAnimatedMeleeEffect("SFX_AXE_MELEE",STR_FRAMES, CURVED_VARS, 30),
 			new GFXAnimatedMeleeEffect("SFX_SPEAR_MELEE",STR_FRAMES, CURVED_VARS, 30),
 			new GFXAnimatedMeleeEffect("SFX_GIANT_BONE_MELEE",STR_FRAMES, CURVED_VARS, 30),
@@ -548,7 +543,8 @@ public class GFXEffects {
 			new GFXAnimatedMissileEffect("SFX_STUN_BEAM", load8(8,1), 30),/*Provisional*/
 			new GFXAnimatedMissileEffect("SFX_ANCIENT_BEAM", load8(8,1), 30),/*Provisional*/
 			new GFXAnimatedMissileEffect("SFX_PURPLE_FLAME_BEAM", load8(8,1), 30),/*Provisional*/
-			new GFXAnimatedMissileEffect("SFX_ROTATING_AXE", load8(0,12), 40),
+
+			
 			new GFXDirectionalMissileEffect("SFX_MAGIC_MISSILE", load8(8,5), 20),
 			new GFXAnimatedMissileEffect("SFX_BIG_FIREBALL", load8(8,1), 30),
 			new GFXDirectionalMissileEffect("SFX_FLAMING_BARREL", load8(8,1), 30), /*Provisional*/
@@ -566,7 +562,8 @@ public class GFXEffects {
 		};
 	}
 
-
+	// Used twice, to create Firebrand and Flamberge effects from 
+	// gfx/crl_slashes-fire.gif, and with delay 20.
 	private GFXAnimatedMeleeEffect createAnimatedMeleeEffect(String id, String file, int delay) {
 		try {
 			return new GFXAnimatedMeleeEffect(id,readSlashes(ImageUtils.createImage(file)), CURVED_VARS, delay);
@@ -576,10 +573,4 @@ public class GFXEffects {
 		}
 	}
 	
-	/*
-	public GFXEffect[] getEffects() {
-		return effects;
-	}
-	*/
-
 }
