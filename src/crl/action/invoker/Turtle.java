@@ -24,7 +24,7 @@ public class Turtle extends HeartAction {
 		return (int)(p.getCastCost() * 1.1);
 	}
 	
-	public void execute(){
+	public void execute() {
 		super.execute();
 		Player aPlayer = (Player)performer;
 		Level aLevel = aPlayer.level;

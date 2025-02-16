@@ -11,9 +11,9 @@ import crl.feature.FeatureFactory;
 import crl.game.*;
 
 public abstract class LevelGenerator {
-	//public abstract Level generateLevel(String param, Dispatcher dispa);
 
-	protected Cell[][] renderLevel(String[][] cellIds) throws CRLException{
+
+	protected Cell[][] renderLevel(String[][] cellIds) throws CRLException {
 		Debug.enterMethod(this, "renderLevel");
 		MapCellFactory mcf = MapCellFactory.getMapCellFactory();
 		Cell[][] ret = new Cell[cellIds.length][cellIds[0].length];
@@ -26,8 +26,9 @@ public abstract class LevelGenerator {
 		Debug.exitMethod(ret);
 		return ret;
 	}
-	
-	protected void renderLevelFeatures(Level level, String[][] cellIds) throws CRLException{
+
+
+	protected void renderLevelFeatures(Level level, String[][] cellIds) throws CRLException {
 		for (int x = 0; x < cellIds.length; x++)
 			for (int y = 0; y < cellIds[0].length; y++) {
 				if (cellIds[x][y].startsWith("F_")){
@@ -38,7 +39,8 @@ public abstract class LevelGenerator {
 			}
 	}
 
-	protected int placeKeys(Level ret){
+
+	protected int placeKeys(Level ret) {
 		Debug.enterMethod(this, "placeKeys");
 		//Place the magic Keys
 		int keys = Util.rand(1,4);
@@ -60,12 +62,11 @@ public abstract class LevelGenerator {
 		}
 		Debug.exitMethod(keys);
 		return keys;
-		
 	}
-	
-	public void placeClue(Level ret, int clueLevel){
+
+
+	public void placeClue(Level ret, int clueLevel) {
 		Debug.enterMethod(this, "placeClue");
-		//Place the clue
 		Position tempPosition = new Position(0,0);
 		while(true) {
 			int cluex = Util.rand(1,ret.getWidth()-1);
@@ -74,7 +75,7 @@ public abstract class LevelGenerator {
 			tempPosition.x = cluex;
 			tempPosition.y = cluey;
 			tempPosition.z = cluez;
-			if (ret.isWalkable(tempPosition)){
+			if (ret.isWalkable(tempPosition)) {
 				Item clue = Main.itemData.createItem("CLUE_PAGE"+clueLevel);
 				ret.addItem(tempPosition, clue);
 				break;

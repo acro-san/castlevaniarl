@@ -3,7 +3,8 @@ package crl.action.invoker;
 import crl.action.ProjectileSkill;
 import crl.player.Player;
 
-public class Cat extends ProjectileSkill{
+public class Cat extends ProjectileSkill {
+	
 	public int getDamage() {
 		return 10+getPlayer().getSoulPower()*2;
 	}

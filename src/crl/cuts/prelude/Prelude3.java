@@ -12,9 +12,10 @@ import crl.player.Player;
 public class Prelude3 extends Unleasher {
 
 	public void unleash(Level level, Game game) {
-		Monster dracula = level.getMonsterByID("PRELUDE_DRACULA"); 
-		if (dracula.getHits () > dracula.getMaxHP()/2)
+		Monster dracula = level.getMonsterByID("PRELUDE_DRACULA");
+		if (dracula.hp > dracula.getMaxHP()/2) {
 			return;
+		}
 		
 		level.addMessage("Dracula invokes a deadly beam of chaos energy!!!");
 		Main.ui.drawEffect(Main.efx.createLocatedEffect(level.getPlayer().pos, "SFX_KILL_CHRIS"));

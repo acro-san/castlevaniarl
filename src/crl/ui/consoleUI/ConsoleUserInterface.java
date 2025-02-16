@@ -555,7 +555,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		si.print(0,2,"ENEMY    ");
 		if (player.level.boss != null) {	// TODO && bossSeen!
 			// duplicate logic! see GFXUserInterface.drawBossHealthBar()!
-			int sixthiedBossHits = (int)Math.ceil((player.level.boss.getHits() * 60.0)/(double)player.level.boss.getMaxHP());
+			int sixthiedBossHits = (int)Math.ceil((player.level.boss.hp * 60.0)/(double)player.level.boss.getMaxHP());
 			int foreColorB = 0;
 			int backColorB = 0;
 			switch (((sixthiedBossHits-1) / 20) + 1) {

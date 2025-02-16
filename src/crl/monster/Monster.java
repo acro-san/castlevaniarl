@@ -16,13 +16,12 @@ import crl.actor.*;
 
 public class Monster extends Actor implements Cloneable {
 
+	protected String defID;	// monsterType? enum? also used in 'NPC' subclass.
 	private transient MonsterDefinition definition;
-	private String defID;
-
-	// FIXME: WTF?! NUH UH! NOPE! WHAAAAT!? Hits and HitMax...?? SEE @ACTOR!
-	protected int hp;
-	private int hpMax;
 	
+	
+	public int hp;
+	//private int hpMax;	// always just get from definition
 	
 	public String featurePrize;
 	public boolean isVisible = true;
@@ -30,6 +29,28 @@ public class Monster extends Actor implements Cloneable {
 	private boolean wasSeen = false;
 	
 	public Monster enemy;
+	
+
+	public Monster(MonsterDefinition md) {
+		definition = md;
+		defID = md.ID;
+		selector = md.defaultSelector.derive();
+		hp = md.maxHP;
+	}
+	
+	
+	public int getMaxHP() {	// where's this being called and why's it not
+		// just using hpMax value of THIS MONSTER!?
+		return getDefinition().maxHP;
+	}
+	
+	public void recoverAllHP() {
+		hp = getDefinition().maxHP;
+	}
+
+	public boolean isDead() {
+		return hp <= 0;
+	}
 	
 	public String getWavOnHit() {
 		return getDefinition().wavOnHit;
@@ -39,16 +60,13 @@ public class Monster extends Actor implements Cloneable {
 		wasSeen = true;
 	}
 	
-	public boolean wasSeen(){
+	public boolean wasSeen() {
 		return wasSeen;
 	}
 
-	public void increaseHits(int i){
-		hp += i;
-	}
 
-	public void act(){
-		if (hasCounter(Consts.C_MONSTER_FREEZE) || hasCounter(Consts.C_MONSTER_SLEEP)){
+	public void act() {
+		if (hasCounter(Consts.C_MONSTER_FREEZE) || hasCounter(Consts.C_MONSTER_SLEEP)) {
 			setNextTime(50);
 			updateStatus();
 			return;
@@ -57,16 +75,19 @@ public class Monster extends Actor implements Cloneable {
 		wasSeen = false;
 	}
 
-	public boolean isInWater(){
-		if (level.getMapCell(pos)!= null)
+
+	public boolean isInWater() {
+		if (level.getMapCell(pos) != null) {
 			return level.getMapCell(pos).isShallowWater();
-		else
-			return false;
+		}
+		return false;
 	}
+
 
 	public void freeze(int cont) {
 		setCounter(Consts.C_MONSTER_FREEZE, cont);
 	}
+
 
 	public int getFreezeResistance() {
 		return 0; //placeholder
@@ -137,6 +158,7 @@ public class Monster extends Actor implements Cloneable {
 		return -1;
 	}
 
+
 	public void damageWithWeapon(StringBuffer message, int dam) {
 		Player pl = level.getPlayer();
 		Item wep = pl.getWeapon();
@@ -147,6 +169,7 @@ public class Monster extends Actor implements Cloneable {
 		}
 		damage(message, dam);
 	}
+	
 	
 	public void damage(StringBuffer message, int dam) {
 		if (selector instanceof DraculaAI) {
@@ -228,17 +251,16 @@ public class Monster extends Actor implements Cloneable {
 	public int getScore() {
 		return getDefinition().score;
 	}
-	
-	public boolean isDead() {
-		return hp <= 0;
-	}
+
 
 	public String getDescription() {
 		// This may be flavored with specific monster daya
 		return getDefinition().description + (hasCounter(Consts.C_MONSTER_CHARM) ? " C ":"");
 	}
 
+
 	private MonsterDefinition getDefinition() {
+		// last minute decision making!? shouldn't this already be set on init?
 		if (definition == null) {
 			if (this instanceof NPC)
 				definition = NPC.NPC_MONSTER_DEFINITION;
@@ -247,8 +269,10 @@ public class Monster extends Actor implements Cloneable {
 		}
 		return definition;
 	}
-	
-	//swimming/ethereal/undead NPCs are the whole reason this has 'getDefinition()' as a method inside!???
+
+
+	//swimming/ethereal/undead NPCs are the whole reason this has
+	// 'getDefinition()' as a method inside!?
 	public boolean canSwim() {
 		return getDefinition().canSwim;
 	}
@@ -261,31 +285,7 @@ public class Monster extends Actor implements Cloneable {
 		return getDefinition().isEthereal;
 	}
 
-	// FIXME Rename as HEALTHPOINTS.
-	public int getHits() {
-		return hp;
-	}
 
-	public Monster(MonsterDefinition md) {
-		definition = md;
-		defID = md.ID;
-		//selector = md.getDefaultSelector();
-		selector = md.defaultSelector.derive();
-		
-		hp = md.maxHP;
-		hpMax = md.maxHP;
-	}
-
-/*
-	public String getFeaturePrize() {
-		return featurePrize;
-	}
-
-	public void setFeaturePrize(String value) {
-		featurePrize = value;
-	}
-*/
-	
 	public int getAttack() {
 		return getDefinition().attack;
 	}
@@ -300,12 +300,14 @@ public class Monster extends Actor implements Cloneable {
 	}
 
 
-	private void setPrize() {
+	// FIXME Convoluted crap code, obscuring what actual chances there are of 
+	// any of the given branches being taken. also: terrible for branch predictor.
+	// solution: why not just store the chances in a droptable and roll once!???
+	private void setPrize() {	// OUTCOME == SIDE EFFECT!! When is this called? ONCE?!
 		Player p = level.getPlayer();
-		String [] prizeList = null;
+		String[] prizeList = null;
 		
-		
-		if (p.deservesMUpgrade()) {
+		if (p.deservesMUpgrade()) {	// this implies it's not set at mapgen time?
 			featurePrize = "MUPGRADE";
 			return;
 		}
@@ -322,61 +324,75 @@ public class Monster extends Actor implements Cloneable {
 		if (p.playerClass == Player.CLASS_VAMPIREKILLER) {
 			if (Util.chance(20)) {
 				// Will get a mystic weapon
-				if (p.getFlag("MYSTIC_CRYSTAL") && Util.chance(20))
-        			prizeList = new String[]{"CRYSTALWP"};
-        		else if (p.getFlag("MYSTIC_FIST") && Util.chance(20))
-        			prizeList = new String[]{"FISTWP"};
-        		else if (p.getFlag("MYSTIC_CROSS") && Util.chance(20))
-        			prizeList = new String[]{"CROSSWP"};
-        		else if (p.getFlag("MYSTIC_STOPWATCH") && Util.chance(20))
-        			prizeList = new String[]{"STOPWATCHWP"};
-        		else if (p.getFlag("MYSTIC_HOLY_WATER") && Util.chance(20))
-        			prizeList = new String[]{"HOLYWP"};
-        		else if (p.getFlag("MYSTIC_HOLY_BIBLE") && Util.chance(20))
-        			prizeList = new String[]{"BIBLEWP"};
-        		else 
-        			prizeList = new String[]{"AXEWP", "DAGGERWP"};
-        	} else
-        	if (Util.chance(50))
-	        if (Util.chance(40))
-    	    if (Util.chance(10))
-        	if (Util.chance(10))
-	        if (Util.chance(10))
-    	    if (Util.chance(10))
-   	    		prizeList = new String[]{"WHITE_MONEY_BAG"};
-			else
-				prizeList = new String[]{"POT_ROAST"};
-			else
-				prizeList = new String[]{"INVISIBILITY_POTION", "ROSARY", "BLUE_MONEY_BAG"};
-			else
-				prizeList = new String[]{"RED_MONEY_BAG"};
-			else
-				prizeList = new String[]{"BIGHEART"};
-			else
+				if (p.getFlag("MYSTIC_CRYSTAL") && Util.chance(20)) {
+					prizeList = new String[]{"CRYSTALWP"};
+				} else if (p.getFlag("MYSTIC_FIST") && Util.chance(20)) {
+					prizeList = new String[]{"FISTWP"};
+				} else if (p.getFlag("MYSTIC_CROSS") && Util.chance(20)) {
+					prizeList = new String[]{"CROSSWP"};
+				} else if (p.getFlag("MYSTIC_STOPWATCH") && Util.chance(20)) {
+					prizeList = new String[]{"STOPWATCHWP"};
+				} else if (p.getFlag("MYSTIC_HOLY_WATER") && Util.chance(20)) {
+					prizeList = new String[]{"HOLYWP"};
+				} else if (p.getFlag("MYSTIC_HOLY_BIBLE") && Util.chance(20)) {
+					prizeList = new String[]{"BIBLEWP"};
+				} else {
+					prizeList = new String[]{"AXEWP", "DAGGERWP"};
+				}
+			} else {
+				if (Util.chance(50)) {
+					if (Util.chance(40)) {
+						if (Util.chance(10)) {
+							if (Util.chance(10)) {
+								if (Util.chance(10)) {
+									if (Util.chance(10)) {
+										prizeList = new String[]{"WHITE_MONEY_BAG"};
+									} else {
+										prizeList = new String[]{"POT_ROAST"};
+									}
+								} else {
+									prizeList = new String[]{"INVISIBILITY_POTION", "ROSARY", "BLUE_MONEY_BAG"};
+								}
+							} else {
+								prizeList = new String[]{"RED_MONEY_BAG"};
+							}
+						} else {
+							prizeList = new String[]{"BIGHEART"};
+						}
+					} else {
+						prizeList = new String[]{"SMALLHEART", "COIN"};
+					}
+				}
+			}
+		} else {
+			if (Util.chance(50)) {
+				if (Util.chance(50)) {
+					if (Util.chance(10)) {
+						if (Util.chance(10)) {
+							if (Util.chance(10)) {
+								prizeList = new String[]{"WHITE_MONEY_BAG"};
+							} else {
+								prizeList = new String[]{"POT_ROAST"};
+							}
+						} else {
+							prizeList = new String[]{"INVISIBILITY_POTION", "ROSARY", "BLUE_MONEY_BAG"};
+						}
+					} else {
+						prizeList = new String[]{"RED_MONEY_BAG"};
+					}
+				} else {
+					prizeList = new String[]{"BIGHEART"};
+				}
+			} else {
 				prizeList = new String[]{"SMALLHEART", "COIN"};
-    	} else {
-	        if (Util.chance(50))
-    	    if (Util.chance(50))
-        	if (Util.chance(10))
-	        if (Util.chance(10))
-    	    if (Util.chance(10))
-    	    	prizeList = new String[]{"WHITE_MONEY_BAG"};
-			else
-				prizeList = new String[]{"POT_ROAST"};
-			else
-				prizeList = new String[]{"INVISIBILITY_POTION", "ROSARY", "BLUE_MONEY_BAG"};
-			else
-				prizeList = new String[]{"RED_MONEY_BAG"};
-			else
-				prizeList = new String[]{"BIGHEART"};
-			else
-				prizeList = new String[]{"SMALLHEART", "COIN"};
-    	}
-
+			}
+		}
+		
 		if (prizeList != null) {
 			featurePrize = Util.pick(prizeList);
 		}
 	}
+	
 	
 	public void die() {
 		super.die();
@@ -388,18 +404,8 @@ public class Monster extends Actor implements Cloneable {
 			em.level = level;
 		}
 	}
-	
-	
-	/*
-	public void setVisible(boolean value) {
-		visible = value;
-	}
-	
-	public boolean isVisible() {
-		return visible;
-	}
-	*/
-	
+
+
 	public int getAttackCost() {
 		return getDefinition().attackCost;
 	}
@@ -619,16 +625,8 @@ public class Monster extends Actor implements Cloneable {
 	}
 	
 	
-	public int getMaxHP() {
-		return getDefinition().maxHP;
-	}
-	
 	public boolean isFlying() {
 		return getDefinition().canFly;
-	}
-	
-	public void recoverAllHP() {
-		hp = hpMax;
 	}
 	
 	

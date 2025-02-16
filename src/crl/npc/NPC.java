@@ -8,10 +8,16 @@ import crl.ui.*;
 import crl.monster.*;
 
 public class NPC extends Monster {
-	private transient NPCDef definition;	// only need set on init and reload. right?
-	private String defID;	// allows fetching definition from global def table
-	private ActionSelector selector;	// ?
 	
+	// isnt an NPCDef the same as a monster def?
+	private transient NPCDef definition;	// only need set on init and reload. right?
+	//private String defID;	// allows fetching definition from global def table
+	// already declared in monster. right?
+	
+	private ActionSelector selector;
+	private String npcID;
+	private String talkMessage = null;
+
 //	private final static MonsterDefinition NPC_MONSTER_DEFINITION = new MonsterDefinition("NPC", "NPC", "VOID", "NULL_SELECTOR", 0, 2, 0, 5, 0, false, false, true, false, 0, 0, 0, 0);
 	
 	public final static MonsterDefinition
@@ -33,7 +39,7 @@ public class NPC extends Monster {
 		defID = def.getID();
 		npcID = def.getID();
 		selector = getNDefinition().getDefaultSelector().derive();
-		hp = def.getHits();
+		hp = def.hpMax;
 	}
 	
 	public Appearance getAppearance() {
@@ -73,13 +79,14 @@ public class NPC extends Monster {
 			if (msg.equals("ATTACK_PLAYER")) {
 				((VillagerAI)getSelector()).setAttackPlayer(true);
 			} else if (msg.equals("EVT_MURDERER")) {
-				if (getHits() > 1)
+				if (hp > 1) {
 					((VillagerAI)getSelector()).setAttackPlayer(true);
-				else
+				} else {
 					((VillagerAI)getSelector()).setOnDanger(true);
+				}
 			}
 		} catch (ClassCastException cce) {
-
+			
 		}
 	}
 
@@ -87,11 +94,12 @@ public class NPC extends Monster {
 	public void damage(StringBuffer buff, int dam) {
 		try {
 			((VillagerAI)getSelector()).setOnDanger(true);
-			if (getHits() > 1)
+			if (hp > 1) {
 				((VillagerAI)getSelector()).setAttackPlayer(true);
+			}
 			level.signal(pos, 8, "EVT_MURDERER");
 		} catch (ClassCastException cce) {
-
+			
 		}
 		super.damage(buff, dam);
 	}
@@ -120,10 +128,8 @@ public class NPC extends Monster {
 		return getNDefinition().isPriest;
 	}
 	
-	private String npcID;
-	private String talkMessage = null;
-	
-	public String getNPCID(){
+
+	public String getNPCID() {
 		return npcID;
 	}
 	

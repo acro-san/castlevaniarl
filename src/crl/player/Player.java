@@ -1980,13 +1980,15 @@ public class Player extends Actor {
 		skills.put("THROW_EGG", new Skill("Throw Egg", new Egg(), 1));
 		skills.put("MANIPULATE", new Skill("Manipulate", new Charm(), 5));
 		skills.put("TAME", new Skill("Tame", new Tame(), 5));
-		skills.put("SUMMON_CAT", new Skill("Invoke Cat", new InvokeCat(), 5));
-		skills.put("SUMMON_TURTLE", new Skill("Invoke Turtle", new InvokeTurtle(), 5));
-		skills.put("SUMMON_BIRD", new Skill("Invoke Bird", new InvokeBird(), 5));
-		skills.put("SUMMON_TIGER", new Skill("Invoke Tiger", new InvokeTiger(), 5));
-		skills.put("SUMMON_TORTOISE", new Skill("Invoke Tortoise", new InvokeTortoise(), 5));
-		skills.put("SUMMON_EAGLE", new Skill("Invoke Eagle", new InvokeEagle(), 5));
-		skills.put("SUMMON_DRAGON", new Skill("Invoke Dragon", new InvokeDragon(), 8));
+		// FIXME This has a lot of duplicated information. str 'invoke cat' is
+		// defined in the summon skill already, as is the heart cost... etc.
+		skills.put("SUMMON_CAT", new Skill("Invoke Cat", new SummonSkill(SummonSkill.CAT), 5));
+		skills.put("SUMMON_TURTLE", new Skill("Invoke Turtle", new SummonSkill(SummonSkill.TURTLE), 5));
+		skills.put("SUMMON_BIRD", new Skill("Invoke Bird", new SummonSkill(SummonSkill.BIRD), 5));
+		skills.put("SUMMON_TIGER", new Skill("Invoke Tiger", new SummonSkill(SummonSkill.TIGER), 5));
+		skills.put("SUMMON_TORTOISE", new Skill("Invoke Tortoise", new SummonSkill(SummonSkill.TORTOISE), 5));
+		skills.put("SUMMON_EAGLE", new Skill("Invoke Eagle", new SummonSkill(SummonSkill.EAGLE), 5));
+		skills.put("SUMMON_DRAGON", new Skill("Invoke Dragon", new SummonSkill(SummonSkill.DRAGON), 8));
 		
 		// BeastMan
 		skills.put("CLAW_SWIPE", new Skill("Claw Swipe", new ClawSwipe(), 3));
@@ -2017,8 +2019,8 @@ public class Player extends Actor {
 		KEYINMINENT = 3;
 
 	public final static int
-		EVT_FO23RWARD = 7,
-		EVT_RE23TURN = 8,
+		EVT_FORWARD = 7,
+		EVT_RETURN = 8,
 		EVT_MERCHANT = 9,
 		EVT_SMASHED = 10,
 		EVT_CHAT = 11,

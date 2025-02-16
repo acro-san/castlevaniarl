@@ -20,21 +20,23 @@ import crl.player.Player;
 import crl.Main;
 import crl.cuts.CaveEntranceSeal;
 import crl.cuts.Unleasher;
-//import crl.feature.Feature;
 import crl.feature.FeatureFactory;
 import crl.game.*;
 
 public class LevelMaster {
-	//private static Dispatcher currentDispatcher;
+
 	private static boolean firstCave = true;
+	
 	public static Level createLevel(LevelMetaData metadata, Player player) throws CRLException {
+		
+		PatternGenerator patGen = new PatternGenerator();
 		
 		String levelID = metadata.getLevelID();
 		Debug.enterStaticMethod("LevelMaster", "createLevel");
 		Debug.say("levelID "+levelID);
 		boolean overrideLevelNumber = false;
 		Level ret = null;
-		PatternGenerator.getGenerator().resetFeatures();
+		patGen.resetFeatures();
 		Respawner x = new Respawner(15, 90);
 		x.selector = new RespawnAI();
 		boolean hasHostage = false;
@@ -197,13 +199,13 @@ public class LevelMaster {
 			ret.setMusicKeyMorning("");
 			ret.setMusicKeyNoon(null);
 			ret.setDwellersInfo(
-					new MonsterSpawnInfo[]{
-							new MonsterSpawnInfo("WARG", MonsterSpawnInfo.UNDERGROUND, 40),
-							new MonsterSpawnInfo("PANTHER", MonsterSpawnInfo.UNDERGROUND, 40),
-							new MonsterSpawnInfo("BAT", MonsterSpawnInfo.UNDERGROUND, 100),
-							new MonsterSpawnInfo("R_SKELETON", MonsterSpawnInfo.UNDERGROUND, 70),
-						}
-					);
+				new MonsterSpawnInfo[] {
+						new MonsterSpawnInfo("WARG", MonsterSpawnInfo.UNDERGROUND, 40),
+						new MonsterSpawnInfo("PANTHER", MonsterSpawnInfo.UNDERGROUND, 40),
+						new MonsterSpawnInfo("BAT", MonsterSpawnInfo.UNDERGROUND, 100),
+						new MonsterSpawnInfo("R_SKELETON", MonsterSpawnInfo.UNDERGROUND, 70),
+					}
+				);
 			ret.setInhabitants(new MonsterSpawnInfo[]{
 				new MonsterSpawnInfo("BAT", MonsterSpawnInfo.UNDERGROUND, 100),
 				new MonsterSpawnInfo("R_SKELETON", MonsterSpawnInfo.UNDERGROUND, 40)
@@ -241,8 +243,8 @@ public class LevelMaster {
 			ret.setMapLocationKey("FOREST");
 			//ret.setIsCandled(true);
 		} else if (levelID.startsWith("MAIN_HALL")) {
-			Entrance.setup(PatternGenerator.getGenerator());
-			ret = PatternGenerator.getGenerator().createLevel();
+			Entrance.setup(patGen);
+			ret = patGen.createLevel();
 			////ret.setDispatcher(new Dispatcher());
 			ret.setInhabitants(Entrance.spawnInfo);
 			ret.setRespawner(x);
@@ -260,8 +262,8 @@ public class LevelMaster {
 			hasHostage = Util.chance(10);
 			//ret.setIsCandled(true);
 		} else if (levelID.startsWith("MOAT")) {
-			Moat.setup(PatternGenerator.getGenerator());
-			ret = PatternGenerator.getGenerator().createLevel();
+			Moat.setup(patGen);
+			ret = patGen.createLevel();
 			//ret.setDispatcher(new Dispatcher());
 			ret.setInhabitants(Moat.spawnInfo);
 			ret.setRespawner(x);
@@ -278,9 +280,9 @@ public class LevelMaster {
 			hasHostage = Util.chance(40);
 			//ret.setIsCandled(true);
 		} else if (levelID.startsWith("BAT_HALL")) {
-			PatternGenerator.getGenerator().resetFeatures();
-			BatLair.setup(PatternGenerator.getGenerator());
-			ret = PatternGenerator.getGenerator().createLevel();
+			patGen.resetFeatures();
+			BatLair.setup(patGen);
+			ret = patGen.createLevel();
 			//ret.setDispatcher(new Dispatcher());
 			ret.setInhabitants(BatLair.spawnInfo);
 			ret.setRespawner(x);

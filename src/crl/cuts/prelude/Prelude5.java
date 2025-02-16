@@ -8,8 +8,9 @@ import crl.ui.Display;
 
 public class Prelude5 extends Unleasher {
 	public void unleash(Level level, Game game) {
-		if (!level.getFlag("CHRIS_DEAD") || level.getMonsterByID("PRELUDE_DRACULA").getHits () > 50)
+		if (!level.getFlag("CHRIS_DEAD") || level.getMonsterByID("PRELUDE_DRACULA").hp > 50) {
 			return;
+		}
 		Display.thus.showChat("PRELUDE_DRACULA3", game);
 		Main.ui.drawEffect(Main.efx.createLocatedEffect(level.getPlayer().pos, "SFX_MORPH_SOLEIYU"));
 		Main.ui.refresh();

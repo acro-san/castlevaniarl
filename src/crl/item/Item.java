@@ -73,106 +73,112 @@ public class Item implements Serializable, MenuItem, GFXMenuItem {
 	
 	public String getDescription(){
 		String description = "";
-		for (int i = 0; i < premodifiers.size(); i++){
-			description += ((Modifier)premodifiers.get(i)).getDescription();
+		for (int i = 0; i < premodifiers.size(); i++) {
+			description += premodifiers.get(i).description;
 		}
 		description += getDefinition().description;
-		for (int i = 0; i < postmodifiers.size(); i++){
-			description += ((Modifier)postmodifiers.get(i)).getDescription();
+		for (int i = 0; i < postmodifiers.size(); i++) {
+			description += postmodifiers.get(i).description;
 		}
 		return description;
-		
 	}
+	
 	
 	public Appearance getAppearance() {
 		return getDefinition().appearance;
 	}
 
-	private int getModifiersAttackBonus(){
+
+	private int getModifiersAttackBonus() {
 		int ret = 0;
-		for (int i = 0; i < premodifiers.size(); i++){
-			ret += ((Modifier)premodifiers.get(i)).getAtkBonus();
+		for (int i = 0; i < premodifiers.size(); i++) {
+			ret += ((Modifier)premodifiers.get(i)).atkBonus;
 		}
-		for (int i = 0; i < postmodifiers.size(); i++){
-			ret += ((Modifier)postmodifiers.get(i)).getAtkBonus();
+		for (int i = 0; i < postmodifiers.size(); i++) {
+			ret += ((Modifier)postmodifiers.get(i)).atkBonus;
 		}
 		return ret;
 	}
 	
-	private int getModifiersAttackCost(){
+	private int getModifiersAttackCost() {
 		int ret = 0;
-		for (int i = 0; i < premodifiers.size(); i++){
-			ret += ((Modifier)premodifiers.get(i)).getAtkCostBonus();
+		for (int i = 0; i < premodifiers.size(); i++) {
+			ret += premodifiers.get(i).atkCostBonus;
 		}
 		for (int i = 0; i < postmodifiers.size(); i++){
-			ret += ((Modifier)postmodifiers.get(i)).getAtkCostBonus();
+			ret += postmodifiers.get(i).atkCostBonus;
 		}
 		return ret;
 	}
 	
-	private double getModifiersGoldMod(){
+	private double getModifiersGoldMod() {
 		double ret = 0;
-		for (int i = 0; i < premodifiers.size(); i++){
-			ret += ((Modifier)premodifiers.get(i)).getPriceModifier() / 100.0;
+		for (int i = 0; i < premodifiers.size(); i++) {
+			ret += premodifiers.get(i).priceModifier / 100.0;
 		}
-		for (int i = 0; i < postmodifiers.size(); i++){
-			ret += ((Modifier)postmodifiers.get(i)).getPriceModifier() / 100.0;
+		for (int i = 0; i < postmodifiers.size(); i++) {
+			ret += postmodifiers.get(i).priceModifier / 100.0;
 		}
 		return ret;
 	}
 	
-	private int getModifiersDefenseBonus(){
+	private int getModifiersDefenseBonus() {
 		int ret = 0;
-		for (int i = 0; i < premodifiers.size(); i++){
-			ret += ((Modifier)premodifiers.get(i)).getDefenseBonus();
+		for (int i = 0; i < premodifiers.size(); i++) {
+			ret += premodifiers.get(i).defenseBonus;
 		}
-		for (int i = 0; i < postmodifiers.size(); i++){
-			ret += ((Modifier)postmodifiers.get(i)).getDefenseBonus();
+		for (int i = 0; i < postmodifiers.size(); i++) {
+			ret += postmodifiers.get(i).defenseBonus;
 		}
 		return ret;
 	}
 	
-	private int getModifiersRangeBonus(){
+	private int getModifiersRangeBonus() {
 		int ret = 0;
-		for (int i = 0; i < premodifiers.size(); i++){
-			ret += ((Modifier)premodifiers.get(i)).getRangeBonus();
+		for (int i = 0; i < premodifiers.size(); i++) {
+			ret += premodifiers.get(i).rangeBonus;
 		}
-		for (int i = 0; i < postmodifiers.size(); i++){
-			ret += ((Modifier)postmodifiers.get(i)).getRangeBonus();
+		for (int i = 0; i < postmodifiers.size(); i++) {
+			ret += postmodifiers.get(i).rangeBonus;
 		}
 		return ret;
 	}
 	
-	private boolean modifiersHarmUndead(){
-		for (int i = 0; i < premodifiers.size(); i++){
-			if (((Modifier)premodifiers.get(i)).isHarmsUndead())
+	private boolean modifiersHarmUndead() {
+		for (int i = 0; i < premodifiers.size(); i++) {
+			if (premodifiers.get(i).harmsUndead) {
 				return true;
+			}
 		}
-		for (int i = 0; i < postmodifiers.size(); i++){
-			if (((Modifier)postmodifiers.get(i)).isHarmsUndead())
+		for (int i = 0; i < postmodifiers.size(); i++) {
+			if (postmodifiers.get(i).harmsUndead) {
 				return true;
+			}
 		}
 		return false;
 	}
 	
-	private boolean modifiersSliceThru(){
-		for (int i = 0; i < premodifiers.size(); i++){
-			if (((Modifier)premodifiers.get(i)).isSlicesThru())
+	private boolean modifiersSliceThru() {
+		for (int i = 0; i < premodifiers.size(); i++) {
+			if (premodifiers.get(i).slicesThru) {
 				return true;
+			}
 		}
-		for (int i = 0; i < postmodifiers.size(); i++){
-			if (((Modifier)postmodifiers.get(i)).isSlicesThru())
+		for (int i = 0; i < postmodifiers.size(); i++) {
+			if (postmodifiers.get(i).slicesThru) {
 				return true;
+			}
 		}
 		return false;
 	}
+	
 	
 	public int getAttack() {
 		int ret = getDefinition().attack + getModifiersAttackBonus();
-		if (getDefinition().attack > 0 && ret <= 0)
+		if (getDefinition().attack > 0 && ret <= 0) {
 			return 1;
-		else
-			return ret;
+		}
+		return ret;
 	}
 
 	public int getAttackCost() {
@@ -270,13 +276,14 @@ public class Item implements Serializable, MenuItem, GFXMenuItem {
 		return base;
 	}
 	
-	public String getFullID(){
+	
+	public String getFullID() {	// FIXME Uh oh!!!! Why're we concatenating IDs, eh??
 		String toAddID = getDefinition().getID();
-		for (int i = 0; i < premodifiers.size(); i++){
-			toAddID += ((Modifier)premodifiers.get(i)).getID();
+		for (int i = 0; i < premodifiers.size(); i++) {
+			toAddID += (premodifiers.get(i)).id;
 		}
-		for (int i = 0; i < postmodifiers.size(); i++){
-			toAddID += ((Modifier)postmodifiers.get(i)).getID();
+		for (int i = 0; i < postmodifiers.size(); i++) {
+			toAddID += postmodifiers.get(i).id;
 		}
 		return toAddID;
 	}

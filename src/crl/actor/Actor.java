@@ -14,27 +14,30 @@ import crl.level.Level;
 import crl.ui.Appearance;
 
 public class Actor implements Cloneable, java.io.Serializable, PriorityEnqueable {
+
+	public /*transient*/ Position pos = new Position(0,0,0);
 	
-	protected /*transient*/ int positionx, positiony, positionz;
 	protected transient Appearance appearance;
 	public ActionSelector selector;
-	public /*transient*/ Position pos = new Position(0,0,0);
+
 	private int hoverHeight;
 	private /*transient*/ int nextTime = 10;
 	
-	public Level level;	// not combat level. a ref to the MAP this is in.
+	public Level level;	// not combat level. ref to the MAP this is in.
 	
 	private boolean isJumping;
 	private int startingJumpingHeight;
 
+	/** Request flag: to be removed from any dispatcher or structure */
+	private boolean aWannaDie;
+	
 
-
-	public int getCost(){
+	public int getCost() {
 		//Debug.say("Cost of "+getDescription()+" "+ nextTime);
 		return nextTime;
 	}
 	
-	public void reduceCost(int value){
+	public void reduceCost(int value) {
 		//Debug.say("Reducing cost of "+getDescription()+"by"+value+" (from "+nextTime+")");
 		nextTime -= value;
 	}
@@ -62,6 +65,7 @@ public class Actor implements Cloneable, java.io.Serializable, PriorityEnqueable
 		return "";
 	}
 
+
 	public void execute(Action x) {
 		if (x != null){
 			x.setPerformer(this);
@@ -78,19 +82,19 @@ public class Actor implements Cloneable, java.io.Serializable, PriorityEnqueable
 		updateStatus();
 	}
 	
+	
 	public void act() {
 		Action x = selector.selectAction(this);
 		execute(x);
 	}
 
-	public void setPosition(int x, int y, int z){
+	public void setPosition(int x, int y, int z) {
 		pos.x = x;
 		pos.y = y;
 		pos.z = z;
 	}
 
 	public void die() {
-		/** Request to be removed from any dispatcher or structure */
 		aWannaDie = true;
 	}
 
@@ -98,39 +102,29 @@ public class Actor implements Cloneable, java.io.Serializable, PriorityEnqueable
 		return aWannaDie;
 	}
 
-	private boolean aWannaDie;
-
-/*
-	public void setPosition(Position p) {
-		position = p;
-	}
-
-	public Position getPosition() {
-		return position;
-	}
-	*/
 
 	//Player has a complex override of getAppearance for form-changes etc!
 	public Appearance getAppearance() { return appearance; }
 	public void setAppearance(Appearance value) { appearance = value; }
 
-	public Object clone(){
+	public Object clone() {
 		try {
 			Actor x = (Actor) super.clone();
 			if (pos != null)
 				x.pos = new Position(pos.x, pos.y, pos.z);
 			return x;
-		} catch (CloneNotSupportedException cnse){
+		} catch (CloneNotSupportedException cnse) {
 			Debug.doAssert(false, "failed class cast, Feature.clone()");
 		}
 		return null;
 	}
 
-
-	public void message(String mess){
+	// Only 'NPC' overrides this...
+	public void message(String mess) {
 	}
 	
 	protected Hashtable<String,Integer> hashCounters = new Hashtable<>();
+	
 	public void setCounter(String counterID, int turns) {
 		hashCounters.put(counterID, Integer.valueOf(turns));
 	}

@@ -7,22 +7,25 @@ import crl.ai.*;
 
 public class NPCDef {
 	
-	private String ID;
+	// FIXME Compare to Monster Definition. Why is this another separate class?
+	private String ID;	// Nope, nope, no! INT or ENUM.
+	
 	public String description;
 	
 	private String talkMessage;		// dialogue. TODO: TxtTpl'd based on player status checks, prior meetings etc?
 	private int attack;
-	private int hits;
+	public int hpMax;	// definition hp == maxHP. right?
 	private String angryMessage;
 	private String dangerMessage;
 	public boolean isHostage = false;
 	public boolean isPriest = false;
+	
 	private Appearance appearance;
 	private ActionSelector defaultSelector;	// ?
 	private ListItem sightListItem;	// ?
 
-	public NPCDef (String pID, String pDescription, String pAppearance,
-	String pDefaultSelectorID, String pTalkMessage, int pAttack, int pHits,
+	public NPCDef(String pID, String pDescription, String pAppearance,
+	String pDefaultSelectorID, String pTalkMessage, int pAttack, int pHP,
 	String pAngryMessage, String pDangerMessage, boolean pHostage, boolean pPriest) {
 		ID = pID;
 		description = pDescription;
@@ -36,7 +39,7 @@ public class NPCDef {
 		talkMessage = pTalkMessage;
 		
 		attack = pAttack;
-		hits = pHits;
+		hpMax = pHP;
 		angryMessage = pAngryMessage;
 		dangerMessage = pDangerMessage;
 		isHostage = pHostage;
@@ -66,10 +69,11 @@ public class NPCDef {
 	public int getAttack() {
 		return attack;
 	}
-
-	public int getHits() {
+/*
+	public int ___getHits() {
 		return hits;
 	}
+	*/
 	
 	public ListItem getSightListItem(){
 		return sightListItem;
@@ -82,25 +86,5 @@ public class NPCDef {
 	public String getDangerMessage(){
 		return dangerMessage;
 	}
-/*
-	public boolean isHostage() {
-		return isHostage;
-	}
 
-	public void setHostage(boolean isHostage) {
-		this.isHostage = isHostage;
-	}
-*/
-	/*
-	public boolean isPriest() {
-		return isPriest;
-	}
-
-	public void setPriest(boolean isPriest) {
-		this.isPriest = isPriest;
-	}
-	*/
-	
 }
-
-

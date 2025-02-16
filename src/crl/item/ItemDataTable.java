@@ -20,8 +20,6 @@ public class ItemDataTable {
 		weaponDefinitions = new Vector<>(),
 		armorDefinitions = new Vector<>();
 
-	
-
 
 	public void init(ItemDefinition[] itemDefs) {
 ///		vDefinitions = new Vector<>();
@@ -51,7 +49,7 @@ public class ItemDataTable {
 
 
 	public ItemDefinition get(String id) {
-		ItemDefinition def = (ItemDefinition)definitions.get(id);
+		ItemDefinition def = definitions.get(id);
 		assert(def != null);
 		if (def == null) {
 			Debug.doAssert(false, "Invalid Item ID " + id);
@@ -59,11 +57,13 @@ public class ItemDataTable {
 		return def;
 	}
 
+
 	public Item createWeapon(String ID, String material) {
 		Modifier modMaterial = null;
 		for (int i = 0; i < MOD_MATERIAL.length; i++) {
-			if (MOD_MATERIAL[i].getID().equals(material))
+			if (MOD_MATERIAL[i].id.equals(material)) {
 				modMaterial = MOD_MATERIAL[i];
+			}
 		}
 		ItemDefinition def = get(ID);
 		Item item = new Item(def);
@@ -78,10 +78,10 @@ public class ItemDataTable {
 	public Item createShield(String ID, String material) {
 		Modifier modMaterial = null;
 		for (int i = 0; i < MOD_ARMOR_MATERIAL.length; i++) {
-			if (MOD_ARMOR_MATERIAL[i].getID().equals(material))
+			if (MOD_ARMOR_MATERIAL[i].id.equals(material)) {
 				modMaterial = MOD_ARMOR_MATERIAL[i];
+			}
 		}
-
 		ItemDefinition def = get(ID);
 		Item item = new Item(def);
 		if (!def.isFixedMaterial) {
@@ -95,8 +95,9 @@ public class ItemDataTable {
 	public Item createArmor(String ID, String material) {
 		Modifier modMaterial = null;
 		for (int i = 0; i < MOD_ARMOR_MATERIAL.length; i++) {
-			if (MOD_ARMOR_MATERIAL[i].getID().equals(material))
+			if (MOD_ARMOR_MATERIAL[i].id.equals(material)) {
 				modMaterial = MOD_ARMOR_MATERIAL[i];
+			}
 		}
 
 		ItemDefinition def = get(ID);
@@ -258,66 +259,66 @@ public class ItemDataTable {
 			new Modifier("OFTHEMOON", "  of the Moon", 2),
 		};
 
-	// FIXME data-as-code. Could load from csv, xml or whatever format datatable
+	// FIXME data-as-code. Could load from csv, xml or ?? format datatable?
 	static {
-		MOD_ARMOR_STRENGTH[0].setDefenseBonus(-1);
-		MOD_ARMOR_STRENGTH[1].setDefenseBonus(1);
-		MOD_ARMOR_MAGIC[1].setDefenseBonus(1);
-		MOD_ARMOR_MATERIAL[0].setDefenseBonus(0);
-		MOD_ARMOR_MATERIAL[1].setDefenseBonus(1);
-		MOD_ARMOR_MATERIAL[2].setDefenseBonus(2);
-		MOD_ARMOR_MATERIAL[3].setDefenseBonus(3);
+		MOD_ARMOR_STRENGTH[0].defenseBonus = -1;
+		MOD_ARMOR_STRENGTH[1].defenseBonus = 1;
+		MOD_ARMOR_MAGIC[1].defenseBonus = 1;
+		MOD_ARMOR_MATERIAL[0].defenseBonus = 0;
+		MOD_ARMOR_MATERIAL[1].defenseBonus = 1;
+		MOD_ARMOR_MATERIAL[2].defenseBonus = 2;
+		MOD_ARMOR_MATERIAL[3].defenseBonus = 3;
 
-		MOD_ARMOR_STRENGTH[1].setPriceModifier(100);
-		MOD_ARMOR_MAGIC[1].setPriceModifier(150);
+		MOD_ARMOR_STRENGTH[1].priceModifier = 100;
+		MOD_ARMOR_MAGIC[1].priceModifier = 150;
 
-		MOD_ARMOR_MATERIAL[0].setPriceModifier(0);
-		MOD_ARMOR_MATERIAL[1].setPriceModifier(100);
-		MOD_ARMOR_MATERIAL[2].setPriceModifier(300);
-		MOD_ARMOR_MATERIAL[3].setPriceModifier(1000);
+		MOD_ARMOR_MATERIAL[0].priceModifier = 0;
+		MOD_ARMOR_MATERIAL[1].priceModifier = 100;
+		MOD_ARMOR_MATERIAL[2].priceModifier = 300;
+		MOD_ARMOR_MATERIAL[3].priceModifier = 1000;
 
-		MOD_STRENGTH[0].setAtkBonus(-3);
-		MOD_STRENGTH[1].setAtkBonus(1);
-		MOD_STRENGTH[2].setAtkBonus(3);
-		MOD_STRENGTH[3].setAtkBonus(5);
-		MOD_STRENGTH[3].setSlicesThru(true);
+		MOD_STRENGTH[0].atkBonus = -3;
+		MOD_STRENGTH[1].atkBonus = 1;
+		MOD_STRENGTH[2].atkBonus = 3;
+		MOD_STRENGTH[3].atkBonus = 5;
+		MOD_STRENGTH[3].slicesThru = true;
 
-		MOD_STRENGTH[0].setPriceModifier(0);
-		MOD_STRENGTH[1].setPriceModifier(100);
-		MOD_STRENGTH[2].setPriceModifier(3000);
-		MOD_STRENGTH[3].setPriceModifier(5000);
+		MOD_STRENGTH[0].priceModifier = 0;
+		MOD_STRENGTH[1].priceModifier = 100;
+		MOD_STRENGTH[2].priceModifier = 3000;
+		MOD_STRENGTH[3].priceModifier = 5000;
 
-		MOD_MAGIC[0].setRangeBonus(1);
-		MOD_MAGIC[1].setHarmsUndead(true);
-		MOD_MAGIC[2].setDefenseBonus(5);
-		MOD_MAGIC[4].setHarmsUndead(true);
+		MOD_MAGIC[0].rangeBonus = 1;
+		MOD_MAGIC[1].harmsUndead = true;
+		MOD_MAGIC[2].defenseBonus = 5;
+		MOD_MAGIC[4].harmsUndead = true;
 
-		MOD_MAGIC[0].setPriceModifier(2000);
-		MOD_MAGIC[1].setPriceModifier(3000);
-		MOD_MAGIC[2].setPriceModifier(1000);
-		MOD_MAGIC[4].setPriceModifier(3000);
+		MOD_MAGIC[0].priceModifier = 2000;
+		MOD_MAGIC[1].priceModifier = 3000;
+		MOD_MAGIC[2].priceModifier = 1000;
+		MOD_MAGIC[4].priceModifier = 3000;
 
-		MOD_MATERIAL[0].setAtkCostBonus(0);
-		MOD_MATERIAL[1].setAtkCostBonus(20);
-		MOD_MATERIAL[1].setAtkBonus(-5);
-		MOD_MATERIAL[2].setAtkBonus(1);
-		MOD_MATERIAL[3].setAtkBonus(3);
-		MOD_MATERIAL[3].setHarmsUndead(true);
-		MOD_MATERIAL[4].setAtkBonus(2);
+		MOD_MATERIAL[0].atkCostBonus = 0;
+		MOD_MATERIAL[1].atkCostBonus = 20;
+		MOD_MATERIAL[1].atkBonus = -5;
+		MOD_MATERIAL[2].atkBonus = 1;
+		MOD_MATERIAL[3].atkBonus = 3;
+		MOD_MATERIAL[3].harmsUndead = true;
+		MOD_MATERIAL[4].atkBonus = 2;
 
-		MOD_MATERIAL[0].setPriceModifier(0);
-		MOD_MATERIAL[1].setPriceModifier(50);
-		MOD_MATERIAL[2].setPriceModifier(100);
-		MOD_MATERIAL[3].setPriceModifier(1000);
-		MOD_MATERIAL[4].setPriceModifier(500);
+		MOD_MATERIAL[0].priceModifier = 0;
+		MOD_MATERIAL[1].priceModifier = 50;
+		MOD_MATERIAL[2].priceModifier = 100;
+		MOD_MATERIAL[3].priceModifier = 1000;
+		MOD_MATERIAL[4].priceModifier = 500;
 
-		MOD_ADDITIONAL[0].setRangeBonus(1);
-		MOD_ADDITIONAL[1].setAtkBonus(1);
-		MOD_ADDITIONAL[2].setAtkBonus(2);
+		MOD_ADDITIONAL[0].rangeBonus = 1;
+		MOD_ADDITIONAL[1].atkBonus = 1;
+		MOD_ADDITIONAL[2].atkBonus = 2;
 
-		MOD_ADDITIONAL[0].setPriceModifier(1500);
-		MOD_ADDITIONAL[1].setPriceModifier(1500);
-		MOD_ADDITIONAL[2].setPriceModifier(2000);
+		MOD_ADDITIONAL[0].priceModifier = 1500;
+		MOD_ADDITIONAL[1].priceModifier = 1500;
+		MOD_ADDITIONAL[2].priceModifier = 2000;
 
 	}
 
@@ -325,10 +326,10 @@ public class ItemDataTable {
 		Modifier material = materials[0];
 		int tries = 3;
 		while (tries > 0) {
-			Modifier rand = Util.pick(materials);
-			int chance = rand.getChance() + levelNumber;
+			Modifier randMat = Util.pick(materials);
+			int chance = randMat.chance + levelNumber;
 			if (Util.chance(chance)) {
-				material = rand;
+				material = randMat;
 				break;
 			}
 			tries--;
@@ -342,20 +343,20 @@ public class ItemDataTable {
 		Modifier magic = null;
 		Modifier additional = null;
 
-		Modifier rand = Util.pick(MOD_STRENGTH);
-		int chance = rand.getChance() + levelNumber;
+		Modifier randMod = Util.pick(MOD_STRENGTH);
+		int chance = randMod.chance + levelNumber;
 		if (Util.chance(chance)) {
-			strength = rand;
+			strength = randMod;
 		}
-		rand = (Modifier) Util.pick(MOD_MAGIC);
-		chance = rand.getChance() + levelNumber;
+		randMod = Util.pick(MOD_MAGIC);
+		chance = randMod.chance + levelNumber;
 		if (Util.chance(chance)) {
-			magic = rand;
+			magic = randMod;
 		}
-		rand = (Modifier) Util.pick(MOD_ADDITIONAL);
-		chance = rand.getChance() + levelNumber;
+		randMod = Util.pick(MOD_ADDITIONAL);
+		chance = randMod.chance + levelNumber;
 		if (Util.chance(chance)) {
-			additional = rand;
+			additional = randMod;
 		}
 
 		if (strength != null)
@@ -370,18 +371,18 @@ public class ItemDataTable {
 		Modifier strength = null;
 		Modifier magic = null;
 		Modifier additional = null;
-		Modifier rand = (Modifier) Util.pick(MOD_ARMOR_STRENGTH);
-		int chance = rand.getChance() + levelNumber;
+		Modifier rand = Util.pick(MOD_ARMOR_STRENGTH);
+		int chance = rand.chance + levelNumber;
 		if (Util.chance(chance)) {
 			strength = rand;
 		}
-		rand = (Modifier) Util.pick(MOD_ARMOR_MAGIC);
-		chance = rand.getChance() + levelNumber;
+		rand = Util.pick(MOD_ARMOR_MAGIC);
+		chance = rand.chance + levelNumber;
 		if (Util.chance(chance)) {
 			magic = rand;
 		}
-		rand = (Modifier) Util.pick(MOD_ARMOR_ADDITIONAL);
-		chance = rand.getChance() + levelNumber;
+		rand = Util.pick(MOD_ARMOR_ADDITIONAL);
+		chance = rand.chance + levelNumber;
 		if (Util.chance(chance)) {
 			additional = rand;
 		}

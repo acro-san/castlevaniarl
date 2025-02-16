@@ -11,14 +11,15 @@ import crl.level.Cell;
 import crl.level.Level;
 import crl.npc.NPC;
 
-public class VillagerAI implements ActionSelector{
+public class VillagerAI implements ActionSelector {
+	
 	protected boolean onDanger;
 	protected boolean attackPlayer;
 
 	public Action selectAction(Actor who) {
-		NPC aNPC = (NPC) who;
+		NPC aNPC = (NPC)who;
 		Level lvl = who.level;
-		if (attackPlayer && aNPC.getHits() > 1){
+		if (attackPlayer && aNPC.hp > 1) {
 			if (Util.chance(10)) {
 				lvl.addMessage("The "+who.getDescription()+" yells: '"+aNPC.getAngryMessage()+"'", who.pos);
 			}
@@ -73,11 +74,13 @@ public class VillagerAI implements ActionSelector{
 		return null;
 	}
 
-	public String getID(){
+	// AIType ID?
+	public String getID() {
 		return "VILLAGER";
 	}
 
-	public ActionSelector derive(){
+
+	public ActionSelector derive() {
 		try {
 			return (ActionSelector) clone();
 		} catch (CloneNotSupportedException cnse) {

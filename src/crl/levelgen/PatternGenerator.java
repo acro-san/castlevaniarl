@@ -9,14 +9,14 @@ import crl.game.*;
 import crl.feature.*;
 
 public class PatternGenerator extends LevelGenerator {
-	private static PatternGenerator singleton = new PatternGenerator();
+//	private static PatternGenerator singleton = new PatternGenerator();
 
 	private Hashtable<String,String> charMap;	// string id -> space separated string of chars??
 	private Vector<AssignedFeature> assignedFeatures = new Vector<>();
 	private LevelFeature baseFeature;
 	private boolean hasBoss;
 
-	public void resetFeatures(){
+	public void resetFeatures() {
 		assignedFeatures.removeAllElements();
 		baseFeature = null;
 		hasBoss = false;
@@ -26,13 +26,11 @@ public class PatternGenerator extends LevelGenerator {
 		assignedFeatures.add(new AssignedFeature(where, lf));
 	}
 
-	//private Position startPosition, endPosition;
-
 	private Feature endFeature;
 
-	public static PatternGenerator getGenerator(){
-		return singleton;
-    }
+//	public static PatternGenerator getGenerator(){
+//		return singleton;
+//}
 
 	public Level createLevel() throws CRLException {
 		Debug.enterMethod(this, "createLevel");
@@ -54,7 +52,7 @@ public class PatternGenerator extends LevelGenerator {
 		ret.setCells(cmap);
 		
 		//ret.setPositions(startPosition, endPosition);
-		if (!hasBoss){
+		if (!hasBoss) {
 			int keysOnLevel = placeKeys(ret);
 			if (endFeature != null)
 				endFeature.setKeyCost(keysOnLevel);

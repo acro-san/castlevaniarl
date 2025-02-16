@@ -1,19 +1,15 @@
 package crl.action.invoker;
 
-import sz.util.Position;
 import crl.action.Action;
-import crl.action.HeartAction;
 import crl.action.ProjectileSkill;
-import crl.actor.Actor;
-import crl.feature.Feature;
-import crl.level.Cell;
 import crl.level.Level;
-import crl.monster.Monster;
 import crl.player.Player;
+import sz.util.Position;
 
 
-public class Bird extends ProjectileSkill{
-	public String getID(){
+public class Bird extends ProjectileSkill {
+	
+	public String getID() {
 		return "Bird";
 	}
 	
@@ -28,6 +24,7 @@ public class Bird extends ProjectileSkill{
 		return 5+getPlayer().getSoulPower()*2;
 	}
 
+	// HP!? the HP of the projectile? The damage dealt?! WTF is 'hit'!??
 	public int getHit() {
 		return 100;
 	}
@@ -76,13 +73,13 @@ public class Bird extends ProjectileSkill{
 			return 2;
 	}
 	
-	public void execute(){
+	
+	public void execute() {
 		reduceHearts();
 		executing = true;
 		Level aLevel = performer.level;
 		Player aPlayer = aLevel.getPlayer();
 		aLevel.addMessage("You invoke two bird souls!");
-
 
 		int otherDir1 = 0;
 		int otherDir2 = 0;
@@ -130,11 +127,13 @@ public class Bird extends ProjectileSkill{
 		executing = false;
 	}
 
-	public int getCost(){
-		Player p = (Player) performer;
+	@Override
+	public int getCost() {
+		Player p = (Player)performer;
 		return (int)(p.getCastCost() * 1.3);
 	}
 	
+	@Override
 	public String getPromptDirection(){
 		return "Where do you want to call the birds?";
 	}

@@ -197,7 +197,7 @@ public class Feature implements Cloneable, java.io.Serializable {
 	}
 
 
-    public int getUpgradePrize() {
+	public int getUpgradePrize() {
 		return upgradePrize;
 	}
 

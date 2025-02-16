@@ -4,35 +4,30 @@ import java.io.Serializable;
 
 public class Modifier implements Serializable {
 
-	private String id;
-	private String description;
-	private double priceModifier;
-	private int atkBonus;
-	private int rangeBonus;
-	private boolean harmsUndead;
-	private boolean slicesThru;
-	private int atkCostBonus;
-	private int defenseBonus;
-	private int chance;
 	
-	public int getChance() {
-		return chance;
-	}
-	public void setChance(int chance) {
-		this.chance = chance;
-	}
-	public String getID(){
-		return id;
-	}
+	public String
+		id,			// FIXME -> short. or int. then use as def array indices.
+		description;
+
+	public double
+		priceModifier;
+	public int
+		chance,
+		atkBonus,
+		rangeBonus,
+		defenseBonus,
+		atkCostBonus;
+	public boolean
+		harmsUndead,
+		slicesThru;
+
 	public Modifier(String ID, String description, int chance) {
 		this.id = ID;
 		this.description = description;
 		this.chance = chance;
 	}
-	public String getDescription() {
-		return description;
-	}
 	
+	/*
 	public int getAtkBonus() {
 		return atkBonus;
 	}
@@ -78,4 +73,5 @@ public class Modifier implements Serializable {
 	public void setPriceModifier(double priceModifier) {
 		this.priceModifier = priceModifier;
 	}
+	*/
 }

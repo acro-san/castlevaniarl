@@ -5,26 +5,31 @@ import crl.player.Player;
 
 public abstract class HeartAction extends Action {
 	
+	// TODO: just define a data table, don't have values as CODE!
 	public abstract int getHeartCost();
 	
-	public void execute(){
+	@Override
+	public void execute() {
 		reduceHearts();
 	}
 	
+	//override? final?
 	public void reduceHearts() {
-		Player aPlayer = (Player) performer;
-		aPlayer.reduceHearts(getHeartCost());
+		Player p = (Player)performer;
+		p.reduceHearts(getHeartCost());
 	}
 
 
-	public Player getPlayer(){
+	public Player getPlayer() {
 		return (Player)performer;
 	}
 
+
+	@Override
 	public boolean canPerform(Actor a) {
 		Player p = getPlayer(a);
 		setPerformer(a);
-		if (p.getHearts() >= getHeartCost()){
+		if (p.getHearts() >= getHeartCost()) {
 			return true;
 		}
 		invalidationMessage = "Your need more power!";

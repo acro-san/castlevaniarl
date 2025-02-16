@@ -853,7 +853,7 @@ public class GFXUserInterface extends UserInterface {
 	}
 	
 	private void drawBossHealthBar() {
-		int bossHP = player.level.boss.getHits();
+		int bossHP = player.level.boss.hp;
 		int bossMHP = player.level.boss.getMaxHP();
 		int sixthiedBossHits = (int)Math.ceil( (bossHP * 60.0) / bossMHP );
 		// boss hp as proportion of a 60-element bar.

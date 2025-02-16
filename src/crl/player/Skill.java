@@ -4,14 +4,12 @@ import java.awt.Image;
 
 import sz.csi.textcomponents.MenuItem;
 import sz.gadgets.GFXMenuItem;
-import crl.ui.*;
-import crl.ui.consoleUI.CharAppearance;
-import crl.*;
 import crl.action.*;
 
-public class Skill implements MenuItem, GFXMenuItem{
+public class Skill implements MenuItem, GFXMenuItem {
+	
 	private Action action;
-	private int heartCost;
+	private int heartCost;	// FIXME Duplicate var with HeartSkills!!!
 	private String actionDescription;
 	private boolean symbolic;
 
