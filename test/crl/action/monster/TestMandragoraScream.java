@@ -45,8 +45,8 @@ public class TestMandragoraScream {
 		player = new Player();
 		player.pos = playerPosition;
 		player.level = level;
-		player.setHitsMax(30);
-		player.setHits(30);
+		player.setHPMax(30);
+		player.setHP(30);
 		when(level.getPlayer()).thenReturn(player);
 		
 		performerPosition = new Position(10, 10);
@@ -84,14 +84,14 @@ public class TestMandragoraScream {
 	public void mandragoraScreamShouldIgnoreArmor() {
 		when(performer.getFlag("MANDRAGORA_PULLED")).thenReturn(true);
 		
-		int oldHits = player.getHits();
+		int oldHits = player.getHP();
 		Item armour = mock(Item.class);
 		when(armour.getDefense()).thenReturn(10);
 		
-		player.setArmor(armour);
+		player.armor = armour;
 	
 		action.execute();
 		
-		assertThat(player.getHits(), equalTo(oldHits - MandragoraScream.SCREAM_DAMAGE));
+		assertThat(player.getHP(), equalTo(oldHits - MandragoraScream.SCREAM_DAMAGE));
 	}
 }

@@ -1,5 +1,6 @@
 package crl.action.invoker;
 
+import crl.action.AT;
 import crl.action.HeartAction;
 import crl.level.Level;
 import crl.player.Consts;
@@ -11,16 +12,16 @@ public class Turtle extends HeartAction {
 		return 5;
 	}
 	
-	public String getID(){
-		return "Turtle";
+	public AT getID() {
+		return AT.Turtle;
 	}
 	
 	public String getSFX(){
 		return "wav/turtleCry.wav";
 	}
 	
-	public int getCost(){
-		Player p = (Player) performer;
+	public int getCost() {
+		Player p = (Player)performer;
 		return (int)(p.getCastCost() * 1.1);
 	}
 	

@@ -1,18 +1,11 @@
 package crl.action.vanquisher;
 
-import sz.util.Line;
-import sz.util.Position;
-import crl.action.Action;
+import crl.action.AT;
 import crl.action.ProjectileSkill;
-import crl.actor.Actor;
-import crl.feature.Feature;
-import crl.level.Cell;
-import crl.level.Level;
-import crl.monster.Monster;
 import crl.player.Player;
-import crl.ui.effects.EffectFactory;
 
-public class FlameSpell extends ProjectileSkill{
+public class FlameSpell extends ProjectileSkill {
+	
 	public int getDamage() {
 		return 15+getPlayer().getSoulPower()*2;
 	}
@@ -53,16 +46,16 @@ public class FlameSpell extends ProjectileSkill{
 		return 8;
 	}
 
-	public String getID(){
-		return "FlameSpell";
+	public AT getID() {
+		return AT.FlameSpell;
 	}
 	
-	public int getCost(){
+	public int getCost() {
 		Player p = (Player) performer;
 		return (int)(p.getCastCost() * 1.3);
 	}
 	
-	public String getPromptPosition(){
+	public String getPromptPosition() {
 		return "Where do you want to invoke the flame?";
 	}
 	

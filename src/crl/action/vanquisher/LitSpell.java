@@ -1,19 +1,11 @@
 package crl.action.vanquisher;
 
-import java.util.Vector;
-
-import sz.util.Line;
-import sz.util.Position;
-import crl.action.Action;
+import crl.action.AT;
 import crl.action.ProjectileSkill;
-import crl.actor.Actor;
-import crl.level.Cell;
-import crl.level.Level;
-import crl.monster.Monster;
 import crl.player.Player;
-import crl.ui.effects.EffectFactory;
 
-public class LitSpell extends ProjectileSkill{
+public class LitSpell extends ProjectileSkill {
+	
 	public int getDamage() {
 		return 5+4*getPlayer().getSoulPower();
 	}
@@ -54,16 +46,17 @@ public class LitSpell extends ProjectileSkill{
 		return 8;
 	}
 
-	public String getID(){
-		return "LitSpell";
+	public AT getID() {
+		return AT.LitSpell;
 	}
 	
-	public int getCost(){
+	public int getCost() {
 		Player p = (Player) performer;
 		return (int)(p.getCastCost() * 1.3);
 	}
 	
-	public String getPromptPosition(){
+	public String getPromptPosition() {
 		return "Where do you want to invoke the lighting?";
 	}
+
 }

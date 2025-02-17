@@ -15,12 +15,13 @@ public class FlameAI implements ActionSelector, Cloneable {
 	
 	private int turnsToDie;
 	private boolean activated;
+	private static final Action SHINE_ACTION = new Shine();
 	
 	public String getID() {
 		return "FLAME_SELECTOR";
 	}
 
-	public Action selectAction(Actor who){
+	public Action selectAction(Actor who) {
 		if (activated) {
 			turnsToDie--;
 			if (turnsToDie <= 0) {
@@ -33,11 +34,11 @@ public class FlameAI implements ActionSelector, Cloneable {
 			if (m != null) {
 				m.damage(new StringBuffer(), 1);
 			}
-			return Shine.getAction();
+			return SHINE_ACTION;//Shine.getAction();
 		} else {
 			turnsToDie = 5;
 			activated = true;
-			return Shine.getAction();
+			return SHINE_ACTION;	//Shine.getAction();
 		}
 	}
 

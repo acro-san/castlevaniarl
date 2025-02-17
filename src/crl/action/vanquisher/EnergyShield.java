@@ -1,14 +1,15 @@
 package crl.action.vanquisher;
 
+import crl.action.AT;
 import crl.action.HeartAction;
-import crl.actor.Actor;
 import crl.level.Level;
 import crl.player.Consts;
 import crl.player.Player;
 
-public class EnergyShield extends HeartAction{
-	public String getID(){
-		return "EnergyShield";
+public class EnergyShield extends HeartAction {
+	
+	public AT getID() {
+		return AT.EnergyShield;
 	}
 	
 	public int getHeartCost() {
@@ -22,10 +23,10 @@ public class EnergyShield extends HeartAction{
 	
 	public void execute(){
 		super.execute();
-		Player aPlayer = (Player)performer;
-		Level aLevel = aPlayer.level;
+		Player p = (Player)performer;
+		Level aLevel = p.level;
 		aLevel.addMessage("You are covered with a shimmering shield!!");
-		aPlayer.setCounter(Consts.C_ENERGYSHIELD, 50+aPlayer.getSoulPower()*2);
+		p.setCounter(Consts.C_ENERGYSHIELD, 50 + p.getSoulPower() * 2);
 	}
 	
 	

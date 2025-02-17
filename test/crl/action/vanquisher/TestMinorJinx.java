@@ -1,7 +1,8 @@
 package crl.action.vanquisher;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import static org.hamcrest.Matchers.*;
 
@@ -33,8 +34,8 @@ public class TestMinorJinx {
 		player = new Player();
 		player.setHeartMax(250);
 		player.setHearts(50);
-		player.setHitsMax(30);
-		player.setHits(30);
+		player.setHPMax(30);
+		player.setHP(30);
 		player.level = level;
 		
 		jinx = new MinorJinx();
@@ -55,25 +56,25 @@ public class TestMinorJinx {
 	}
 	
 	@Test
-	public void castingMinorJinxShouldDecreaseHits() {
-		int oldHits = player.getHits();
+	public void castingMinorJinxShouldDecreaseHP() {
+		int oldHP = player.getHP();
 		
 		jinx.execute();
 		
-		assertThat(player.getHits(), lessThan(oldHits));
+		assertThat(player.getHP(), lessThan(oldHP));
 	}
 	
 	@Test
 	public void armourShouldNotDecreaseDamageWhenCastingMinorJinx() {
-		int oldHits = player.getHits();
+		int oldHP = player.getHP();
 		Item armour = mock(Item.class);
 		when(armour.getDefense()).thenReturn(10);
 		
-		player.setArmor(armour);
+		player.armor = armour;
 		
 		jinx.execute();
 		
-		assertThat(player.getHits(), equalTo(oldHits - 5));
+		assertThat(player.getHP(), equalTo(oldHP - 5));
 	}
 
 }

@@ -2,14 +2,15 @@ package crl.feature.action;
 
 import sz.util.Position;
 import crl.Main;
+import crl.action.AT;
 import crl.action.Action;
 import crl.level.Level;
 import crl.monster.Monster;
 
 public class Blast extends Action {
 	
-	public String getID() {
-		return "Blast";
+	public AT getID() {
+		return AT.Blast;
 	}
 	
 	public void execute() {

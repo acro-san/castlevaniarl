@@ -1,19 +1,20 @@
 package crl.action.monster;
 
 import sz.util.Position;
+import crl.action.AT;
 import crl.action.Action;
-import crl.level.Cell;
 import crl.level.Level;
 import crl.monster.Monster;
 import crl.player.Damage;
 import crl.player.Player;
 
-public class Dash extends Action{
-	public String getID(){
-		return "SLICE_DIVE";
+public class Dash extends Action {
+	
+	public AT getID() {
+		return AT.SliceDive;
 	}
 	
-	public boolean needsDirection(){
+	public boolean needsDirection() {
 		return true;
 	}
 
@@ -36,7 +37,6 @@ public class Dash extends Action{
 			}
 			
 			aMonster.pos = destinationPoint;
-			//currentCell = aLevel.getMapCell(destinationPoint);
 		}
 		aLevel.addMessage(message.toString());
 	}

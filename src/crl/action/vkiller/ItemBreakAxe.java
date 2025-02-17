@@ -2,6 +2,7 @@ package crl.action.vkiller;
 
 import sz.util.Position;
 import sz.util.Util;
+import crl.action.AT;
 import crl.action.ProjectileSkill;
 import crl.game.SFXManager;
 import crl.player.Player;
@@ -51,10 +52,8 @@ public class ItemBreakAxe extends ProjectileSkill {
 	}
 	
 	
-
-	
-	public String getID(){
-		return "Axe";
+	public AT getID() {
+		return AT.ItemBreak_Axe;//"Axe";
 	}
 	
 	public boolean needsPosition(){

@@ -1,5 +1,6 @@
 package crl.action.invoker;
 
+import crl.action.AT;
 import crl.action.Action;
 import crl.action.ProjectileSkill;
 import crl.level.Level;
@@ -9,8 +10,8 @@ import sz.util.Position;
 
 public class Bird extends ProjectileSkill {
 	
-	public String getID() {
-		return "Bird";
+	public AT getID() {
+		return AT.Bird;
 	}
 	
 	public boolean needsDirection(){
@@ -134,7 +135,7 @@ public class Bird extends ProjectileSkill {
 	}
 	
 	@Override
-	public String getPromptDirection(){
+	public String getPromptDirection() {
 		return "Where do you want to call the birds?";
 	}
 }

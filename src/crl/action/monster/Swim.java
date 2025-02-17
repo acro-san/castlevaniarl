@@ -2,6 +2,7 @@ package crl.action.monster;
 
 import sz.util.Debug;
 import sz.util.Position;
+import crl.action.AT;
 import crl.action.Action;
 import crl.level.Cell;
 import crl.level.Level;
@@ -10,8 +11,8 @@ import crl.player.Damage;
 
 public class Swim extends Action {
 	
-	public String getID() {
-		return "Swim";
+	public AT getID() {
+		return AT.Swim;
 	}
 	
 	public boolean needsDirection() {
@@ -20,7 +21,7 @@ public class Swim extends Action {
 
 	public void execute() {
 		Debug.doAssert(performer instanceof Monster, "The player tried to Swim...");
-		Monster aMonster = (Monster) performer;
+		Monster mon = (Monster)performer;
 		Position var = directionToVariation(targetDirection);
 		Position destinationPoint = Position.add(performer.pos, var);
 		Level aLevel = performer.level;
@@ -32,17 +33,17 @@ public class Swim extends Action {
 					performer.pos = destinationPoint;
 			} else {
 				if (destinationMonster == null){
-					aLevel.addMessage("A "+aMonster.getDescription()+" jumps out of the water!", destinationPoint);
+					aLevel.addMessage("A "+mon.getDescription()+" jumps out of the water!", destinationPoint);
 					performer.pos = destinationPoint;
 				}
 			}
 		}
 
-		if (aMonster.getAttack() > 0 &&
+		if (mon.getAttack() > 0 &&
 			aLevel.getPlayer().pos.equals(destinationPoint) &&
-			aLevel.getPlayer().getStandingHeight() == aMonster.getStandingHeight()) {
+			aLevel.getPlayer().getStandingHeight() == mon.getStandingHeight()) {
 			// Damage the poor player and bounce him back
-			if (aLevel.getPlayer().damage("The "+aMonster.getDescription()+" hits you with his jump!", aMonster, new Damage(aMonster.getAttack(), false)))
+			if (aLevel.getPlayer().damage("The "+mon.getDescription()+" hits you with his jump!", mon, new Damage(mon.getAttack(), false)))
 				aLevel.getPlayer().bounceBack(var,1);
 		}
 	}

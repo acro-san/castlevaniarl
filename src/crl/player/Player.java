@@ -41,8 +41,8 @@ public class Player extends Actor {
 	
 	private boolean doNotRecordScore = false;
 	
-	private static int
-		HITMAX = 60;
+	private static final int
+		MAX_HPMAX = 60;		// MAXIMUM max-hp
 	
 	public static final Advancement
 		ADV_MERCURY = new AdvMercury(),
@@ -86,8 +86,10 @@ public class Player extends Actor {
 	public int score;
 	private int keys;
 	private int carryMax;
-	private int hits;
-	private int hitsMax;
+	
+	private int hp;
+	private int hpMax;
+	
 	private int baseSightRange;
 	private int breathing = 25;
 	private int gold;
@@ -130,6 +132,9 @@ public class Player extends Actor {
 
 	private Hostage currentHostage;
 	private Monster enemy;
+	
+	private HashMap<String, Equipment> inventory = new HashMap<>();
+	
 	
 	public void setAdvancementLevels(int[] advancementLevels) {
 		this.advancementLevels = advancementLevels;
@@ -217,8 +222,8 @@ public class Player extends Actor {
 		}
 	}
 	
-	public static final String 
-		INCREMENT_HITS = "hits",
+	public static final String
+		INCREMENT_HITS = "hits",	// FIXME Rename INCREMENT_HP !!!
 		INCREMENT_HEARTS = "hearts",
 		INCREMENT_ATTACK = "attack",
 		INCREMENT_COMBAT = "combat",
@@ -229,7 +234,8 @@ public class Player extends Actor {
 		INCREMENT_DEFENSE = "defense",
 		INCREMENT_EVADE = "evade";
 	
-	public String getLastIncrementString(){
+	
+	public String getLastIncrementString() {
 		int temp = 0;
 		String tempStr = "";
 		temp = getLastIncrement(INCREMENT_HITS);
@@ -275,7 +281,7 @@ public class Player extends Actor {
 		return tempStr;
 	}
 	
-	private int getNeededXP(int level){
+	private int getNeededXP(int level) {
 		return getAvgEnemies(level) * getAvgXP(level);
 	}
 	
@@ -311,21 +317,22 @@ public class Player extends Actor {
 	*/
 
 	public Player () {
-		hitsMax = 20;
-		hits = hitsMax;
+		hpMax = 20;
+		hp = hpMax;
 		heartMax = 20;
-		carryMax = 15;
 		hearts = 5;
+		carryMax = 15;
 		gold = 0;
 		currentMysticWeapon = -1;
-		for (int i = 0; i < ItemDefinition.CATS.length; i++){
+		for (int i = 0; i < ItemDefinition.CATS.length; i++) {
 			resetWeaponSkillLevel(ItemDefinition.CATS[i]);
 		}
 	}
 	
-	public static void initializeWhips(String leatherWhip, 
-			String chainWhip, 
-			String vampireKiller, 
+	
+	public static void initializeWhips(String leatherWhip,
+			String chainWhip,
+			String vampireKiller,
 			String thornWhip,
 			String flameWhip,
 			String litWhip)
@@ -339,7 +346,15 @@ public class Player extends Actor {
 		LIT_WHIP = it.createWeapon(litWhip,"");
 	}
 	
-	public static Item LEATHER_WHIP, CHAIN_WHIP, VAMPIRE_WHIP, THORN_WHIP, FLAME_WHIP, LIT_WHIP;
+	
+	public static Item
+		LEATHER_WHIP,
+		CHAIN_WHIP,
+		VAMPIRE_WHIP,	//vkiller (fully upgraded normal whip ?)
+		THORN_WHIP,
+		FLAME_WHIP,
+		LIT_WHIP;
+
 
 	public int getMysticWeapon() {
 		return currentMysticWeapon;
@@ -356,7 +371,8 @@ public class Player extends Actor {
 		playerEventListener.informEvent(code, param);
 	}
 
-	public int getMorphDefense(){
+	//static?
+	public int getMorphDefense() {
 		if (hasCounter(Consts.C_MYSTMORPH) || hasCounter(Consts.C_MYSTMORPH2)){
 			return 1;
 		} else if (hasCounter(Consts.C_LUPINEMORPH))
@@ -435,7 +451,7 @@ public class Player extends Actor {
 			}
 		}
 		
-		hits -= dam.damage;
+		hp -= dam.damage;
 		level.addMessage(damageSource + " {"+dam.damage+"}");
 		if (Util.chance(50)) {
 			decreaseWhip();
@@ -448,18 +464,21 @@ public class Player extends Actor {
 
 	public void selfDamage(String damageSource, int damageType, Damage dam) {
 		damage(damageSource, dam);
-		if (hits < 0){
-			switch (damageType){
-				case Player.DAMAGE_MORPHED_WITH_STRONG_ARMOR:
-					gameSessionInfo.setDeathCause(GameSessionInfo.STRANGLED_BY_ARMOR);
-					break;
-				case Player.DAMAGE_WALKED_ON_LAVA:
-					gameSessionInfo.setDeathCause(GameSessionInfo.BURNED_BY_LAVA);
-					break;
-			}
+		if (hp > 0) {
+			return;	// still alive.
 		}
-
+		
+		// hp is 0 or lower. DEAD.
+		switch (damageType) {
+			case Player.DAMAGE_MORPHED_WITH_STRONG_ARMOR:
+				gameSessionInfo.setDeathCause(GameSessionInfo.STRANGLED_BY_ARMOR);
+				break;
+			case Player.DAMAGE_WALKED_ON_LAVA:
+				gameSessionInfo.setDeathCause(GameSessionInfo.BURNED_BY_LAVA);
+				break;
+		}
 	}
+
 
 	public void increaseWeaponSkill(String category) {
 		Counter c = ((Counter)weaponSkillsCounters.get(category));
@@ -570,41 +589,42 @@ public class Player extends Actor {
 		}
 
 		
-		if (getWeapon() != null && Util.chance(getWeapon().getCoverage())){
-			level.addMessage("You parry the attack with your "+getWeapon().getDescription());
+		if (weapon != null && Util.chance(weapon.getCoverage())) {
+			level.addMessage("You parry the attack with your "+weapon.getDescription());
 			return false;
 		}
 		
-		if (getShield() != null &&
-				(getWeapon() == null || (getWeapon()!= null && !getWeapon().isTwoHanded()))
-				){
+		if (shield != null &&
+			(weapon == null || (weapon != null && !weapon.isTwoHanded()))
+			)
+		{
 			int blockChance = getShieldBlockChance();
 			int coverageChance = getShieldCoverageChance();
 			
-			if (hasCounter("SHIELD_GUARD")){
+			if (hasCounter("SHIELD_GUARD")) {
 				if (attackDirection == blockDirection ||
 					attackDirection == blockDirection1 ||
 					attackDirection == blockDirection2){
 					level.addMessage("You withstand the attack!");
 					blockChance *= 3;
 					coverageChance = 100;
-				} 
-			} 
+				}
+			}
 			
-			if (Util.chance(blockChance)){
-				level.addMessage("You completely block the attack with your "+getShield().getDescription());
+			if (Util.chance(blockChance)) {
+				level.addMessage("You completely block the attack with your "+shield.getDescription());
 				increaseWeaponSkill(ItemDefinition.CAT_SHIELD);
 				return false;
 			}
 			
-			if (Util.chance(coverageChance)){
-				level.addMessage("Your "+getShield().getDescription()+" is hit.");
-				dam.reduceDamage(getShield().getDefense());
+			if (Util.chance(coverageChance)) {
+				level.addMessage("Your "+shield.getDescription()+" is hit.");
+				dam.reduceDamage(shield.getDefense());
 			}
 		}
 		damage("The "+who.getDescription()+" hits you.", dam);
 		Main.ui.drawEffect(Main.efx.createLocatedEffect(pos, "SFX_QUICK_WHITE_HIT"));
-		if (hits < 0) {
+		if (hp < 0) {
 			if (sex == MALE)
 				SFXManager.play("wav/die_male.wav");
 			else
@@ -616,10 +636,10 @@ public class Player extends Actor {
 		return true;
 	}
 
-	public void checkDeath(){
-		if (hits < 0) {
+	public void checkDeath() {
+		if (hp < 0) {
 			level.addMessage("You are dead..");
-			informPlayerEvent (DEATH);
+			informPlayerEvent(DEATH);
 		}
 	}
 
@@ -627,7 +647,6 @@ public class Player extends Actor {
 		currentMysticWeapon = value;
 	}
 
-	private Hashtable<String, Equipment> inventory = new Hashtable<>();
 
 	public String getSecondaryWeaponDescription() {
 		if (playerClass == CLASS_VAMPIREKILLER) {
@@ -636,28 +655,29 @@ public class Player extends Actor {
 			else
 				return "None";
 		} else {
-			if (getSecondaryWeapon() != null)
-				return getSecondaryWeapon().getAttributesDescription();
+			if (secondaryWeapon != null)
+				return secondaryWeapon.getAttributesDescription();
 			else
 				return "";
 		}
 	}
 	
-	public String getEquipedWeaponDescription(){
+	public String getEquipedWeaponDescription() {
 		if (weapon != null)
 			return (weapon.hasCounter(Consts.C_WEAPON_ENCHANTMENT) ? "Enchanted ":"") + weapon.getAttributesDescription();
 		else
 			return "Nothing";
 	}
 
-	public String getArmorDescription(){
+	public String getArmorDescription() {
 		if (armor != null)
 			return armor.getAttributesDescription();
 		else
 			return "Nothing";
 	}
 
-	public String getAccDescription(){
+
+	public String getAccDescription() {
 		if (shield == null)
 			return "Nothing";
 		else
@@ -679,7 +699,7 @@ public class Player extends Actor {
 			increaseHeartMax(Integer.parseInt(effectOnAcquire[1]));
 		else
 		if (effectOnAcquire[0].equals("HITSMAX"))
-			increaseHitsMax(Integer.parseInt(effectOnAcquire[1]));
+			increaseHPMax(Integer.parseInt(effectOnAcquire[1]));
 		else
 		if (effectOnAcquire[0].equals("ENABLE")){
 			if (effectOnAcquire[1].equals("LITSPELL"))
@@ -715,20 +735,21 @@ public class Player extends Actor {
 		}
 	}
 
-	private Item weapon;
-	private Item secondaryWeapon;
-	private Item armor;
-	private Item shield;
-
+	public Item
+		weapon,
+		secondaryWeapon,
+		armor,
+		shield;
+	
 	public int getItemCount() {
 		int eqCount = 0;
-		Enumeration<Equipment> en = inventory.elements();
-		while (en.hasMoreElements()) {
-			eqCount += (en.nextElement()).getQuantity();
+		for (String i: inventory.keySet()) {
+			eqCount += inventory.get(i).getQuantity();
 		}
 		return eqCount;
 	}
-	public boolean canCarry(){
+	
+	public boolean canCarry() {
 		return getItemCount() < carryMax;
 	}
 	
@@ -753,10 +774,9 @@ public class Player extends Actor {
 	}*/
 
 	public Vector<Equipment> getInventory() {
-		Vector<Equipment> ret = new Vector<>();
-		Enumeration<Equipment> x = inventory.elements();
-		while (x.hasMoreElements()) {
-			ret.add(x.nextElement());
+		Vector<Equipment> ret = new Vector<>(10);
+		for (String i: inventory.keySet()) {
+			ret.add(inventory.get(i));
 		}
 		return ret;
 	}
@@ -778,28 +798,78 @@ public class Player extends Actor {
 		hearts = value;
 	}
 
-	public int getHits() {
-		return hits;
+	// === HP Functions ===
+	
+	public int getHP() {
+		return hp;
 	}
 
-	public void setHits(int value) {
-		hits = value;
-		if (hits > hitsMax) {
-			hits = hitsMax;
+	public void setHP(int value) {
+		hp = value;
+		if (hp > hpMax) {
+			hp = hpMax;
 		}
 	}
+	
+	public int getHPMax() {
+		return hpMax;
+	}
 
+	public void setHPMax(int max) {
+		hpMax = max;
+	}
+	
+	public void increaseHPMax(int amount) {
+		assert(amount > 0);
+		hpMax += amount;
+		// TODO: What if: HP was FULL, and you just increased max amount?
+		// fill up current amount also? Or no?
+		if (hpMax > MAX_HPMAX) {
+			hpMax = MAX_HPMAX;
+		}
+	}
+	
+	
+	public void heal() {	// FULL heal. TODO Rename 'fullHeal' or 'healFully'
+		hp = hpMax;
+	}
+
+
+	public void heal(int i) {	// heal()	was called recoverHP().
+		hp += i;
+		if (hp > hpMax) {
+			hp = hpMax;
+		}
+	}
+	
+	/** Recover p% of your max HP! */
+	public void healHPPercentage(int p) {	// previously known as "recoverHitsP"
+		int recovery = (int)Math.round((double)hpMax * (p/100.0));
+		heal(recovery);
+	}
+	
+	
+	/*public void regen() {
+		if (regenRate > 0)
+			regenCont++;
+		if (regenCont > regenRate) {
+			regenCont = 0;
+			recoverHits(1);
+		}
+	}*/
+	
+	
 	public String getName() {
 		return name;
 	}
-
-	private String classString;
-	public String getClassString() {
-		return classString;
-	}
-
+	
 	public void setName(String value) {
 		name = value;
+	}
+
+	private String classString;		// ....?!?! WHY WHAT WHY STORE STR OF IT?
+	public String getClassString() {
+		return classString;
 	}
 
 	public PlayerEventListener getPlayerEventListener() {
@@ -810,10 +880,11 @@ public class Player extends Actor {
 		playerEventListener = value;
 	}
 
-	public void reduceHearts(int jijiji){
-		hearts -= jijiji;
+	public void reduceHearts(int amount) {
+		hearts -= amount;
 	}
 
+	// *Mystic*WeaponName?
 	public static String weaponName(int code) {	//playerWeaponID?
 		switch (code){
 			case AXE:
@@ -948,56 +1019,59 @@ public class Player extends Actor {
 			
 		super.updateStatus();
 		
-			
 		if (hasIncreasedDefense()) defenseCounter--;
 		if (isInvisible()) invisibleCount--;
-    	if (hasIncreasedJumping()) jumpingCounter--;
-    	if (isInvincible()) invincibleCount--;
-    	if (hasEnergyField()) energyFieldCounter--;
-    	
-    	if (isPoisoned()){
-    		poisonCount--;
-    		if (!isPoisoned())
-    			level.addMessage("The poison leaves your blood.");
-    	}
-    	if (isStunned()) stunCount--;
-    	if (isPetrified()) petrifyCount--;
-    	if (isFainted()) faintCount--;
-    	
-    	if (isPoisoned()){
-    		if (Util.chance(40)){
-    			selfDamage("You feel the poison coursing through your veins!", Player.DAMAGE_POISON, new Damage(3, true));
-    		}
-    	}
-    	if (getHoverHeight() > 0)
-    		if (hasCounter(Consts.C_BATMORPH) || hasCounter(Consts.C_BATMORPH2))
-    			;
-    		else
-    			setHoverHeight(getHoverHeight()-4);
-    	if (level.getMapCell(pos) != null && level.getMapCell(pos).isWater()){
-    		if (getFlag("PLAYER_SWIMMING")){
-    			if (getCounter("OXYGEN") == 0){
-    				drown();
-    			} else if (getCounter("OXYGEN") == 5){
-   					level.addMessage("You are almost drown!");
-    			} else if (getCounter("OXYGEN") == 15){
-    				level.addMessage("You are drowning!");
-    			}
-    		} else {
-    			setCounter("OXYGEN", getBreathing());
-    			level.addMessage("You start swimming!");
-    			setFlag("PLAYER_SWIMMING", true);
-    		}
-    	} else {
-    		setFlag("PLAYER_SWIMMING", false);
-    	}
-        //regen();
+		if (hasIncreasedJumping()) jumpingCounter--;
+		if (isInvincible()) invincibleCount--;
+		if (hasEnergyField()) energyFieldCounter--;
+		
+		if (isPoisoned()) {
+			poisonCount--;
+			if (!isPoisoned()) {
+				level.addMessage("The poison leaves your blood.");
+			}
+		}
+		if (isStunned()) stunCount--;
+		if (isPetrified()) petrifyCount--;
+		if (isFainted()) faintCount--;
+		
+		if (isPoisoned()) {
+			if (Util.chance(40)) {
+				selfDamage("You feel the poison coursing through your veins!", Player.DAMAGE_POISON, new Damage(3, true));
+			}
+		}
+		if (getHoverHeight() > 0) {
+			if (hasCounter(Consts.C_BATMORPH) || hasCounter(Consts.C_BATMORPH2)) {
+				;
+			} else {
+				setHoverHeight(getHoverHeight()-4);
+			}
+		}
+		if (level.getMapCell(pos) != null && level.getMapCell(pos).isWater()) {
+			if (getFlag("PLAYER_SWIMMING")) {
+				if (getCounter("OXYGEN") == 0) {
+					drown();
+				} else if (getCounter("OXYGEN") == 5) {
+					level.addMessage("You are almost drown!");
+				} else if (getCounter("OXYGEN") == 15) {
+					level.addMessage("You are drowning!");
+				}
+			} else {
+				setCounter("OXYGEN", getBreathing());
+				level.addMessage("You start swimming!");
+				setFlag("PLAYER_SWIMMING", true);
+			}
+		} else {
+			setFlag("PLAYER_SWIMMING", false);
+		}
+		// regen();
 	}
 
-	private void levelUp(){
+
+	private void levelUp() {
 		nextLevelXP += getNeededXP(playerLevel);
-		if (playerLevel % 2 == 0){
-			hitsMax++;
+		if (playerLevel % 2 == 0) {
+			hpMax++;
 			addLastIncrement(INCREMENT_HITS,1);
 		}
 		if (playerLevel % 3 == 0){
@@ -1101,7 +1175,7 @@ public class Player extends Actor {
 			if (destinationPoint == null) {
 				level.addMessage("You fall into a endless pit!");
 				gameSessionInfo.setDeathCause(GameSessionInfo.ENDLESS_PIT);
-				hits = -1;
+				hp = -1;	// 0, surely?
 				informPlayerEvent(Player.DEATH);
 				Debug.exitMethod();
 				return;
@@ -1119,7 +1193,7 @@ public class Player extends Actor {
 			if (tryp == null) {
 				level.addMessage("You are smashed inside the "+destinationCell.getShortDescription()+"!");
 				gameSessionInfo.setDeathCause(GameSessionInfo.SMASHED);
-				hits = -1;
+				hp = -1;	// 0, surely?
 				informPlayerEvent(Player.EVT_SMASHED);
 				Debug.exitMethod();
 				return;
@@ -1214,7 +1288,7 @@ public class Player extends Actor {
 				}
 				
 				if (destinationFeature.getScorePrize() > 0) {
-					level.addMessage("You pickup the "+destinationFeature.getDescription()+".");
+					level.addMessage("You pick up the "+destinationFeature.getDescription()+".");
 					addGold(destinationFeature.getScorePrize());
 					level.destroyFeature(destinationFeature);
 					if (!played) {
@@ -1260,7 +1334,7 @@ public class Player extends Actor {
 
 				if (destinationFeature.getHealPrize() > 0){
 					level.addMessage("You eat the "+ destinationFeature.getDescription() +"!");
-					setHits(getHits() + destinationFeature.getHealPrize());
+					setHP(hp + destinationFeature.getHealPrize());
 					level.destroyFeature(destinationFeature);
 					if (!played){
 						played = true;
@@ -1329,15 +1403,16 @@ public class Player extends Actor {
 	private void drown() {
 		gameSessionInfo.setDeathCause(GameSessionInfo.DROWNED);
 		gameSessionInfo.deathLevel = level.levelNumber;
-		this.hits = -1;
+		hp = -1;	//0, surely!?
 		informPlayerEvent(Player.DROWNED);
 	}
+	
 	
 	public boolean deservesUpgrade() {
 		if (playerClass != CLASS_VAMPIREKILLER) {
 			return false;
 		}
-		if (getWeapon() == VAMPIRE_WHIP) {
+		if (weapon == VAMPIRE_WHIP) {
 			return false;
 		}
 		if (minorHeartCount > 5) {
@@ -1564,9 +1639,6 @@ public class Player extends Actor {
 		return energyFieldCounter > 0;
 	}
 
-	public void heal() {	// FULL heal.
-		hits = hitsMax;
-	}
 
 	public void reduceQuantityOf(Item what) {
 		String toAddID = what.getFullID();
@@ -1600,31 +1672,11 @@ public class Player extends Actor {
 		return hasCounter(Consts.C_BATMORPH) || hasCounter(Consts.C_BATMORPH2) || isEthereal();
 	}
 
-	public void recoverHits(int i){
-		hits += i;
-		if (hits > hitsMax) {
-			hits = hitsMax;
-		}
-	}
-	
-	public void recoverHitsP(int p){
-		int recovery = (int)Math.round((double)getHitsMax() * (p/100.0D));
-		recoverHits(recovery);
-	}
-
 	public void reduceKeys(int k) {
 		keys -= k;
 	}
 
-    /*public void regen() {
-    	if (regenRate > 0)
-    		regenCont++;
-    	if (regenCont > regenRate){
-    		regenCont = 0;
-    		recoverHits(1);
-    	}
-    }*/
-	
+
 	// FIXME We have these values in Text, fixed, already, do we not!?
 	// 
 	public void setPlayerClass(byte value) {
@@ -1884,24 +1936,28 @@ public class Player extends Actor {
 	}
 
 	public String getWeaponDescription() {
-		if (playerClass == CLASS_VAMPIREKILLER)
-			if (getMysticWeapon() != -1)
+		if (playerClass == CLASS_VAMPIREKILLER) {
+			if (getMysticWeapon() != -1) {
 				return weaponName(getMysticWeapon());
-			else
+			} else {
 				return "None";
-		else
-			if (getWeapon() != null)
-				if (getWeapon().getReloadTurns() > 0)
-					return getWeapon().getDescription()+"("+getWeapon().getRemainingTurnsToReload()+")";
-				else
-					return getWeapon().getDescription();
-			else
-				return "None";
-
+			}
+		}
+		// All non-VK classes:
+		if (weapon == null) {
+			return "None";
+		}
+		if (weapon.getReloadTurns() > 0) {
+			return weapon.getDescription()+"("+weapon.getRemainingTurnsToReload()+")";
+		} else {
+			return weapon.getDescription();
+		}
 	}
 
+
 	// Skill *DEFINITIONS*.
-	private final static Hashtable<String, Skill> skills = new Hashtable<>();
+	// TODO Just make this an ARRAY, indexed by integer ordinal of skill enum...?
+	private final static HashMap<String, Skill> skills = new HashMap<>();
 	static {
 		skills.put("DIVING_SLIDE", new Skill("Diving Slide", new DivingSlide(), 8));
 		skills.put("SPINNING_SLICE", new Skill("Spinning Slice", new SpinningSlice(), 8));
@@ -1932,12 +1988,13 @@ public class Player extends Actor {
 		skills.put("ITEM_BREAK", new Skill("Item Break", new ItemBreak(), 0));
 		skills.put("BACKFLIP", new Skill("Backflip"));
 		skills.put("SKILL_SOULWIND", new Skill("Soul Wind", new SoulWind(), 10));
+		// y'know... this structure is just CRAZY!
+		// skills put str new Skill, str, new SoulWind, 10? WTF!???
 		skills.put("SKILL_SOULFLAME", new Skill("Soul Flame", new SoulFlame(), 10));
 		skills.put("SKILL_SOULICE", new Skill("Soul Ice", new SoulIce(), 20));
 		skills.put("SKILL_SOULSAINT", new Skill("Soul Saint", new SoulSaint(), 15));
 		skills.put("SKILL_SOULBLAST", new Skill("Soul Blast", new SoulBlast(), 20));
 		skills.put("SLIDE_KICK", new Skill("Slide Kick", new SlideKick(), 2));
-		
 		
 		// Renegade Skills
 		skills.put("FIREBALL", new Skill("Fireball", new Fireball(), 2));
@@ -2056,6 +2113,7 @@ public class Player extends Actor {
 		STATUS_PETRIFY = "PETRIFY",
 		STATUS_FAINTED = "FAINTED";
 
+	/*
 	public Item getWeapon() {
 		return weapon;
 	}
@@ -2079,7 +2137,7 @@ public class Player extends Actor {
 	public void setArmor(Item value) {
 		armor = value;
 	}
-
+	
 	public Item getShield() {
 		return shield;
 	}
@@ -2087,7 +2145,7 @@ public class Player extends Actor {
 	public void setShield(Item value) {
 		shield = value;
 	}
-
+*/
 	public String getStatusString() {
 		String status = "";
 		if (isInvisible())
@@ -2216,25 +2274,11 @@ public class Player extends Actor {
 	}
 
 
-	public int getHitsMax() {
-		return hitsMax;
-	}
-
-	public void setHitsMax(int hitsMax) {
-		this.hitsMax = hitsMax;
-	}
-	
 	public void increaseHeartMax(int how){
 		heartMax += how;
 	}
-	
-	public void increaseHitsMax(int how) {
-		assert(how > 0);
-		hitsMax += how;
-		if (hitsMax > HITMAX)
-			hitsMax = HITMAX;
-	}
-	
+
+
 	public void increaseMUpgradeCount() {
 		mUpgradeCount++;
 	}
@@ -2635,17 +2679,21 @@ public class Player extends Actor {
 		return tmpAvailableAdvancements;
 	}
 	
-	public boolean canAttack(){
-		if (isSwimming()){
-			
-			if (getWeapon() == null || 
-					getWeapon().getWeaponCategory().equals(ItemDefinition.CAT_UNARMED) ||
-					getWeapon().getWeaponCategory().equals(ItemDefinition.CAT_DAGGERS) ||
-					getWeapon().getWeaponCategory().equals(ItemDefinition.CAT_SPEARS) ||
-					getWeapon().getWeaponCategory().equals(ItemDefinition.CAT_RINGS) )
+	
+	public boolean canAttack() {
+		if (isSwimming()) {
+			if (weapon == null ||
+				weapon.getWeaponCategory().equals(ItemDefinition.CAT_UNARMED) ||
+				weapon.getWeaponCategory().equals(ItemDefinition.CAT_DAGGERS) ||
+				weapon.getWeaponCategory().equals(ItemDefinition.CAT_SPEARS) ||
+				weapon.getWeaponCategory().equals(ItemDefinition.CAT_RINGS) )
+			{
+				// So those 4 are the only weapontypes usable under water? Or
+				// IN water?
 				return true;
-			else
+			} else {
 				return false;
+			}
 		}
 		return !(hasCounter(Consts.C_BATMORPH) ||
 				hasCounter(Consts.C_BATMORPH2) ||
@@ -2653,14 +2701,16 @@ public class Player extends Actor {
 				hasCounter(Consts.C_MYSTMORPH2));
 	}
 	
-	public void cure(){
-		if (isPoisoned()){
+	
+	public void cure() {	// TODO Rename as curePoison()
+		if (isPoisoned()) {
 			level.addMessage("The poison leaves your veins");
 			setPoison(0);
 		} else {
 			level.addMessage("Nothing happens");
 		}
 	}
+	
 	
 	public void deMorph() {
 		if (hasCounter(Consts.C_BATMORPH))
@@ -2694,8 +2744,10 @@ public class Player extends Actor {
 			addItem(item);
 		} else {
 			level.addItem(pos, item);
+			//TODO it's not removing it from your possession, explicitly, is it?
 		}
 	}
+	
 	public void morph(String morphID, int count, boolean smallMorph,
 			boolean bigMorph, int morphStrength, int loseMindChance) {
 		deMorph();
@@ -2720,26 +2772,26 @@ public class Player extends Actor {
 
 		
 		// Drop items
-		Item weapon = getWeapon();
-		if (weapon != null){
+		///Item weapon = getWeapon();
+		if (weapon != null) {
 			level.addMessage("You drop your "+weapon.getDescription());
-			carryOrDrop(weapon);
-			setWeapon(null);
+			carryOrDrop(weapon);	// FIXME SURELY explicit drop, here!??
+			weapon = null;
 		}
 		
-		if (getSecondaryWeapon() != null){
-			level.addMessage("You drop your "+getSecondaryWeapon().getDescription());
-			carryOrDrop(getSecondaryWeapon());
-			setSecondaryWeapon(null);
+		if (secondaryWeapon != null) {
+			level.addMessage("You drop your "+secondaryWeapon.getDescription());
+			carryOrDrop(secondaryWeapon);
+			secondaryWeapon = null;
 		}
 		
-		if (getShield() != null){
-			level.addMessage("You drop your "+getShield().getDescription());
-			carryOrDrop(getShield());
-			setShield(null);
+		if (shield != null) {
+			level.addMessage("You drop your "+shield.getDescription());
+			carryOrDrop(shield);
+			shield = null;
 		}
 		
-		Item armor = getArmor();
+		//Item armor = getArmor();
 		if (armor != null) {
 			if (bigMorph) {
 				if (armor.getDefense() > morphStrength) {
@@ -2748,22 +2800,22 @@ public class Player extends Actor {
 					return;
 				}
 				level.addMessage("You destroy your "+armor.getDescription()+"!");
-				setArmor(null);
+				armor = null;
 			} else if (smallMorph) {
 				level.addMessage("Your "+armor.getDescription()+" falls.");
 				carryOrDrop(armor);
-				setArmor(null);
+				armor = null;
 			}
 		}
-		
 		setCounter(morphID, count);
 	}
 	
-	public boolean canWield(){
+	
+	public boolean canWield() {
 		return !isMorphed();
 	}
 	
-	public boolean isMorphed(){
+	public boolean isMorphed() {
 		return
 			hasCounter(Consts.C_LUPINEMORPH) ||
 			hasCounter(Consts.C_BEARMORPH) ||
@@ -2946,41 +2998,44 @@ public class Player extends Actor {
 		return attackDescription;
 	}
 	
+	
 	public int getWeaponAttack() {
 		double multiplier = 1;
 		if (isSwimming()) {
 			multiplier = 0.5;
 		}
-		if (weapon != null) {
-			if (playerClass == Player.CLASS_VAMPIREKILLER) {
-				return (int)(multiplier * (weaponSkill(weapon.getDefinition().weaponCategory) +
-						(int)Math.round(getAttack() * (weapon.getAttack()/2.0))));
-			} else {
-				return (int)(multiplier * (weapon.getAttack() +
-					weaponSkill(weapon.getDefinition().weaponCategory) +
-					getAttack() +
-					(weapon.hasCounter(Consts.C_WEAPON_ENCHANTMENT) ? 2 : 0)));
-			}
-		} else {
+		
+		if (weapon == null) {
 			return (int)(multiplier * getPunchDamage());
+		}
+		
+		if (playerClass == Player.CLASS_VAMPIREKILLER) {
+			return (int)(multiplier * (weaponSkill(weapon.getDefinition().weaponCategory) +
+					(int)Math.round(getAttack() * (weapon.getAttack()/2.0))));
+		} else {
+			return (int)(multiplier * (weapon.getAttack() +
+				weaponSkill(weapon.getDefinition().weaponCategory) +
+				getAttack() +
+				(weapon.hasCounter(Consts.C_WEAPON_ENCHANTMENT) ? 2 : 0)));
 		}
 	}
 	
 	
-	
-	public int getArmorDefense(){
-		if (getArmor() != null){
-			if (playerClass == CLASS_VAMPIREKILLER) {
-				return (int)(getArmor().getDefense() + Math.ceil(getPlayerLevel()/3.0D));
-			} else {
-				return getArmor().getDefense();
-			}
-		} else
+	public int getArmorDefense() {
+		if (armor == null) {
 			return 0;
+		}
+		
+		if (playerClass == CLASS_VAMPIREKILLER) {
+			// TODO VampireKiller perk to surface on the class-select screen!
+			return (int)(armor.getDefense() + Math.ceil(getPlayerLevel()/3.0));
+		} else {
+			return armor.getDefense();
+		}
 	}
 	
 	
-	public int getDefenseBonus(){
+	public int getDefenseBonus() {
 		int ret = 0;
 		if (playerClass == Player.CLASS_MANBEAST) {
 			ret+= Math.ceil((double)getPlayerLevel() / 2.5);
@@ -2991,40 +3046,46 @@ public class Player extends Actor {
 		return ret;
 	}
 	
-	public int getShieldBlockChance(){
-		int blockChance = 0;
-		if (getShield() != null &&
-			(getWeapon() == null || (getWeapon()!= null && !getWeapon().isTwoHanded()))) {
-			if (playerClass == CLASS_KNIGHT) {
-				blockChance = getShield().getCoverage();
-			} else {
-				blockChance = (int)(getShield().getCoverage() / 2.0);
-			}
-			blockChance += 2 * weaponSkill(ItemDefinition.CAT_SHIELD);
-			if (blockChance > 70) {
-				return 70;
-			} else {
-				return blockChance;
-			}
-		} else {
+	
+	public int getShieldBlockChance() {
+		if (shield == null) {
 			return 0;
 		}
+		boolean wieldingTwoHander = weapon != null && weapon.isTwoHanded();
+		if (wieldingTwoHander) {
+			return 0;
+		}
+		int blockChance = 0;
+		// TODO Another class perk that ought to be explained on class-sel screen?
+		if (playerClass == CLASS_KNIGHT) {
+			blockChance = shield.getCoverage();
+		} else {
+			blockChance = (int)(shield.getCoverage() / 2.0);
+		}
+		blockChance += 2 * weaponSkill(ItemDefinition.CAT_SHIELD);
+		if (blockChance > 70) {
+			return 70;
+		}
+		return blockChance;
 	}
 
 	
 	public int getShieldCoverageChance() {
-		if (getShield() != null &&
-			(getWeapon() == null || (getWeapon()!= null && !getWeapon().isTwoHanded()))) {
-			int coverageChance = 0;
-			if (playerClass == CLASS_KNIGHT) {
-				coverageChance = 70;
-			} else {
-				coverageChance = getShield().getCoverage();
-			}
-			return coverageChance;
-		} else {
+		if (shield == null) {
 			return 0;
 		}
+		boolean wieldingTwoHander = weapon != null && weapon.isTwoHanded();
+		if (wieldingTwoHander) {
+			return 0;
+		}
+		
+		int coverageChance = 0;
+		if (playerClass == CLASS_KNIGHT) {
+			coverageChance = 70;
+		} else {
+			coverageChance = shield.getCoverage();
+		}
+		return coverageChance;
 	}
 
 

@@ -1,14 +1,15 @@
 package crl.action.monster.boss;
 
 import crl.Main;
+import crl.action.AT;
 import crl.action.Action;
 import crl.level.Level;
 import crl.monster.Monster;
 
 public class Vanish extends Action {
 	
-	public String getID() {
-		return "VANISH";
+	public AT getID() {
+		return AT.Vanish;
 	}
 
 	public void execute() {

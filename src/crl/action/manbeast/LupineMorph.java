@@ -1,5 +1,6 @@
 package crl.action.manbeast;
 
+import crl.action.AT;
 import crl.action.MorphAction;
 import crl.player.Consts;
 import crl.player.Player;
@@ -9,15 +10,15 @@ public class LupineMorph extends MorphAction{
 		return 15;
 	}
 	
-	public String getID(){
-		return "LupineMorph";
+	public AT getID(){
+		return AT.LupineMorph;
 	}
 
 	public String getSFX(){
 		return "wav/growll.wav";
 	}
 
-	public int getCost(){
+	public int getCost() {
 		Player p = (Player) performer;
 		return (int)(p.getAttackCost() * 1.5);
 	}

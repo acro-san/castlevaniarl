@@ -3,6 +3,7 @@ package crl.action.monster.boss;
 import sz.util.Position;
 import sz.util.Util;
 import crl.Main;
+import crl.action.AT;
 import crl.action.Action;
 import crl.feature.Feature;
 import crl.level.Level;
@@ -12,8 +13,8 @@ import crl.player.Player;
 
 public class ShadowExtinction  extends Action {
 
-	public String getID() {
-		return "SHADOW_EXTINCTION";
+	public AT getID() {
+		return AT.ShadowExtinction;
 	}
 	
 	public void execute() {

@@ -1,5 +1,6 @@
 package crl.action.invoker;
 
+import crl.action.AT;
 import crl.action.ProjectileSkill;
 import crl.player.Player;
 
@@ -45,11 +46,11 @@ public class Cat extends ProjectileSkill {
 		return 3;
 	}
 	
-	public String getID(){
-		return "Cat";
+	public AT getID() {
+		return AT.Cat;
 	}
 	
-	public String getSFX(){
+	public String getSFX() {
 		return "wav/kitty.wav";
 	}
 

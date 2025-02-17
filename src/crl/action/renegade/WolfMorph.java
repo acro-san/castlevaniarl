@@ -1,20 +1,21 @@
 package crl.action.renegade;
 
-import crl.action.HeartAction;
+import crl.action.AT;
 import crl.action.MorphAction;
 import crl.player.Consts;
 import crl.player.Player;
 
-public class WolfMorph extends MorphAction{
+public class WolfMorph extends MorphAction {
+	
 	public int getHeartCost() {
 		return 10;
 	}
 	
-	public String getID(){
-		return "WolfBatMorph";
+	public AT getID() {
+		return AT.WolfMorph;	// was "WolfBatMorph"
 	}
 
-	public String getSFX(){
+	public String getSFX() {
 		return "wav/swaashll.wav";
 	}
 

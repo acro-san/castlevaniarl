@@ -1,6 +1,7 @@
 package crl.action.vanquisher;
 
 import crl.Main;
+import crl.action.AT;
 import crl.action.HeartAction;
 import crl.level.Level;
 import crl.monster.Monster;
@@ -12,8 +13,8 @@ public class Mindblast extends HeartAction {
 	public int getHeartCost() {
 		return 15;
 	}
-	public String getID() {
-		return "Mindblast";
+	public AT getID() {
+		return AT.MindBlast;
 	}
 	
 	public void execute() {
@@ -21,21 +22,19 @@ public class Mindblast extends HeartAction {
 		Level aLevel = performer.level;
 		Player aPlayer = aLevel.getPlayer();
 		aLevel.addMessage("You cause great disruption!");
-
-		for (int i = 0; i < 5; i++){
+		
+		for (int i = 0; i < 5; i++) {
 			Monster nearestMonster = aPlayer.getNearestMonster();
-			if (nearestMonster == null || Position.flatDistance(nearestMonster.pos, aPlayer.pos)>15) {
-				
-			} else {
-				StringBuffer buff = new StringBuffer();
-				if (nearestMonster.wasSeen()){
-					drawEffect(Main.efx.createDirectedEffect(aPlayer.pos, nearestMonster.pos, "SFX_LIT_SPELL", Position.flatDistance(performer.pos, nearestMonster.pos)));
-					buff.append("The "+nearestMonster.getDescription()+" mind is blasted!");
-				}
-				nearestMonster.damage(buff, 25+aPlayer.getSoulPower()*2);
-				aLevel.addMessage(buff.toString());
-				
+			if (nearestMonster == null || Position.flatDistance(nearestMonster.pos, aPlayer.pos) > 15) {
+				continue;
 			}
+			StringBuffer buff = new StringBuffer();
+			if (nearestMonster.wasSeen()) {
+				drawEffect(Main.efx.createDirectedEffect(aPlayer.pos, nearestMonster.pos, "SFX_LIT_SPELL", Position.flatDistance(performer.pos, nearestMonster.pos)));
+				buff.append("The "+nearestMonster.getDescription()+" mind is blasted!");
+			}
+			nearestMonster.damage(buff, 25+aPlayer.getSoulPower()*2);
+			aLevel.addMessage(buff.toString());
 		}
 	}
 
@@ -43,7 +42,5 @@ public class Mindblast extends HeartAction {
 		Player p = (Player) performer;
 		return (int)(p.getCastCost() * 1.5);
 	}
-	
 
-	
 }

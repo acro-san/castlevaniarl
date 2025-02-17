@@ -5,9 +5,14 @@ import crl.ai.*;
 import crl.actor.*;
 
 public class EmergerAI implements ActionSelector {
+	
+	private static final Action
+		EMERGE_ACTION = new EmergeMonster();
+	
 	private int counter;
 
-	public String getID(){
+	// AIT
+	public String getID() {
 		return "Emerge";
 	}
 
@@ -16,19 +21,19 @@ public class EmergerAI implements ActionSelector {
 		counter++;
 		if (x.getCounter() < counter){
 			who.die();
-			return EmergeMonster.getAction();
-    	}
-    	//if (Util.chance(20))
-		 	//return PreemergeEffects.getAction();
-		 	//return null;
+			return EMERGE_ACTION;
+		}
+		//if (Util.chance(20))
+			//return PreemergeEffects.getAction();
+			//return null;
 		return null;
 	}
 
-	 public ActionSelector derive(){
- 		try {
-	 		return (ActionSelector) clone();
-	 	} catch (CloneNotSupportedException cnse){
+	public ActionSelector derive() {
+		try {
+			return (ActionSelector) clone();
+		} catch (CloneNotSupportedException cnse) {
 			return null;
-	 	}
- 	}
+		}
+	}
 }

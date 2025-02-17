@@ -7,11 +7,11 @@ import crl.player.Player;
 
 public class FusionSpirits extends Action {
 	
-	public String getID() {
-		return "Fusion Spirits";
+	public AT getID() {
+		return AT.FusionSpirits;
 	}
 	
-	public boolean needsSpirits(){
+	public boolean needsSpirits() {
 		return true;
 	}
 
@@ -55,8 +55,8 @@ public class FusionSpirits extends Action {
 		performer.level.addMessage("You try to fusion "+principalDs+" with "+secondaryDs+"...");
 		aPlayer.addHistoricEvent("Fusioned "+principalDs+" with "+secondaryDs);
 		
-		if (principal.equals("VENUS_SPIRIT")){
-			if (secondary.equals("URANUS_SPIRIT")){
+		if (principal.equals("VENUS_SPIRIT")) {
+			if (secondary.equals("URANUS_SPIRIT")) {
 				aPlayer.reduceCastCost(5);
 				performer.level.addMessage("Your spellcasting ability increases!");
 			} else if (secondary.equals("NEPTUNE_SPIRIT")){
@@ -66,7 +66,7 @@ public class FusionSpirits extends Action {
 				aPlayer.increaseSoulPower(1);
 				performer.level.addMessage("Your soul power increases!");
 			}
-		} else if (principal.equals("MERCURY_SPIRIT")){
+		} else if (principal.equals("MERCURY_SPIRIT")) {
 			if (secondary.equals("URANUS_SPIRIT")){
 				aPlayer.reduceWalkCost(5);
 				performer.level.addMessage("You feel quicker!");
@@ -76,15 +76,15 @@ public class FusionSpirits extends Action {
 			} else if (secondary.equals("JUPITER_SPIRIT")){
 				aPlayer.increaseEvadeChance(5);
 				performer.level.addMessage("You feel more nimble!");
-			} 
-		} else if (principal.equals("MARS_SPIRIT")){
-			if (secondary.equals("URANUS_SPIRIT")){
+			}
+		} else if (principal.equals("MARS_SPIRIT")) {
+			if (secondary.equals("URANUS_SPIRIT")) {
 				aPlayer.reduceAttackCost(5);
 				performer.level.addMessage("You feel more able on combat!");
 			} else if (secondary.equals("NEPTUNE_SPIRIT")){
-				aPlayer.increaseHitsMax(3);
+				aPlayer.increaseHPMax(3);
 				performer.level.addMessage("You feel hardy!");
-			} else if (secondary.equals("JUPITER_SPIRIT")){
+			} else if (secondary.equals("JUPITER_SPIRIT")) {
 				aPlayer.increaseAttack(1);
 				performer.level.addMessage("You feel stronger!");
 			}

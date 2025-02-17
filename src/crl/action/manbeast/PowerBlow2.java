@@ -1,5 +1,6 @@
 package crl.action.manbeast;
 
+import crl.action.AT;
 import crl.action.HeartAction;
 import crl.level.Level;
 import crl.player.Consts;
@@ -10,12 +11,12 @@ public class PowerBlow2 extends HeartAction{
 		return 3;
 	}
 	
-	public String getID(){
-		return "PowerBlow2";
+	public AT getID() {
+		return AT.PowerBlow2;
 	}
 	
-	public int getCost(){
-		Player p = (Player) performer;
+	public int getCost() {
+		Player p = (Player)performer;
 		return (int)(p.getAttackCost() * 1.1);
 	}
 	

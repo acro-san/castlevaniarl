@@ -1,6 +1,7 @@
 package crl.action.vanquisher;
 
 import crl.Main;
+import crl.action.AT;
 import crl.action.HeartAction;
 import crl.level.Cell;
 import crl.level.Level;
@@ -10,23 +11,23 @@ import sz.util.Position;
 
 public class Teleport extends HeartAction {
 	
-	public String getID() {
-		return "Teleport2";
+	public AT getID() {
+		return AT.Teleport_Vanq;
 	}
 	
 	public int getHeartCost() {
 		return 5;
 	}
 	
-	public boolean needsPosition(){
+	public boolean needsPosition() {
 		return true;
 	}
 
-	public String getPromptPosition(){
+	public String getPromptPosition() {
 		return "Where do you want to teleport?";
 	}
 
-	public void execute(){
+	public void execute() {
 		super.execute();
 		Player player = (Player) performer;
 		Level level = player.level;
@@ -61,12 +62,13 @@ public class Teleport extends HeartAction {
 		
 	}
 
-	public int getCost(){
+	public int getCost() {
 		Player p = (Player) performer;
 		return (int)(p.getCastCost() * 1.4);
 	}
 	
-	public String getSFX(){
+	public String getSFX() {
 		return "wav/scrch.wav";
 	}
+
 }

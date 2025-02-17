@@ -3,14 +3,15 @@ package crl.action.monster.boss;
 import sz.util.Position;
 import sz.util.Util;
 import crl.Main;
+import crl.action.AT;
 import crl.action.Action;
 import crl.level.Level;
 import crl.monster.Monster;
 
 public class Materialize extends Action {
 	
-	public String getID() {
-		return "MATERIALIZE";
+	public AT getID() {
+		return AT.Materialize;
 	}
 	
 	public void execute() {
@@ -19,7 +20,7 @@ public class Materialize extends Action {
 		Monster mon = (Monster)performer;
 		mon.isVisible = true;
 		Position var = new Position(Util.rand(-5,5),Util.rand(-5,5));
-		Position pum =Position.add(aLevel.getPlayer().pos, var);
+		Position pum = Position.add(aLevel.getPlayer().pos, var);
 		mon.pos = pum;
 		//drawEffect(new SplashEffect(pum, "Oo.", Appearance.WHITE));
 		drawEffect(Main.efx.createLocatedEffect(pum, "SFX_MATERIALIZE"));

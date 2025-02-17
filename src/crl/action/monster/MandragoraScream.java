@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import sz.util.Position;
 import crl.Main;
+import crl.action.AT;
 import crl.action.Action;
 import crl.game.SFXManager;
 import crl.monster.Monster;
@@ -22,8 +23,8 @@ public class MandragoraScream extends Action {
 		SCREAM_WAV = "wav/scream.wav";
 
 	@Override
-	public String getID() {
-		return "MANDRAGORA_SCREAM";
+	public AT getID() {
+		return AT.MandragoraScream;
 	}
 	
 	@Override

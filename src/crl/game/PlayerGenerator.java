@@ -14,13 +14,15 @@ import crl.player.Consts;
 import crl.player.Player;
 import crl.ui.Appearance;
 
-public abstract class PlayerGenerator {
+public abstract class PlayerGenerator {	// No. Not abstract. WHY would THIS be abstract???
 	
-	public static PlayerGenerator thus;
+	public static PlayerGenerator thus;	// NO. that's STUPID.
 	
 	public abstract Player generatePlayer();
+	// ehhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh?
 	
-	private Hashtable<String, Player> SPECIAL_PLAYERS = new Hashtable<>();	// FIXME actually just an array?
+	private Hashtable<String, Player>
+		SPECIAL_PLAYERS = new Hashtable<>();	// FIXME actually just an array?
 	
 	//static?
 	private void initSpecialPlayers() {
@@ -62,8 +64,8 @@ public abstract class PlayerGenerator {
 		chris.setAppearance(aps.get("CHRISTOPHER_B"));
 		chris.setPlot("After defeating Dracula two times, he returns to the castle to fulfill his fate for a last time", "");
 		chris.setDescription("The famous Vampire Killer, heir of the Belmont fate");
-		chris.setWeapon(it.createWeapon("LEATHER_WHIP",""));
-		chris.setArmor(it.createArmor("VARMOR",""));
+		chris.weapon = it.createWeapon("LEATHER_WHIP","");
+		chris.armor = it.createArmor("VARMOR","");
 		chris.setAdvancementLevels(ADVANCEMENT_LEVELS_HARDER);
 		SPECIAL_PLAYERS.put("CHRIS", chris);
 		
@@ -105,8 +107,8 @@ public abstract class PlayerGenerator {
 		solei.setAppearance(aps.get("SOLEIYU_B"));
 		solei.setPlot("Finally deciding to face his own fate, he travels to the cursed Castlevania", "");
 		solei.setDescription("The son of Christopher Belmont");
-		solei.setWeapon(it.createWeapon("HARPER",""));
-		solei.setArmor(it.createArmor("PLATE", "STEEL"));
+		solei.weapon = it.createWeapon("HARPER","");
+		solei.armor = it.createArmor("PLATE", "STEEL");
 		solei.setAdvancementLevels(ADVANCEMENT_LEVELS_HARDER);
 		SPECIAL_PLAYERS.put("SOLEIYU", solei);
 		
@@ -158,8 +160,8 @@ public abstract class PlayerGenerator {
 		sonia.setAppearance(aps.get("SONIA_B"));
 		sonia.setPlot("Came to the castle as the first Belmont ever", "");
 		sonia.setDescription("Sonia Belmont, a mysterious girl");
-		sonia.setWeapon(it.createWeapon("LEATHER_WHIP",""));
-		sonia.setArmor(it.createArmor("VARMOR",""));
+		sonia.weapon = it.createWeapon("LEATHER_WHIP","");
+		sonia.armor = it.createArmor("VARMOR","");
 		sonia.setAdvancementLevels(ADVANCEMENT_LEVELS_NORMAL);
 		SPECIAL_PLAYERS.put("SONIA", sonia);
 	}
@@ -241,8 +243,8 @@ public abstract class PlayerGenerator {
 			player.setBannedArmors(RENEGADE_BANNED_ARMOR);
 			player.setAdvancementLevels(ADVANCEMENT_LEVELS_NORMAL);
 
-			player.setShield(Main.itemData.createShield(Util.pick(RENEGADE_SHIELDS), Util.pick(ARMOR_MATERIALS)));
-			player.setSecondaryWeapon(Main.itemData.createWeapon("BASELARD", Util.pick(WEAPON_MATERIALS)));
+			player.shield = Main.itemData.createShield(Util.pick(RENEGADE_SHIELDS), Util.pick(ARMOR_MATERIALS));
+			player.secondaryWeapon = Main.itemData.createWeapon("BASELARD", Util.pick(WEAPON_MATERIALS));
 
 			player.putCustomMessage("INTRO_1", "I can almost breathe the chaos that invades every tree and animal in this forest. It is time to return to the castle.");
 			player.putCustomMessage("CLARA1", "Commonner? . . . Ignorant human... get out of my way.");
@@ -251,7 +253,7 @@ public abstract class PlayerGenerator {
 		case Player.CLASS_VANQUISHER:
 
 			player.setGold(Util.rand(5,15) * 100);
-			player.setHitsMax(17);
+			player.setHPMax(17);
 			player.heal();
 			plots = Text.VANQUISHER_PLOTS;
 			descriptions = Text.VANQUISHER_DESCRIPTIONS;
@@ -276,7 +278,7 @@ public abstract class PlayerGenerator {
 
 		case Player.CLASS_INVOKER:
 			player.setGold(Util.rand(2,10) * 100);
-			player.setHitsMax(17);
+			player.setHPMax(17);
 			player.heal();
 			plots = Text.INVOKER_PLOTS;
 			descriptions = Text.INVOKER_DESCRIPTIONS;
@@ -301,7 +303,7 @@ public abstract class PlayerGenerator {
 		case Player.CLASS_MANBEAST:
 			//player.setRegenRate(40);
 			player.setGold(Util.rand(1,5) * 100);
-			player.setHitsMax(26);
+			player.setHPMax(26);
 			player.setBaseSightRange(6);
 			player.heal();
 			plots = Text.MANBEAST_PLOTS;
@@ -328,7 +330,7 @@ public abstract class PlayerGenerator {
 			break;
 		case Player.CLASS_KNIGHT:
 			player.setGold(Util.rand(5,12) * 100);
-			player.setHitsMax(23);
+			player.setHPMax(23);
 			player.setHeartMax(10);
 			player.setBreathing(15);
 			player.heal();
@@ -366,7 +368,7 @@ public abstract class PlayerGenerator {
 			player.increaseWeaponSkillLevel(ItemDefinition.CAT_SHIELD);
 			player.setBannedArmors(KNIGHT_BANNED_ARMOR);
 			player.setAdvancementLevels(ADVANCEMENT_LEVELS_NORMAL);
-			player.setShield(Main.itemData.createShield(Util.pick(KNIGHT_SHIELDS), Util.pick(ARMOR_MATERIALS)));
+			player.shield = Main.itemData.createShield(Util.pick(KNIGHT_SHIELDS), Util.pick(ARMOR_MATERIALS));
 			player.putCustomMessage("INTRO_1", "Indeed, those seem to be Wargs: demonic wolf-like creatures summoned by the Count of Darkness to protect his castle. We better get to the castle quickly.");
 			player.putCustomMessage("CLARA1", "Can you not see the mark of heavens? I am a Knight of the Sacred Order, and I came to cleanse this place from darkness.");
 			break;
@@ -386,9 +388,9 @@ public abstract class PlayerGenerator {
 		
 		ItemDataTable itf = Main.itemData;
 		if (initWeapons != null) {
-			player.setWeapon(itf.createWeapon(Util.pick(initWeapons), Util.pick(WEAPON_MATERIALS)));
+			player.weapon = itf.createWeapon(Util.pick(initWeapons), Util.pick(WEAPON_MATERIALS));
 		}
-		player.setArmor(itf.createArmor(Util.pick(initArmors), Util.pick(ARMOR_MATERIALS)));
+		player.armor = itf.createArmor(Util.pick(initArmors), Util.pick(ARMOR_MATERIALS));
 		int items = Util.rand(5,7);
 		for (int i = 0; i < items; i++){
 			player.addItem(itf.createItem(Util.pick(initItems)));

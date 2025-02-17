@@ -1,30 +1,34 @@
 package crl.action.manbeast;
 
+import crl.action.AT;
 import crl.action.MorphAction;
 import crl.player.Consts;
 import crl.player.Player;
 
 public class BearMorph extends MorphAction {
+	
 	public int getHeartCost() {
 		return 15;
 	}
 	
-	public String getID(){
-		return "BearMorph";
+	public AT getID() {
+		return AT.BearMorph;
 	}
 
-	public String getSFX(){
+	public String getSFX() {
 		return "wav/growll.wav";
 	}
 
-	public int getCost(){
+	public int getCost() {
 		Player p = (Player) performer;
 		return (int)(p.getAttackCost() * 1.5);
 	}
 	
-	
+	// FIXME - Whoa! It's cool that this is a mechanic! SURFACE IT TO THE PLAYER!
+	// It's not apparent AT ALL that there's possible unknown random downsides 
+	// to using the Manbeast's abilities.
 	public int getMadChance() {
-		return 60- 	getPlayer().getSoulPower()*2;
+		return 60 - getPlayer().getSoulPower() * 2;
 	}
 
 	public String getMorphID() {

@@ -2,6 +2,7 @@ package crl.action.weapon;
 
 
 import sz.util.Position;
+import crl.action.AT;
 import crl.action.Action;
 import crl.actor.Actor;
 import crl.feature.Feature;
@@ -11,8 +12,8 @@ import crl.player.Player;
 
 public class TigerClaw extends Action {
 	
-	public String getID(){
-		return "TIGER_CLAW";
+	public AT getID() {
+		return AT.TigerClaw;
 	}
 	
 	public boolean needsDirection() {

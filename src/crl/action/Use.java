@@ -15,8 +15,8 @@ import crl.player.Player;
 
 public class Use extends Action {
 	
-	public String getID() {
-		return "Use";
+	public AT getID() {
+		return AT.Use;
 	}
 	
 	public boolean needsItem() {
@@ -28,21 +28,21 @@ public class Use extends Action {
 	}
 
 	public void execute() {
-		Player aPlayer = (Player)performer;
-		Level pLvl = aPlayer.level;
+		Player p = (Player)performer;
+		Level pLvl = p.level;
 		ItemDefinition def = targetItem.getDefinition();
 		String[] effect = def.effectOnUse.split(" ");
 		
 		if (def.getID().equals("SOUL_RECALL")) {
-			if (aPlayer.getHostage()!=null){
-				Main.ui.showMessage("Abandon "+aPlayer.getHostage().getDescription()+"? [Y/N]");
+			if (p.getHostage() != null) {
+				Main.ui.showMessage("Abandon "+p.getHostage().getDescription()+"? [Y/N]");
 				if (Main.ui.prompt()) {
-					aPlayer.abandonHostage();
+					p.abandonHostage();
 				} else {
 					return;
 				}
 			}
-			aPlayer.informPlayerEvent(Player.EVT_GOTO_LEVEL, "TOWN0");
+			p.informPlayerEvent(Player.EVT_GOTO_LEVEL, "TOWN0");
 			// Check if we actually managed to go to level!
 			if (!pLvl.getID().equals("TOWN0")) {
 				pLvl.addMessage("An evil energy prevents the orb from working!");
@@ -51,34 +51,34 @@ public class Use extends Action {
 			SFXManager.play("wav/loutwarp.wav");
 			// We need to properly relocate the player
 			Position exit = pLvl.getExitFor("FOREST0");
-			aPlayer.level.levelNumber = 0;
-			aPlayer.landOn(Position.add(exit, new Position(-1,0,0)));
-			aPlayer.reduceQuantityOf(targetItem);
+			p.level.levelNumber = 0;
+			p.landOn(Position.add(exit, new Position(-1,0,0)));
+			p.reduceQuantityOf(targetItem);
 			return;
 		}
 		
 		if (def.getID().equals("OXY_HERB")) {
-			aPlayer.level.addMessage("You bite the oxyherb. Air fills your breast!");
-			if (aPlayer.isSwimming()){
-				aPlayer.setCounter("OXYGEN", aPlayer.getBreathing());
+			p.level.addMessage("You bite the oxyherb. Air fills your breast!");
+			if (p.isSwimming()) {
+				p.setCounter("OXYGEN", p.getBreathing());
 			}
-			aPlayer.reduceQuantityOf(targetItem);
+			p.reduceQuantityOf(targetItem);
 			return;
 		}
 		
 		if (def.getID().startsWith("ART_CARD_")) {
-			if (pLvl.getMapCell(aPlayer.pos).getID().equals("WEIRD_MACHINE")){
+			if (pLvl.getMapCell(p.pos).getID().equals("WEIRD_MACHINE")) {
 				pLvl.addMessage("You insert the card into the machine!");
-				aPlayer.setFlag("HAS_"+def.getID(), true);
-				if (aPlayer.getFlag("HAS_ART_CARD_SOL") &&
-					aPlayer.getFlag("HAS_ART_CARD_MOONS") &&
-					aPlayer.getFlag("HAS_ART_CARD_DEATH") &&
-					aPlayer.getFlag("HAS_ART_CARD_LOVE"))
+				p.setFlag("HAS_"+def.getID(), true);
+				if (p.getFlag("HAS_ART_CARD_SOL") &&
+					p.getFlag("HAS_ART_CARD_MOONS") &&
+					p.getFlag("HAS_ART_CARD_DEATH") &&
+					p.getFlag("HAS_ART_CARD_LOVE"))
 				{
-					pLvl.addMessage("The machine opens. A wooden music box plays a mellow melody. You take the jukebox");
-					aPlayer.addItem(Main.itemData.createItem("JUKEBOX"));
+					pLvl.addMessage("The machine opens. A wooden music box plays a mellow melody. You take the music box");
+					p.addItem(Main.itemData.createItem("JUKEBOX"));
 				}
-				aPlayer.reduceQuantityOf(targetItem);
+				p.reduceQuantityOf(targetItem);
 				return;
 			} else {
 				performer.level.addMessage("You raise the "+targetItem.getDescription()+" up high! Nothing happens...");
@@ -87,7 +87,7 @@ public class Use extends Action {
 		}
 		
 		if (effect[0].equals("")) {
-			performer.level.addMessage("You don\'t find a use for the "+targetItem.getDescription());
+			performer.level.addMessage("You don't find a use for the "+targetItem.getDescription());
 			//aPlayer.addItem(targetItem);
 			return;
 		}
@@ -99,23 +99,23 @@ public class Use extends Action {
 			if (effect[cmd].equals("DAYLIGHT")) {
 				if (!pLvl.isDay()) {
 					pLvl.addMessage("The card fizzles in a blast of light!");
-					aPlayer.informPlayerEvent(Player.EVT_FORWARDTIME);
+					p.informPlayerEvent(Player.EVT_FORWARDTIME);
 				} else {
 					pLvl.addMessage("Nothing happens.");
 				}
 			} else if (effect[cmd].equals("MOONLIGHT")) {
 				if (pLvl.isDay()) {
 					pLvl.addMessage("The card fizzles in a puff of smoke!");
-					aPlayer.informPlayerEvent(Player.EVT_FORWARDTIME);
+					p.informPlayerEvent(Player.EVT_FORWARDTIME);
 				} else {
 					pLvl.addMessage("Nothing happens.");
 				}
 			} else if (effect[cmd].equals("INCREASE_DEFENSE"))
-				aPlayer.increaseDefense(Integer.parseInt(effect[cmd+1]));
+				p.increaseDefense(Integer.parseInt(effect[cmd+1]));
 			else if (effect[cmd].equals("INVINCIBILITY"))
-				aPlayer.setInvincible(Integer.parseInt(effect[cmd+1]));
+				p.setInvincible(Integer.parseInt(effect[cmd+1]));
 			else if (effect[cmd].equals("ENERGY_FIELD"))
-				aPlayer.setEnergyField(Integer.parseInt(effect[cmd+1]));
+				p.setEnergyField(Integer.parseInt(effect[cmd+1]));
 			else if (effect[cmd].equals("READ_CLUE"))
 				readClue(Integer.parseInt(effect[cmd+1]));
 			
@@ -123,36 +123,36 @@ public class Use extends Action {
 				aPlayer.setCounter("LIGHT",Integer.parseInt(effect[cmd+1]));
 			*/
 			else if (effect[cmd].equals("INCREASE_JUMPING"))
-				aPlayer.increaseJumping(Integer.parseInt(effect[cmd+1]));
+				p.increaseJumping(Integer.parseInt(effect[cmd+1]));
 			else if (effect[cmd].equals("SETWHIP")) {
 				if (effect[cmd+1].equals("LIT"))
-					aPlayer.setLitWhip();
+					p.setLitWhip();
 				else if (effect[cmd+1].equals("FLAME"))
-					aPlayer.setFireWhip();
+					p.setFireWhip();
 				else if (effect[cmd+1].equals("THORN"))
-					aPlayer.setThornWhip();
+					p.setThornWhip();
 			} else if (effect[cmd].equals("HEAL")) {
 				if (effect[cmd+1].equals("NP"))
-					aPlayer.heal();
+					p.heal();
 				else
-					aPlayer.recoverHits(Integer.parseInt(effect[cmd+1]));
+					p.heal(Integer.parseInt(effect[cmd+1]));
 			} else if (effect[cmd].equals("FIREBALL"))
 				//aPlayer.setFireballWhip(Integer.parseInt(effect[cmd+1]));
-				aPlayer.setCounter(Consts.C_FIREBALL_WHIP, Integer.parseInt(effect[cmd+1]));
+				p.setCounter(Consts.C_FIREBALL_WHIP, Integer.parseInt(effect[cmd+1]));
 			else if (effect[cmd].equals("RECOVER"))
-				aPlayer.recoverHits(Integer.parseInt(effect[cmd+1]));
+				p.heal(Integer.parseInt(effect[cmd+1]));
 			else if (effect[cmd].equals("DAMAGE")) {
-				if (aPlayer.isInvincible())
+				if (p.isInvincible())
 					pLvl.addMessage("The damage is repelled!");
 				else
-					aPlayer.selfDamage(message, Player.DAMAGE_USING_ITEM, new Damage(Integer.parseInt(effect[cmd+1]), false));
+					p.selfDamage(message, Player.DAMAGE_USING_ITEM, new Damage(Integer.parseInt(effect[cmd+1]), false));
 			} else if (effect[cmd].equals("LIGHT")) {
-				aPlayer.setCounter("LIGHT", 200);
+				p.setCounter("LIGHT", 200);
 			}
 			performer.level.addMessage(message.toString());
 		}
 		if (def.isSingleUse) {
-			aPlayer.reduceQuantityOf(targetItem);
+			p.reduceQuantityOf(targetItem);
 		}
 
 	}

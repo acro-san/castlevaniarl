@@ -1,15 +1,17 @@
 package crl.action.invoker;
 
 import sz.util.Util;
+import crl.action.AT;
 import crl.action.HeartAction;
 import crl.level.Level;
 import crl.monster.Monster;
 import crl.player.Consts;
 import crl.player.Player;
 
-public class Charm extends HeartAction{
-	public String getID(){
-		return "Charm";
+public class Charm extends HeartAction {
+	
+	public AT getID() {
+		return AT.Charm;
 	}
 	
 	public String getPromptPosition() {
@@ -24,7 +26,7 @@ public class Charm extends HeartAction{
 		return 5;
 	}
 	
-	public void execute(){
+	public void execute() {
 		super.execute();
 		Player aPlayer = (Player) performer;
 		Level x = performer.level;

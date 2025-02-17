@@ -1,8 +1,10 @@
 package crl.action.manbeast;
 
+import crl.action.AT;
 import crl.action.ProjectileSkill;
 
-public class ClawAssault extends ProjectileSkill{
+public class ClawAssault extends ProjectileSkill {
+	
 	public int getDamage() {
 		return 15 + getPlayer().getPunchDamage()*2;
 	}
@@ -43,8 +45,8 @@ public class ClawAssault extends ProjectileSkill{
 		return 5;
 	}
 
-	public String getID() {
-		return "ClawAssault";
+	public AT getID() {
+		return AT.ClawAssault;
 	}
 
 	public boolean allowsSelfTarget() {

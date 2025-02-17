@@ -1,5 +1,6 @@
 package crl.action.renegade;
 
+import crl.action.AT;
 import crl.action.BeamProjectileSkill;
 import crl.player.Player;
 
@@ -45,8 +46,8 @@ public class HellFire extends BeamProjectileSkill{
 		return 15;
 	}
 
-	public String getID(){
-		return "HellFire";
+	public AT getID() {
+		return AT.HellFire;
 	}
 	
 	public String getSFX(){

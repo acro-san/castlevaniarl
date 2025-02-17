@@ -1,6 +1,7 @@
 package crl.action.vanquisher;
 
 import crl.Main;
+import crl.action.AT;
 import crl.action.HeartAction;
 import crl.level.Level;
 import crl.monster.Monster;
@@ -13,8 +14,8 @@ public class LitStorm extends HeartAction {
 		return 10;
 	}
 	
-	public String getID() {
-		return "LitStorm";
+	public AT getID() {
+		return AT.LitStorm;
 	}
 	
 	public void execute() {

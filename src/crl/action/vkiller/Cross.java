@@ -1,6 +1,7 @@
 package crl.action.vkiller;
 
 import sz.util.Util;
+import crl.action.AT;
 import crl.action.ProjectileSkill;
 import crl.feature.SmartFeature;
 import crl.feature.SmartFeatureFactory;
@@ -8,6 +9,10 @@ import crl.feature.ai.CrossAI;
 import crl.player.Player;
 
 public class Cross extends ProjectileSkill {
+	
+	public AT getID() {
+		return AT.MW_Cross;// "Cross";
+	}
 	
 	public int getDamage() {
 		return 5 + 
@@ -46,12 +51,8 @@ public class Cross extends ProjectileSkill {
 	public int getHeartCost() {
 		return 3;
 	}
-
-	public String getID(){
-		return "Cross";
-	}
 	
-	public void execute(){
+	public void execute() {
 		super.execute();
 		if (targetPosition.equals(performer.pos)) {
 			if (Util.chance(50)) {
@@ -67,18 +68,18 @@ public class Cross extends ProjectileSkill {
 			cross.pos = finalPoint;
 			getPlayer().level.addSmartFeature(cross);
 		} else {
-			/*Effect crossEffect =EffectFactory.getSingleton().createDirectedEffect(performer.getPosition(), targetPosition, "SFX_CROSS", i);
+			/*Effect crossEffect =Main.efx.createDirectedEffect(performer.getPosition(), targetPosition, "SFX_CROSS", i);
 			crossEffect.setPosition(performer.level.getPlayer().getPosition());
 			drawEffect(crossEffect);*/
 		}
 	}
 
-	public String getPromptPosition(){
+	public String getPromptPosition() {
 		return "Where do you want to throw the Cross?";
 	}
 	
-	public int getCost(){
-		if (performer instanceof Player){
+	public int getCost() {
+		if (performer instanceof Player) {
 			Player p = (Player) performer;
 			return (int)(25 / (p.getShotLevel()+1));
 		} else

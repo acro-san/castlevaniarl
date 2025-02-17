@@ -1,21 +1,22 @@
 package crl.action.vkiller;
 
 import crl.Main;
+import crl.action.AT;
 import crl.action.HeartAction;
 import crl.level.Level;
 import crl.player.Player;
 
 public class SoulWind extends HeartAction {
 	
+	public AT getID() {
+		return AT.SoulWind;//"Soul Wind";
+	}
+
 	public int getHeartCost() {
 		return 10;
 	}
-
-	public String getID() {
-		return "Soul Wind";
-	}
 	
-	public void execute(){
+	public void execute() {
 		super.execute();
 		Player aPlayer = (Player) performer;
 		Level x = performer.level;

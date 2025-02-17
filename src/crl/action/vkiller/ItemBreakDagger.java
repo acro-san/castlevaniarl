@@ -1,12 +1,14 @@
 package crl.action.vkiller;
 
+import crl.action.AT;
 import crl.action.ProjectileSkill;
 import crl.game.SFXManager;
 import crl.player.Player;
 
-public class ItemBreakDagger extends ProjectileSkill{
-	public String getID(){
-		return "DaggerBreak";
+public class ItemBreakDagger extends ProjectileSkill {
+	
+	public AT getID() {
+		return AT.ItemBreak_Dagger;//"DaggerBreak";
 	}
 
 	public String getPromptPosition(){
@@ -17,7 +19,7 @@ public class ItemBreakDagger extends ProjectileSkill{
 		return "wav/dagger.wav";
 	}
 	
-	public int getCost(){
+	public int getCost() {
 		Player p = (Player) performer;
 		return (int)(25 / (p.getShotLevel()+1));
 	}

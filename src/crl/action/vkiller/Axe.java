@@ -1,9 +1,15 @@
 package crl.action.vkiller;
 
+import crl.action.AT;
 import crl.action.ProjectileSkill;
 import crl.player.Player;
 
-public class Axe extends ProjectileSkill{
+public class Axe extends ProjectileSkill {
+	
+	public AT getID() {
+		return AT.MW_Axe;//"Axe";	// subweaponSkillAxe? throwMysticAxe? SWS_AXE?
+	}
+	
 	public boolean piercesThru() {
 		return true;
 	}
@@ -46,12 +52,8 @@ public class Axe extends ProjectileSkill{
 		return 1;
 	}
 
-	public String getID(){
-		return "Axe";
-	}
-	
-	public int getCost(){
-		Player p = (Player) performer;
+	public int getCost() {
+		Player p = (Player)performer;
 		return (int)(25 / (p.getShotLevel()+1));
 	}
 	

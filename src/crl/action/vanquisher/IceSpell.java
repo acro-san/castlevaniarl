@@ -2,18 +2,13 @@ package crl.action.vanquisher;
 
 import java.util.Vector;
 
-import sz.util.Line;
-import sz.util.Position;
-import crl.action.Action;
+import crl.action.AT;
 import crl.action.ProjectileSkill;
-import crl.actor.Actor;
-import crl.level.Cell;
-import crl.level.Level;
 import crl.monster.Monster;
 import crl.player.Player;
-import crl.ui.effects.EffectFactory;
 
-public class IceSpell extends ProjectileSkill{
+public class IceSpell extends ProjectileSkill {
+	
 	public int getDamage() {
 		return 15+2*getPlayer().getSoulPower();
 	}
@@ -54,33 +49,35 @@ public class IceSpell extends ProjectileSkill{
 		return 8;
 	}
 
-	public String getID(){
-		return "IceSpell";
+	public AT getID() {
+		return AT.IceSpell;
 	}
 	
-	public void execute(){
+	public void execute() {
 		super.execute();
-		Vector hitMonsters = getHitMonsters();
-		for (int i = 0; i < hitMonsters.size(); i++){
-			Monster targetMonster = (Monster) hitMonsters.elementAt(i);
-			int friz = 10 +getPlayer().getSoulPower() - targetMonster.getFreezeResistance();
-			if (friz > 0){
-				if (targetMonster.wasSeen())
+		Vector<Monster> hitMonsters = getHitMonsters();
+		for (int i = 0; i < hitMonsters.size(); i++) {
+			Monster targetMonster = hitMonsters.elementAt(i);
+			int friz = 10 + getPlayer().getSoulPower() - targetMonster.getFreezeResistance();
+			if (friz > 0) {
+				if (targetMonster.wasSeen()) {
 					targetMonster.level.addMessage("The "+targetMonster.getDescription()+ " is frozen!");
+				}
 				targetMonster.freeze(friz);
-			} else
-				if (targetMonster.wasSeen())
+			} else {
+				if (targetMonster.wasSeen()) {
 					targetMonster.level.addMessage("The "+targetMonster.getDescription()+ " is too hot!");
-			
+				}
+			}
 		}
 	}
 
-	public int getCost(){
+	public int getCost() {
 		Player p = (Player) performer;
 		return (int)(p.getCastCost() * 1.3);
 	}
 	
-	public String getPromptPosition(){
+	public String getPromptPosition() {
 		return "Where do you want to invoke the frost?";
 	}
 	

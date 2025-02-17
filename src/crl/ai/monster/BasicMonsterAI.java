@@ -5,6 +5,7 @@ import java.util.Iterator;
 import sz.util.OutParameter;
 import sz.util.Position;
 import sz.util.Util;
+import crl.Main;
 import crl.action.Action;
 import crl.action.ActionFactory;
 import crl.action.monster.MonsterCharge;
@@ -161,14 +162,13 @@ public class BasicMonsterAI extends MonsterAI {
 					//Pick an attack from those available
 					otherAttack: for (RangedAttack element: rangedAttacks) {
 						// If the player is on attack range, and is either a direct attack or we are at the same height as the player, and randomly
-						if (element.getRange() >= playerDistance && 
+						if (element.getRange() >= playerDistance &&
 								Util.chance(element.getFrequency()) &&
-								(
-									element.getAttackType() == MonsterMissile.TYPE_DIRECT ||
-									(element.getAttackType() != MonsterMissile.TYPE_DIRECT && aMonster.getStandingHeight() == aMonster.level.getPlayer().getStandingHeight())
-								)
-							){
-							Action ret = ActionFactory.getActionFactory().getAction(element.getAttackId());
+								(element.getAttackType() == MonsterMissile.TYPE_DIRECT ||
+								(element.getAttackType() != MonsterMissile.TYPE_DIRECT && aMonster.getStandingHeight() == aMonster.level.getPlayer().getStandingHeight())
+							))
+						{
+							Action ret = Main.getAction(element.getAttackId());
 							// If attacks needs charge, ensure I have charge, else try another attack
 							if (element.getChargeCounter() > 0){
 								if (chargeCounter > 0){
@@ -209,7 +209,7 @@ public class BasicMonsterAI extends MonsterAI {
 		}
 	 }
 	
-	private Action tryWalking (Monster aMonster, int direction) {
+	private Action tryWalking(Monster aMonster, int direction) {
 		if (isStationary) {
 			return null;
 		} else {
@@ -302,6 +302,7 @@ public class BasicMonsterAI extends MonsterAI {
 		}
 	}
 
+	//AIT!
 	public String getID(){
 		return "BASIC_MONSTER_AI";
 	}

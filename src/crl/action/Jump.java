@@ -13,18 +13,19 @@ import crl.npc.NPC;
 import crl.player.Consts;
 import crl.player.Damage;
 import crl.player.Player;
-import crl.ui.UserInterface;
 
 public class Jump extends Action {
 	
 	private Player aPlayer;
 	
-	public String getID() {
-		return "Jump";
+	public AT getID() {
+		return AT.Jump;
 	}
 	
 	public boolean needsDirection() {
-		if (aPlayer.hasCounter(Consts.C_BATMORPH) || aPlayer.hasCounter(Consts.C_BATMORPH2) || aPlayer.isSwimming()){
+		if (aPlayer.hasCounter(Consts.C_BATMORPH) || 
+			aPlayer.hasCounter(Consts.C_BATMORPH2) || 
+			aPlayer.isSwimming()) {
 			return false;
 		}
 		return true;
@@ -56,12 +57,13 @@ public class Jump extends Action {
 	}
 
 	public void execute() {
-		Debug.doAssert(performer instanceof Player, "Walk action, tried for not player");
+		Debug.doAssert(performer instanceof Player,
+			"Walk action, tried for not player");
 		aPlayer = (Player) performer;
 		Position var = directionToVariation(targetDirection);
 		Level aLevel = performer.level;
 		if (aPlayer.isSwimming()) {
-			if (aLevel.getMapCell(aPlayer.pos).isShallowWater()){
+			if (aLevel.getMapCell(aPlayer.pos).isShallowWater()) {
 				aLevel.addMessage("You are already floating");
 			} else {
 				if (aPlayer.pos.z != 0){

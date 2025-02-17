@@ -17,21 +17,15 @@ public class SmartFeatureFactory {	// > SmartFeatures or SmartFeatureData
 		Debug.byebye("SmartFeature "+id+" not found");
 		return null;
 	}
-
+/*
 	public void addDefinition(SmartFeature definition) {
 		definitions.put(definition.getID(), definition);
 	}
+	*/
 	
 	public static void init(SmartFeature[] defs) {
 		for (int i = 0; i < defs.length; i++)
 			definitions.put(defs[i].getID(), defs[i]);
 	}
-/*
-	public SmartFeatureFactory() {
-		definitions = new Hashtable<>(40);
-	}
-*/
-//	public static SmartFeatureFactory getFactory(){
-//		return singleton;
-//	}
+
 }

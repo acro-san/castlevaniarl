@@ -1,17 +1,18 @@
 package crl.action.renegade;
 
+import crl.action.AT;
 import crl.action.HeartAction;
 import crl.action.MorphAction;
 import crl.player.Consts;
 import crl.player.Player;
 
-public class MystMorph2 extends MorphAction{
+public class MystMorph2 extends MorphAction {
 	public int getHeartCost() {
 		return 10;
 	}
 	
-	public String getID(){
-		return "MystMorph2";
+	public AT getID(){
+		return AT.MystMorph2;//"MystMorph2";
 	}
 
 	public String getSFX(){

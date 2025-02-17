@@ -15,8 +15,8 @@ public class TargetPS extends ProjectileSkill {
 	private Item weapon;
 	private int reloadTime;
 	
-	public String getID(){
-		return "Target";
+	public AT getID() {
+		return AT.Target;
 	}
 
 	public void execute() {
@@ -27,7 +27,7 @@ public class TargetPS extends ProjectileSkill {
 		} catch (ClassCastException cce) {
 			return;
 		}
-		weapon = player.getWeapon();
+		weapon = player.weapon;
 		
 		ItemDefinition weaponDef = weapon.getDefinition();
 
@@ -47,31 +47,31 @@ public class TargetPS extends ProjectileSkill {
 			weapon.getRemainingTurnsToReload() > 0)
 			weapon.setRemainingTurnsToReload(weapon.getRemainingTurnsToReload()-1);
 		if (weaponDef.isSingleUse) {
-			if (weapon.getReloadTurns() > 0){
+			if (weapon.getReloadTurns() > 0) {
 				if (weapon.getRemainingTurnsToReload() == 0) {
-					player.setWeapon(null);
+					player.weapon = null;
 				}
-			}else {
+			} else {
 				if (player.hasItem(weapon))
 					player.reduceQuantityOf(weapon);
 				else
-					player.setWeapon(null);
+					player.weapon = null;
 			}
 		}
 	}
 
-	public String getPromptPosition(){
+	public String getPromptPosition() {
 		return "Where do you want to attack?";
 	}
 
-	public Position getPosition(){
+	public Position getPosition() {
 		return targetPosition;
 	}
 
-	public String getSFX(){
-		Player p = (Player) performer;
-		weapon = p.getWeapon();
-		if (weapon != null && !weapon.getAttackSound().equals("DEFAULT")){
+	public String getSFX() {
+		Player p = (Player)performer;
+		weapon = p.weapon;
+		if (weapon != null && !weapon.getAttackSound().equals("DEFAULT")) {
 			return weapon.getAttackSound();
 		} else {
 			if (((Player)performer).sex == Player.MALE)
@@ -81,20 +81,21 @@ public class TargetPS extends ProjectileSkill {
 		}
 	}
 
-	public int getCost(){
+	public int getCost() {
 		return player.getAttackCost()+weapon.getAttackCost()+reloadTime;
 	}
 	
-	private boolean reload(Item weapon, Player aPlayer){
-		if (weapon != null){
-			if (aPlayer.getGold() < weapon.getDefinition().reloadCostGold){
+	private boolean reload(Item weapon, Player aPlayer) {
+		// TODO See/dedupe 'Reload' skill? Already have this logic, dont we?
+		
+		if (weapon != null) {
+			if (aPlayer.getGold() < weapon.getDefinition().reloadCostGold) {
 				aPlayer.level.addMessage("You can't reload the " + weapon.getDescription());
 				return false;
 			}else if (aPlayer.getHearts() < 1){
 				aPlayer.level.addMessage("You can't reload the " + weapon.getDescription());
 				return false;
-			}
-			else {
+			} else {
 				weapon.reload();
 				aPlayer.reduceGold(weapon.getDefinition().reloadCostGold);
 				aPlayer.reduceHearts(1);
@@ -104,10 +105,12 @@ public class TargetPS extends ProjectileSkill {
 				reloadTime = 10*weapon.getDefinition().reloadTurns;
 				return true;
 			}
-		} else
+		} else {
 			aPlayer.level.addMessage("You can't reload yourself");
+		}
 		return false;
 	}
+	
 	
 	public boolean canPerform(Actor a) {
 		player = null;
@@ -117,9 +120,10 @@ public class TargetPS extends ProjectileSkill {
 			return false;
 		}
 		
-		Item weapon = player.getWeapon();
+		//Item 
+		weapon = player.weapon;
 		
-		if (!player.canAttack()){
+		if (!player.canAttack()) {
 			invalidationMessage = "You can't attack!";
 			return false;
 		}
@@ -132,22 +136,23 @@ public class TargetPS extends ProjectileSkill {
 		// wtf specific string naming heck.:!?
 		String wfxID = "SFX_WP_" + weapon.getDefinition().getID();
 		// this seems a bad way to go about querying if a targeted projectile
-		// can be directed. surely that should be a simple field on the skill??
+		// can be directed. surely that should be a simple field on the skill?
 		if (!Main.efx.isDirectedEffect(wfxID)) {
 			invalidationMessage = "You cannot target your " + weapon.getDescription() + ". Attack on a direction instead!";
 			return false;
 		}
 		
-		if (weapon.getRange() < 2){
+		if (weapon.getRange() < 2) {
 			invalidationMessage = "You can't target your "+weapon.getDescription();
 			return false;
 		}
 		
-		if (player.getWeapon() != null && player.getWeapon().getWeaponCategory() == ItemDefinition.CAT_BOWS){
+		if (player.weapon != null && 
+			player.weapon.getWeaponCategory() == ItemDefinition.CAT_BOWS) {
 			Monster nearest = player.getNearestMonster();
-			if (nearest != null){
+			if (nearest != null) {
 				if (Position.flatDistance(nearest.pos, player.pos) < 2){
-					invalidationMessage = "You can't aim your "+player.getWeapon().getDescription()+" this close to the enemy, get away!";
+					invalidationMessage = "You can't aim your "+player.weapon.getDescription()+" this close to the enemy, get away!";
 					return false;
 				}
 			}
@@ -162,7 +167,7 @@ public class TargetPS extends ProjectileSkill {
 		return player.getWeaponAttack()+Util.rand(0,2);
 	}
 	
-	public boolean isWeaponAttack(){
+	public boolean isWeaponAttack() {
 		return true;
 	}
 
@@ -172,7 +177,7 @@ public class TargetPS extends ProjectileSkill {
 
 
 	public int getPathType() {
-		if (weapon.getVerticalRange()>0)
+		if (weapon.getVerticalRange() > 0)
 			return PATH_DIRECT;
 		else
 			return PATH_LINEAR;

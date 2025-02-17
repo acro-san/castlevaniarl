@@ -1,6 +1,7 @@
 package crl.action.weapon;
 
 import sz.util.Position;
+import crl.action.AT;
 import crl.action.Action;
 import crl.actor.Actor;
 import crl.feature.Feature;
@@ -11,8 +12,8 @@ import crl.player.Player;
 
 public class DivingSlide extends Action {
 
-	public String getID(){
-		return "DivingSlide";
+	public AT getID() {
+		return AT.DivingSlide;
 	}
 	
 	public boolean needsDirection() {
@@ -31,9 +32,8 @@ public class DivingSlide extends Action {
 		}
 
 		Position var = directionToVariation(targetDirection);
-
 		Level aLevel = performer.level;
-		if (aPlayer.getWeapon() == null) {
+		if (aPlayer.weapon == null) {
 			aLevel.addMessage("You can't slide without a proper weapon");
 			return;
 		}
@@ -81,7 +81,7 @@ public class DivingSlide extends Action {
 		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
 		if (destinationFeature != null && destinationFeature.isDestroyable()) {
 			message.append("You slice the "+destinationFeature.getDescription());
-			Feature prize = destinationFeature.damage(player, player.getWeapon().getAttack());
+			Feature prize = destinationFeature.damage(player, player.weapon.getAttack());
 			if (prize != null) {
 				message.append(", and cut it apart!");
 			}
@@ -108,9 +108,8 @@ public class DivingSlide extends Action {
 	
 	@Override
 	public boolean canPerform(Actor a) {
-		Player aPlayer = (Player)a;
-		//Level aLevel = performer.level;
-		if (aPlayer.getHearts() < 8) {
+		Player p = (Player)a;
+		if (p.getHearts() < 8) {
 			invalidationMessage = "You need more energy!";
 			return false;
 		}

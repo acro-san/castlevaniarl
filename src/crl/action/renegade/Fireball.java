@@ -1,9 +1,23 @@
 package crl.action.renegade;
 
+import crl.action.AT;
 import crl.action.ProjectileSkill;
 import crl.player.Player;
 
-public class Fireball extends ProjectileSkill{
+public class Fireball extends ProjectileSkill {
+
+	public AT getID() {
+		return AT.Fireball;
+	}
+	
+	public int getHeartCost() {
+		return 2;
+	}
+	
+	public int getCost() {
+		Player p = (Player) performer;
+		return (int)(p.getCastCost() * 1.1);
+	}
 	
 	public int getDamage() {
 		return 3+getPlayer().getSoulPower()*2;
@@ -37,23 +51,10 @@ public class Fireball extends ProjectileSkill{
 		return "fireball";
 	}
 
-	public int getHeartCost() {
-		return 2;
-	}
-
-	public String getID(){
-		return "Fireball";
-	}
-	
 	public String getSFX(){
 		return "wav/fire.wav";
 	}
 
-	public int getCost(){
-		Player p = (Player) performer;
-		return (int)(p.getCastCost() * 1.1);
-	}
-	
 	public String getPromptPosition(){
 		return "Where do you want to throw the fireball?";
 	}

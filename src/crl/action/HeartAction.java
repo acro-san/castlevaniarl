@@ -19,11 +19,9 @@ public abstract class HeartAction extends Action {
 		p.reduceHearts(getHeartCost());
 	}
 
-
 	public Player getPlayer() {
 		return (Player)performer;
 	}
-
 
 	@Override
 	public boolean canPerform(Actor a) {

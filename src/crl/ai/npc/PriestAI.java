@@ -15,7 +15,7 @@ public class PriestAI extends VillagerAI {
 		}
 		Player p = who.level.getPlayer();
 		if (Position.flatDistance(who.pos, p.pos) < 3) {
-			if (p.getHits() < p.getHitsMax()) {
+			if (p.getHP() < p.getHPMax()) {
 				p.informPlayerEvent(crl.player.Player.EVT_CHAT, who);
 				//who.level.addMessage("The priest says: 'Rest here for a while'");
 				p.heal();

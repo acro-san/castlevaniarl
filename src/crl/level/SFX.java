@@ -7,8 +7,8 @@ public class SFX extends Action {
 	
 //	private static SFX singleton = new SFX();
 	
-	public String getID() {
-		return "SFX";
+	public AT getID() {
+		return AT.SFX;
 	}
 
 	public void execute() {

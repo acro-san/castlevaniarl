@@ -3,6 +3,7 @@ package crl.action.monster.boss;
 import sz.util.Position;
 import sz.util.Util;
 import crl.Main;
+import crl.action.AT;
 import crl.action.Action;
 import crl.feature.Feature;
 import crl.level.Level;
@@ -12,8 +13,8 @@ import crl.player.Player;
 
 public class ShadowFlare extends Action {
 	
-	public String getID() {
-		return "SHADOWFLARE";
+	public AT getID() {
+		return AT.ShadowFlare;
 	}
 	
 	public void execute() {

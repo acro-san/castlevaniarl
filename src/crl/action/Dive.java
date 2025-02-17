@@ -8,8 +8,8 @@ import crl.player.Player;
 
 public class Dive extends Action {
 	
-	public String getID() {
-		return "DIVE";
+	public AT getID() {
+		return AT.Dive;//"DIVE";
 	}
 	
 	public void execute() {
@@ -28,14 +28,14 @@ public class Dive extends Action {
 				}
 			}
 		}
-		
 	}
+	
 	
 	public boolean canPerform(Actor a) {
 		Player aPlayer = getPlayer(performer);
 		Level aLevel = aPlayer.level;
 		Cell currentCell = aLevel.getMapCell(aPlayer.pos);
-		if (currentCell.isShallowWater()){
+		if (currentCell.isShallowWater()) {
 			if (aPlayer.pos.z == aLevel.getDepth()-1) {
 				invalidationMessage = "You can't dive lower";
 				return false;

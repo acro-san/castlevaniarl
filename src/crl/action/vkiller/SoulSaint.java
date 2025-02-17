@@ -1,23 +1,25 @@
 package crl.action.vkiller;
 
+import crl.action.AT;
 import crl.action.HeartAction;
 import crl.player.Consts;
 import crl.player.Player;
 
-public class SoulSaint extends HeartAction{
+public class SoulSaint extends HeartAction {
+	
+	public AT getID() {
+		return AT.SoulSaint;//"Soul Saint";
+	}
+	
 	public int getHeartCost() {
 		return 15;
 	}
-	
-	public String getID(){
-		return "Soul Saint";
-	}
-	
-	public String getSFX(){
+
+	public String getSFX() {
 		return null;
 	}
 	
-	public int getCost(){
+	public int getCost() {
 		Player p = (Player) performer;
 		return (int)(p.getCastCost() * 1.1);
 	}

@@ -1,9 +1,11 @@
 package crl.action.renegade;
 
+import crl.action.AT;
 import crl.action.ProjectileSkill;
 import crl.player.Player;
 
 public class SummonSpirit extends ProjectileSkill {
+	
 	public int getDamage() {
 		return 10+getPlayer().getSoulPower()*2;
 	}
@@ -44,16 +46,16 @@ public class SummonSpirit extends ProjectileSkill {
 		return 4;
 	}
 
-	public String getID(){
-		return "SummonSpirit";
+	public AT getID() {
+		return AT.SummonSpirit;
 	}
 	
-	public String getSFX(){
+	public String getSFX() {
 		return "wav/scrch.wav";
 	}
 	
 	public int getCost(){
-		Player p = (Player) performer;
+		Player p = (Player)performer;
 		return (int)(p.getCastCost() * 1.6);
 	}
 }

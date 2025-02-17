@@ -2,6 +2,7 @@ package crl.action.renegade;
 
 import sz.util.Position;
 import crl.Main;
+import crl.action.AT;
 import crl.action.Action;
 import crl.actor.Actor;
 import crl.feature.Feature;
@@ -12,8 +13,8 @@ import crl.player.Player;
 
 public class BallOfDestruction extends Action {
 	
-	public String getID() {
-		return "BallOfDestruction";
+	public AT getID() {
+		return AT.BallOfDestruction;
 	}
 	
 	public boolean needsDirection() {
@@ -84,7 +85,7 @@ public class BallOfDestruction extends Action {
 				break;
 		}
 		if (i == 20) {
-			//drawEffect(new MissileEffect(new Position(aPlayer.pos), "*~", Appearance.RED, targetDirection,20, true, false));
+			// drawEffect(new MissileEffect(new Position(aPlayer.pos), "*~", Appearance.RED, targetDirection,20, true, false));
 			drawEffect(Main.efx.createDirectedEffect(aPlayer.pos, this.getPositionalDirectionFrom(aPlayer.pos), "SFX_RENEGADE_BOD", 20));
 		}
 		i = 0;

@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 import sz.util.Position;
 import sz.util.Util;
+import crl.Main;
 import crl.action.Action;
 import crl.action.ActionFactory;
 import crl.action.monster.MonsterWalk;
@@ -40,7 +41,7 @@ public class RangedAI extends MonsterAI {
 					RangedAttack element = (RangedAttack) iter.next();
 					if (element.getRange() >= playerDistance && Util.chance(element.getFrequency())){
 						//Perform the attack
-						Action ret = ActionFactory.getActionFactory().getAction(element.getAttackId());
+						Action ret = Main.getAction(element.getAttackId());
 						ret.setDirection(directionToPlayer);
 						ret.setPosition(aMonster.level.getPlayer().pos);
 						return ret;

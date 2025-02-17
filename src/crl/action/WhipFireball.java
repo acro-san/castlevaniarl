@@ -1,6 +1,7 @@
 package crl.action;
 
 public class WhipFireball extends ProjectileSkill {
+	
 	public int getDamage() {
 		return 4;
 	}
@@ -45,7 +46,7 @@ public class WhipFireball extends ProjectileSkill {
 		return false;
 	}
 
-	public String getID() {
-		return null;
+	public AT getID() {
+		return AT.WhipFireball;
 	}
 }

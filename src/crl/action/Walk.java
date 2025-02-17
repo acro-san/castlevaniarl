@@ -19,8 +19,8 @@ public class Walk extends Action {
 	
 	private Player aPlayer;
 	
-	public String getID() {
-		return "Walk";
+	public AT getID() {
+		return AT.Walk;
 	}
 	
 	public boolean needsDirection() {

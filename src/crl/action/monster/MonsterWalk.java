@@ -2,6 +2,7 @@ package crl.action.monster;
 
 import sz.util.Debug;
 import sz.util.Position;
+import crl.action.AT;
 import crl.action.Action;
 import crl.ai.monster.BasicMonsterAI;
 import crl.feature.Feature;
@@ -15,8 +16,8 @@ import crl.player.Damage;
 
 public class MonsterWalk extends Action {
 	
-	public String getID() {
-		return "MonsterWalk";
+	public AT getID() {
+		return AT.MonsterWalk;
 	}
 	
 	public boolean needsDirection() {

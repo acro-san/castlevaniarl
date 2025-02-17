@@ -17,10 +17,9 @@ import crl.ui.effects.Effect;
 public class Attack extends Action {
 	
 	private int reloadTime;
-	private Item weapon;
 	
-	public String getID() {
-		return "Attack";
+	public AT getID() {
+		return AT.Attack;
 	}
 	
 	public boolean needsDirection() {
@@ -30,17 +29,18 @@ public class Attack extends Action {
 
 	public void execute() {
 		Position var = directionToVariation(targetDirection);
-		Player player = null;
+		Player p = null;
 		reloadTime = 0;
 		try {
-			player = (Player)performer;
-		} catch (ClassCastException cce){
+			p = (Player)performer;
+		} catch (ClassCastException cce) {
+			System.err.println("Attack action performed by nonplayer -> Throwing Exception!?: DEBUG to remove this case!");
 			return;
 		}
 		
-		weapon = player.getWeapon();
+		Item weapon = p.weapon;
 		Level aLevel = performer.level;
-		if (!player.canAttack()) {
+		if (!p.canAttack()) {
 			aLevel.addMessage("You can't attack!");
 			return;
 		}
@@ -49,17 +49,17 @@ public class Attack extends Action {
 			weapon = null;*/
 		
 		if (weapon == null || weapon.getDefinition().weaponCategory.equals(ItemDefinition.CAT_UNARMED)) {
-			if (targetDirection == Action.SELF && aLevel.getMonsterAt(player.pos) == null){
+			if (targetDirection == Action.SELF && aLevel.getMonsterAt(p.pos) == null){
 				aLevel.addMessage("Don't hit yourself");
 				return;
 			}
-			Position targetPosition = Position.add(player.pos, Action.directionToVariation(targetDirection)); 
+			Position targetPosition = Position.add(p.pos, Action.directionToVariation(targetDirection)); 
 			Monster targetMonster = aLevel.getMonsterAt(targetPosition);
-			String attackDescription = player.getPunchDescription();
-			int punchDamage = player.getPunchDamage();
-			int push = player.getPunchPush();
+			String attackDescription = p.getPunchDescription();
+			int punchDamage = p.getPunchDamage();
+			int push = p.getPunchPush();
 			
-			if (targetMonster != null && targetMonster.getStandingHeight() == player.getStandingHeight()){
+			if (targetMonster != null && targetMonster.getStandingHeight() == p.getStandingHeight()){
 				StringBuffer buff = new StringBuffer("You "+attackDescription+" the "+targetMonster.getDescription()+"!");
 				targetMonster.damageWithWeapon(buff, punchDamage);
 				aLevel.addMessage(buff.toString());
@@ -70,7 +70,7 @@ public class Attack extends Action {
 			Feature targetFeature = aLevel.getFeatureAt(targetPosition);
 			if (targetFeature != null && targetFeature.isDestroyable()){
 				aLevel.addMessage("You "+attackDescription+" the "+targetFeature.getDescription());
-				targetFeature.damage(player, punchDamage);
+				targetFeature.damage(p, punchDamage);
 			}
 			
 			Cell targetMapCell = aLevel.getMapCell(targetPosition);
@@ -80,18 +80,18 @@ public class Attack extends Action {
 			return;
 		}
 
-		if (targetDirection == Action.SELF && aLevel.getMonsterAt(player.pos) == null) {
+		if (targetDirection == Action.SELF && aLevel.getMonsterAt(p.pos) == null) {
 			aLevel.addMessage("That's a coward way to give up!");
 			return;
 		}
 		
 		targetPosition = Position.add(performer.pos, Action.directionToVariation(targetDirection));
-		int startHeight = aLevel.getMapCell(player.pos).getHeight() + player.getHoverHeight();
+		int startHeight = aLevel.getMapCell(p.pos).getHeight() + p.getHoverHeight();
 		ItemDefinition weaponDef = weapon.getDefinition();
 
 		if (weapon.getReloadTurns() > 0)
 			if (weapon.getRemainingTurnsToReload() == 0) {
-				if (!reload(weapon, player))
+				if (!reload(weapon, p))
 					return;
 			}
 
@@ -119,9 +119,9 @@ public class Attack extends Action {
 						if (
 							targetMonster != null &&
 							!(targetMonster.isInWater() && targetMonster.canSwim()) &&
-							(destinationCell.getHeight() == aLevel.getMapCell(player.pos).getHeight() ||
-							destinationCell.getHeight() -1  == aLevel.getMapCell(player.pos).getHeight() ||
-							destinationCell.getHeight() == aLevel.getMapCell(player.pos).getHeight()-1)
+							(destinationCell.getHeight() == aLevel.getMapCell(p.pos).getHeight() ||
+							destinationCell.getHeight() -1  == aLevel.getMapCell(p.pos).getHeight() ||
+							destinationCell.getHeight() == aLevel.getMapCell(p.pos).getHeight()-1)
 						)
 							break;
 					}
@@ -166,8 +166,8 @@ public class Attack extends Action {
 			if (hits){
 				hits = false;
 				hitsSomebody = true;
-				int penalty = (int)(Position.distance(targetMonster.pos, player.pos)/4);
-				int attack = player.getWeaponAttack()+Util.rand(0,2);
+				int penalty = (int)(Position.distance(targetMonster.pos, p.pos)/4);
+				int attack = p.getWeaponAttack()+Util.rand(0,2);
 				attack -= penalty;
 				if (attack < 1)
 					attack = 1;
@@ -194,12 +194,12 @@ public class Attack extends Action {
 			Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
 			if (destinationFeature != null && destinationFeature.isDestroyable()) {
 				hitsSomebody = true;
-				if (player.sees(destinationPoint)) {
+				if (p.sees(destinationPoint)) {
 					message = "You hit the "+destinationFeature.getDescription();
 				} else {
 					message = "You hit something";
 				}
-				destinationFeature.damage(player, weapon.getAttack());
+				destinationFeature.damage(p, weapon.getAttack());
 				aLevel.addMessage(message);
 			}
 			
@@ -214,25 +214,27 @@ public class Attack extends Action {
 		}
 /*		if (!hitsSomebody)
 			aLevel.addMessage("You swing at the air!");*/
-		if (!hitsSomebody && player.hasCounter(Consts.C_FIREBALL_WHIP)) {
+		if (!hitsSomebody && p.hasCounter(Consts.C_FIREBALL_WHIP)) {
 			Action fireball = new WhipFireball();
 			fireball.setPerformer(performer);
 			fireball.setPosition(targetPosition);
 			fireball.execute();
 		}
 		if (weapon.getReloadTurns() > 0 &&
-			weapon.getRemainingTurnsToReload() > 0)
+			weapon.getRemainingTurnsToReload() > 0) {
 			weapon.setRemainingTurnsToReload(weapon.getRemainingTurnsToReload()-1);
+		}
 		if (weaponDef.isSingleUse) {
 			if (weapon.getReloadTurns() > 0) {
 				if (weapon.getRemainingTurnsToReload() == 0) {
-					player.setWeapon(null);
+					p.weapon = null;
 				}
 			} else {
-				if (player.hasItem(weapon))
-					player.reduceQuantityOf(weapon);
-				else
-					player.setWeapon(null);
+				if (p.hasItem(weapon)) {
+					p.reduceQuantityOf(weapon);
+				} else {
+					p.weapon = null;
+				}
 			}
 		}
 	}
@@ -273,9 +275,10 @@ public class Attack extends Action {
 	
 	
 	public int getCost() {
-		Player player = (Player) performer;
-		if (weapon != null){
-			return player.getAttackCost() + weapon.getAttackCost()+reloadTime;
+		Player player = (Player)performer;
+		Item weapon = player.weapon;
+		if (weapon != null) {
+			return player.getAttackCost() + weapon.getAttackCost() + reloadTime;
 		} else {
 			return (int)(player.getAttackCost() * 1.5);
 		}
@@ -284,7 +287,7 @@ public class Attack extends Action {
 
 	public String getSFX() {
 		Player p = (Player)performer;
-		weapon = p.getWeapon();
+		Item weapon = p.weapon;
 		if (weapon != null && !weapon.getAttackSound().equals("DEFAULT")) {
 			return weapon.getAttackSound();
 		} else {
@@ -326,20 +329,21 @@ public class Attack extends Action {
 			}
 			runner.add(varP);
 		}
-
 	}
+	
 	
 	public boolean canPerform(Actor a) {
 		Player player = getPlayer(a);
-		if (!player.canAttack()){
+		if (!player.canAttack()) {
 			invalidationMessage = "You can't attack";
 			return false;
 		}
-		if (player.getWeapon() != null && player.getWeapon().getWeaponCategory() == ItemDefinition.CAT_BOWS){
+		Item wpn = player.weapon;
+		if (wpn != null && wpn.getWeaponCategory() == ItemDefinition.CAT_BOWS) {
 			Monster nearest = player.getNearestMonster();
-			if (nearest != null){
+			if (nearest != null) {
 				if (Position.distance(nearest.pos, player.pos) < 2){
-					invalidationMessage = "You can't aim your "+player.getWeapon().getDescription()+" this close to the enemy, get away!";
+					invalidationMessage = "You can't aim your "+wpn.getDescription()+" this close to the enemy, get away!";
 					return false;
 				}
 			}

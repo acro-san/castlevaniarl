@@ -2,14 +2,16 @@ package crl.action.monster.boss;
 
 import sz.util.Position;
 import sz.util.Util;
+import crl.action.AT;
 import crl.action.Action;
 import crl.level.Level;
 import crl.monster.Monster;
 import crl.monster.MonsterData;
 
-public class SummonSnakes extends Action{
-	public String getID() {
-		return "SUMMON_SNAKES";
+public class SummonSnakes extends Action {
+	
+	public AT getID() {
+		return AT.SummonSnakes;
 	}
 	
 	public int getCost() {
@@ -29,7 +31,6 @@ public class SummonSnakes extends Action{
 				i--;
 				continue;
 			}
-			
 			Monster snake = MonsterData.buildMonster("SNAKE");
 			snake.pos = destinationPoint;
 			aLevel.addMonster(snake);

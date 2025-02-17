@@ -12,29 +12,30 @@ import crl.monster.Monster;
 public class SickleAI extends MonsterAI {
 	
 	public Action selectAction(Actor who) {
-		Monster aMonster = (Monster) who;
-		int directionToPlayer = aMonster.starePlayer();
+		Monster mon = (Monster)who;
+		int directionToPlayer = mon.starePlayer();
 		if (directionToPlayer == -1) {
 			return null;
-		} else {
-			int distanceToPlayer = Position.flatDistance(aMonster.pos, aMonster.level.getPlayer().pos);
-			if (distanceToPlayer > 20) {
-				return null;
-			}
-			Action ret = new MonsterWalk();
-			ret.setDirection(directionToPlayer);
-			Cell currentCell = aMonster.level.getMapCell(aMonster.pos);
-			Cell destinationCell = aMonster.level.getMapCell(
-				Position.add(
-					aMonster.pos,
-					Action.directionToVariation(directionToPlayer)
-				));
-
-			if (destinationCell == null || currentCell == null){
-				return null;
-			}
-			return ret;
 		}
+
+		int distanceToPlayer = Position.flatDistance(mon.pos, mon.level.getPlayer().pos);
+		if (distanceToPlayer > 20) {
+			return null;
+		}
+		Action ret = new MonsterWalk();
+		ret.setDirection(directionToPlayer);
+		Cell currentCell = mon.level.getMapCell(mon.pos);
+		Cell destinationCell = mon.level.getMapCell(
+			Position.add(
+				mon.pos,
+				Action.directionToVariation(directionToPlayer)
+			));
+
+		if (destinationCell == null || currentCell == null){
+			return null;
+		}
+		return ret;
+	
 	}
 
 	public String getID() {

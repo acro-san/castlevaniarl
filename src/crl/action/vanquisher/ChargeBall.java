@@ -1,9 +1,11 @@
 package crl.action.vanquisher;
 
+import crl.action.AT;
 import crl.action.ProjectileSkill;
 import crl.player.Player;
 
-public class ChargeBall extends ProjectileSkill{
+public class ChargeBall extends ProjectileSkill {
+	
 	public int getDamage() {
 		return 8+(int)Math.round(getPlayer().getSoulPower()*2.5d);
 	}
@@ -44,16 +46,16 @@ public class ChargeBall extends ProjectileSkill{
 		return 6;
 	}
 
-	public String getID(){
-		return "ChargeBall";
+	public AT getID() {
+		return AT.ChargeBall;
 	}
 	
-	public int getCost(){
-		Player p = (Player) performer;
+	public int getCost() {
+		Player p = (Player)performer;
 		return (int)(p.getCastCost() * 1.5);
 	}
 	
-	public String getPromptPosition(){
+	public String getPromptPosition() {
 		return "Where do you want to throw the charge Ball?";
 	}
 }

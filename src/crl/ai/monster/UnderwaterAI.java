@@ -3,8 +3,8 @@ package crl.ai.monster;
 import sz.util.Debug;
 import sz.util.Position;
 import sz.util.Util;
+import crl.Main;
 import crl.action.Action;
-import crl.action.ActionFactory;
 import crl.action.monster.MonsterWalk;
 import crl.action.monster.Swim;
 import crl.actor.Actor;
@@ -15,7 +15,7 @@ import crl.monster.Monster;
 public class UnderwaterAI extends MonsterAI {
 	/** Dwells in the water swimming until he spots the player, swims to him
 	 * and Jumps out of the water. walks to it and fires */
-	public Action selectAction(Actor who){
+	public Action selectAction(Actor who) {
 		Debug.doAssert(who instanceof Monster, "Underwater AI selectAction");
 		Monster aMonster = (Monster) who;
 	//	Player aPlayer = who.level.getPlayer();
@@ -49,7 +49,7 @@ public class UnderwaterAI extends MonsterAI {
 					RangedAttack ra = (RangedAttack)rangedAttacks.elementAt(i);
 					if (distanceToPlayer <= ra.getRange()) {
 						if (Util.chance(ra.getFrequency())){
-							Action ret = ActionFactory.getActionFactory().getAction(ra.getAttackId());
+							Action ret = Main.getAction(ra.getAttackId());
 							ret.setDirection(directionToPlayer);
 							return ret;
 						}

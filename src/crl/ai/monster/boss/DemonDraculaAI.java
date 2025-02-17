@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 import sz.util.Position;
 import sz.util.Util;
+import crl.Main;
 import crl.action.Action;
 import crl.action.ActionFactory;
 import crl.action.monster.MonsterCharge;
@@ -50,7 +51,7 @@ public class DemonDraculaAI extends MonsterAI {
 					RangedAttack element = (RangedAttack) iter.next();
 					if (element.getRange() >= playerDistance && Util.chance(element.getFrequency())) {
 						//Perform the attack
-						Action ret = ActionFactory.getActionFactory().getAction(element.getAttackId());
+						Action ret = Main.getAction(element.getAttackId());
 						if (element.getChargeCounter() > 0) {
 							if (chargeCounter == 0) {
 								chargeCounter = element.getChargeCounter();

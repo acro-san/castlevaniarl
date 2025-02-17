@@ -9,8 +9,8 @@ import crl.level.Level;
 
 public class Throw extends Action {
 	
-	public String getID() {
-		return "Throw";
+	public AT getID() {
+		return AT.Throw;
 	}
 	
 	public boolean needsItem() {

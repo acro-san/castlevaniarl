@@ -8,8 +8,8 @@ import crl.player.Player;
 
 public class Get extends Action {
 	
-	public String getID() {
-		return "Get";
+	public AT getID() {
+		return AT.Get;
 	}
 	
 	public boolean needsUnderlyingItem(){return true;}
@@ -18,25 +18,26 @@ public class Get extends Action {
 	
 	
 	public void execute() {
-		Debug.doAssert(performer instanceof Player, "An actor different from the player tried to execute Get action");
+		Debug.doAssert(performer instanceof Player, 
+			"An actor different from the player tried to execute Get action");
 		Debug.enterMethod(this, "execute");
-		Player aPlayer = (Player)performer;
+		Player p = (Player)performer;
 		Level aLevel = performer.level;
 		
-		Item destinationItem = targetItem;
-		if (destinationItem != null) {
-			if (aPlayer.canCarry()) {
-				aLevel.addMessage("You pick up the "+destinationItem.getDescription()+".");
-				aPlayer.addItem(destinationItem);
-				aLevel.removeItemFrom(destinationItem, performer.pos);
-			} else {
-				// "You already have as many X as you can carry".
-				// "You can't carry any more X" <- briefest is best?
-				aLevel.addMessage("You have too many things already to pick up the "+destinationItem.getDescription()+"!");
-			}
-			// destinationItem = aLevel.getItemAt(destinationPoint);
-		} else {
+		Item itm = targetItem;
+		if (itm == null) {
 			aLevel.addMessage("There is nothing to pick up here!");
+			Debug.exitMethod();
+			return;
+		}
+		
+		if (p.canCarry()) {
+			aLevel.addMessage("You pick up the "+itm.getDescription()+".");
+			p.addItem(itm);
+			aLevel.removeItemFrom(itm, performer.pos);
+		} else {
+			// other wording? "You already have as many X as you can carry".
+			aLevel.addMessage("You can't carry any more "+itm.getDescription()+"!");
 		}
 		Debug.exitMethod();
 	}

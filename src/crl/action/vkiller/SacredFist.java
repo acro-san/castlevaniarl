@@ -1,14 +1,17 @@
 package crl.action.vkiller;
 
+import crl.action.AT;
 import crl.action.BeamProjectileSkill;
 import crl.player.Player;
 
-public class SacredFist extends BeamProjectileSkill{
-	public String getID(){
-		return "SacredFist";
+public class SacredFist extends BeamProjectileSkill {
+	
+	
+	public AT getID() {
+		return AT.MW_SacredFist;// "SacredFist";
 	}
 	
-	public int getCost(){
+	public int getCost() {
 		Player p = (Player) performer;
 		return (int)(25 / (p.getShotLevel()+1));
 	}

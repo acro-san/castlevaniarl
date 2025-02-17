@@ -1,6 +1,7 @@
 package crl.data;
 
 import crl.Main;
+import crl.action.AT;
 import crl.ai.ActionSelector;
 import crl.ai.monster.BasicMonsterAI;
 import crl.ai.monster.MonsterAI;
@@ -131,6 +132,9 @@ public class MonsterLoader {
 			
 			String mid = monTag.getStrAttr("id");
 			MonsterDefinition md = (MonsterDefinition)monsterDefs.get(mid);
+			if (md == null) {
+				System.err.println("Monster ID: ["+mid+"] has no definition at AI-load time.");
+			}
 			
 			XMLTag selectorTag = monTag.children[0];
 			assert("selector".equals(selectorTag.name));
@@ -221,8 +225,14 @@ public class MonsterLoader {
 		XMLTag[] raDefs = ratks.children;
 		for (XMLTag raTag: raDefs) {
 			int damage = raTag.getIntAttr("damage");	// yields 0 if no attr.
+			// *ah*. ActionType (ID) from String...:
+			String atype = raTag.getStrAttr("id");
+			AT aTypeID = AT.valueOf(atype);
+			// err if not doable? or what??
+			
 			RangedAttack ra = new RangedAttack(
-				raTag.getStrAttr("id"),
+				aTypeID,
+				//raTag.getStrAttr("id"),
 				raTag.getStrAttr("type"),
 				raTag.getStrAttr("status_effect"),
 				raTag.getIntAttr("range"),

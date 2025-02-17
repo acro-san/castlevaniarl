@@ -1,6 +1,7 @@
 package crl.action.vkiller;
 
 import crl.Main;
+import crl.action.AT;
 import crl.action.HeartAction;
 import crl.player.Player;
 import crl.ui.ActionCancelException;
@@ -26,12 +27,12 @@ public class ItemBreak extends HeartAction {
 		else return 0;
 	}
 	
-	public String getID() {
-		return "ItemBreak";
+	public AT getID() {
+		return AT.ItemBreak;
 	}
 	
-	public HeartAction getBreakAction(){
-		switch (getPlayer().getMysticWeapon()){
+	public HeartAction getBreakAction() {
+		switch (getPlayer().getMysticWeapon()) {
 		case Player.AXE:
 			return AXEBREAK;
 		case Player.BIBLE:

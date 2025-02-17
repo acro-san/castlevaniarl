@@ -3,6 +3,7 @@ package crl.action.vkiller;
 import sz.util.Line;
 import sz.util.Position;
 import crl.Main;
+import crl.action.AT;
 import crl.action.BeamProjectileSkill;
 import crl.level.Cell;
 import crl.level.Level;
@@ -10,11 +11,11 @@ import crl.player.Player;
 
 public class ItemBreakSacredFist extends BeamProjectileSkill {
 	
-	public String getID() {
-		return "ItemBreakSacredFist";
+	public AT getID() {
+		return AT.ItemBreak_SacredFist;	//"ItemBreakSacredFist";
 	}
 	
-	public int getCost(){
+	public int getCost() {
 		Player p = (Player) performer;
 		return (int)(25 / (p.getShotLevel()+1));
 	}
@@ -78,16 +79,15 @@ public class ItemBreakSacredFist extends BeamProjectileSkill {
 		Level level = getPlayer().level;
 		Position runner = line.next();
 		int i = 0;
-		for (; i < 5; i++){
+		for (; i < 5; i++) {
 			runner = line.next();
 			Cell destinationCell = performer.level.getMapCell(runner);
-			if (
-				level.isWalkable(runner) &&
-				destinationCell.getHeight() == level.getMapCell(player.pos).getHeight()
-			)
+			if (level.isWalkable(runner) &&
+				destinationCell.getHeight() == level.getMapCell(player.pos).getHeight()) {
 				;
-			else
+			} else {
 				break;
+			}
 		}
 		drawEffect(Main.efx.createDirectedEffect(player.pos, targetPosition, "SFX_TELEPORT", i));
 		

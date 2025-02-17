@@ -3,6 +3,7 @@ package crl.action.invoker;
 import sz.util.Line;
 import sz.util.Position;
 import crl.Main;
+import crl.action.AT;
 import crl.action.HeartAction;
 import crl.feature.Feature;
 import crl.level.Cell;
@@ -16,8 +17,8 @@ public class Egg extends HeartAction {
 		return 1;
 	}
 	
-	public String getID() {
-		return "Egg";
+	public AT getID() {
+		return AT.Egg;
 	}
 	
 	public boolean needsPosition() {

@@ -7,8 +7,8 @@ import crl.player.Player;
 
 public class Equip extends Action {
 	
-	public String getID() {
-		return "Equip";
+	public AT getID() {
+		return AT.Equip;
 	}
 	
 	public boolean needsItem() {
@@ -44,13 +44,13 @@ public class Equip extends Action {
 						return;
 					}
 				}
-				Item currentArmor = player.getArmor();
+				Item currentArmor = player.armor;
 				player.reduceQuantityOf(targetItem);
 				if (currentArmor != null) {
 					player.addItem(currentArmor);
 				}
 				performer.level.addMessage("You wear the "+def.description);
-				player.setArmor(targetItem);
+				player.armor = targetItem;
 				break;
 				
 			case ItemDefinition.EQUIPTYPE_WEAPON:
@@ -58,70 +58,69 @@ public class Equip extends Action {
 					performer.level.addMessage("You can't abandon the mystic whip");
 					return;
 				}
-				Item currentWeapon = player.getWeapon();
-				Item currentSecondaryWeapon = player.getSecondaryWeapon();
-				if (targetItem.isTwoHanded()){
-					Item currentShield = player.getShield();
-					if (currentShield != null){
-						if (!player.canCarry()){
+				Item currentWeapon = player.weapon;
+				Item currentSecondaryWeapon = player.secondaryWeapon;
+				if (targetItem.isTwoHanded()) {
+					Item currentShield = player.shield;
+					if (currentShield != null) {
+						if (!player.canCarry()) {
 							performer.level.addMessage("You can't store your "+currentShield.getDescription()+" to wear this two handed weapon.");
 							return;
 						} else {
 							performer.level.addMessage("You remove your "+currentShield.getDescription());
 							player.addItem(currentShield);
-							player.setShield(null);
+							player.shield = null;
 						}
 					}
 				}
 				
-				if (currentWeapon != null){
-					if (currentSecondaryWeapon != null){
-						if (!player.canCarry()){
+				if (currentWeapon != null) {
+					if (currentSecondaryWeapon != null) {
+						if (!player.canCarry()) {
 							performer.level.addMessage("You are unable to store your "+currentSecondaryWeapon.getDescription());
 							return;
 						} else {
-							player.setSecondaryWeapon(currentWeapon);
+							player.secondaryWeapon = currentWeapon;
 							performer.level.addMessage("You put your "+currentWeapon.getDescription()+" in your belt.");
 							player.addItem(currentSecondaryWeapon);
 							performer.level.addMessage("You store your "+currentSecondaryWeapon.getDescription());
 						}
 					} else {
-						player.setSecondaryWeapon(currentWeapon);
+						player.secondaryWeapon = currentWeapon;
 						performer.level.addMessage("You put your "+currentWeapon.getDescription()+" in your belt.");
 					}
 				}
 				performer.level.addMessage("You wield the "+def.description);
-				player.setWeapon(targetItem);
+				player.weapon = targetItem;
 				player.reduceQuantityOf(targetItem);
 				
 				break;
-				
 			case ItemDefinition.EQUIPTYPE_SHIELD:
-				Item currentShield = player.getShield();
-				currentWeapon = player.getWeapon();
+				Item currentShield = player.shield;
+				currentWeapon = player.weapon;
 				
-				if (currentWeapon != null && currentWeapon.isTwoHanded()){
+				if (currentWeapon != null && currentWeapon.isTwoHanded()) {
 					//Must remove weapon to use shield
 					if (!player.canCarry()){
 						performer.level.addMessage("You are unable to store your current weapon to wear the shield.");
 						return;
 					} else {
-						player.setWeapon(null);
+						player.weapon = null;
 						player.addItem(currentWeapon);
 					}
 				}
-				if (currentShield != null){
-					//Remove the current shield
-					if (!player.canCarry()){
-						performer.level.addMessage("You are unable to store your current shiled to wear the new one.");
+				if (currentShield != null) {
+					// Remove the current shield
+					if (!player.canCarry()) {
+						performer.level.addMessage("You are unable to store your current shield to wear the new one.");
 						return;
 					} else {
-						player.setShield(null);
+						player.shield = null;
 						player.addItem(currentShield);
 					}
 				}
 				
-				player.setShield(targetItem);
+				player.shield = targetItem;
 				player.reduceQuantityOf(targetItem);
 				performer.level.addMessage("You wear the "+def.description);
 				break;

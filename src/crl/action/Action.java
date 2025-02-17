@@ -34,12 +34,14 @@ public abstract class Action implements java.io.Serializable {
 		DOWNLEFT = 7,
 		SELF = 8;
 	
+	// can be eventually phased out completely.
+	public abstract AT getID();
 	
-	public abstract String getID();
-	
+	// abstract??! FIXME CLEAR UP THIS AND OTHER COMPLEX 'value as function call' defs!!!
 	public int getCost() {
 		return 50;
 	}
+	
 
 	protected boolean checkHearts(int q) {
 		boolean ret = ((Player)performer).getHearts() >= q;
@@ -199,6 +201,7 @@ public abstract class Action implements java.io.Serializable {
 		}
 	}
 
+
 	public static int toIntDirection(Position what) {
 		switch (what.x) {
 			case 1:
@@ -227,7 +230,6 @@ public abstract class Action implements java.io.Serializable {
 						return UPLEFT;
 				}
 		}
-
 		return -1;
 	}
 	

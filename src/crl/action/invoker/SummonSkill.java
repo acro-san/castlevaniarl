@@ -2,6 +2,7 @@ package crl.action.invoker;
 
 import sz.util.Position;
 import sz.util.Util;
+import crl.action.AT;
 import crl.action.HeartAction;
 import crl.level.Level;
 import crl.monster.Monster;
@@ -31,17 +32,21 @@ public class SummonSkill extends HeartAction {
 			"S_BIRD", "S_CAT", "S_DRAGON", "S_EAGLE", "S_TIGER", "S_TORTOISE", "S_TURTLE"
 		},
 		
-		// these are more like human-readable synopses / text-descriptions?
-		SUMMON_IDS = {	// I HIGHLY doubt these phrases are 'IDs'. spell ids?
-			"Invoke Bird", "Invoke Cat", "Invoke Dragon", "Invoke Eagle",
-			"Invoke Tiger", "Invoke Tortoise", "Invoke Turtle"
-		},
-		
 		SUMMON_SFX = {
 			null, "wav/kitty.wav", null, null, "wav/tigerGrowl.wav",
 			"wav/turtleCry.wav", "wav/turtleCry.wav"
 			// ^tortoise (uses turtleCry also).
 		};
+	
+	
+	public static final AT[]
+		SUMMON_IDS = {	// I HIGHLY doubt these phrases are 'IDs'. spell ids?
+			AT.SummonBird, AT.SummonCat, AT.SummonDragon, AT.SummonEagle,
+			AT.SummonTiger, AT.SummonTortoise, AT.SummonTurtle
+			// these seem more like human-readable synopses / text-descriptions?
+//			"Invoke Bird", "Invoke Cat", "Invoke Dragon", "Invoke Eagle",
+//			"Invoke Tiger", "Invoke Tortoise", "Invoke Turtle"
+	};
 	
 	public static final int[]		//   Tiger only costs 5!?
 		SUMMON_HEARTCOSTS = {5, 5, 8, 5, 5, 5, 5},	// only dragon is 8.
@@ -59,7 +64,7 @@ public class SummonSkill extends HeartAction {
 	}
 	
 	@Override
-	public String getID() {
+	public AT getID() {
 		return SUMMON_IDS[sType];
 	}
 	

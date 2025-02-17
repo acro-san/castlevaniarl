@@ -2,6 +2,7 @@ package crl.action.manbeast;
 
 import sz.util.Position;
 import crl.Main;
+import crl.action.AT;
 import crl.action.Action;
 import crl.action.HeartAction;
 import crl.actor.Actor;
@@ -14,31 +15,31 @@ import crl.player.Player;
 public class ClawSwipe extends HeartAction {
 	
 	public int getHeartCost() {
-		return 3;	
+		return 3;
 	}
 	
-	public String getID(){
-		return "ClawSwipe";
+	public AT getID() {
+		return AT.ClawSwipe;
 	}
 	
-	public boolean needsDirection(){
+	public boolean needsDirection() {
 		return true;
 	}
 
-	public String getPromptDirection(){
+	public String getPromptDirection() {
 		return "Where do you want to unleash your energy?";
 	}
 	
-	public String getSFX(){
+	public String getSFX() {
 		return "wav/swaashll.wav";
 	}
 
-	public int getCost(){
-		Player p = (Player) performer;
+	public int getCost() {
+		Player p = (Player)performer;
 		return (int)(p.getAttackCost() * 1.2);
 	}
 	
-	public void execute(){
+	public void execute() {
 		super.execute();
 		Player aPlayer = (Player)performer;
 		int damage = 4 + aPlayer.getPunchDamage();

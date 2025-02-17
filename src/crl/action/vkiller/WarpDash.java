@@ -3,6 +3,7 @@ package crl.action.vkiller;
 import sz.util.Line;
 import sz.util.Position;
 import crl.Main;
+import crl.action.AT;
 import crl.action.HeartAction;
 import crl.level.Cell;
 import crl.level.Level;
@@ -14,8 +15,8 @@ public class WarpDash extends HeartAction {
 		return 3;
 	}
 
-	public String getID(){
-		return "WarpDash";
+	public AT getID(){
+		return AT.WarpDash;//"WarpDash";
 	}
 	
 	public boolean needsPosition(){

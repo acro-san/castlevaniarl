@@ -6,10 +6,10 @@ import crl.monster.*;
 
 public class EmergeMonster extends Action {
 	// WTF?!
-	private static EmergeMonster singleton = new EmergeMonster();
+////	private static EmergeMonster singleton = new EmergeMonster();
 	
-	public String getID() {
-		return "EmergeMonster";
+	public AT getID() {
+		return AT.EmergeMonster;
 	}
 	
 	public void execute() {
@@ -22,7 +22,8 @@ public class EmergeMonster extends Action {
 			level.destroyFeature(em.getMound());
 	}
 
-	public static EmergeMonster getAction() {
-		return singleton;
-	}
+	// It's almost as if... these shouldn't even be classes in the first place!
+//	public static EmergeMonster getAction() {
+//		return singleton;
+//	}
 }

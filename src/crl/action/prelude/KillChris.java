@@ -2,18 +2,18 @@ package crl.action.prelude;
 
 import sz.util.Position;
 import crl.Main;
+import crl.action.AT;
 import crl.action.Action;
 import crl.level.Level;
 import crl.player.Player;
 
 public class KillChris extends Action {
 
-	public String getID() {
-		return "PRELUDE_KILL_CHRIS";
+	public AT getID() {
+		return AT.PreludeKillChris;
 	}
 	
 	public void execute() {
-		//Monster aMonster = (Monster)performer;
 		Level aLevel = performer.level;
 		Player aPlayer = aLevel.getPlayer();
 		aLevel.addMessage("Dracula invokes a deadly beam of chaos energy!");

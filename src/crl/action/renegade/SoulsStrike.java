@@ -2,6 +2,7 @@ package crl.action.renegade;
 
 import sz.util.Position;
 import crl.Main;
+import crl.action.AT;
 import crl.action.HeartAction;
 import crl.level.Level;
 import crl.monster.Monster;
@@ -9,8 +10,8 @@ import crl.player.Player;
 
 public class SoulsStrike extends HeartAction {
 	
-	public String getID() {
-		return "Souls Strike";
+	public AT getID() {
+		return AT.SoulsStrike;//"Souls Strike";
 	}
 	
 	public int getHeartCost() {

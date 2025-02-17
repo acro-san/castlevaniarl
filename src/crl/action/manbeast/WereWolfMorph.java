@@ -1,5 +1,6 @@
 package crl.action.manbeast;
 
+import crl.action.AT;
 import crl.action.MorphAction;
 import crl.player.Consts;
 import crl.player.Player;
@@ -9,15 +10,15 @@ public class WereWolfMorph extends MorphAction{
 		return 20;
 	}
 	
-	public String getID(){
-		return "WereWolfMorph";
+	public AT getID(){
+		return AT.WerewolfMorph;
 	}
 
 	public String getSFX(){
 		return "wav/howl.wav";
 	}
 
-	public int getCost(){
+	public int getCost() {
 		Player p = (Player) performer;
 		return (int)(p.getAttackCost() * 1.5);
 	}

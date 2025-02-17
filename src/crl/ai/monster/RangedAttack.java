@@ -1,10 +1,14 @@
 package crl.ai.monster;
 
+import crl.action.AT;
 import crl.action.monster.MonsterMissile;
 
-public class RangedAttack implements java.io.Serializable{
-	private String attackId;
-	private String attackType;
+public class RangedAttack implements java.io.Serializable {
+	
+	private AT attackId;	// an action identifier.
+	
+	private String attackType;	// ??!
+	
 	private int range;
 	private int frequency;
 	private String attackMessage;
@@ -16,7 +20,7 @@ public class RangedAttack implements java.io.Serializable{
 	private String statusEffect;
 	private int damage;
 	
-	public RangedAttack(String pAttackId, String pAttackType, String pStatusEffect, int pRange, int pFrequency, String pAttackMessage, String pEffectType, String pEffectString, int pDamage){
+	public RangedAttack(AT pAttackId, String pAttackType, String pStatusEffect, int pRange, int pFrequency, String pAttackMessage, String pEffectType, String pEffectString, int pDamage){
 		attackId = pAttackId;
 		attackType = pAttackType;
 		if (attackType == null)
@@ -38,7 +42,7 @@ public class RangedAttack implements java.io.Serializable{
 		return effectWav;
 	}
 	
-	public String getAttackId() {
+	public AT getAttackId() {
 		return attackId;
 	}
 	

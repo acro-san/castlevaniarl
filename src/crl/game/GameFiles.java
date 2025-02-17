@@ -17,7 +17,6 @@ import java.util.Iterator;
 import java.util.Vector;
 
 import crl.Main;
-import crl.actor.Message;
 import crl.data.Text;
 import crl.item.ItemDefinition;
 import crl.player.Equipment;
@@ -26,7 +25,6 @@ import crl.player.HiScore;
 import crl.player.MonsterDeath;
 import crl.player.Player;
 import crl.player.Skill;
-import crl.ui.UserInterface;
 import sz.util.Debug;
 
 public class GameFiles {
@@ -359,7 +357,7 @@ public class GameFiles {
 			
 			fileWriter.newLine();
 			Vector<String> history = gsi.getHistory();
-			for (int i = 0; i < history.size(); i++){
+			for (int i = 0; i < history.size(); i++) {
 				fileWriter.write(heshe + " " + history.elementAt(i));
 				fileWriter.newLine();
 			}
@@ -379,7 +377,7 @@ public class GameFiles {
 			fileWriter.write(player.getName()+" the level "+ player.getPlayerLevel()+" "+player.getClassString() + " "+player.getStatusString());fileWriter.newLine();
 			fileWriter.write("Sex: "+ (player.sex == Player.MALE ? "M" : "F"));
 			fileWriter.newLine();
-			fileWriter.write("Hits: "+player.getHits()+ "/"+player.getHitsMax()+" Hearts: " + player.getHearts() +"/"+player.getHeartsMax()+
+			fileWriter.write("Hits: "+player.getHP()+ "/"+player.getHPMax()+" Hearts: " + player.getHearts() +"/"+player.getHeartsMax()+
 				  " Gold: "+player.getGold()+ " Keys: "+player.getKeys());fileWriter.newLine();
 			fileWriter.write("Carrying: "+player.getItemCount()+"/"+player.getCarryMax());
 			fileWriter.newLine();
@@ -568,7 +566,7 @@ public class GameFiles {
 			fileWriter.newLine();
 			fileWriter.write("Sex: "+ (player.sex == Player.MALE ? "M" : "F"));
 			fileWriter.newLine();
-			fileWriter.write("Hits: "+player.getHits()+ "/"+player.getHitsMax()+" Hearts: " + player.getHearts() +"/"+player.getHeartsMax()+
+			fileWriter.write("Hits: "+player.getHP()+ "/"+player.getHPMax()+" Hearts: " + player.getHearts() +"/"+player.getHeartsMax()+
 				  " Gold: "+player.getGold()+ " Keys: "+player.getKeys());
 			fileWriter.newLine();
 			fileWriter.write("Carrying: "+player.getItemCount()+"/"+player.getCarryMax());

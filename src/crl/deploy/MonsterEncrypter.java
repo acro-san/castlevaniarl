@@ -10,11 +10,11 @@ public class MonsterEncrypter {
 	public static void main(String[] args){
 		try {
 			System.out.println("Writing encrypted file");
-			DESEncrypter encrypter = new DESEncrypter("65csvlk3489585f9rjh");
-			encrypter.encrypt(new FileInputStream("data/monsters.xml"), new FileOutputStream("data/monsters.exml"));
-			encrypter.encrypt(new FileInputStream("data/monsters.csv"), new FileOutputStream("data/monsters.ecsv"));
-			System.out.println("File written");
-		} catch (IOException ioe){
+			DESEncrypter e = new DESEncrypter("65csvlk3489585f9rjh");
+			e.encrypt(new FileInputStream("data/monsters.xml"), new FileOutputStream("data/monsters.exml"));
+	//		e.encrypt(new FileInputStream("data/monsters.csv"), new FileOutputStream("data/monsters.ecsv"));
+			System.out.println("Files written");
+		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
 	}}

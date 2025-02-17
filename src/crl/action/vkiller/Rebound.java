@@ -2,6 +2,7 @@ package crl.action.vkiller;
 
 import sz.util.Debug;
 import sz.util.Position;
+import crl.action.AT;
 import crl.action.Action;
 import crl.feature.Feature;
 import crl.level.Cell;
@@ -11,8 +12,8 @@ import crl.player.Player;
 
 public class Rebound extends Action {
 	
-	public String getID() {
-		return "Rebound";
+	public AT getID() {
+		return AT.Rebound;	//"Rebound";
 	}
 	
 	public boolean needsDirection() {
@@ -102,7 +103,7 @@ public class Rebound extends Action {
 	
 	
 	public String getPromptDirection() {
-		return "Where do you want to throw the Dagger?";
+		return "Where do you want to throw the Rebound Crystal?";
 	}
 
 }

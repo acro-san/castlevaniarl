@@ -1,6 +1,7 @@
 package crl.action.vkiller;
 
 import crl.Main;
+import crl.action.AT;
 import crl.action.HeartAction;
 import crl.feature.Feature;
 import crl.level.Cell;
@@ -16,8 +17,8 @@ public class AirDash extends HeartAction {
 		return 5;
 	}
 
-	public String getID(){
-		return "AirDash";
+	public AT getID(){
+		return AT.AirDash;
 	}
 	
 	public boolean needsPosition(){

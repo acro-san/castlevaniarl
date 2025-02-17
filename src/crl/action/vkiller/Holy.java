@@ -4,6 +4,7 @@ import sz.util.Line;
 import sz.util.Position;
 import sz.util.Util;
 import crl.Main;
+import crl.action.AT;
 import crl.action.Action;
 import crl.action.HeartAction;
 import crl.feature.Feature;
@@ -19,17 +20,17 @@ public class Holy extends HeartAction {
 		return 1;
 	}
 	
-	public String getID(){
-		return "Holy";
+	public AT getID() {
+		return AT.MW_HolyWater;//"Holy";
 	}
 	
-	public boolean needsPosition(){
+	public boolean needsPosition() {
 		return true;
 	}
 
-	private int getDamage(){
+	private int getDamage() {
 		return 6 + 
-			getPlayer().getShotLevel()+ 
+			getPlayer().getShotLevel()+
 			getPlayer().getSoulPower();
 	}
 	
@@ -45,7 +46,7 @@ public class Holy extends HeartAction {
 			aLevel.addMessage("The vial washes over you");
 			if (Util.chance(30)) {
 				aLevel.addMessage("You feel healed.");
-				aPlayer.recoverHits(2);
+				aPlayer.heal(2);
 			} else {
 				aLevel.addMessage("The bottle hits your head and breaks.");
 			}
@@ -56,7 +57,7 @@ public class Holy extends HeartAction {
 		Position flameOrigin = null;
 		Cell destinationCell = null;
 		int i = 0;
-		for (; i < 3; i++){
+		for (; i < 3; i++) {
 			flameOrigin = holyLine.next();
 			destinationCell = aLevel.getMapCell(flameOrigin);
 			if (!aLevel.isValidCoordinate(flameOrigin) || (destinationCell!= null && destinationCell.isSolid())){
@@ -124,7 +125,7 @@ public class Holy extends HeartAction {
 		return (int)(25 / (p.getShotLevel()+1));
 	}
 	
-	public String getSFX(){
+	public String getSFX() {
 		return "wav/breakpot.wav";
 	}
 

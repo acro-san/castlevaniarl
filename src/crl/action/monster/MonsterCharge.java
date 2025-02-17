@@ -3,6 +3,7 @@ package crl.action.monster;
 import sz.util.Debug;
 import sz.util.Position;
 import crl.Main;
+import crl.action.AT;
 import crl.action.Action;
 import crl.game.SFXManager;
 import crl.level.Cell;
@@ -10,19 +11,20 @@ import crl.level.Level;
 import crl.monster.Monster;
 import crl.player.Damage;
 import crl.player.Player;
-import crl.ui.UserInterface;
 
 public class MonsterCharge extends Action {
+	
 	private int range;
 	private String message;
 	private String effectWav;
 
 	private int damage;
-	public String getID(){
-		return "MONSTER_CHARGE";
+	
+	public AT getID() {
+		return AT.MonsterCharge;
 	}
 	
-	public boolean needsDirection(){
+	public boolean needsDirection() {
 		return true;
 	}
 
@@ -37,15 +39,16 @@ public class MonsterCharge extends Action {
 		Debug.doAssert(performer instanceof Monster, "Someone not a monster tried to JumpOver");
 		Monster aMonster = (Monster) performer;
 		targetDirection = aMonster.starePlayer();
-        Position var = directionToVariation(targetDirection);
-        Level aLevel = performer.level;
-        Player aPlayer = aLevel.getPlayer();
-        aLevel.addMessage("The "+aMonster.getDescription()+" "+message+".");
-        Cell currentCell = aLevel.getMapCell(performer.pos);
-        Position destinationPoint = null;
-        if (effectWav != null)
-        	SFXManager.play(effectWav);
-        for (int i=0; i<range; i++){
+		Position var = directionToVariation(targetDirection);
+		Level aLevel = performer.level;
+		Player aPlayer = aLevel.getPlayer();
+		aLevel.addMessage("The "+aMonster.getDescription()+" "+message+".");
+		Cell currentCell = aLevel.getMapCell(performer.pos);
+		Position destinationPoint = null;
+		if (effectWav != null) {
+			SFXManager.play(effectWav);
+		}
+		for (int i=0; i<range; i++) {
 			destinationPoint = Position.add(aMonster.pos, var);
 			if (!aLevel.isValidCoordinate(destinationPoint))
 				break;
@@ -90,16 +93,15 @@ public class MonsterCharge extends Action {
 				actionAnimationPause();
 			}
 		}
-		
 	}
 
-	public String getPromptDirection(){
+	public String getPromptDirection() {
 		return "Where do you want to whip?";
 	}
 
-	public int getCost(){
+	public int getCost() {
 		Monster m = (Monster) performer;
-		if (m.getAttackCost() == 0){
+		if (m.getAttackCost() == 0) {
 			Debug.say("quickie monster");
 			return 10;
 		}

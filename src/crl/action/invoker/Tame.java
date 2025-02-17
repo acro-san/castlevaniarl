@@ -1,14 +1,15 @@
 package crl.action.invoker;
 
 import sz.util.Util;
+import crl.action.AT;
 import crl.action.HeartAction;
 import crl.level.Level;
 import crl.monster.Monster;
 import crl.player.Consts;
 
 public class Tame extends HeartAction {
-	public String getID() {
-		return "Tame";
+	public AT getID() {
+		return AT.Tame;
 	}
 	
 	public String getPromptPosition() {

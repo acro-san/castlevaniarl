@@ -4,41 +4,43 @@ import crl.actor.Actor;
 import crl.item.Item;
 import crl.player.Player;
 
-public class SwitchWeapons extends Action{
+public class SwitchWeapons extends Action {
+	
 	public int getCost() {
 		return 25;
 	}
 
-	public String getID(){
-		return "SwitchWeapons";
+	public AT getID() {
+		return AT.SwitchWeapons;
 	}
 	
-	public void execute(){
-		Player aPlayer = (Player) performer;
-		Item secondary = aPlayer.getSecondaryWeapon();
-		if (secondary == null){
+	@Override
+	public void execute() {
+		Player p = (Player)performer;
+		Item secondary = p.secondaryWeapon;
+		if (secondary == null) {
 			/*aPlayer.level.addMessage("You don't have a secondary weapon");
 			return;*/
-			Item primary = aPlayer.getWeapon();
-			aPlayer.setWeapon(null);
-			aPlayer.level.addMessage("You attack unarmed");
-			if (primary != null){
-				aPlayer.setSecondaryWeapon(primary);
-			} 
+			Item primary = p.weapon;
+			p.weapon = null;
+			p.level.addMessage("You attack unarmed");
+			if (primary != null) {
+				p.secondaryWeapon = primary;
+			}
 			return;
 		}
-		Item primary = aPlayer.getWeapon();
-		aPlayer.setWeapon(secondary);
-		if (primary != null){
-			aPlayer.setSecondaryWeapon(primary);
-			aPlayer.level.addMessage("You switch your "+primary.getDescription()+" for your "+secondary.getDescription());
+		Item primary = p.weapon;
+		p.weapon = secondary;
+		if (primary != null) {
+			p.secondaryWeapon = primary;
+			p.level.addMessage("You switch your "+primary.getDescription()+" for your "+secondary.getDescription());
 		} else {
-			aPlayer.setSecondaryWeapon(null);
-			aPlayer.level.addMessage("You equip your "+secondary.getDescription());
+			p.secondaryWeapon = null;
+			p.level.addMessage("You equip your "+secondary.getDescription());
 		}
  	}
 	
-	public boolean canPerform(Actor a){
+	public boolean canPerform(Actor a) {
 		/*Player aPlayer = (Player) a;
 		Item secondary = aPlayer.getSecondaryWeapon();
 		if (secondary == null){

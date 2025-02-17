@@ -1,6 +1,7 @@
 package crl.action.vkiller;
 
 import crl.Main;
+import crl.action.AT;
 import crl.action.HeartAction;
 import crl.feature.Feature;
 import crl.level.Level;
@@ -15,24 +16,24 @@ public class SlideKick extends HeartAction {
 		return 2;
 	}
 
-	public String getID(){
-		return "SlideKick";
+	public AT getID(){
+		return AT.SlideKick;	// "SlideKick";
 	}
 	
-	public boolean needsPosition(){
+	public boolean needsPosition() {
 		return true;
 	}
 
-	public String getPromptPosition(){
+	public String getPromptPosition() {
 		return "Where do you want to slide?";
 	}
 
-	public void execute(){
+	public void execute() {
 		super.execute();
-		Player aPlayer = (Player) performer;
+		Player aPlayer = (Player)performer;
 		Level aLevel = aPlayer.level;
 		
-		if (targetPosition.equals(performer.pos)){
+		if (targetPosition.equals(performer.pos)) {
 			aLevel.addMessage("You fall back.");
 			return;
 		}
@@ -42,7 +43,7 @@ public class SlideKick extends HeartAction {
 		Line fireLine = new Line(performer.pos, targetPosition);
 		Position previousPoint = aPlayer.pos;
 		int projectileHeight = aLevel.getMapCell(aPlayer.pos).getHeight();
-		for (int i=0; i<3; i++){
+		for (int i=0; i<3; i++) {
 			Position destinationPoint = fireLine.next();
 			if (aLevel.isSolid(destinationPoint)){
 				drawEffect(Main.efx.createDirectedEffect(performer.pos, targetPosition, "SFX_SLIDEKICK", i));
@@ -51,10 +52,9 @@ public class SlideKick extends HeartAction {
 			}
 			
 			String message = "";
-			
 			int destinationHeight = aLevel.getMapCell(destinationPoint).getHeight();
 
-			if (destinationHeight == projectileHeight){
+			if (destinationHeight == projectileHeight) {
 				Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
 				if (destinationFeature != null && destinationFeature.isDestroyable()) {
 					message = "You hit the "+destinationFeature.getDescription();
@@ -91,12 +91,12 @@ public class SlideKick extends HeartAction {
 		aPlayer.landOn(previousPoint);
 	}
 
-	public int getCost(){
+	public int getCost() {
 		Player p = (Player) performer;
 		return (int)(p.getWalkCost() * 1.4);
 	}
 	
-	public String getSFX(){
+	public String getSFX() {
 		return "wav/scrch.wav";
 	}
 }

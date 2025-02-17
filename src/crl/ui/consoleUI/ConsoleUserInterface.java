@@ -490,7 +490,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		Debug.enterMethod(this, "drawPlayerStatus");
 		int foreColor;
 		int backColor;
-		switch (((player.getHits()-1) / 20) + 1){
+		switch (((player.getHP()-1) / 20) + 1) {
 		case 1:
 			foreColor = ConsoleSystemInterface.RED;
 			backColor = ConsoleSystemInterface.WHITE;
@@ -539,7 +539,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		} else if (player.getShotLevel() == 2) {
 			shot = "III";
 		}
-		int rest = ((player.getHits()-1) % 20) + 1;
+		int rest = ((player.getHP()-1) % 20) + 1;
 		
 		si.print(0,0,"SCORE    "+player.score);
 		si.print(0,1,"PLAYER   ");
@@ -790,12 +790,11 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 			if (offset.x <= -xrange) offset.x = -xrange;
 			if (offset.y >= yrange) offset.y = yrange;
 			if (offset.y <= -yrange) offset.y = -yrange;
-     	}
-		
-		
-    }
+		}
+	}
 
-	private int pickDirection(String prompt) throws ActionCancelException{
+
+	private int pickDirection(String prompt) throws ActionCancelException {
 		Debug.enterMethod(this, "pickDirection");
 		//refresh();
 		messageBox.setText(prompt);
@@ -808,35 +807,35 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 			x = si.inkey();
 		int ret = ConsoleUISelector.toIntDirection(x);
 		if (ret != -1) {
-        	Debug.exitMethod(ret);
-        	return ret;
+			Debug.exitMethod(ret);
+			return ret;
 		} else {
-			ActionCancelException ace = new ActionCancelException(); 
+			ActionCancelException ace = new ActionCancelException();
 			Debug.exitExceptionally(ace);
 			si.refresh();
-        	throw ace; 
+			throw ace;
 		}
 	}
 
-	private Item pickEquipedItem(String prompt) throws ActionCancelException{
+	private Item pickEquipedItem(String prompt) throws ActionCancelException {
 		Debug.enterMethod(this, "pickEquipedItem");
-  		Vector equipped = new Vector();
-  		if (player.getArmor() != null)
-  			equipped.add(player.getArmor());
-  		if (player.getWeapon() != null)
-  			equipped.add(player.getWeapon());
-  		if (player.getShield() != null)
-  			equipped.add(player.getShield());
-  		MenuBox menuBox = new MenuBox(si);
-  		//menuBox.setBounds(26,6,30,11);
-  		menuBox.setBounds(10,3,60,18);
-  		menuBox.setPromptSize(2);
-  		menuBox.setMenuItems(equipped);
-  		menuBox.setPrompt(prompt);
-  		menuBox.setForeColor(ConsoleSystemInterface.RED);
-  		menuBox.setBorder(true);
-  		si.saveBuffer();
-  		menuBox.draw();
+		Vector<Item> equipped = new Vector<>();
+		if (player.armor != null)
+			equipped.add(player.armor);
+		if (player.weapon != null)
+			equipped.add(player.weapon);
+		if (player.shield != null)
+			equipped.add(player.shield);
+		MenuBox menuBox = new MenuBox(si);
+		//menuBox.setBounds(26,6,30,11);
+		menuBox.setBounds(10,3,60,18);
+		menuBox.setPromptSize(2);
+		menuBox.setMenuItems(equipped);
+		menuBox.setPrompt(prompt);
+		menuBox.setForeColor(ConsoleSystemInterface.RED);
+		menuBox.setBorder(true);
+		si.saveBuffer();
+		menuBox.draw();
 		Item equiped = (Item)menuBox.getSelection();
 		si.restore();
 		if (equiped == null){
@@ -849,16 +848,16 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 	
 	private Item pickItem(String prompt) throws ActionCancelException{
 		Debug.enterMethod(this, "pickItem");
-  		Vector inventory = player.getInventory();
-  		MenuBox menuBox = new MenuBox(si);
-  		menuBox.setBounds(10,3,60,18);
-  		menuBox.setPromptSize(2);
-  		menuBox.setMenuItems(inventory);
-  		menuBox.setPrompt(prompt);
-  		menuBox.setForeColor(ConsoleSystemInterface.RED);
-  		menuBox.setBorder(true);
-  		si.saveBuffer();
-  		menuBox.draw();
+		Vector<Equipment> inventory = player.getInventory();
+		MenuBox menuBox = new MenuBox(si);
+		menuBox.setBounds(10,3,60,18);
+		menuBox.setPromptSize(2);
+		menuBox.setMenuItems(inventory);
+		menuBox.setPrompt(prompt);
+		menuBox.setForeColor(ConsoleSystemInterface.RED);
+		menuBox.setBorder(true);
+		si.saveBuffer();
+		menuBox.draw();
 		Equipment equipment = (Equipment)menuBox.getSelection();
 		si.restore();
 		if (equipment == null){
@@ -871,7 +870,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 	
 	private Item pickUnderlyingItem(String prompt) throws ActionCancelException{
 		Debug.enterMethod(this, "pickUnderlyingItem");
-  		Vector items = level.getItemsAt(player.pos);
+		Vector<Item> items = level.getItemsAt(player.pos);
   		if (items == null)
   			return null;
   		if (items.size() == 1)
@@ -1107,175 +1106,174 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 	
 	public Action showInventory() throws ActionCancelException {
 		Equipment.eqMode = true;
-  		Vector inventory = player.getInventory();
+		Vector<Equipment> inventory = player.getInventory();
 		int xpos = 1, ypos = 0;
-  		MenuBox menuBox = new MenuBox(si);
-  		menuBox.setHeight(11);
-  		menuBox.setWidth(50);
-  		menuBox.setPosition(1,8);
-  		menuBox.setBorder(false);
-  		menuBox.setMenuItems(inventory);
-  		
-  		MenuBox itemUsageChoices = new MenuBox(si);
-  		itemUsageChoices.setHeight(9);
-  		itemUsageChoices.setWidth(20);
-  		itemUsageChoices.setPosition(52,15);
-  		itemUsageChoices.setBorder(false);
-  		itemUsageChoices.setMenuItems(vecItemUsageChoices);
-  		itemUsageChoices.clearBox();
-  		
-  		TextBox itemDescription = new TextBox(si);
-  		itemDescription.setBounds(52,9,25,5);
-  		si.saveBuffer();
-  		si.cls();
-  		si.print(xpos,ypos,  "------------------------------------------------------------------------", ConsoleSystemInterface.DARK_RED);
-  		si.print(xpos,ypos+1,  "Inventory", ConsoleSystemInterface.RED);
-  		si.print(xpos,ypos+2,  "------------------------------------------------------------------------", ConsoleSystemInterface.DARK_RED);
- 		si.print(xpos+2,ypos+3,  "1. Weapon:    "+player.getEquipedWeaponDescription());
- 		si.print(xpos+2,ypos+4,  "2. Readied:   "+player.getSecondaryWeaponDescription());
- 		si.print(xpos+2,ypos+5,  "3. Armor:     "+player.getArmorDescription());
- 		si.print(xpos+2,ypos+6,  "4. Shield:    "+player.getAccDescription());
- 		si.print(xpos,ypos+7,  "------------------------------------------------------------------------", ConsoleSystemInterface.DARK_RED);
- 		menuBox.draw();
- 		si.print(xpos,24,  "[Space] to continue, Up and Down to browse");
- 		si.refresh();
- 		Item selected = null;
- 		
- 		Action selectedAction = null;
- 		do {
-	 		try {
-	 			Equipment eqs = (Equipment) menuBox.getSelectionAKS(additionalKeys);
-	 			if (eqs == null)
-	 				break;
-	 			selected = eqs.getItem();
-	 		} catch (AdditionalKeysSignal aks){
-	 			switch (aks.getKeyCode()){
-	 			case CharKey.N1:
-	 				//Unequip Weapon
-	 				if (player.getWeapon() != null){
-	 					selectedAction = new Unequip();
-	 					selectedAction.setPerformer(player);
-	 					selectedAction.setEquipedItem(player.getWeapon());
-	 					si.restore();
-	 		 			return selectedAction;
-	 				} else {
-	 					continue;
-	 				}
-	 			case CharKey.N2:
-	 				//Unequip Secondary Weapon
-	 				if (player.getSecondaryWeapon() != null){
-	 					selectedAction = new Unequip();
-	 					selectedAction.setPerformer(player);
-	 					selectedAction.setEquipedItem(player.getSecondaryWeapon());
-	 					si.restore();
-	 		 			return selectedAction;
-	 				} else {
-	 					continue;
-	 				}
-	 			case CharKey.N3:
-	 				//Unequip Armor
-	 				if (player.getArmor() != null){
-	 					selectedAction = new Unequip();
-	 					selectedAction.setPerformer(player);
-	 					selectedAction.setEquipedItem(player.getArmor());
-	 					si.restore();
-	 		 			return selectedAction;
-	 				} else {
-	 					continue;
-	 				}
-	 			case CharKey.N4:
-	 				//Unequip Shield
-	 				if (player.getShield() != null){
-	 					selectedAction = new Unequip();
-	 					selectedAction.setPerformer(player);
-	 					selectedAction.setEquipedItem(player.getShield());
-	 					si.restore();
-	 		 			return selectedAction;
-	 				} else {
-	 					continue;
-	 				}
-	 			}
-	 		}
-	 		if (selected == null){
-	 			break;
-	 		}
-	 		si.print(52, 8, fill(selected.getDescription(), 25), ConsoleSystemInterface.RED);
-	 		itemDescription.clear();
-	 		itemDescription.setText(selected.getDefinition().menuDescription);
-	 		
-	 		
-	 		itemUsageChoices.draw();
-	 		itemDescription.draw();
-	 		SimpleMenuItem choice = null;
-	 		try {
-	 			choice = (SimpleMenuItem)itemUsageChoices.getNullifiedSelection(itemUsageAdditionalKeys);
-	 		} catch (AdditionalKeysSignal aks){
-	 			switch (aks.getKeyCode()){
-	 			case CharKey.u:
-	 				choice = (SimpleMenuItem)vecItemUsageChoices.elementAt(0);
-	 				break;
-	 			case CharKey.e:
-	 				choice = (SimpleMenuItem)vecItemUsageChoices.elementAt(1);
-	 				break;
-	 			case CharKey.d:
-	 				choice = (SimpleMenuItem)vecItemUsageChoices.elementAt(2);
-	 				break;
-	 			case CharKey.t:
-	 				choice = (SimpleMenuItem)vecItemUsageChoices.elementAt(3);
-	 				break;
-	 			}
-	 		}
-	 		
-	 		if (choice != null){
-		 		switch (choice.getValue()){
-		 		case 1: // Use
-		 			Use use = new Use();
-		 			use.setPerformer(player);
-		 			use.setItem(selected);
-		 			si.restore();
-		 			return use;
-		 		case 2: //Equip
-		 			Equip equip = new Equip();
-		 			equip.setPerformer(player);
-		 			equip.setItem(selected);
-		 			si.restore();
-		 			return equip;
-		 		case 3: //Drop
-		 			Drop drop = new Drop();
-		 			drop.setPerformer(player);
-		 			drop.setItem(selected);
-		 			si.restore();
-		 			return drop;
-		 		case 4: // Throw
-		 			Throw throwx = new Throw();
-		 			throwx.setPerformer(player);
-		 			throwx.setItem(selected);
-		 			si.restore();
-		 			throwx.setPosition(pickPosition("Throw where?", CharKey.SPACE));
-		 			return throwx;
-		 		case 5: // Cancel
-		 			
-		 			break;
-		 		}
-	 		}
-	 		si.print(52, 8, fill("",25));
-	 		itemUsageChoices.clearBox();
-	 		itemDescription.clearBox();
-	 		
- 		} while (selected != null);
-//		si.waitKey(CharKey.SPACE);
+		MenuBox menuBox = new MenuBox(si);
+		menuBox.setHeight(11);
+		menuBox.setWidth(50);
+		menuBox.setPosition(1,8);
+		menuBox.setBorder(false);
+		menuBox.setMenuItems(inventory);
+
+		MenuBox itemUsageChoices = new MenuBox(si);
+		itemUsageChoices.setHeight(9);
+		itemUsageChoices.setWidth(20);
+		itemUsageChoices.setPosition(52,15);
+		itemUsageChoices.setBorder(false);
+		itemUsageChoices.setMenuItems(vecItemUsageChoices);
+		itemUsageChoices.clearBox();
+
+		TextBox itemDescription = new TextBox(si);
+		itemDescription.setBounds(52,9,25,5);
+		si.saveBuffer();
+		si.cls();
+		si.print(xpos,ypos,  "------------------------------------------------------------------------", ConsoleSystemInterface.DARK_RED);
+		si.print(xpos,ypos+1,  "Inventory", ConsoleSystemInterface.RED);
+		si.print(xpos,ypos+2,  "------------------------------------------------------------------------", ConsoleSystemInterface.DARK_RED);
+		si.print(xpos+2,ypos+3,  "1. Weapon:    "+player.getEquipedWeaponDescription());
+		si.print(xpos+2,ypos+4,  "2. Readied:   "+player.getSecondaryWeaponDescription());
+		si.print(xpos+2,ypos+5,  "3. Armor:     "+player.getArmorDescription());
+		si.print(xpos+2,ypos+6,  "4. Shield:    "+player.getAccDescription());
+		si.print(xpos,ypos+7,  "------------------------------------------------------------------------", ConsoleSystemInterface.DARK_RED);
+		menuBox.draw();
+		si.print(xpos,24,  "[Space] to continue, Up and Down to browse");
+		si.refresh();
+		Item selected = null;
+
+		Action selectedAction = null;
+		do {
+			try {
+				Equipment eqs = (Equipment) menuBox.getSelectionAKS(additionalKeys);
+				if (eqs == null)
+					break;
+				selected = eqs.getItem();
+			} catch (AdditionalKeysSignal aks){
+				switch (aks.getKeyCode()){
+				case CharKey.N1:
+					//Unequip Weapon
+					if (player.weapon != null) {
+						selectedAction = new Unequip();
+						selectedAction.setPerformer(player);
+						selectedAction.setEquipedItem(player.weapon);
+						si.restore();
+						return selectedAction;
+					} else {
+						continue;
+					}
+				case CharKey.N2:
+					//Unequip Secondary Weapon
+					if (player.secondaryWeapon != null){
+						selectedAction = new Unequip();
+						selectedAction.setPerformer(player);
+						selectedAction.setEquipedItem(player.secondaryWeapon);
+						si.restore();
+						return selectedAction;
+					} else {
+						continue;
+					}
+				case CharKey.N3:
+					// Unequip Armor
+					if (player.armor != null) {
+						selectedAction = new Unequip();
+						selectedAction.setPerformer(player);
+						selectedAction.setEquipedItem(player.armor);
+						si.restore();
+						return selectedAction;
+					} else {
+						continue;
+					}
+				case CharKey.N4:
+					// Unequip Shield
+					if (player.shield != null) {
+						selectedAction = new Unequip();
+						selectedAction.setPerformer(player);
+						selectedAction.setEquipedItem(player.shield);
+						si.restore();
+						return selectedAction;
+					} else {
+						continue;
+					}
+				}
+			}
+			if (selected == null){
+				break;
+			}
+			si.print(52, 8, fill(selected.getDescription(), 25), ConsoleSystemInterface.RED);
+			itemDescription.clear();
+			itemDescription.setText(selected.getDefinition().menuDescription);
+
+			itemUsageChoices.draw();
+			itemDescription.draw();
+			SimpleMenuItem choice = null;
+			try {
+				choice = (SimpleMenuItem)itemUsageChoices.getNullifiedSelection(itemUsageAdditionalKeys);
+			} catch (AdditionalKeysSignal aks){
+				switch (aks.getKeyCode()){
+				case CharKey.u:
+					choice = (SimpleMenuItem)vecItemUsageChoices.elementAt(0);
+					break;
+				case CharKey.e:
+					choice = (SimpleMenuItem)vecItemUsageChoices.elementAt(1);
+					break;
+				case CharKey.d:
+					choice = (SimpleMenuItem)vecItemUsageChoices.elementAt(2);
+					break;
+				case CharKey.t:
+					choice = (SimpleMenuItem)vecItemUsageChoices.elementAt(3);
+					break;
+				}
+			}
+			
+			if (choice != null) {
+				switch (choice.getValue()){
+				case 1: // Use
+					Use use = new Use();
+					use.setPerformer(player);
+					use.setItem(selected);
+					si.restore();
+					return use;
+				case 2: //Equip
+					Equip equip = new Equip();
+					equip.setPerformer(player);
+					equip.setItem(selected);
+					si.restore();
+					return equip;
+				case 3: //Drop
+					Drop drop = new Drop();
+					drop.setPerformer(player);
+					drop.setItem(selected);
+					si.restore();
+					return drop;
+				case 4: // Throw
+					Throw throwx = new Throw();
+					throwx.setPerformer(player);
+					throwx.setItem(selected);
+					si.restore();
+					throwx.setPosition(pickPosition("Throw where?", CharKey.SPACE));
+					return throwx;
+				case 5: // Cancel
+
+					break;
+				}
+			}
+			si.print(52, 8, fill("",25));
+			itemUsageChoices.clearBox();
+			itemDescription.clearBox();
+
+		} while (selected != null);
+		//		si.waitKey(CharKey.SPACE);
 		si.restore();
 		Equipment.eqMode = false;
 		return null;
 	}
 
 
- 	/**
-     * Shows a message inmediately; useful for system
-     * messages.
-     *  
-     * @param x the message to be shown
-     */
+	/**
+	 * Shows a message inmediately; useful for system
+	 * messages.
+	 *  
+	 * @param x the message to be shown
+	 */
 	public void showMessage(String x){
 		messageBox.setForeColor(ConsoleSystemInterface.RED);
 		messageBox.addText(x);
@@ -1297,7 +1295,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 	}
 	
 	
-	public void showMessageHistory(){
+	public void showMessageHistory() {
 		si.saveBuffer();
 		si.cls();
 		si.print(1, 0, "Message Buffer", CharAppearance.DARK_RED);
@@ -1317,7 +1315,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		si.cls();
 		si.print(1,0, player.getName()+" the level "+ player.getPlayerLevel()+" "+player.getClassString() + " "+player.getStatusString(), ConsoleSystemInterface.RED);
 		si.print(1,1, "Sex: "+ (player.sex == Player.MALE ? "M" : "F"));
-		si.print(1,2, "Hits: "+player.getHits()+ "/"+player.getHitsMax()+" Hearts: " + player.getHearts() +"/"+player.getHeartsMax()+
+		si.print(1,2, "Hits: "+player.getHP()+ "/"+player.getHPMax()+" Hearts: " + player.getHearts() +"/"+player.getHeartsMax()+
 					  " Gold: "+player.getGold()+ " Keys: "+player.getKeys());
 		si.print(1,3, "Carrying: "+player.getItemCount()+"/"+player.getCarryMax());
 		si.print(1,5, "Attack      +"+player.getAttack());
@@ -1487,7 +1485,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 				break;
 			case CommandListener.SHOWSKILLS:
 				try {
-					if (!player.isSwimming()){
+					if (!player.isSwimming()) {
 						actionSelectedByCommand = showSkills();
 					} else {
 						player.level.addMessage("You can't do that!");

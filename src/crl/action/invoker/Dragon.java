@@ -2,6 +2,7 @@ package crl.action.invoker;
 
 import sz.util.Position;
 import crl.Main;
+import crl.action.AT;
 import crl.action.Action;
 import crl.action.HeartAction;
 import crl.feature.Feature;
@@ -13,8 +14,8 @@ public class Dragon extends HeartAction {
 	public int getHeartCost() {
 		return 8;
 	}
-	public String getID(){
-		return "Dragon";
+	public AT getID(){
+		return AT.Dragon;
 	}
 	
 	public boolean needsDirection(){

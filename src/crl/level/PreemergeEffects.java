@@ -7,8 +7,8 @@ public class PreemergeEffects extends Action {
 	
 ///	private static PreemergeEffects singleton = new PreemergeEffects();
 	
-	public String getID() {
-		return "Preemerge";
+	public AT getID() {
+		return AT.Preemerge;
 	}
 
 	public void execute() {

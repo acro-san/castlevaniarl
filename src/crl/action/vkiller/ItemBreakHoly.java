@@ -1,6 +1,7 @@
 package crl.action.vkiller;
 
 import crl.Main;
+import crl.action.AT;
 import crl.action.HeartAction;
 import crl.feature.Feature;
 import crl.level.Level;
@@ -15,8 +16,8 @@ public class ItemBreakHoly extends HeartAction {
 	public int getHeartCost() {
 		return 5;
 	}
-	public String getID(){
-		return "Holy";
+	public AT getID() {
+		return AT.ItemBreak_HolyWater;	//"Holy"; <-- looks bug-prone!
 	}
 	
 	public void execute(){
@@ -81,6 +82,7 @@ public class ItemBreakHoly extends HeartAction {
 		Player p = (Player) performer;
 		return (int)(25 / (p.getShotLevel()+1));
 	}
+	
 	public String getSFX() {
 		return "wav/breakpot.wav";
 	}

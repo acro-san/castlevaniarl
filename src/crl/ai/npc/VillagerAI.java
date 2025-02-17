@@ -74,7 +74,7 @@ public class VillagerAI implements ActionSelector {
 		return null;
 	}
 
-	// AIType ID?
+	// AIType ID... -> AIT enum.
 	public String getID() {
 		return "VILLAGER";
 	}

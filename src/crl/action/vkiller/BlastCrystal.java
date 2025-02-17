@@ -1,5 +1,6 @@
 package crl.action.vkiller;
 
+import crl.action.AT;
 import crl.action.HeartAction;
 import crl.level.Level;
 import crl.player.Player;
@@ -10,8 +11,8 @@ public class BlastCrystal extends HeartAction {
 		return 5;
 	}
 	
-	public String getID(){
-		return "BLAST_CRYSTAL";
+	public AT getID() {
+		return AT.MW_BlastCrystal;// "BLAST_CRYSTAL";
 	}
 	
 	public void execute() {

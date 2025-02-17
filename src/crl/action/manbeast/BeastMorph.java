@@ -1,23 +1,25 @@
 package crl.action.manbeast;
 
+import crl.action.AT;
 import crl.action.MorphAction;
 import crl.player.Consts;
 import crl.player.Player;
 
-public class BeastMorph extends MorphAction{
+public class BeastMorph extends MorphAction {
+	
 	public int getHeartCost() {
 		return 15;
 	}
 	
-	public String getID(){
-		return "BeastMorph";
+	public AT getID() {
+		return AT.BeastMorph;
 	}
 
 	public String getSFX(){
 		return "wav/growll.wav";
 	}
 
-	public int getCost(){
+	public int getCost() {
 		Player p = (Player) performer;
 		return (int)(p.getAttackCost() * 1.5);
 	}

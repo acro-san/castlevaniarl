@@ -4,6 +4,7 @@ import sz.util.Debug;
 import sz.util.Line;
 import sz.util.Position;
 import crl.Main;
+import crl.action.AT;
 import crl.action.Action;
 import crl.game.SFXManager;
 import crl.level.Level;
@@ -12,6 +13,7 @@ import crl.player.Damage;
 import crl.player.Player;
 
 public class MonsterMissile extends Action {
+	
 	private int range;
 	private String message;
 	private String effectType;
@@ -21,7 +23,7 @@ public class MonsterMissile extends Action {
 	private int damage;
 	private String type;
 	
-	public String getEffectWav (){
+	public String getEffectWav() {
 		return effectWav;
 	}
 	
@@ -45,8 +47,8 @@ public class MonsterMissile extends Action {
 	}
 
 
-	public String getID() {
-		return "MONSTER_MISSILE";
+	public AT getID() {
+		return AT.MonsterMissile;
 	}
 	
 	public boolean needsPosition() {

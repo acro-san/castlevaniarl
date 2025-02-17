@@ -2,6 +2,7 @@ package crl.action.manbeast;
 
 import sz.util.Position;
 import crl.Main;
+import crl.action.AT;
 import crl.action.Action;
 import crl.action.HeartAction;
 import crl.feature.Feature;
@@ -16,8 +17,8 @@ public class EnergyScythe extends HeartAction {
 		return 5;
 	}
 	
-	public String getID(){
-		return "EnergyScythe";
+	public AT getID(){
+		return AT.EnergyScythe;
 	}
 	
 	public boolean needsDirection(){

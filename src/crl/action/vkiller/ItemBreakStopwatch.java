@@ -1,14 +1,15 @@
 package crl.action.vkiller;
 
 import sz.util.Debug;
-
+import crl.action.AT;
 import crl.action.HeartAction;
 import crl.level.Level;
 import crl.player.Player;
 
 public class ItemBreakStopwatch extends HeartAction {
-	public String getID(){
-		return "Stopwatch";
+	
+	public AT getID() {
+		return AT.ItemBreak_Stopwatch;	// "Stopwatch"; <-- bug potential...!?
 	}
 	
 	public void execute(){
@@ -20,10 +21,11 @@ public class ItemBreakStopwatch extends HeartAction {
 		x.stopTime(2*(5 + aPlayer.getShotLevel()*2+ aPlayer.getSoulPower()));
 	}
 
-	public String getSFX(){
+	public String getSFX() {
 		return "wav/clockbel.wav";
 	}
-	public int getCost(){
+	
+	public int getCost() {
 		Player p = (Player) performer;
 		return (int)(25 / (p.getShotLevel()+1));
 	}

@@ -1,5 +1,6 @@
 package crl.action.weapon;
 
+import crl.action.AT;
 import crl.action.Action;
 import crl.action.Attack;
 import crl.actor.Actor;
@@ -9,22 +10,22 @@ import crl.player.Player;
 
 public class EnergyBurst extends Action {
 	
-	public String getID(){
-		return "ENERGY_BURST";
+	public AT getID() {
+		return AT.EnergyBurst;
 	}
 	
-	public boolean needsDirection(){
+	public boolean needsDirection() {
 		return true;
 	}
 
-	public String getPromptDirection(){
+	public String getPromptDirection() {
 		return "Where do you want to fire at?";
 	}
 
 	public void execute() {
-		Player aPlayer = (Player)performer;
-		Level aLevel = aPlayer.level;
-		Item wp = aPlayer.getWeapon();
+		Player p = (Player)performer;
+		Level aLevel = p.level;
+		Item wp = p.weapon;
 		if (wp == null || wp.getReloadTurns() == 0) {
 			aLevel.addMessage("This will only work with ranged weapons!");
 			return;
@@ -42,16 +43,16 @@ public class EnergyBurst extends Action {
 		for (int i = 0; i < shots; i++) {
 			atk.execute();
 		}
-		
 	}
 	
+	
 	public boolean canPerform(Actor a) {
-		Player aPlayer = (Player) a;
-		if (aPlayer.getHearts() < 10) {
+		Player p = (Player) a;
+		if (p.getHearts() < 10) {
 			invalidationMessage = "You need more energy!";
 			return false;
 		}
-		Item wp = aPlayer.getWeapon();
+		Item wp = p.weapon;
 		if (wp == null || wp.getReloadTurns() == 0) {
 			invalidationMessage = "This will only work with ranged weapons!";
 			return false;

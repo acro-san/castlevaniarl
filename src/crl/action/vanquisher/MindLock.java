@@ -2,19 +2,14 @@ package crl.action.vanquisher;
 
 import java.util.Vector;
 
-import sz.util.Line;
-import sz.util.Position;
-import crl.action.Action;
+import crl.action.AT;
 import crl.action.ProjectileSkill;
-import crl.actor.Actor;
-import crl.level.Cell;
-import crl.level.Level;
 import crl.monster.Monster;
 import crl.player.Consts;
 import crl.player.Player;
-import crl.ui.effects.EffectFactory;
 
-public class MindLock extends ProjectileSkill{
+public class MindLock extends ProjectileSkill {
+	
 	public int getDamage() {
 		return 0;
 	}
@@ -59,17 +54,18 @@ public class MindLock extends ProjectileSkill{
 		return 7;
 	}
 
-	public String getID(){
-		return "Mindlock";
+	public AT getID() {
+		return AT.MindLock;
 	}
 	
-	public void execute(){
+	public void execute() {
 		super.execute();
-		Vector hitMonsters = getHitMonsters();
-		for (int i = 0; i < hitMonsters.size(); i++){
-			Monster targetMonster = (Monster) hitMonsters.elementAt(i);
-			if (targetMonster.wasSeen())
+		Vector<Monster> hitMonsters = getHitMonsters();
+		for (int i = 0; i < hitMonsters.size(); i++) {
+			Monster targetMonster = hitMonsters.elementAt(i);
+			if (targetMonster.wasSeen()) {
 				targetMonster.level.addMessage("The "+targetMonster.getDescription()+ "'s mind is locked!");
+			}
 			targetMonster.setCounter(Consts.C_MONSTER_SLEEP, getPlayer().getSoulPower()*2+5);
 		}
 	}
@@ -79,7 +75,7 @@ public class MindLock extends ProjectileSkill{
 		return (int)(p.getCastCost() * 1.3);
 	}
 	
-	public String getPromptPosition(){
+	public String getPromptPosition() {
 		return "Where do you want to project the ray?";
 	}
 	

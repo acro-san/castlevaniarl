@@ -2,6 +2,7 @@ package crl.action.vkiller;
 
 import sz.util.Position;
 import crl.Main;
+import crl.action.AT;
 import crl.action.HeartAction;
 import crl.level.Level;
 import crl.monster.VMonster;
@@ -10,8 +11,8 @@ import crl.player.Player;
 public class SoulFlame extends HeartAction {
 	
 	@Override
-	public String getID() {
-		return "Soul Flame";
+	public AT getID() {
+		return AT.SoulFlame;//"Soul Flame";
 	}
 	
 	@Override

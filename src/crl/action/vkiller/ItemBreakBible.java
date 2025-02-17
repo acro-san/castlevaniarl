@@ -1,5 +1,6 @@
 package crl.action.vkiller;
 
+import crl.action.AT;
 import crl.action.BeamProjectileSkill;
 import crl.player.Player;
 
@@ -51,16 +52,16 @@ public class ItemBreakBible extends BeamProjectileSkill{
 		return 2;
 	}
 
-	public String getID(){
-		return "ItemBreakBible";
+	public AT getID() {
+		return AT.ItemBreak_Bible;// "ItemBreakBible";
 	}
 	
-	public String getSFX(){
+	public String getSFX() {
 		return "wav/fire.wav";
 	}
 
-	public int getCost(){
-		Player p = (Player) performer;
+	public int getCost() {
+		Player p = (Player)performer;
 		return (int)(p.getCastCost() * 1.1);
 	}
 	

@@ -1,5 +1,6 @@
 package crl.action.weapon;
 import crl.Main;
+import crl.action.AT;
 import crl.action.Action;
 import crl.actor.Actor;
 import crl.feature.Feature;
@@ -13,41 +14,40 @@ import sz.util.Position;
 // Why's this one not a HeartAction???
 public class WhirlwindWhip extends Action {
 	
-	public String getID() {
-		return "WhirlwindWhip";
+	public AT getID() {
+		return AT.WhirlwindWhip;
 	}
 	
 	public void execute() {
-		Player aPlayer = (Player)performer;
-		Level aLevel = aPlayer.level;
+		Player p = (Player)performer;
+		Level aLevel = p.level;
 		if (!checkHearts(5)) {
 			aLevel.addMessage("You need more hearts");
 			return;
 		}
-		int attack = aPlayer.getWeaponAttack();
-		if (aPlayer.playerClass == Player.CLASS_VAMPIREKILLER) {
-			attack = aPlayer.weaponSkill(ItemDefinition.CAT_WHIPS) + 
-				(int)Math.round(aPlayer.getAttack() * (aPlayer.getWeapon().getAttack()/2.0D));
+		int attack = p.getWeaponAttack();
+		if (p.playerClass == Player.CLASS_VAMPIREKILLER) {
+			attack = p.weaponSkill(ItemDefinition.CAT_WHIPS) + 
+				(int)Math.round(p.getAttack() * (p.weapon.getAttack()/2.0D));
 		}
-		hit(Position.add(performer.pos, Action.directionToVariation(Action.UP)), attack);
-		hit(Position.add(performer.pos, Action.directionToVariation(Action.UPLEFT)), attack);
-		hit(Position.add(performer.pos, Action.directionToVariation(Action.LEFT)), attack);
-		hit(Position.add(performer.pos, Action.directionToVariation(Action.DOWNLEFT)), attack);
-		hit(Position.add(performer.pos, Action.directionToVariation(Action.DOWN)), attack);
-		hit(Position.add(performer.pos, Action.directionToVariation(Action.DOWNRIGHT)), attack);
-		hit(Position.add(performer.pos, Action.directionToVariation(Action.RIGHT)), attack);
-		hit(Position.add(performer.pos, Action.directionToVariation(Action.UPRIGHT)), attack);
+		hit(Position.add(p.pos, Action.directionToVariation(Action.UP)), attack);
+		hit(Position.add(p.pos, Action.directionToVariation(Action.UPLEFT)), attack);
+		hit(Position.add(p.pos, Action.directionToVariation(Action.LEFT)), attack);
+		hit(Position.add(p.pos, Action.directionToVariation(Action.DOWNLEFT)), attack);
+		hit(Position.add(p.pos, Action.directionToVariation(Action.DOWN)), attack);
+		hit(Position.add(p.pos, Action.directionToVariation(Action.DOWNRIGHT)), attack);
+		hit(Position.add(p.pos, Action.directionToVariation(Action.RIGHT)), attack);
+		hit(Position.add(p.pos, Action.directionToVariation(Action.UPRIGHT)), attack);
 	}
 
 
-	// 
-	private boolean hit(Position destinationPoint, int attack) {
+	private boolean hit(Position dstPos, int attack) {
 		StringBuffer message = new StringBuffer();
 		Level aLevel = performer.level;
 		Player aPlayer = aLevel.getPlayer();
-		Main.ui.drawEffect(Main.efx.createLocatedEffect(destinationPoint, "SFX_WHITE_HIT"));
+		Main.ui.drawEffect(Main.efx.createLocatedEffect(dstPos, "SFX_WHITE_HIT"));
 		//aLevel.addBlood(destinationPoint, 8);
-		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
+		Feature destinationFeature = aLevel.getFeatureAt(dstPos);
 		if (destinationFeature != null && destinationFeature.isDestroyable()) {
 			message.append("You crush the "+destinationFeature.getDescription());
 
@@ -58,8 +58,8 @@ public class WhirlwindWhip extends Action {
 			aLevel.addMessage(message.toString());
 			return true;
 		}
-		Monster targetMonster = performer.level.getMonsterAt(destinationPoint);
-		Cell destinationCell = performer.level.getMapCell(destinationPoint);
+		Monster targetMonster = performer.level.getMonsterAt(dstPos);
+		Cell destinationCell = performer.level.getMapCell(dstPos);
 		//Position pp = aPlayer.pos;
 		Cell playerCell = aLevel.getMapCell(aPlayer.pos);
 		int pmcH = playerCell.getHeight();

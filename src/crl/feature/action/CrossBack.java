@@ -4,6 +4,7 @@ import sz.util.Line;
 import sz.util.Position;
 import sz.util.Util;
 import crl.Main;
+import crl.action.AT;
 import crl.action.Action;
 import crl.actor.Actor;
 import crl.feature.Feature;
@@ -16,8 +17,8 @@ import crl.ui.effects.Effect;
 
 public class CrossBack extends Action {
 	
-	public String getID() {
-		return "Cross";
+	public AT getID() {
+		return AT.CrossBack;
 	}
 	
 	public boolean needsPosition() {

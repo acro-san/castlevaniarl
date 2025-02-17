@@ -2,10 +2,11 @@ package crl.action;
 
 import crl.actor.Actor;
 import crl.item.Item;
+import crl.item.ItemDefinition;
 import crl.player.Player;
 
-public class Reload extends Action{
-	private transient Item weapon;
+public class Reload extends Action {
+	private transient Item weapon;	// ...
 	public int getCost() {
 		if (weapon != null)
 			return 10 * weapon.getDefinition().reloadCostGold;
@@ -13,33 +14,38 @@ public class Reload extends Action{
 			return 50;
 	}
 
-	public String getID(){
-		return "Reload";
+	public AT getID() {
+		return AT.Reload;
 	}
 	
-	public void execute(){
-		Player aPlayer = (Player) performer;
-		weapon = aPlayer.getWeapon();
-		if (weapon != null){
-			if (weapon.getDefinition().isSingleUse){
-				aPlayer.level.addMessage("You can't reload the " + weapon.getDescription());
-			} else if (aPlayer.getGold() < weapon.getDefinition().reloadCostGold)
-				aPlayer.level.addMessage("You can't reload the " + weapon.getDescription());
-			else {
-				weapon.reload();
-				aPlayer.reduceGold(weapon.getDefinition().reloadCostGold);
-				aPlayer.reduceHearts(1);
-				aPlayer.level.addMessage(
-					"You reload the " + weapon.getDescription()+
-					" ("+weapon.getDefinition().reloadCostGold+" gold)");
-			}
-		} else
-			aPlayer.level.addMessage("You can't reload yourself");
- 	}
 	
-	public boolean canPerform(Actor a){
+	public void execute() {
+		Player p = (Player)performer;
+		weapon = p.weapon;
+		if (weapon == null) {
+			p.level.addMessage("You can't reload yourself");
+			return;
+		}
+		
+		ItemDefinition wdef = weapon.getDefinition();
+		if (wdef.isSingleUse || p.getGold() < wdef.reloadCostGold) {
+			p.level.addMessage("You can't reload the " + weapon.getDescription());
+			return;
+		}
+		
+		weapon.reload();
+		p.reduceGold(wdef.reloadCostGold);
+		p.reduceHearts(1);
+		p.level.addMessage("You reload the " + weapon.getDescription() +
+			" ("+wdef.reloadCostGold+" gold)");
+		
+	}
+	
+	
+	public boolean canPerform(Actor a) {
 		Player aPlayer = getPlayer(a);
-		Item weapon = aPlayer.getWeapon();
+		// Item 
+		weapon = aPlayer.weapon;
 		if (weapon == null) {
 			invalidationMessage = "You can't reload yourself";
 			return false;
@@ -61,4 +67,5 @@ public class Reload extends Action{
 			return false;
 		}
 	}
+
 }

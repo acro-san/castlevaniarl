@@ -1,11 +1,13 @@
 package crl.action.vanquisher;
 
+import crl.action.AT;
 import crl.action.ProjectileSkill;
 import crl.player.Player;
 
-public class HomingBall extends ProjectileSkill{
+public class HomingBall extends ProjectileSkill {
+	
 	public int getDamage() {
-		return 5+(int)Math.round(getPlayer().getSoulPower()*1.5d);
+		return 5 + (int)Math.round(getPlayer().getSoulPower() * 1.5);
 	}
 
 	public int getHit() {
@@ -44,8 +46,8 @@ public class HomingBall extends ProjectileSkill{
 		return 2;
 	}
 
-	public String getID(){
-		return "HomingBall";
+	public AT getID() {
+		return AT.HomingBall;
 	}
 
 	public int getCost(){

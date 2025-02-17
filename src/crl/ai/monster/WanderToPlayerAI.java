@@ -3,8 +3,8 @@ package crl.ai.monster;
 import sz.util.Debug;
 import sz.util.Position;
 import sz.util.Util;
+import crl.Main;
 import crl.action.Action;
-import crl.action.ActionFactory;
 import crl.action.monster.MonsterWalk;
 import crl.actor.Actor;
 import crl.ai.ActionSelector;
@@ -13,7 +13,7 @@ import crl.monster.Monster;
 import crl.player.Consts;
 
 
-public class WanderToPlayerAI extends MonsterAI{
+public class WanderToPlayerAI extends MonsterAI {
 	/** This AI is used by those enemies that just walk until they find
 	 * the player, optionally performing a ranged attack 
 	 * him when he is in range */
@@ -90,7 +90,7 @@ public class WanderToPlayerAI extends MonsterAI{
 						RangedAttack ra = (RangedAttack)rangedAttacks.elementAt(i);
 						if (distanceToPlayer <= ra.getRange())
 							if (Util.chance(ra.getFrequency())){
-								Action ret = ActionFactory.getActionFactory().getAction(ra.getAttackId());
+								Action ret = Main.getAction(ra.getAttackId());
 								ret.setDirection(directionToPlayer);
 								return ret;
 							}

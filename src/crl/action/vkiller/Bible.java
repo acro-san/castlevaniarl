@@ -1,6 +1,7 @@
 package crl.action.vkiller;
 
 import crl.Main;
+import crl.action.AT;
 import crl.action.HeartAction;
 import crl.feature.Feature;
 import crl.level.Level;
@@ -34,11 +35,11 @@ public class Bible extends HeartAction {
 		return 2;
 	}
 	
-	public String getID(){
-		return "Bible";
+	public AT getID(){
+		return AT.MW_Bible;
 	}
 
-	private int getDamage(){
+	private int getDamage() {
 		return 7 + 
 			getPlayer().getShotLevel() + 
 			getPlayer().getSoulPower()*2;

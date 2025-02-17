@@ -1,6 +1,7 @@
 package crl.action.renegade;
 
 import crl.Main;
+import crl.action.AT;
 import crl.action.HeartAction;
 import crl.level.Cell;
 import crl.level.Level;
@@ -10,8 +11,8 @@ import sz.util.Position;
 
 public class ShadeTeleport extends HeartAction {
 	
-	public String getID() {
-		return "ShadeTeleport";
+	public AT getID() {
+		return AT.ShadeTeleport;
 	}
 	
 	public int getHeartCost() {

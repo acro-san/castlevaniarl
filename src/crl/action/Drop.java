@@ -5,8 +5,8 @@ import crl.player.Player;
 
 public class Drop extends Action {
 	
-	public String getID() {
-		return "Drop";
+	public AT getID() {
+		return AT.Drop;// "Drop";
 	}
 	
 	public boolean needsItem() {

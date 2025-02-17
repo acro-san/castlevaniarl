@@ -3,6 +3,7 @@ package crl.action.monster.boss;
 import sz.util.Position;
 import sz.util.Util;
 import crl.Main;
+import crl.action.AT;
 import crl.action.Action;
 import crl.level.Level;
 import crl.monster.Monster;
@@ -11,8 +12,8 @@ import crl.player.Player;
 
 public class ShadowApocalypse extends Action {
 	
-	public String getID() {
-		return "SHADOW_APOCALYPSE";
+	public AT getID() {
+		return AT.ShadowApocalypse;
 	}
 	
 	public void execute() {

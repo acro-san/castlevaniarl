@@ -2,11 +2,18 @@ package crl.action.vkiller;
 
 import sz.util.Position;
 import sz.util.Util;
+import crl.action.AT;
 import crl.action.ProjectileSkill;
 import crl.game.SFXManager;
 import crl.player.Player;
 
-public class ItemBreakCross extends ProjectileSkill{
+public class ItemBreakCross extends ProjectileSkill {
+	
+	public AT getID(){
+		return AT.ItemBreak_Cross;	// "Cross"; <-- Eh!? Buggy!? Was same ID as non-ItemBreak one?!
+	}
+	
+	
 	public int getDamage() {
 		return 5 + 
 		getPlayer().getShotLevel() + 
@@ -58,10 +65,7 @@ public class ItemBreakCross extends ProjectileSkill{
 		else
 			return 5;
 	}
-
-	public String getID(){
-		return "Cross";
-	}
+	
 	
 	public String getPromptPosition(){
 		return "Where do you want to throw the Cross?";

@@ -1,5 +1,6 @@
 package crl.action.renegade;
 
+import crl.action.AT;
 import crl.action.BeamProjectileSkill;
 import crl.player.Player;
 
@@ -45,8 +46,8 @@ public class FlamesShoot extends BeamProjectileSkill{
 		return 10;
 	}
 
-	public String getID(){
-		return "FlamesShoot";
+	public AT getID(){
+		return AT.FlamesShoot;
 	}
 	
 	public String getSFX(){

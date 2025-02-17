@@ -1,6 +1,7 @@
 package crl.action.invoker;
 
 import sz.util.Position;
+import crl.action.AT;
 import crl.action.Action;
 import crl.action.BeamProjectileSkill;
 import crl.feature.Feature;
@@ -50,15 +51,15 @@ public class DrakeSoul extends BeamProjectileSkill {
 		return 10;
 	}
 
-	public String getID(){
-		return "DrakeSoul";
+	public AT getID(){
+		return AT.DrakeSoul;
 	}
 	
 	public String getSFX(){
 		return "wav/fire.wav";
 	}
 
-	public int getCost(){
+	public int getCost() {
 		Player p = (Player) performer;
 		return (int)(p.getCastCost() * 1.1);
 	}

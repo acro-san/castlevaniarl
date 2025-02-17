@@ -161,7 +161,7 @@ public class Monster extends Actor implements Cloneable {
 
 	public void damageWithWeapon(StringBuffer message, int dam) {
 		Player pl = level.getPlayer();
-		Item wep = pl.getWeapon();
+		Item wep = pl.weapon;
 		if (wep == null) {
 			pl.increaseWeaponSkill(ItemDefinition.CAT_UNARMED);
 		} else {
@@ -192,14 +192,14 @@ public class Monster extends Actor implements Cloneable {
 					Position.flatDistance(pos, pl.pos) < 3) {
 				int recover = (int)Math.ceil(getDefinition().bloodContent / 30);	// why 30?
 				level.addMessage("You drink some of the "+getDefinition().description+" blood! (+"+recover+")");
-				pl.recoverHits(recover);
+				pl.heal(recover);
 			}
 			if (Util.chance(40)) {
 				level.addBlood(pos, Util.rand(0,1));
 			}
 		}
 		if (pl.getFlag("HEALTH_REGENERATION") && Util.chance(30)) {	// *RANDOM* regen?! Why not slow tickrate?
-			pl.recoverHits(1);
+			pl.heal(1);
 		}
 
 		if (isDead()) {
@@ -439,10 +439,10 @@ public class Monster extends Actor implements Cloneable {
 		int penalty = 0;
 		if (isWeaponAttack) {
 			penalty = (int)(Position.distance(pos, attackOrigin)/4);
-			if (attacker.getWeapon().isHarmsUndead() && isUndead()) {
+			if (attacker.weapon.isHarmsUndead() && isUndead()) {
 				magicalDamage *= 2;
 			}
-			attacker.increaseWeaponSkill(attacker.getWeapon().getDefinition().weaponCategory);
+			attacker.increaseWeaponSkill(attacker.weapon.getDefinition().weaponCategory);
 			
 		}
 		

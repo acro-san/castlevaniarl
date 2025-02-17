@@ -20,7 +20,7 @@ import sz.csi.ConsoleSystemInterface;
 import sz.csi.jcurses.JCursesConsoleInterface;
 import sz.csi.wswing.WSwingConsoleInterface;
 import sz.midi.STMidiPlayer;
-
+import sz.util.Debug;
 import crl.action.*;
 import crl.action.monster.*;
 import crl.action.monster.boss.*;
@@ -103,6 +103,9 @@ public class Main {
 	// (AI)Selectors by ID: could EASILY be a fixed len, indexed array, using short IDs.
 	public static HashMap<String, ActionSelector>
 		selectors = new HashMap<>();
+	
+	public static HashMap<AT, Action>
+		actions = new HashMap<>();
 	
 	public static EffectFactory efx;	//instead of EffectFactory.getSingleton()!
 	
@@ -611,9 +614,10 @@ public class Main {
 	}
 	
 	private static void initializeActions() {
-		ActionFactory af = ActionFactory.getActionFactory();
-		Action[] definitions = {
-			new Dash(),
+		// NB: these are all monster/boss actions.
+		actions = new HashMap<>();
+		Action[] adefs = {
+			new Dash(),	// is in fact 'monster "SliceDive"!? Why called Dash!??
 			new MonsterWalk(),
 			new Swim(),
 			new MonsterCharge(),
@@ -624,9 +628,16 @@ public class Main {
 			new Teleport(),
 			new MandragoraScream()
 		};
-		for (int i = 0; i < definitions.length; i++) {
-			af.addDefinition(definitions[i]);
+		for (Action a: adefs) {
+			actions.put(a.getID(), a);
 		}
+	}
+	
+	// lifted from old 'ActionFactory'
+	public static Action getAction(AT id) {
+		Action a = actions.get(id);
+		Debug.doAssert(a != null, "Tried to get an invalid "+id+" Action");
+		return a;
 	}
 	
 	private static void initializeCells() {

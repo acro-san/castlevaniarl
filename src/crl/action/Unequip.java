@@ -3,54 +3,56 @@ package crl.action;
 import crl.actor.Actor;
 import crl.player.Player;
 
-public class Unequip extends Action{
-	public String getID(){
-		return "Unequip";
+public class Unequip extends Action {
+	
+	public AT getID() {
+		return AT.Unequip;
 	}
 	
-	public boolean needsEquipedItem(){
+	public boolean needsEquipedItem() {
 		return true;
 	}
 
-	public String getPromptEquipedItem(){
+	public String getPromptEquipedItem() {
 		return "What do you want to unequip?";
 	}
 
-	public void execute(){
+	@Override
+	public void execute() {
 		Player player = (Player)performer;
-		if (player.getArmor() == targetEquipedItem){
+		assert(targetEquipedItem != null);
+		
+		if (targetEquipedItem == player.armor) {
 			if (player.playerClass == Player.CLASS_VAMPIREKILLER) {
 				performer.level.addMessage("You can't abandon the vampire killer armor");
 				return;
 			}
-			player.addItem(player.getArmor());
+			player.addItem(player.armor);
 			player.level.addMessage("You take off your "+targetEquipedItem.getDescription());
-			player.setArmor(null);
-		}
-		if (player.getWeapon() == targetEquipedItem){
+			player.armor = null;
+		} else if (targetEquipedItem == player.weapon) {
 			if (player.playerClass == Player.CLASS_VAMPIREKILLER && player.getFlag("ONLY_VK")) {
 				performer.level.addMessage("You can't abandon the mystic whip");
 				return;
 			}
-			player.addItem(player.getWeapon());
-			player.level.addMessage("You unwield your "+targetEquipedItem.getDescription());
-			player.setWeapon(null);
-		}
-		if (player.getShield() == targetEquipedItem){
-			player.addItem(player.getShield());
+			player.addItem(player.weapon);
+			player.weapon = null;
+			player.level.addMessage("You stop wielding your "+targetEquipedItem.getDescription());
+		} else if (targetEquipedItem == player.shield) {
+			player.addItem(player.shield);
+			player.shield = null;
 			player.level.addMessage("You take off your "+targetEquipedItem.getDescription());
-			player.setShield(null);
-		}
-		if (player.getSecondaryWeapon() == targetEquipedItem){
-			player.addItem(player.getSecondaryWeapon());
+		} else if (targetEquipedItem == player.secondaryWeapon) {
+			player.addItem(player.secondaryWeapon);
+			player.secondaryWeapon = null;
 			player.level.addMessage("You draw back your "+targetEquipedItem.getDescription());
-			player.setSecondaryWeapon(null);
 		}
 	}
 	
+	
 	public boolean canPerform(Actor a) {
 		boolean ret = ((Player)a).canCarry();
-		if (!ret){
+		if (!ret) {
 			invalidationMessage = "Your pack is full";
 		}
 		return ret;

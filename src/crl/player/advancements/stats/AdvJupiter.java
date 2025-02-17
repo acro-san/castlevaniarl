@@ -27,7 +27,7 @@ public class AdvJupiter extends Advancement{
 	}
 	
 	public void advance(Player p) {
-		p.setHitsMax(p.getHitsMax()+getIncrement(p));
+		p.setHPMax(p.getHPMax()+getIncrement(p));
 		p.addLastIncrement(Player.INCREMENT_HITS,getIncrement(p));
 	}
 

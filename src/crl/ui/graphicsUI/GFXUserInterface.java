@@ -805,7 +805,8 @@ public class GFXUserInterface extends UserInterface {
 		
 		BufferedImage foreColor;
 		BufferedImage backColor;
-		switch (((player.getHits()-1) / 20) + 1) {
+		// ???
+		switch (((player.getHP()-1) / 20) + 1) {
 		case 1:
 			foreColor = HEALTH_RED;
 			backColor = HEALTH_WHITE;
@@ -819,7 +820,7 @@ public class GFXUserInterface extends UserInterface {
 			backColor = HEALTH_DARK_RED;
 			break;
 		}
-		int rest = ((player.getHits()-1) % 20) + 1;
+		int rest = ((player.getHP()-1) % 20) + 1;
 		
 		final int
 			barX = 41,
@@ -985,8 +986,8 @@ public class GFXUserInterface extends UserInterface {
 				si.drawImage(18,38, getImageForMystic(player.getMysticWeapon()));
 			}
 		} else {
-			if (player.getWeapon() != null) {
-				si.drawImage(18,38, ((GFXAppearance)player.getWeapon().getAppearance()).getIconImage());
+			if (player.weapon != null) {
+				si.drawImage(18,38, ((GFXAppearance)player.weapon.getAppearance()).getIconImage());
 			}
 		}
 		
@@ -1374,14 +1375,14 @@ public class GFXUserInterface extends UserInterface {
 		enterScreen();
 
 		Vector<Item> equipped = new Vector<>();
-		if (player.getArmor() != null)
-			equipped.add(player.getArmor());
-		if (player.getWeapon() != null)
-			equipped.add(player.getWeapon());
-		if (player.getShield() != null)
-			equipped.add(player.getShield());
-		if (player.getSecondaryWeapon() != null)
-			equipped.add(player.getSecondaryWeapon());
+		if (player.armor != null)
+			equipped.add(player.armor);
+		if (player.weapon != null)
+			equipped.add(player.weapon);
+		if (player.shield != null)
+			equipped.add(player.shield);
+		if (player.secondaryWeapon != null)
+			equipped.add(player.secondaryWeapon);
 
 		if (equipped.size() == 0) {
 			level.addMessage("Nothing equipped");
@@ -1416,7 +1417,7 @@ public class GFXUserInterface extends UserInterface {
 	
 	private Item pickItem(String prompt) throws ActionCancelException {
 		enterScreen();
-		Vector inventory = player.getInventory();
+		Vector<Equipment> inventory = player.getInventory();
 		BorderedMenuBox menuBox = GetMenuBox();
 		menuBox.setGap(35);
 		menuBox.setPosition(6,4);
@@ -1696,46 +1697,47 @@ public class GFXUserInterface extends UserInterface {
 					break;
 				selected = eqs.getItem();
 			} catch (AdditionalKeysSignal aks) {
-				switch (aks.getKeyCode()){
+				// FIXME duplicated logic also in ConsoleUserInterface.
+				switch (aks.getKeyCode()) {
 				case CharKey.N1:
-					//Unequip Weapon
-					if (player.getWeapon() != null){
+					// Unequip Weapon
+					if (player.weapon != null) {
 						selectedAction = new Unequip();
 						selectedAction.setPerformer(player);
-						selectedAction.setEquipedItem(player.getWeapon());
+						selectedAction.setEquipedItem(player.weapon);
 						exitInventory(itemDescription);
 						return selectedAction;
 					} else {
 						continue;
 					}
 				case CharKey.N2:
-					//Unequip Secondary Weapon
-					if (player.getSecondaryWeapon() != null){
+					// Unequip Secondary Weapon
+					if (player.secondaryWeapon != null) {
 						selectedAction = new Unequip();
 						selectedAction.setPerformer(player);
-						selectedAction.setEquipedItem(player.getSecondaryWeapon());
+						selectedAction.setEquipedItem(player.secondaryWeapon);
 						exitInventory(itemDescription);
 						return selectedAction;
 					} else {
 						continue;
 					}
 				case CharKey.N3:
-					//Unequip Armor
-					if (player.getArmor() != null){
+					// Unequip Armor
+					if (player.armor != null) {
 						selectedAction = new Unequip();
 						selectedAction.setPerformer(player);
-						selectedAction.setEquipedItem(player.getArmor());
+						selectedAction.setEquipedItem(player.armor);
 						exitInventory(itemDescription);
 						return selectedAction;
 					} else {
 						continue;
 					}
 				case CharKey.N4:
-					//Unequip Shield
-					if (player.getShield() != null){
+					// Unequip Shield
+					if (player.shield != null) {
 						selectedAction = new Unequip();
 						selectedAction.setPerformer(player);
-						selectedAction.setEquipedItem(player.getShield());
+						selectedAction.setEquipedItem(player.shield);
 						exitInventory(itemDescription);
 						return selectedAction;
 					} else {
@@ -1772,7 +1774,7 @@ public class GFXUserInterface extends UserInterface {
 				}
 			}
 			if (choice != null) {
-				switch (choice.getValue()){
+				switch (choice.getValue()) {
 				case 1: // Use
 					Use use = new Use();
 					use.setPerformer(player);
@@ -1827,20 +1829,19 @@ public class GFXUserInterface extends UserInterface {
 
 
 	/**
-	 * Shows a message inmediately; useful for system
-	 * messages.
+	 * Shows a message immediately; useful for system messages.
 	 * 
-	 * @param x the message to be shown
+	 * @param msg the message to be shown
 	 */
-	public void showMessage(String x) {
+	public void showMessage(String msg) {
 		messageBox.setForeground(COLOR_LAST_MESSAGE);
-		messageBox.setText(x);
+		messageBox.setText(msg);
 		messageBox.setVisible(true); // Force it!
-		//si.refresh();
 	}
 	
-	public void showImportantMessage(String x){
-		showMessage(x);
+	// aka show*Modal*Message
+	public void showImportantMessage(String msg) {
+		showMessage(msg);
 		si.waitKey(CharKey.SPACE);
 	}
 
@@ -1852,6 +1853,7 @@ public class GFXUserInterface extends UserInterface {
 			System.out.println(description);
 		}
 	}
+	
 	
 	@Override
 	public void showCriticalError(String description) {
@@ -1875,7 +1877,7 @@ public class GFXUserInterface extends UserInterface {
 		si.drawImage(IMG_STATUSSCR_BGROUND);
 		si.print(1,1, player.getName()+" the level "+ player.getPlayerLevel()+" "+player.getClassString() + " "+player.getStatusString(), GFXDisplay.COLOR_BOLD);
 		si.print(1,2, "Sex: "+ (player.sex == Player.MALE ? "M" : "F"), Color.WHITE);
-		si.print(1,3, "Hits: "+player.getHits()+ "/"+player.getHitsMax()+" Hearts: " + player.getHearts() +"/"+player.getHeartsMax()+
+		si.print(1,3, "Hits: "+player.getHP()+ "/"+player.getHPMax()+" Hearts: " + player.getHearts() +"/"+player.getHeartsMax()+
 				" Gold: "+player.getGold()+ " Keys: "+player.getKeys(), Color.WHITE);
 		si.print(1,4, "Carrying: "+player.getItemCount()+"/"+player.getCarryMax(), Color.WHITE);
 		si.print(1,6, "Attack: +"+player.getAttack(), Color.WHITE);

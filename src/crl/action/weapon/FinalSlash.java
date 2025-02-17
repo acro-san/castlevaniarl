@@ -1,6 +1,7 @@
 package crl.action.weapon;
 
 import sz.util.Position;
+import crl.action.AT;
 import crl.action.Action;
 import crl.actor.Actor;
 import crl.feature.Feature;
@@ -10,8 +11,8 @@ import crl.player.Player;
 
 public class FinalSlash extends Action {
 	
-	public String getID() {
-		return "FINAL_SLASH";
+	public AT getID() {
+		return AT.FinalSlash;
 	}
 	
 	public boolean needsDirection() {
@@ -22,7 +23,7 @@ public class FinalSlash extends Action {
 		return "Where do you want to slash at?";
 	}
 
-	public void execute(){
+	public void execute() {
 		Player aPlayer = (Player)performer;
 		Level aLevel = aPlayer.level;
 		if (!checkHearts(10)) {
@@ -116,7 +117,7 @@ public class FinalSlash extends Action {
 		return false;
 	}
 	
-	// WHY! this is NOT unique logic. Same in most of these classes! is a DATA FIELD!!
+	// WHY!? this is NOT unique logic. Same in most of these classes! is a DATA FIELD!
 	@Override
 	public boolean canPerform(Actor a) {
 		Player aPlayer = (Player) a;

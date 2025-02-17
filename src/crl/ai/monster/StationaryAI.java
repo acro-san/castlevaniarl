@@ -4,8 +4,8 @@ import java.util.Iterator;
 
 import sz.util.Position;
 import sz.util.Util;
+import crl.Main;
 import crl.action.Action;
-import crl.action.ActionFactory;
 import crl.actor.Actor;
 import crl.ai.ActionSelector;
 import crl.monster.Monster;
@@ -26,7 +26,7 @@ public class StationaryAI extends MonsterAI {
 				RangedAttack element = iter.next();
 				if (element.getRange() >= playerDistance && Util.chance(element.getFrequency())) {
 					// Perform the attack
-					Action ret = ActionFactory.getActionFactory().getAction(element.getAttackId());
+					Action ret = Main.getAction(element.getAttackId());
 					ret.setDirection(directionToPlayer);
 					return ret;
 				}
