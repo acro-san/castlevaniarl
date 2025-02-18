@@ -4,6 +4,7 @@ import sz.util.Position;
 import crl.action.Action;
 import crl.action.monster.MonsterWalk;
 import crl.actor.Actor;
+import crl.ai.AIT;
 import crl.ai.ActionSelector;
 import crl.ai.monster.MonsterAI;
 import crl.level.Cell;
@@ -38,16 +39,9 @@ public class SickleAI extends MonsterAI {
 	
 	}
 
-	public String getID() {
-		return "WANDER";
+	public AIT getID() {
+		return AIT.SICKLE_AI;
 	}
 
-	public ActionSelector derive() {
-		try {
-			return (ActionSelector)clone();
-		} catch (CloneNotSupportedException cnse) {
-			return null;
-		}
-	}
-	
+
 }

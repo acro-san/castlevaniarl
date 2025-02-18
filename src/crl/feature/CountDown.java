@@ -4,7 +4,7 @@ import crl.action.*;
 import crl.ai.*;
 import crl.actor.*;
 
-public class CountDown implements ActionSelector, Cloneable {
+public class CountDown extends ActionSelector implements Cloneable {
 	
 	private int turnsToDie;
 
@@ -12,8 +12,8 @@ public class CountDown implements ActionSelector, Cloneable {
 		turnsToDie = turns;
 	}
 
-	public String getID() {
-		return "COUNTDOWN";
+	public AIT getID() {
+		return AIT.COUNTDOWN;
 	}
 
 	public Action selectAction(Actor who) {
@@ -26,12 +26,5 @@ public class CountDown implements ActionSelector, Cloneable {
 		return null;
 	}
 
-	public ActionSelector derive() {
-		try {
-			return (ActionSelector) clone();
-		} catch (CloneNotSupportedException cnse) {
-			return null;
-		}
-	}
 
 }

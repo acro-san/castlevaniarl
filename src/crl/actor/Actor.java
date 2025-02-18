@@ -18,7 +18,11 @@ public class Actor implements Cloneable, java.io.Serializable, PriorityEnqueable
 	public /*transient*/ Position pos = new Position(0,0,0);
 	
 	protected transient Appearance appearance;
-	public ActionSelector selector;
+	
+	// byte/int aiType;
+	public ActionSelector selector;		///DEPRECATIOUS_MAXIMUS;
+	// it'd be nice to have this as just a function-id-flag, BUT: some of the
+	// 'selector' implementations contain EXTRA STATE FIELDS.
 
 	private int hoverHeight;
 	private /*transient*/ int nextTime = 10;

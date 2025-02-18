@@ -8,16 +8,16 @@ import crl.action.Action;
 import crl.action.monster.MonsterWalk;
 import crl.action.monster.Swim;
 import crl.actor.Actor;
+import crl.ai.AIT;
 import crl.ai.ActionSelector;
 import crl.monster.Monster;
-//import crl.player.Player;
 
 public class UnderwaterAI extends MonsterAI {
 	/** Dwells in the water swimming until he spots the player, swims to him
 	 * and Jumps out of the water. walks to it and fires */
 	public Action selectAction(Actor who) {
 		Debug.doAssert(who instanceof Monster, "Underwater AI selectAction");
-		Monster aMonster = (Monster) who;
+		Monster aMonster = (Monster)who;
 	//	Player aPlayer = who.level.getPlayer();
 		int directionToPlayer = aMonster.starePlayer();
 		if (directionToPlayer == -1){
@@ -69,15 +69,8 @@ public class UnderwaterAI extends MonsterAI {
 		}
 	}
 
-	public String getID(){
-		return "UNDERWATER";
+	public AIT getID() {
+		return AIT.UNDERWATER;
 	}
 
-	public ActionSelector derive() {
-		try {
-			return (ActionSelector) clone();
-		} catch (CloneNotSupportedException cnse) {
-			return null;
-		}
-	}
 }

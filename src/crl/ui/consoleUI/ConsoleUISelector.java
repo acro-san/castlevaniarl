@@ -10,6 +10,7 @@ import crl.Main;
 import crl.action.Action;
 import crl.actor.Actor;
 import crl.actor.Message;
+import crl.ai.AIT;
 import crl.ai.ActionSelector;
 import crl.game.Cheat;
 import crl.monster.Monster;
@@ -20,6 +21,7 @@ import crl.ui.UISelector;
 import crl.ui.UserAction;
 
 public class ConsoleUISelector extends UISelector {
+	
 	private ConsoleSystemInterface si;	//transient?
 	
 	public ConsoleUserInterface ui() {
@@ -124,12 +126,13 @@ public class ConsoleUISelector extends UISelector {
 		return null;
 	}
 	
-	public String getID(){
-		return "UI";
+	// This class rly seems like it ought not to be an 'AI' function.
+	public AIT getID() {
+		return AIT.UI;
 	}
 	
-	public ActionSelector derive() {
-		return null;
-	}
+//	public ActionSelector derive() {
+//		return null;
+//	}
 	
 }

@@ -11,13 +11,14 @@ import crl.ai.ActionSelector;
 import crl.level.Level;
 import crl.player.Player;
 
-public abstract class UISelector implements ActionSelector {
+public abstract class UISelector extends ActionSelector {
 	
 	protected Hashtable<String, UserAction> gameActions = new Hashtable<>();
 	
 	protected Action advance;
 	protected Action attack;
 	protected Action target;
+	
 	protected Position defaultTarget;
 	protected Player player;
 	protected Level level;
@@ -35,10 +36,11 @@ public abstract class UISelector implements ActionSelector {
 		DOWNRIGHT1_KEY, DOWNRIGHT2_KEY,
 		SELF1_KEY, SELF2_KEY;
 
-	public void setPlayer (Player p){
+	public void setPlayer (Player p) {
 		player = p;
 		level = player.level;
 	}
+	
 	protected Action getRelatedAction(int keyCode) {
 		Debug.enterMethod(this, "getRelatedAction", keyCode+"");
 		UserAction ua = gameActions.get(keyCode+"");
@@ -51,13 +53,7 @@ public abstract class UISelector implements ActionSelector {
 		return ret;
 	}
 
-	///private transient UserInterface ui;
-/*	public UserInterface getUI(){
-		if (ui == null)
-			ui = UserInterface.getUI();
-		return ui;
-	}
-*/
+
 	//UserInterface ui
 	protected void init(UserAction[] gameActions, Action advance, Action target, Action attack, Properties keyBindings) {
 		//this.ui = ui;

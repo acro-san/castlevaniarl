@@ -7,6 +7,7 @@ import crl.Main;
 import crl.action.Action;
 import crl.action.monster.MonsterWalk;
 import crl.actor.Actor;
+import crl.ai.AIT;
 import crl.ai.ActionSelector;
 import crl.level.Cell;
 import crl.monster.Monster;
@@ -15,16 +16,14 @@ import crl.player.Consts;
 
 public class WanderToPlayerAI extends MonsterAI {
 	/** This AI is used by those enemies that just walk until they find
-	 * the player, optionally performing a ranged attack 
-	 * him when he is in range */
-	
+	 * the player, optionally performing a ranged attack when in range */
 	
 	public Action selectAction(Actor who) {
 		Debug.doAssert(who instanceof Monster, "WanderToPlayerAI selectAction");
 		Monster aMonster = (Monster) who;
 		
 		if (aMonster.enemy != null) {
-			if (!aMonster.level.getMonsters().contains(aMonster.enemy)){
+			if (!aMonster.level.getMonsters().contains(aMonster.enemy)) {
 				aMonster.enemy = null;
 			}
 		}
@@ -119,17 +118,8 @@ public class WanderToPlayerAI extends MonsterAI {
 	}
 
 
-	public String getID(){
-		return "WANDER";
-	}
-
-
-	public ActionSelector derive() {
-		try {
-			return (ActionSelector)clone();
-		} catch (CloneNotSupportedException cnse) {
-			return null;
-		}
+	public AIT getID() {
+		return AIT.WANDER;
 	}
 
 

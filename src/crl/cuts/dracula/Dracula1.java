@@ -15,11 +15,12 @@ public class Dracula1 extends Unleasher {
 	public void unleash(Level level, Game game) {
 		Monster dracula = level.getMonsterByID("DRACULA");
 		int distance = Position.distance(dracula.pos, game.getPlayer().pos); 
-		if (distance > 3 && !((DraculaAI)dracula.selector).isOnBattle())
+		if (distance > 3 && !((DraculaAI)dracula.selector).inBattle) {
 			return;
+		}
 		Display.thus.showChat("DRACULA1", game);
 		level.getMapCell(level.getExitFor("#DRACPOS")).setAppearance(Main.appearances.get("DRACULA_THRONE2_X"));
-		((DraculaAI)dracula.selector).setOnBattle(true);
+		((DraculaAI)dracula.selector).inBattle = true;
 		dracula.isVisible = true;
 		level.setMusicKeyMorning("DRACULA");
 		STMusicManagerNew.thus.playKey("DRACULA");

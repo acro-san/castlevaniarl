@@ -6,16 +6,15 @@ import sz.util.*;
 import crl.ai.*;
 import crl.actor.*;
 
-public class RespawnAI implements ActionSelector {
+public class RespawnAI extends ActionSelector {
 	
 	private static final Action
 		SPAWN_ACTION = new SpawnMonster();	//type?
 	
 	private int counter;
 
-	//AIT?
-	public String getID() {
-		return "Respawn";
+	public AIT getID() {
+		return AIT.Respawn;
 	}
 
 	public Action selectAction(Actor who) {
@@ -32,11 +31,5 @@ public class RespawnAI implements ActionSelector {
 		return null;
 	}
 
-	public ActionSelector derive() {
-		try {
-			return (ActionSelector) clone();
-		} catch (CloneNotSupportedException cnse) {
-			return null;
-		}
-	}
+
 }

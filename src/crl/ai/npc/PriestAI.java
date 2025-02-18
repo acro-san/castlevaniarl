@@ -5,6 +5,7 @@ import sz.util.Util;
 import crl.action.Action;
 import crl.action.npc.PeaceWalk;
 import crl.actor.Actor;
+import crl.ai.AIT;
 import crl.player.Player;
 
 public class PriestAI extends VillagerAI {
@@ -29,8 +30,8 @@ public class PriestAI extends VillagerAI {
 		return null;
 	}
 
-	public String getID() {
-		return "HEALPLAYER";
+	public AIT getID() {
+		return AIT.HEALPLAYER;
 	}
 	
 }

@@ -2,21 +2,22 @@ package crl.feature.ai;
 
 import crl.action.Action;
 import crl.actor.Actor;
+import crl.ai.AIT;
 import crl.ai.ActionSelector;
 import crl.feature.SmartFeature;
 import crl.feature.action.*;
 
-public class BlastCrystalAI implements ActionSelector, Cloneable {
+public class BlastCrystalAI extends ActionSelector implements Cloneable {
 	
 	private int blastCounter;
 	private int turnsToBlast; 
 	private boolean activated;
 	
-	public String getID() {
-		return "CRYSTAL_SELECTOR";
+	public AIT getID() {
+		return AIT.CRYSTAL_SELECTOR;
 	}
 
-	public Action selectAction(Actor who){
+	public Action selectAction(Actor who) {
 		if (activated) {
 			if (blastCounter > 2){
 				who.die();
@@ -40,12 +41,5 @@ public class BlastCrystalAI implements ActionSelector, Cloneable {
 		}
 	}
 
-	public ActionSelector derive() {
-		try {
-			return (ActionSelector) clone();
-		} catch (CloneNotSupportedException cnse) {
-			return null;
-		}
-	}
 
 }

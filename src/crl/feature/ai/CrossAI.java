@@ -1,23 +1,25 @@
 package crl.feature.ai;
 
 import crl.Main;
-import crl.action.*;
-import crl.action.vkiller.Cross;
-import crl.ai.*;
-import crl.actor.*;
+import crl.action.Action;
+import crl.actor.Actor;
+import crl.ai.AIT;
+import crl.ai.ActionSelector;
 import crl.feature.SmartFeature;
 import crl.feature.action.CrossBack;
-import crl.ui.UserInterface;
-import sz.util.*;
+import sz.util.Position;
 
-public class CrossAI implements ActionSelector, Cloneable {
+public class CrossAI extends ActionSelector implements Cloneable {
 	
-	public String getID() {
-		return "CROSS_SELECTOR";
+	private Position targetPosition;
+	
+	public void setTargetPosition(Position value) {
+		targetPosition = value;
 	}
 
-	private Position targetPosition;
-
+	public AIT getID() {
+		return AIT.CROSS_SELECTOR;
+	}
 
 	public Action selectAction(Actor who) {
 		Action ret = new CrossBack();
@@ -29,15 +31,4 @@ public class CrossAI implements ActionSelector, Cloneable {
 		return ret;
 	}
 
-	public ActionSelector derive() {
-		try {
-			return (ActionSelector)clone();
-		} catch (CloneNotSupportedException cnse){
-			return null;
-		}
-	}
-
-	public void setTargetPosition(Position value) {
-		targetPosition = value;
-	}
 }

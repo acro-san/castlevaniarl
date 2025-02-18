@@ -24,6 +24,7 @@ import sz.util.Debug;
 import crl.action.*;
 import crl.action.monster.*;
 import crl.action.monster.boss.*;
+import crl.ai.AIT;
 import crl.ai.ActionSelector;
 import crl.ai.monster.BasicMonsterAI;
 import crl.ai.monster.RangedAI;
@@ -41,9 +42,9 @@ import crl.data.Cells;
 import crl.data.Features;
 import crl.data.Items;
 import crl.data.MonsterLoader;
-import crl.data.SmartFeatures;
 import crl.feature.CountDown;
 import crl.feature.FeatureFactory;
+import crl.feature.SmartFeature;
 import crl.feature.SmartFeatureFactory;
 import crl.feature.ai.BlastCrystalAI;
 import crl.feature.ai.CrossAI;
@@ -101,7 +102,7 @@ public class Main {
 		appearances = new HashMap<>();
 
 	// (AI)Selectors by ID: could EASILY be a fixed len, indexed array, using short IDs.
-	public static HashMap<String, ActionSelector>
+	public static HashMap<AIT, ActionSelector>
 		selectors = new HashMap<>();
 	
 	public static HashMap<AT, Action>
@@ -117,6 +118,7 @@ public class Main {
 	private static Properties configuration;
 	private static Properties UIconfiguration;
 	private static String uiFile;
+	
 	
 	
 	public static String getConfigurationVal(String key) {
@@ -684,7 +686,34 @@ public class Main {
 
 
 	private static void initializeSmartFeatures() {
-		SmartFeatureFactory.init(SmartFeatures.getSmartFeatures(selectors));
+		//public static SmartFeature[] getSmartFeatures(HashMap<String, ActionSelector> acs) {
+		HashMap<String, Appearance> aps = Main.appearances;
+		HashMap<AIT, ActionSelector> ais = selectors;
+		// Bad constructor parameterisation evident:
+		SmartFeature[] sms = new SmartFeature[6];
+		sms[0] = new SmartFeature("CROSS", "Holy cross", aps.get("CROSS"));
+		sms[0].selector = ais.get(AIT.CROSS_SELECTOR);
+		
+		sms[1] = new SmartFeature("BURNING_FLAME", "Burning Flame", aps.get("FLAME"));
+		sms[1].selector = ais.get(AIT.FLAME_SELECTOR);
+		sms[1].damageOnStep = 1;
+		
+		sms[2] = new SmartFeature("GARLIC", "Garlic", aps.get("GARLIC"));
+		sms[2].selector = ais.get(AIT.COUNTDOWN);
+		sms[2].effectOnStep = "TRAP";
+		
+		sms[3] = new SmartFeature("BIBUTI", "Bibuti Powder", aps.get("BIBUTI"));
+		sms[3].selector = ais.get(AIT.COUNTDOWN);
+		sms[3].damageOnStep = 3;
+		
+		sms[4] = new SmartFeature("FLAME", "Magic Flame", aps.get("FLAME"));
+		sms[4].selector = ais.get(AIT.COUNTDOWN);
+		sms[4].damageOnStep = 4;
+		
+		sms[5] = new SmartFeature("BLAST_CRYSTAL", "Blast Crystal", aps.get("BLAST_CRYSTAL"));
+		sms[5].selector = ais.get(AIT.CRYSTAL_SELECTOR);
+		
+		SmartFeatureFactory.init(sms);
 	}
 
 

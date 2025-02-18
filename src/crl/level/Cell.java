@@ -4,11 +4,15 @@ import sz.util.*;
 import crl.Main;
 import crl.ui.*;
 
-public class Cell implements Cloneable, java.io.Serializable{
+public class Cell implements Cloneable, java.io.Serializable {
+	
+	// Is this a tile/terrain *definition* ... or an instance of such?
+	// one should only require an index. unless there's STATE? (key/door unlock state for example)?
+	
 	private boolean isStair, isSolid, isWater, isOpaque, shallowWater;
 	private boolean ethereal;
 	private transient Appearance appearance;
-	private String appearanceID;
+	private String appearanceID;	// sprite index??
 	private String ID;
 	private String description, shortDescription;
 	private int height;
@@ -20,11 +24,12 @@ public class Cell implements Cloneable, java.io.Serializable{
 
 	public final static int DOOR = 0;
 
-	public String getID(){
+	// FIXME TILE_TYPEs. Tile IDs. DEFINITELY should *NOT* be strings!!
+	public String getID() {
 		return ID;
 	}
 
-	public Cell (String pID, String pShortDescription, String pDescription, Appearance pApp){
+	public Cell(String pID, String pShortDescription, String pDescription, Appearance pApp) {
 		ID = pID;
 		appearance = pApp;
 		appearanceID = pApp.getID();

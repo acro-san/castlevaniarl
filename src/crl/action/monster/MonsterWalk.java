@@ -40,8 +40,8 @@ public class MonsterWalk extends Action {
 		Feature destinationFeature = aLevel.getFeatureAt(destinationPoint);
 		SmartFeature standing = aLevel.getSmartFeature(performer.pos);
 		if (standing != null) {
-			if (standing.getEffectOnStep() != null) {
-				String[] effects = standing.getEffectOnStep().split(" ");
+			if (standing.effectOnStep != null) {
+				String[] effects = standing.effectOnStep.split(" ");
 				if (effects[0].equals("TRAP") && mon != aLevel.boss) {
 					aLevel.addMessage("The "+mon.getDescription()+" is trapped!");
 					return;

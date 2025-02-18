@@ -7,13 +7,13 @@ import sz.util.Position;
 import sz.util.Util;
 import crl.Main;
 import crl.action.Action;
-import crl.action.ActionFactory;
 import crl.action.monster.MonsterCharge;
 import crl.action.monster.MonsterMissile;
 import crl.action.monster.MonsterWalk;
 import crl.action.monster.SummonMonster;
 import crl.action.monster.Swim;
 import crl.actor.Actor;
+import crl.ai.AIT;
 import crl.ai.ActionSelector;
 import crl.monster.Monster;
 import crl.player.Consts;
@@ -24,10 +24,8 @@ import crl.player.Consts;
  *
  */
 public class BasicMonsterAI extends MonsterAI {
-	// AI Parameters
-	/**
-	 * Defines if the monster never moves 
-	 */
+
+	/** Defines whether the monster never moves */
 	private boolean isStationary;
 	
 	/**
@@ -48,17 +46,14 @@ public class BasicMonsterAI extends MonsterAI {
 	 */
 	private int patrolRange = 0;
 	
-	// Extended monster attributes
 	/**
 	 * Keeps track of the charge count for attacks which
 	 * need charge
+	 * FREQUENTLY DUPLICATED STATE BY VARIOUS BOSS AIs...
 	 */
 	private int chargeCounter = 0;
 	
-	/**
-	 * Keeps track of the last direction the monster walked
-	 * on
-	 */
+	/** Tracks the last direction the monster walked */
 	private int lastDirection = -1;
 	
 	/**
@@ -207,7 +202,7 @@ public class BasicMonsterAI extends MonsterAI {
 				return tryWalking(aMonster, directionToPlayer);
 			}
 		}
-	 }
+	}
 	
 	private Action tryWalking(Monster aMonster, int direction) {
 		if (isStationary) {
@@ -302,18 +297,11 @@ public class BasicMonsterAI extends MonsterAI {
 		}
 	}
 
-	//AIT!
-	public String getID(){
-		return "BASIC_MONSTER_AI";
+
+	public AIT getID() {
+		return AIT.BASIC_MONSTER_AI;
 	}
 
-	public ActionSelector derive(){
-		try {
-			return (ActionSelector)clone();
-		} catch (CloneNotSupportedException cnse) {
-			return null;
-		}
-	}
 
 	public void setApproachLimit(int limit) {
 		approachLimit = limit;

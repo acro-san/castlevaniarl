@@ -14,7 +14,7 @@ public class NPC extends Monster {
 	//private String defID;	// allows fetching definition from global def table
 	// already declared in monster. right?
 	
-	private ActionSelector selector;
+	//private ActionSelector selector;	// doesn't it already have one?
 	private String npcID;
 	private String talkMessage = null;
 
@@ -25,12 +25,13 @@ public class NPC extends Monster {
 	static {
 		NPC_MONSTER_DEFINITION.description = "Innocent Being";
 		NPC_MONSTER_DEFINITION.appearance = Main.appearances.get("VOID");
-		NPC_MONSTER_DEFINITION.defaultSelector = Main.selectors.get("NULL_SELECTOR");
+		NPC_MONSTER_DEFINITION.defaultSelector = Main.selectors.get(AIT.NULL_SELECTOR);
 		NPC_MONSTER_DEFINITION.score = -100;
 		NPC_MONSTER_DEFINITION.maxHP = 2;
 		NPC_MONSTER_DEFINITION.attack = 0;
 		NPC_MONSTER_DEFINITION.sightRange = 5;
 		NPC_MONSTER_DEFINITION.bloodContent = 30;
+
 	}
 
 	public NPC(NPCDef def) {
@@ -38,7 +39,7 @@ public class NPC extends Monster {
 		definition = def;
 		defID = def.getID();
 		npcID = def.getID();
-		selector = getNDefinition().getDefaultSelector().derive();
+		selector = getNDefinition().defaultSelector.derive();
 		hp = def.hpMax;
 	}
 	

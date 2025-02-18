@@ -4,22 +4,21 @@ import crl.action.*;
 import crl.ai.*;
 import crl.actor.*;
 
-public class EmergerAI implements ActionSelector {
+public class EmergerAI extends ActionSelector {
 	
 	private static final Action
 		EMERGE_ACTION = new EmergeMonster();
 	
 	private int counter;
 
-	// AIT
-	public String getID() {
-		return "Emerge";
+	public AIT getID() {
+		return AIT.Emerge;
 	}
 
 	public Action selectAction(Actor who) {
-		Emerger x = (Emerger) who;
+		Emerger x = (Emerger)who;
 		counter++;
-		if (x.getCounter() < counter){
+		if (x.getCounter() < counter) {
 			who.die();
 			return EMERGE_ACTION;
 		}
@@ -29,11 +28,5 @@ public class EmergerAI implements ActionSelector {
 		return null;
 	}
 
-	public ActionSelector derive() {
-		try {
-			return (ActionSelector) clone();
-		} catch (CloneNotSupportedException cnse) {
-			return null;
-		}
-	}
+
 }

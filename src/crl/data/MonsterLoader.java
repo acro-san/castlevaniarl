@@ -28,12 +28,14 @@ import java.io.*;
 import sz.crypt.*;
 
 public class MonsterLoader {
+	static final String
+		DKEY = "65csvlk3489585f9rjh";
 	
 	public static MonsterDefinition[] getBaseMonsters(String monsterFile) throws CRLException {
 		BufferedReader br = null;
 		try {
 			Vector<MonsterDefinition> vecMonsters = new Vector<>(10);
-			DESEncrypter encrypter = new DESEncrypter("65csvlk3489585f9rjh");
+			DESEncrypter encrypter = new DESEncrypter(DKEY);
 			br = new BufferedReader(
 				new InputStreamReader(
 					encrypter.decrypt(new FileInputStream(monsterFile))));
@@ -76,6 +78,7 @@ public class MonsterLoader {
 		}
 	}
 	
+	
 	public static MonsterDefinition[] getMonsterDefinitions(
 			String monsterDefFile, String monsterAI_XMLFile) throws CRLException {
 		try {
@@ -85,8 +88,7 @@ public class MonsterLoader {
 			for (int i = 0; i < monsters.length; i++) {
 				monsterTable.put(monsters[i].ID, monsters[i]);
 			}
-			
-			DESEncrypter encrypter = new DESEncrypter("65csvlk3489585f9rjh");
+			DESEncrypter encrypter = new DESEncrypter(DKEY);
 			InputStream decryptStream = encrypter.decrypt(new FileInputStream(monsterAI_XMLFile));
 			XMLTag xml = NoX.xmlFromStream(decryptStream);
 			// 'parse' (convert xml struct into game's internal data)
@@ -132,9 +134,6 @@ public class MonsterLoader {
 			
 			String mid = monTag.getStrAttr("id");
 			MonsterDefinition md = (MonsterDefinition)monsterDefs.get(mid);
-			if (md == null) {
-				System.err.println("Monster ID: ["+mid+"] has no definition at AI-load time.");
-			}
 			
 			XMLTag selectorTag = monTag.children[0];
 			assert("selector".equals(selectorTag.name));

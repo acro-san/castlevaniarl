@@ -7,6 +7,7 @@ import sz.util.Util;
 import crl.Main;
 import crl.action.Action;
 import crl.actor.Actor;
+import crl.ai.AIT;
 import crl.ai.ActionSelector;
 import crl.monster.Monster;
 
@@ -37,15 +38,8 @@ public class StationaryAI extends MonsterAI {
 	}
 
 
-	public String getID() {
-		return "STATIONARY_AI";
+	public AIT getID() {
+		return AIT.STATIONARY_AI;
 	}
 
-	public ActionSelector derive() {
-		try {
-			return (ActionSelector)clone();
-		} catch (CloneNotSupportedException cnse) {
-			return null;
-		}
-	}
 }

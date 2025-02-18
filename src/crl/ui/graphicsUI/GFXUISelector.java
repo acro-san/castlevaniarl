@@ -14,6 +14,7 @@ import crl.Main;
 import crl.action.Action;
 import crl.actor.Actor;
 import crl.actor.Message;
+import crl.ai.AIT;
 import crl.ai.ActionSelector;
 import crl.game.Cheat;
 import crl.monster.Monster;
@@ -24,7 +25,7 @@ import crl.ui.UISelector;
 import crl.ui.UserAction;
 
 public class GFXUISelector extends UISelector
-	implements ActionSelector, MouseListener, MouseMotionListener, Serializable {
+	implements MouseListener, MouseMotionListener, Serializable {
 	
 	private transient SwingSystemInterface si;
 	private boolean useMouse = false;
@@ -236,13 +237,13 @@ public class GFXUISelector extends UISelector
 	}
 	
 
-	public String getID(){
-		return "UI";
+	public AIT getID() {
+		return AIT.UI;
 	}
 
-	public ActionSelector derive() {
-		return null;
-	}
+//	public ActionSelector derive() {
+//		return null;
+//	}
 	
 	
 	public void mouseClicked(MouseEvent e) { }

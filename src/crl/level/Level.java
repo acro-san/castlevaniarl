@@ -1030,15 +1030,16 @@ public class Level implements FOVMap, Serializable {
 	}
 	
 	public void checkUnleashers(Game game){
-		for (int i = 0; i < unleashers.length; i++){
-			if (unleashers[i].enabled())
+		for (int i = 0; i < unleashers.length; i++) {
+			if (unleashers[i].enabled) {
 				unleashers[i].unleash(this, game);
+			}
 		}
 	}
 	
-	public void disableTriggers(){
-		for (int i = 0; i < unleashers.length; i++){
-			unleashers[i].disable();
+	public void disableTriggers() {
+		for (int i = 0; i < unleashers.length; i++) {
+			unleashers[i].enabled = false;;
 		}
 	}
 	

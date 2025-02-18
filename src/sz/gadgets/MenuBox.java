@@ -17,11 +17,11 @@ public class MenuBox {
 	private Vector items;
 	private String title = "";
 
-	//State Attributes
+	// State Attributes
 	private int currentPage;
 	private int pages;
 	
-	//Components
+	// Components
 	private int xpos, ypos, width, itemsPerPage;;
 	private SwingSystemInterface si;
 	private BufferedImage box;

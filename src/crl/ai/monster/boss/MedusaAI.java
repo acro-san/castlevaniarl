@@ -6,6 +6,7 @@ import crl.action.Action;
 import crl.action.monster.MonsterWalk;
 import crl.action.monster.boss.SummonSnakes;
 import crl.actor.Actor;
+import crl.ai.AIT;
 import crl.ai.ActionSelector;
 import crl.ai.monster.MonsterAI;
 import crl.monster.Monster;
@@ -56,17 +57,9 @@ public class MedusaAI extends MonsterAI {
 	}
 
 
-	public String getID() {
-		return "MEDUSA_AI";
+	public AIT getID() {
+		return AIT.MEDUSA_AI;
 	}
 
-
-	public ActionSelector derive() {
-		try {
-			return (ActionSelector)clone();
-		} catch (CloneNotSupportedException cnse) {
-			return null;
-		}
-	}
 
 }

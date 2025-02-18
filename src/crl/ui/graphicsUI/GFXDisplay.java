@@ -65,8 +65,10 @@ public class GFXDisplay extends Display {
 		IMG_PICKER,
 		IMG_BORDERS;
 	
-	public static Color COLOR_BOLD;
+	public static Color
+		COLOR_BOLD;
 	
+	// global ref, from main? store all loaded fonts in global struct?
 	protected GFXConfiguration conf;
 	
 	private void initProperties(Properties p) {
@@ -86,11 +88,12 @@ public class GFXDisplay extends Display {
 			IMG_MAPMARKER = PropertyFilters.getImage(p.getProperty("IMG_MAPMARKER"), p.getProperty("IMG_MAPMARKER_BOUNDS"));
 			IMG_PICKER = PropertyFilters.getImage(p.getProperty("IMG_PICKER"), p.getProperty("IMG_PICKER_BOUNDS"));
 			IMG_BORDERS = PropertyFilters.getImage(p.getProperty("IMG_BORDERS"), p.getProperty("IMG_BORDERS_BOUNDS"));
-			FNT_TITLE = PropertyFilters.getFont(p.getProperty("FNT_TITLE"), p.getProperty("FNT_TITLE_SIZE"));
-			FNT_TEXT = PropertyFilters.getFont(p.getProperty("FNT_TEXT"), p.getProperty("FNT_TEXT_SIZE"));
-			FNT_PROLOGUE = PropertyFilters.getFont(p.getProperty("FNT_PROLOGUE"), p.getProperty("FNT_PROLOGUE_SIZE"));
+			
+			FNT_TITLE = PropertyFilters.loadFont(p.getProperty("FNT_TITLE"), p.getProperty("FNT_TITLE_SIZE"));
+			FNT_TEXT = PropertyFilters.loadFont(p.getProperty("FNT_TEXT"), p.getProperty("FNT_TEXT_SIZE"));
+			FNT_PROLOGUE = PropertyFilters.loadFont(p.getProperty("FNT_PROLOGUE"), p.getProperty("FNT_PROLOGUE_SIZE"));
 			FNT_DIALOGUEIN = FNT_TEXT;
-			FNT_MONO = PropertyFilters.getFont(p.getProperty("FNT_MONO"), p.getProperty("FNT_MONO_SIZE"));
+			FNT_MONO = PropertyFilters.loadFont(p.getProperty("FNT_MONO"), p.getProperty("FNT_MONO_SIZE"));
 		} catch (FontFormatException ffe) {
 			Game.crash("Error loading the font", ffe);
 		} catch (IOException ioe) {

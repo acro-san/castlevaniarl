@@ -16,6 +16,7 @@ import crl.action.knight.Defend;
 import crl.action.manbeast.*;
 import crl.action.vkiller.*;
 import crl.actor.*;
+import crl.ai.AIT;
 import crl.ai.ActionSelector;
 import crl.monster.*;
 import crl.ui.*;
@@ -2767,12 +2768,10 @@ public class Player extends Actor {
 			setFlag("KEEPMESSAGES", true);
 			originalSelector = selector;
 			setCounter("REGAIN_SHAPE", count);
-			selector = Main.selectors.get("WILD_MORPH_AI");
+			selector = Main.selectors.get(AIT.WILD_MORPH_AI);
 		}
-
 		
 		// Drop items
-		///Item weapon = getWeapon();
 		if (weapon != null) {
 			level.addMessage("You drop your "+weapon.getDescription());
 			carryOrDrop(weapon);	// FIXME SURELY explicit drop, here!??

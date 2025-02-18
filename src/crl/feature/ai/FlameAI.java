@@ -11,14 +11,14 @@ import crl.monster.Monster;
 /** Stays alive for 5 turns, causes an animation each turn
  * then dies;*/
 
-public class FlameAI implements ActionSelector, Cloneable {
+public class FlameAI extends ActionSelector implements Cloneable {
 	
 	private int turnsToDie;
 	private boolean activated;
 	private static final Action SHINE_ACTION = new Shine();
 	
-	public String getID() {
-		return "FLAME_SELECTOR";
+	public AIT getID() {
+		return AIT.FLAME_SELECTOR;
 	}
 
 	public Action selectAction(Actor who) {
@@ -39,14 +39,6 @@ public class FlameAI implements ActionSelector, Cloneable {
 			turnsToDie = 5;
 			activated = true;
 			return SHINE_ACTION;	//Shine.getAction();
-		}
-	}
-
-	public ActionSelector derive() {
-		try {
-			return (ActionSelector) clone();
-		} catch (CloneNotSupportedException cnse) {
-			return null;
 		}
 	}
 

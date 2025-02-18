@@ -2,27 +2,17 @@ package crl.ai.monster;
 
 import java.util.Vector;
 
-import sz.util.Debug;
-import crl.action.Action;
-import crl.actor.Actor;
 import crl.ai.ActionSelector;
+//import sz.util.Debug;
 
-public abstract class MonsterAI  implements ActionSelector, Cloneable{
-	protected Vector<RangedAttack> rangedAttacks;
+public abstract class MonsterAI extends ActionSelector implements Cloneable {
 	
-	public void setRangedAttacks(Vector<RangedAttack> pRangedAttacks){
-   	 rangedAttacks = pRangedAttacks;
-    }
+	protected Vector<RangedAttack> rangedAttacks;	// public? non-null?
+	// "attacks". ALL are declared as such? not just ranged?
 	
-	public abstract Action selectAction(Actor who);
-	public abstract String getID();
-
-	public ActionSelector derive(){
-		try {
-			return (ActionSelector) clone();
-		} catch (Exception e) {
-			Debug.byebye("Failed to clone MonsterAI "+getID());
-			return null;
-		}
+	public void setRangedAttacks(Vector<RangedAttack> pRangedAttacks) {
+		rangedAttacks = pRangedAttacks;
 	}
+
+
 }

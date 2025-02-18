@@ -6,13 +6,13 @@ import sz.util.Position;
 import sz.util.Util;
 import crl.Main;
 import crl.action.Action;
-import crl.action.ActionFactory;
 import crl.action.monster.MonsterCharge;
 import crl.action.monster.MonsterMissile;
 import crl.action.monster.MonsterWalk;
 import crl.action.monster.SummonMonster;
 import crl.action.monster.boss.ShadowApocalypse;
 import crl.actor.Actor;
+import crl.ai.AIT;
 import crl.ai.ActionSelector;
 import crl.ai.monster.MonsterAI;
 import crl.ai.monster.RangedAttack;
@@ -20,7 +20,7 @@ import crl.monster.Monster;
 
 public class DemonDraculaAI extends MonsterAI {
 
-	private int approachLimit = 0;
+///	private int approachLimit = 0;
 	private int chargeCounter = 99;
 	
 	public Action selectAction(Actor who) {
@@ -89,15 +89,10 @@ public class DemonDraculaAI extends MonsterAI {
 		}
 	}
 
-	public String getID() {
-		return "DEMON_DRACULA_AI";
+
+	public AIT getID() {
+		return AIT.DEMON_DRACULA_AI;
 	}
 
-	public ActionSelector derive() {
-		try {
-			return (ActionSelector) clone();
-		} catch (CloneNotSupportedException cnse){
-			return null;
-		}
-	}
+
 }

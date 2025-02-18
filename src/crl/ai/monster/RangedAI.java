@@ -6,9 +6,9 @@ import sz.util.Position;
 import sz.util.Util;
 import crl.Main;
 import crl.action.Action;
-import crl.action.ActionFactory;
 import crl.action.monster.MonsterWalk;
 import crl.actor.Actor;
+import crl.ai.AIT;
 import crl.ai.ActionSelector;
 import crl.monster.Monster;
 
@@ -56,19 +56,11 @@ public class RangedAI extends MonsterAI {
 		}
 	}
 
-	public String getID(){
-		return "RANGED_AI";
+	public AIT getID() {
+		return AIT.RANGED_AI;
 	}
 
-	public ActionSelector derive(){
-		try {
-			return (ActionSelector) clone();
-		} catch (CloneNotSupportedException cnse){
-			return null;
-		}
-	}
-
-	public void setApproachLimit(int limit){
+	public void setApproachLimit(int limit) {
 		approachLimit = limit;
 	}
 

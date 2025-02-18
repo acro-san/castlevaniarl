@@ -4,11 +4,13 @@ import java.util.*;
 
 import sz.util.*;
 
+// just put the table in main...
 public class SmartFeatureFactory {	// > SmartFeatures or SmartFeatureData
-///	private static SmartFeatureFactory singleton = new SmartFeatureFactory();
+
 	private static Hashtable<String, SmartFeature>
 		definitions = new Hashtable<>(40);
-
+	
+	// Get 'SmartFeature' CLONED OBJECT from global table of SmartFeature defs.
 	public static SmartFeature buildFeature(String id) {
 		SmartFeature x = definitions.get(id);
 		if (x != null) {
@@ -17,15 +19,10 @@ public class SmartFeatureFactory {	// > SmartFeatures or SmartFeatureData
 		Debug.byebye("SmartFeature "+id+" not found");
 		return null;
 	}
-/*
-	public void addDefinition(SmartFeature definition) {
-		definitions.put(definition.getID(), definition);
-	}
-	*/
 	
 	public static void init(SmartFeature[] defs) {
 		for (int i = 0; i < defs.length; i++)
-			definitions.put(defs[i].getID(), defs[i]);
+			definitions.put(defs[i].ID, defs[i]);
 	}
 
 }

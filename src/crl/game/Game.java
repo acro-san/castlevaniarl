@@ -20,7 +20,7 @@ import sz.util.*;
 
 
 public class Game implements CommandListener, PlayerEventListener, java.io.Serializable {
-	//Configuration
+
 	private transient UserInterface ui;
 	private transient UISelector uiSelector;
 	
@@ -433,7 +433,7 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 		storedLevels = new Hashtable<>();
 	}
 	
-	private void resumeScreen(){
+	private void resumeScreen() {
 		STMusicManagerNew.thus.playKey("GAME_OVER");
 		Main.ui.showMessageHistory();
 		if (Display.thus.showResumeScreen(player)) {
@@ -441,7 +441,7 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 		}
 	}
 	
-	public void informEvent(int code){
+	public void informEvent(int code) {
 		informEvent(code, null);
 	}
 
@@ -485,8 +485,8 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 						forwardTime();
 						forwardTime();
 						VMonster monsters = player.level.getMonsters();
-						for (int i = 0; i < monsters.size(); i++){
-							if (monsters.elementAt(i) instanceof Merchant){
+						for (int i = 0; i < monsters.size(); i++) {
+							if (monsters.elementAt(i) instanceof Merchant) {
 								((Merchant)monsters.elementAt(i)).refreshMerchandise(player);
 							}
 						}

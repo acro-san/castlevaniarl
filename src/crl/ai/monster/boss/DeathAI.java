@@ -7,6 +7,7 @@ import crl.action.monster.MonsterMissile;
 import crl.action.monster.MonsterWalk;
 import crl.action.monster.boss.UnleashSickles;
 import crl.actor.Actor;
+import crl.ai.AIT;
 import crl.ai.ActionSelector;
 import crl.ai.monster.MonsterAI;
 import crl.monster.Monster;
@@ -72,16 +73,9 @@ public class DeathAI extends MonsterAI {
 		}
 	}
 
-	public String getID(){
-		return "DEATH_AI";
+	public AIT getID() {
+		return AIT.DEATH_AI;
 	}
 
-	public ActionSelector derive() {
-		try {
-			return (ActionSelector) clone();
-		} catch (CloneNotSupportedException cnse){
-			return null;
-		}
-	}
 
 }

@@ -19,9 +19,7 @@ public class Monster extends Actor implements Cloneable {
 	protected String defID;	// monsterType? enum? also used in 'NPC' subclass.
 	private transient MonsterDefinition definition;
 	
-	
 	public int hp;
-	//private int hpMax;	// always just get from definition
 	
 	public String featurePrize;
 	public boolean isVisible = true;
@@ -34,6 +32,10 @@ public class Monster extends Actor implements Cloneable {
 	public Monster(MonsterDefinition md) {
 		definition = md;
 		defID = md.ID;
+		if (md.defaultSelector == null) {
+			boolean debuggery = true;
+			// what monster def has null AI def???!
+		}
 		selector = md.defaultSelector.derive();
 		hp = md.maxHP;
 	}
@@ -173,7 +175,7 @@ public class Monster extends Actor implements Cloneable {
 	
 	public void damage(StringBuffer message, int dam) {
 		if (selector instanceof DraculaAI) {
-			((DraculaAI)selector).setOnBattle(true);
+			((DraculaAI)selector).inBattle = true;
 		}
 		if (Util.chance(getEvadeChance())) {
 			if (wasSeen())

@@ -6,12 +6,13 @@ import crl.action.Action;
 import crl.action.monster.MonsterWalk;
 import crl.action.npc.PeaceWalk;
 import crl.actor.Actor;
+import crl.ai.AIT;
 import crl.ai.ActionSelector;
 import crl.level.Cell;
 import crl.level.Level;
 import crl.npc.NPC;
 
-public class VillagerAI implements ActionSelector {
+public class VillagerAI extends ActionSelector {
 	
 	protected boolean onDanger;
 	protected boolean attackPlayer;
@@ -74,19 +75,10 @@ public class VillagerAI implements ActionSelector {
 		return null;
 	}
 
-	// AIType ID... -> AIT enum.
-	public String getID() {
-		return "VILLAGER";
+	public AIT getID() {
+		return AIT.VILLAGER;
 	}
 
-
-	public ActionSelector derive() {
-		try {
-			return (ActionSelector) clone();
-		} catch (CloneNotSupportedException cnse) {
-			return null;
-		}
-	}
 
 	public void setOnDanger(boolean value) {
 		onDanger = value;

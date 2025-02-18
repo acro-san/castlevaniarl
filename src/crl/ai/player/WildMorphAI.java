@@ -7,60 +7,55 @@ import crl.action.Action;
 import crl.action.Attack;
 import crl.action.Walk;
 import crl.actor.Actor;
+import crl.ai.AIT;
 import crl.ai.ActionSelector;
 import crl.player.Player;
 
-public class WildMorphAI implements ActionSelector {
+public class WildMorphAI extends ActionSelector {
 	
 	public Action selectAction(Actor who) {
-		Player aPlayer = (Player) who;
-		if (aPlayer.getEnemy() != null) {
-			if (!aPlayer.level.getMonsters().contains(aPlayer.getEnemy())) {
-				aPlayer.setEnemy(null);
+		Player p = (Player)who;
+		if (p.getEnemy() != null) {
+			if (!p.level.getMonsters().contains(p.getEnemy())) {
+				p.setEnemy(null);
 			}
 		}
 		
 		int directionToMonster = -1;
-		if (aPlayer.getEnemy() != null) {
-			directionToMonster = aPlayer.stareMonster(aPlayer.getEnemy());
+		if (p.getEnemy() != null) {
+			directionToMonster = p.stareMonster(p.getEnemy());
 		} else {
-			directionToMonster = aPlayer.stareMonster();
+			directionToMonster = p.stareMonster();
 		}
 		
 		if (directionToMonster == -1) {
 			return null;
+		}
+
+		Position destination = Position.add(who.pos, Action.directionToVariation(directionToMonster));
+		if (p.level.getMonsterAt(destination) != null) {
+			p.setEnemy(p.level.getMonsterAt(destination));
+		}
+		if (p.getEnemy() != null && destination.equals(p.getEnemy().pos)) {
+			Action ret = new Attack();
+			ret.setPerformer(p);
+			ret.setDirection(directionToMonster);
+			return ret;
 		} else {
-			Position destination = Position.add(who.pos, Action.directionToVariation(directionToMonster));
-			if (aPlayer.level.getMonsterAt(destination) != null)
-				aPlayer.setEnemy(aPlayer.level.getMonsterAt(destination));
-			if (aPlayer.getEnemy()!= null && destination.equals(aPlayer.getEnemy().pos)){
-				Action ret = new Attack();
-				ret.setPerformer(aPlayer);
+			Action ret = new Walk();
+			if (!who.level.isWalkable(Position.add(who.pos, Action.directionToVariation(directionToMonster)))) {
+				directionToMonster = Util.rand(0,7);
 				ret.setDirection(directionToMonster);
-				return ret;
 			} else {
-				Action ret = new Walk();
-				if (!who.level.isWalkable(Position.add(who.pos, Action.directionToVariation(directionToMonster)))){
-					directionToMonster = Util.rand(0,7); 
-					ret.setDirection(directionToMonster);
-				} else {
-					ret.setDirection(directionToMonster);
-				}
-				return ret;
+				ret.setDirection(directionToMonster);
 			}
+			return ret;
 		}
 	}
 
-	public String getID() {
-		return "WILD_MORPH_AI";
-	}
 
-	public ActionSelector derive() {
-		try {
-			return (ActionSelector)clone();
-		} catch (CloneNotSupportedException cnse) {
-			return null;
-		}
+	public AIT getID() {
+		return AIT.WILD_MORPH_AI;
 	}
 
 }

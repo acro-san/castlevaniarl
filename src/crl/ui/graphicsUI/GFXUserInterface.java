@@ -1030,7 +1030,7 @@ public class GFXUserInterface extends UserInterface {
 		COLOR_BORDER_IN = conf.borderColourInner;
 		COLOR_BORDER_OUT = conf.borderColourOuter;
 		FNT_MESSAGEBOX = conf.messageBoxFont;
-		FNT_PERSISTANTMESSAGEBOX = conf.persistantMessageBoxFont;
+		FNT_PERSISTANTMESSAGEBOX = conf.persistentMessageBoxFont;
 		IMG_STATUSSCR_BGROUND = conf.statusScreenBackground;
 	}
 	
