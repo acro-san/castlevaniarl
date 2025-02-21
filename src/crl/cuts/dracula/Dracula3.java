@@ -1,8 +1,8 @@
 package crl.cuts.dracula;
 
+import crl.Main;
 import crl.cuts.Unleasher;
 import crl.game.Game;
-import crl.game.STMusicManagerNew;
 import crl.level.Level;
 import crl.monster.Monster;
 import crl.ui.Display;
@@ -13,9 +13,9 @@ public class Dracula3 extends Unleasher{
 		Monster dracula = level.getMonsterByID("DEMON_DRACULA");
 		if (dracula != null)
 			return;
-		STMusicManagerNew.thus.stopMusic();
+		Main.music.stopMusic();
 		Display.thus.showChat("DRACULA3", game);
-		STMusicManagerNew.thus.playKey("VICTORY");
+		Main.music.playKey("VICTORY");
 		game.wonGame();
 		enabled = false;
 	}

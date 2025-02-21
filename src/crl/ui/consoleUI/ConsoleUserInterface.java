@@ -364,13 +364,13 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 						}
 					}
 					
-					Vector items = level.getItemsAt(runner);
+					Vector<Item> items = level.getItemsAt(runner);
 					Item item = null;
-					if (items != null){
-						item = (Item) items.elementAt(0);
+					if (items != null) {
+						item = items.elementAt(0);
 					}
-					if (item != null){
-						if (item.isVisible()){
+					if (item != null) {
+						if (item.isVisible()) {
 							CharAppearance itemApp = (CharAppearance)item.getAppearance();
 							si.print(PC_POS.x-xrange+x,PC_POS.y-yrange+y, itemApp.getChar(), itemApp.getColor());
 							BasicListItem li = (BasicListItem)sightListItems.get(item.getDefinition().getID());
@@ -1504,18 +1504,19 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 				Display.thus.showMap(level.getMapLocationKey(), level.getDescription());
 				break;
 			case CommandListener.SWITCHMUSIC:
-				boolean enabled = STMusicManagerNew.thus.isEnabled();
-				if (enabled){
+				boolean enabled = Main.music.enabled;
+				if (enabled) {
 					showMessage("Turn off music");
-					STMusicManagerNew.thus.stopMusic();
-					STMusicManagerNew.thus.setEnabled(false);
+					Main.music.stopMusic();
+					Main.music.enabled = false;
 				} else {
 					showMessage("Turn on music");
-					STMusicManagerNew.thus.setEnabled(true);
-					if (!level.isDay() && level.hasNoonMusic())
-						STMusicManagerNew.thus.playKey(level.getMusicKeyNoon());
-					else
-						STMusicManagerNew.thus.playKey(level.getMusicKeyMorning());
+					Main.music.enabled = true;
+					if (!level.isDay() && level.hasNoonMusic()) {
+						Main.music.playKey(level.getMusicKeyNoon());
+					} else {
+						Main.music.playKey(level.getMusicKeyMorning());
+					}
 				}
 				break;
 			case EXAMINELEVELMAP:
@@ -1625,7 +1626,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		}
 	}
 	
-	private void examineLevelMap(){
+	private void examineLevelMap() {
 		si.saveBuffer();
 		si.cls();
 		int lw = level.getWidth();
@@ -1681,10 +1682,9 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 			si.print(5, 24, "Page "+i, ConsoleSystemInterface.RED);
 			si.refresh();
 			si.waitKey(CharKey.SPACE);
-		} 
+		}
 		
 		si.restore();
 		si.refresh();
-		
 	}
 }

@@ -10,7 +10,6 @@ import crl.cuts.CutsceneDialogue;
 import crl.data.Text;
 import crl.game.Game;
 import crl.game.MonsterRecord;
-import crl.game.STMusicManagerNew;
 import crl.monster.Monster;
 import crl.npc.Hostage;
 import crl.player.GameSessionInfo;
@@ -69,7 +68,7 @@ public class CharDisplay extends Display {
 		si.print((80 - t.length()) / 2, 22, t, ConsoleSystemInterface.WHITE);
 
 		si.refresh();
-		STMusicManagerNew.thus.playKey("TITLE");
+		Main.music.playKey("TITLE");
 		CharKey x = new CharKey(CharKey.NONE);
 		// TODO process menu-defined keycodes based on menu itself? ...
 		while (x.code != CharKey.A && x.code != CharKey.a &&

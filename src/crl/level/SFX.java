@@ -5,8 +5,6 @@ import crl.action.*;
 
 public class SFX extends Action {
 	
-//	private static SFX singleton = new SFX();
-	
 	public AT getID() {
 		return AT.SFX;
 	}
@@ -20,15 +18,4 @@ public class SFX extends Action {
 	private final static int THUNDER = 1;
 	private int effect = THUNDER;	// by default...
 
-//	public void setEffect(int pEffect) {
-//		effect = pEffect;
-//	}
-
-	// replace with: return/ new SFX(); ??
-	/*
-	public static SFX getThunder() {
-		singleton.setEffect(THUNDER);
-		return singleton;
-	}
-	*/
 }

@@ -3,11 +3,10 @@ package crl.cuts.mummies;
 import java.util.Hashtable;
 
 import sz.util.Position;
-
+import crl.Main;
 import crl.cuts.Unleasher;
 import crl.game.CRLException;
 import crl.game.Game;
-import crl.game.STMusicManagerNew;
 import crl.level.Level;
 import crl.levelgen.StaticGenerator;
 import crl.ui.Display;
@@ -16,11 +15,11 @@ public class Mummy1 extends Unleasher {
 	
 	public void unleash(Level level, Game game) {
 		if (level.boss == null) {
-			Display.thus.showScreen("As you destroy the mummy of Akmodan, the whole room trembles, and a cold hurricaned wind covers all the place, shredding everything on sight. All of a sudden, the floor under you collapses.");
+			Display.thus.showScreen("As you destroy the mummy of Akmodan, the whole room trembles, and a cold hurricane wind engulfs the place, shredding everything on sight. All of a sudden, the floor under you collapses.");
 			level.getPlayer().reduceKeys(1);
 			level.setMusicKeyMorning("");
 			level.setMusicKeyNoon("");
-			STMusicManagerNew.thus.stopMusic();
+			Main.music.stopMusic();
 			try {
 				StaticGenerator.getGenerator().renderOverLevel(level, newMap, charMap, new Position(0,0));
 			} catch (CRLException crle){

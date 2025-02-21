@@ -96,7 +96,9 @@ public class Main {
 	public static final boolean
 		DEBUG_MODE = true;
 	
+	// Controlled by COMMANDLINE FLAGS *ONLY*.
 	private static int uiMode;	// default is SWING_GFX...
+	
 	public static UserInterface ui;
 	private static UISelector uiSelector;
 	
@@ -131,16 +133,24 @@ public class Main {
 	private static Game currentGame;
 	private static boolean createNew = true;
 	
-	private static Properties configuration;
+	// user options, versus what's actual graphics/gamedata setup (moddable or otherwise).
+	// seem like 2 different use cases. Not all players want to mod immediately.
+	// but most want to have keybinds and set the screen size properly.
+	
+	// public static Conf conf;	// ?
+	public static Properties configuration;
 	private static Properties UIconfiguration;	// why's that separate??? WHY!?
-	private static String uiFile;
-	// ...
+	private static String uiFile;	// the file from which UIConfiguration is read...
+	
+	public static STMusicManagerNew music;
+
 	// what *ARE* all the conf properties/fields? how're they set?
 	
-	
-	public static String getConfigurationVal(String key) {
+	/*
+	public static String __getConfigurationVal(String key) {
 		return configuration.getProperty(key);
 	}
+	*/
 
 	private static void init() {
 		if (createNew) {
@@ -150,10 +160,12 @@ public class Main {
 			readConfiguration();
 			GFXConfiguration gfx_configuration = null;
 			try {
+				
+				// TODO just unify 'appearances'. Zero need for 2 sets
+				// of classes. Load the spritedefs and char/colors as a struct.
 				switch (uiMode) {
 				case SWING_GFX:
-					gfx_configuration = new GFXConfiguration();
-					gfx_configuration.loadConfiguration(UIconfiguration);
+					gfx_configuration = new GFXConfiguration(UIconfiguration);
 					System.out.println("Initializing Graphics Appearances");
 					initializeGAppearances(gfx_configuration);
 					break;
@@ -226,46 +238,47 @@ public class Main {
 			} catch (Exception e) {
 				crash("Error initializing", e);
 			}
-			STMusicManagerNew.initManager();
+			music = new STMusicManagerNew();
 			if (configuration.getProperty("enableSound") != null &&
 				configuration.getProperty("enableSound").equals("true")) { // Sound
 				if (configuration.getProperty("enableMusic") == null || 
 					!configuration.getProperty("enableMusic").equals("true")) { // Music
-					STMusicManagerNew.thus.setEnabled(false);
+					music.enabled = false;
 				} else {
 					System.out.println("Initializing Midi Sequencer");
 					try {
 						STMidiPlayer.sequencer = MidiSystem.getSequencer();
-						//STMidiPlayer.setVolume(0.1d);
+						//STMidiPlayer.setVolume(0.1);
 						STMidiPlayer.sequencer.open();
 						
 					} catch (MidiUnavailableException mue) {
 						Game.addReport("Midi device unavailable");
 						System.out.println("Midi Device Unavailable");
-						STMusicManagerNew.thus.setEnabled(false);
+						music.enabled = false;
 						return;
 					}
 					System.out.println("Initializing Music Manager");
 					
-					
-					Enumeration<Object> keys = configuration.keys();
+					Enumeration<Object> keys = configuration.keys();	// all conf fields.
 					while (keys.hasMoreElements()) {
 						String key = (String)keys.nextElement();
 						if (key.startsWith("mus_")) {
-							String music = key.substring(4);
-							STMusicManagerNew.thus.addMusic(music, configuration.getProperty(key));
+							String musicTrackID = key.substring(4);
+							music.addMusic(musicTrackID, configuration.getProperty(key));
 						}
 					}
-					STMusicManagerNew.thus.setEnabled(true);
+					music.enabled = true;
 				}
 				if (configuration.getProperty("enableSFX") == null ||
 					!configuration.getProperty("enableSFX").equals("true")) {
-					SFXManager.setEnabled(false);
+					SFXManager.enabled = false;
 				} else {
-					SFXManager.setEnabled(true);
+					SFXManager.enabled = true;
 				}
 			}
-			Player.initializeWhips("LEATHER_WHIP", "CHAIN_WHIP", "VKILLERW","THORN_WHIP", "FLAME_WHIP", "LIT_WHIP");
+			
+			Player.initializeWhips(
+			"LEATHER_WHIP", "CHAIN_WHIP", "VKILLERW","THORN_WHIP", "FLAME_WHIP", "LIT_WHIP");
 			
 			if (CHECK_WEB_FOR_NEW_VERSION) {
 				GameVersion webVersion = GameVersion.getWebLatestVersion();
@@ -294,9 +307,11 @@ public class Main {
 
 		if (uiMode == SWING_GFX) {
 			UIconfiguration = new Properties();
+
 			try {
 				UIconfiguration.load(new FileInputStream(uiFile));
 			} catch (IOException e) {
+				// TODO Gracefully fallback to some default??
 				System.out.println("Error loading configuration file, please confirm existence of "+uiFile);
 				System.exit(-1);
 			}
@@ -305,7 +320,7 @@ public class Main {
 	
 	
 	private static void title() {
-		STMusicManagerNew.thus.playKey("TITLE");
+		music.playKey("TITLE");
 		int choice = Display.thus.showTitleScreen();
 		switch (choice) {
 		case 0:
@@ -564,7 +579,7 @@ public class Main {
 			throw e;
 		}
 		
-		
+		// FIXME game's internals shouldn't need to differ this much.
 		switch (uiMode) {
 		case SWING_GFX:
 			((GFXUserInterface)ui).init((SwingSystemInterface)si, userCommands, target);
@@ -583,14 +598,15 @@ public class Main {
 	//		uiSelector.init(si, userCommands, target);	// ...
 			// Swing Console UI .. boots, opens, doesn't work. doesn't centre.
 			//uiSelector = new ConsoleUISelector();	// ?OK?
-
 			break;
 		}
 	}
-	
+
+
 	private static int i(String s) {
 		return Integer.parseInt(s);
 	}
+
 
 	private static String readKeyString(Properties config, String keyName) throws CRLException {
 		return readKey(config, keyName)+"";
@@ -751,8 +767,8 @@ public class Main {
 		System.exit(-1);
 	}
 
-
-	private static Hashtable<String,MonsterRecord> monsterRecord;
+	// FIXME pointless getter/setter/accessors, just make this table public!!!
+	private static Hashtable<String, MonsterRecord> monsterRecord;
 
 	public static MonsterRecord getMonsterRecordFor(String monsterID) {
 		return monsterRecord.get(monsterID);

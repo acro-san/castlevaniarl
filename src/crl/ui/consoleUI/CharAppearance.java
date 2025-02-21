@@ -5,16 +5,18 @@ import sz.csi.*;
 
 
 public class CharAppearance extends Appearance {
+	
 	private char character;
 	private int color;
 
-	public final static CharAppearance VOID = new CharAppearance("VOID", ' ', ConsoleSystemInterface.BLACK);
+	public final static CharAppearance
+		VOID = new CharAppearance("VOID", ' ', ConsoleSystemInterface.BLACK);
 
-	public static CharAppearance getVoidAppearance(){
+	public static CharAppearance getVoidAppearance() {
 		return VOID;
 	}
 	
-	public CharAppearance(String ID, char character, int color){
+	public CharAppearance(String ID, char character, int color) {
 		super(ID);
 		this.character = character;
 		this.color = color;
@@ -29,7 +31,7 @@ public class CharAppearance extends Appearance {
 	}
 	
 	public static final int
-    BLACK = 0,
+	BLACK = 0,
 	DARK_BLUE = 1,
 	GREEN = 2,
 	TEAL = 3,
@@ -37,7 +39,7 @@ public class CharAppearance extends Appearance {
 	PURPLE = 5,
 	BROWN = 6,
 	LIGHT_GRAY = 7,
-    GRAY = 8,
+	GRAY = 8,
 	BLUE = 9,
 	LEMON = 10,
 	CYAN = 11,
@@ -46,7 +48,7 @@ public class CharAppearance extends Appearance {
 	YELLOW = 14,
 	WHITE = 15;
 	
-	public static  int getColor(String colorName){
+	public static int getColor(String colorName) {
 		if (colorName == null) return -1;
 		if (colorName.equals("BLACK")) return BLACK;
 		if (colorName.equals("DARK_BLUE")) return DARK_BLUE;

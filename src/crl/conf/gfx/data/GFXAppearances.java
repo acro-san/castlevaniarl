@@ -249,7 +249,7 @@ public class GFXAppearances {
 		
 		createTAppearance("TELEPORT", 7, 3,0,8),
 		
-		// Sacred weapons
+		// Sacred weapons	// TODO use IT enum indices..
 		createIAppearance("ART_CARD_SOL", false, 1, 1),
 		createIAppearance("ART_CARD_MOONS", false, 2, 1),
 		createIAppearance("ART_CARD_DEATH", false, 3, 1),
@@ -378,7 +378,7 @@ public class GFXAppearances {
 		createIAppearance("LEATHER_WHIP", false, 7, 25),
 		
 		
-		// Monsters
+		// Monsters TODO use MT enumeration ids.
 		createAppearance("R_SKELETON", Textures.MonstersImage, 1, 1),
 		createAppearance("GZOMBIE", Textures.MonstersImage, 4, 2),
 		createAppearance("ZOMBIE", Textures.MonstersImage, 7, 8),
@@ -651,6 +651,7 @@ public class GFXAppearances {
 		return createXAppearance(ID, bigImage, xpos, ypos, width, height, 0);
 	}
 	
+	
 	public GFXAppearance createXAppearance(String ID, BufferedImage bigImage, int xpos, int ypos, int width, int height, int yoff){
 		try {
 			BufferedImage img = ImageUtils.crearImagen(bigImage, xpos, ypos, width, height);
@@ -662,6 +663,8 @@ public class GFXAppearances {
 		return null;
 	}
 	
+	
+	// init separated single-Tile graphic
 	public GFXAppearance createTAppearance(String ID, int xpos, int ypos) {
 		xpos--;
 		ypos--;

@@ -67,7 +67,11 @@ public class GFXConfiguration {
 	}
 */
 	
-	public void loadConfiguration(Properties p) {
+	public GFXConfiguration(Properties p) {	// actually not properties though..?
+		loadConfiguration(p);
+	}
+	
+	private void loadConfiguration(Properties p) {
 //		tp.mark("Start of loadCconfiguration");
 		//screenScale = 1.28;
 		screenScale = PropertyFilters.getDouble(p.getProperty("SCREEN_SCALE"));

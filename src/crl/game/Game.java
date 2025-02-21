@@ -130,18 +130,18 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 			
 			if (isDay){
 				if (currentLevel.hasNoonMusic()){
-					STMusicManagerNew.thus.stopMusic();
+					Main.music.stopMusic();
 					Display.thus.showTimeChange(!isDay, fog, rain, thunderstorm, false);
-					STMusicManagerNew.thus.playKey(currentLevel.getMusicKeyNoon());
+					Main.music.playKey(currentLevel.getMusicKeyNoon());
 				} else {
 					Display.thus.showTimeChange(!isDay, fog, rain, thunderstorm, false);
 				}
 			} else {
 				
 				if (currentLevel.hasNoonMusic()) {
-					STMusicManagerNew.thus.stopMusic();
+					Main.music.stopMusic();
 					Display.thus.showTimeChange(!isDay, fog, rain, thunderstorm, sunnyDay);
-					STMusicManagerNew.thus.playKey(currentLevel.getMusicKeyMorning());
+					Main.music.playKey(currentLevel.getMusicKeyMorning());
 				} else {
 					Display.thus.showTimeChange(!isDay, fog, rain, thunderstorm, sunnyDay);
 				}
@@ -167,9 +167,9 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 		turns = player.getGameSessionInfo().turns;
 		syncUniqueRegister();
 		if (currentLevel.hasNoonMusic() && !currentLevel.isDay()){
-			STMusicManagerNew.thus.playKey(currentLevel.getMusicKeyNoon());
+			Main.music.playKey(currentLevel.getMusicKeyNoon());
 		} else {
-			STMusicManagerNew.thus.playKey(currentLevel.getMusicKeyMorning());
+			Main.music.playKey(currentLevel.getMusicKeyMorning());
 		}
 		run();
 	}
@@ -208,7 +208,7 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 		run();
 	}
 	
-	public void training(){
+	public void training() {
 		player = PlayerGenerator.thus.createSpecialPlayer("SOLEIYU_KID");
 		player.setGame(this);
 		player.setGameSessionInfo(new GameSessionInfo());
@@ -434,7 +434,7 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 	}
 	
 	private void resumeScreen() {
-		STMusicManagerNew.thus.playKey("GAME_OVER");
+		Main.music.playKey("GAME_OVER");
 		Main.ui.showMessageHistory();
 		if (Display.thus.showResumeScreen(player)) {
 			GameFiles.saveMemorialFile(player);
@@ -632,9 +632,9 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 		}
 		dispatcher = currentLevel.getDispatcher();
 		if (currentLevel.hasNoonMusic() && !currentLevel.isDay()){
-			STMusicManagerNew.thus.playKey(currentLevel.getMusicKeyNoon());
+			Main.music.playKey(currentLevel.getMusicKeyNoon());
 		} else {
-			STMusicManagerNew.thus.playKey(currentLevel.getMusicKeyMorning());
+			Main.music.playKey(currentLevel.getMusicKeyMorning());
 		}
 		if (currentLevel.isRutinary()){
 			currentLevel.anihilateMonsters();
@@ -658,9 +658,9 @@ public class Game implements CommandListener, PlayerEventListener, java.io.Seria
 		player.level = level;
 		dispatcher = currentLevel.getDispatcher();
 		if (currentLevel.hasNoonMusic() && !currentLevel.isDay()) {
-			STMusicManagerNew.thus.playKey(currentLevel.getMusicKeyNoon());
+			Main.music.playKey(currentLevel.getMusicKeyNoon());
 		} else {
-			STMusicManagerNew.thus.playKey(currentLevel.getMusicKeyMorning());
+			Main.music.playKey(currentLevel.getMusicKeyMorning());
 		}
 		//STMusicManager.thus.playForLevel(levelNumber, levelPath[levelNumber], currentLevel.isDay());
 		ui.levelChange();

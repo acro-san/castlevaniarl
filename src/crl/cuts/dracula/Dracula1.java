@@ -5,7 +5,6 @@ import crl.Main;
 import crl.ai.monster.boss.DraculaAI;
 import crl.cuts.Unleasher;
 import crl.game.Game;
-import crl.game.STMusicManagerNew;
 import crl.level.Level;
 import crl.monster.Monster;
 import crl.ui.Display;
@@ -23,7 +22,7 @@ public class Dracula1 extends Unleasher {
 		((DraculaAI)dracula.selector).inBattle = true;
 		dracula.isVisible = true;
 		level.setMusicKeyMorning("DRACULA");
-		STMusicManagerNew.thus.playKey("DRACULA");
+		Main.music.playKey("DRACULA");
 		enabled = false;
 	}
 

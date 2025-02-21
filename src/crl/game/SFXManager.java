@@ -6,11 +6,13 @@ public class SFXManager {
 	
 	private static Thread currentThread;
 	
-	private static boolean enabled;
+	public static boolean enabled = true;
 	
+	/*
 	public static void setEnabled(boolean value) {
 		enabled = value;
 	}
+	*/
 	
 	public static synchronized void play(String fileName) {
 		if (enabled == false || fileName == null || fileName.equals("")) {
@@ -20,13 +22,13 @@ public class SFXManager {
 		if (currentThread != null) {
 			currentThread.interrupt();
 		}
-		if (fileName.endsWith(".wav")){
+		if (fileName.endsWith(".wav")) {
 			WavPlayer wavPlayer = new WavPlayer(fileName);
 			currentThread = new Thread(wavPlayer);
 		}
 		try {
 			currentThread.start();
-		} catch (IllegalThreadStateException itse){
+		} catch (IllegalThreadStateException itse) {
 			Game.addReport("Illegal Thread State for "+fileName);
 		}
 	}

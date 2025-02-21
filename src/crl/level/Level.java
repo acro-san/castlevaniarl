@@ -1,6 +1,5 @@
 package crl.level;
 
-
 import java.io.Serializable;
 import java.util.*;
 
@@ -19,8 +18,7 @@ import crl.player.*;
 import crl.levelgen.*;
 
 public class Level implements FOVMap, Serializable {
-	// FIXME Why not just *have* an FOVMap as a member of the level???
-	
+	// FIXME Why not just *have* an FOVMap as a member of the level??
 	
 	private String ID;
 	public int levelNumber;	// -1 is prologue / othermodes maybe?
@@ -74,11 +72,11 @@ public class Level implements FOVMap, Serializable {
 	}
 	
 	public Position getExitFor(String levelID) {
-		return (Position)exits.get(levelID);
+		return exits.get(levelID);
 	}
 
 	public Position getAnExit() {
-		return (Position)exits.get(exits.keys().nextElement());
+		return exits.get(exits.keys().nextElement());	// zeroeth exit..?
 	}
 	
 	public void addItem(Position where, Item what) {
@@ -111,9 +109,11 @@ public class Level implements FOVMap, Serializable {
 		frosts.put(where.toString(), new Counter(frostness));
 	}
 
+
 	public void addBlood(Position where, int bloodness) {
-		if (Main.getConfigurationVal("blood").equals("false"))
+		if (Main.configuration.getProperty("blood").equals("false")) {
 			return;
+		}
 		if (getBloodAt(where) != null)
 			bloods.remove(where.toString());
 		if (!isValidCoordinate(where))
@@ -168,7 +168,7 @@ public class Level implements FOVMap, Serializable {
 	}
 	
 	public void removeActor(Actor what) {
-		Debug.doAssert(what != null, "Tried to remove a null actor to the world");
+		Debug.doAssert(what != null, "Tried to remove a null actor from the world");
 		dispatcher.removeActor(what);
 	}
 

@@ -1,10 +1,10 @@
 package crl.cuts.prelude;
 
 import sz.util.Position;
+import crl.Main;
 import crl.ai.monster.boss.DraculaAI;
 import crl.cuts.Unleasher;
 import crl.game.Game;
-import crl.game.STMusicManagerNew;
 import crl.level.Level;
 import crl.ui.Display;
 
@@ -16,7 +16,7 @@ public class Prelude4 extends Unleasher {
 			return;
 		}
 		Display.thus.showChat("PRELUDE_DRACULA2", game);
-		STMusicManagerNew.thus.playKey("CHRIS_DEAD");
+		Main.music.playKey("CHRIS_DEAD");
 		level.setMusicKeyMorning("CHRIS_DEAD");
 		((DraculaAI)level.getMonsterByID("PRELUDE_DRACULA").selector).inBattle = true;
 		enabled = false;

@@ -18,9 +18,9 @@ public class PropertyFilters {
 	public static Color getColor(String rgba) {
 		String[] components = rgba.split(",");
 		if (components.length == 4)
-			return new Color (inte(components[0]), inte(components[1]), inte(components[2]),inte(components[3]));
+			return new Color(inte(components[0]), inte(components[1]), inte(components[2]),inte(components[3]));
 		else
-			return new Color (inte(components[0]), inte(components[1]), inte(components[2]));
+			return new Color(inte(components[0]), inte(components[1]), inte(components[2]));
 	}
 	
 	public static int inte(String n){

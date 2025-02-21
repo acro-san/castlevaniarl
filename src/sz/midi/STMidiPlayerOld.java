@@ -2,8 +2,8 @@ package sz.midi;
 
 import javax.sound.midi.*;
 
+import crl.Main;
 import crl.game.Game;
-import crl.game.STMusicManagerNew;
 
 import java.io.*;
 
@@ -27,65 +27,65 @@ public class STMidiPlayerOld implements Runnable {
 		boolean leave = false;
 		Sequencer sequencer = null;
 		try {
-			sequencer = MidiSystem.getSequencer ();
-	        sequencer.open();
+			sequencer = MidiSystem.getSequencer();
+			sequencer.open();
 		} catch(MidiUnavailableException mue) {
-        	Game.addReport("Midi device unavailable");
-        	STMusicManagerNew.thus.setEnabled(false);
-        	return;
-        }
-        
-        out: while (true){
-        	if (currentInstruction == INS_DIE){
-        		break out;
-        	}
-        	if (currentInstruction == INS_STOP){
-        		currentMidiFile = "__noneYet";
-        	}
-        	if (currentMidiFile.equals("__noneYet")){
-        		try {
-        			this.wait();
-        		} catch (InterruptedException ie) {
-        			continue;
-        		}
-        	}
-        	File midiFile = new File(currentMidiFile);
-        	if(!midiFile.exists() || midiFile.isDirectory() || !midiFile.canRead()) {
-        		Game.addReport("Invalid Midi file: "+currentMidiFile);
-        		 try {
-        			this.wait();
-        		} catch (InterruptedException ie) {
-        			continue;
-        		}
-        	}
-        	leave = false;
-        	while (!leave){
-		        try {
-		            sequencer.setSequence(MidiSystem.getSequence(midiFile));
-		            sequencer.start();
-		            while(true) {
-		                if(sequencer.isRunning()) {
-		                    try {
-		                        Thread.sleep(1000); // Check every second
-		                    } catch(InterruptedException ignore) {
-		                    	leave = true;
-		                    	break;
-		                    }
-		                } else {
-		                    break;
-		                }
-		            }
-		            // Close the MidiDevice & free resources
-		            sequencer.stop();
-		        } catch(InvalidMidiDataException imde) {
-		        	Game.addReport("Invalid Midi data for "+currentMidiFile);
-		        } catch(IOException ioe) {
-		        	Game.addReport("I/O Error for "+currentMidiFile);
-		            ioe.printStackTrace();
-		        }
-        	}
-        }
-        sequencer.close();
+			Game.addReport("Midi device unavailable");
+			Main.music.enabled = false;
+			return;
+		}
+		
+		out: while (true) {
+			if (currentInstruction == INS_DIE) {
+				break out;
+			}
+			if (currentInstruction == INS_STOP) {
+				currentMidiFile = "__noneYet";
+			}
+			if (currentMidiFile.equals("__noneYet")) {
+				try {
+					this.wait();
+				} catch (InterruptedException ie) {
+					continue;
+				}
+			}
+			File midiFile = new File(currentMidiFile);
+			if(!midiFile.exists() || midiFile.isDirectory() || !midiFile.canRead()) {
+				Game.addReport("Invalid Midi file: "+currentMidiFile);
+				try {
+					this.wait();
+				} catch (InterruptedException ie) {
+					continue;
+				}
+			}
+			leave = false;
+			while (!leave) {
+				try {
+					sequencer.setSequence(MidiSystem.getSequence(midiFile));
+					sequencer.start();
+					while(true) {
+						if(sequencer.isRunning()) {
+							try {
+								Thread.sleep(1000); // Check every second
+							} catch(InterruptedException ignore) {
+								leave = true;
+								break;
+							}
+						} else {
+							break;
+						}
+					}
+					// Close the MidiDevice & free resources
+					sequencer.stop();
+				} catch(InvalidMidiDataException imde) {
+					Game.addReport("Invalid Midi data for "+currentMidiFile);
+				} catch(IOException ioe) {
+					Game.addReport("I/O Error for "+currentMidiFile);
+					ioe.printStackTrace();
+				}
+			}
+		}
+		sequencer.close();
 	}
 
 }

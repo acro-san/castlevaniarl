@@ -2091,18 +2091,19 @@ public class GFXUserInterface extends UserInterface {
 				Display.thus.showMap(level.getMapLocationKey(), level.getDescription());
 				break;
 			case CommandListener.SWITCHMUSIC:
-				boolean enabled = STMusicManagerNew.thus.isEnabled();
-				if (enabled){
+				// This code is duplicated across 'gui' and 'char' systems.
+				if (Main.music.enabled) {
 					showMessage("Turn off music");
-					STMusicManagerNew.thus.stopMusic();
-					STMusicManagerNew.thus.setEnabled(false);
+					Main.music.stopMusic();
+					Main.music.enabled = false;
 				} else {
 					showMessage("Turn on music");
-					STMusicManagerNew.thus.setEnabled(true);
-					if (!level.isDay() && level.hasNoonMusic())
-						STMusicManagerNew.thus.playKey(level.getMusicKeyNoon());
-					else
-						STMusicManagerNew.thus.playKey(level.getMusicKeyMorning());
+					Main.music.enabled = true;
+					if (!level.isDay() && level.hasNoonMusic()) {
+						Main.music.playKey(level.getMusicKeyNoon());
+					} else {
+						Main.music.playKey(level.getMusicKeyMorning());
+					}
 				}
 				break;
 			case CommandListener.EXAMINELEVELMAP:

@@ -53,10 +53,8 @@ public class DebugBestiary extends JFrame {
 					armour. Is that right? seems iffy.
 	
 	
-	idea: Feature 'red outline glow' aura!
-	// just: swap the alphacomp mode to colour only, draw the sprite 4x in red,
-	// then draw the normal mode sprite over the top!!
-	
+	TODO: Display each monster's ASCII Character that it appears as in console
+	mode. Where's that defined/stored??
 	
 	*/
 	
