@@ -17,7 +17,7 @@ import crl.actor.*;
 public class Monster extends Actor implements Cloneable {
 
 	protected String defID;	// monsterType? enum? also used in 'NPC' subclass.
-	private transient MonsterDefinition definition;
+	private transient MonsterDef definition;
 	
 	public int hp;
 	
@@ -29,7 +29,7 @@ public class Monster extends Actor implements Cloneable {
 	public Monster enemy;
 	
 
-	public Monster(MonsterDefinition md) {
+	public Monster(MonsterDef md) {
 		definition = md;
 		defID = md.ID;
 		if (md.defaultSelector == null) {
@@ -261,7 +261,7 @@ public class Monster extends Actor implements Cloneable {
 	}
 
 
-	private MonsterDefinition getDefinition() {
+	private MonsterDef getDefinition() {
 		// last minute decision making!? shouldn't this already be set on init?
 		if (definition == null) {
 			if (this instanceof NPC)

@@ -10,24 +10,23 @@ import sz.util.*;
 
 public class MonsterData {
 
-	private static Hashtable<String, MonsterDefinition> definitions = new Hashtable<>(40);
-	private static Vector<MonsterDefinition> vDefinitions = new Vector<>(50);
+	public static HashMap<String, MonsterDef> MONSTER_DEFS = new HashMap<>(40);
+	public static Vector<MonsterDef> DEFS_ORDERED = new Vector<>(50);
 	private static int lastSpawnLocation;
 
 	public static Monster buildMonster(String id) {
-		return new Monster(definitions.get(id));
+		return new Monster(MONSTER_DEFS.get(id));
 	}
 
-	public static MonsterDefinition getDefinition(String id) {
-		return definitions.get(id);
+	public static MonsterDef getDefinition(String id) {
+		return MONSTER_DEFS.get(id);
 	}
 	
-	public static void init(MonsterDefinition[] defs) {
-		for (int i = 0; i < defs.length; i++) {
-			defs[i].appearance = Main.appearances.get(defs[i].ID);	// ???
-			definitions.put(defs[i].ID, defs[i]);
-			vDefinitions.add(defs[i]);
-			
+	public static void init(MonsterDef[] defs) {
+		for (MonsterDef md: defs) {
+			md.appearance = Main.appearances.get(md.ID);	// ???
+			MONSTER_DEFS.put(md.ID, md);
+			DEFS_ORDERED.add(md);
 		}
 	}
 	
@@ -44,16 +43,24 @@ public class MonsterData {
 			int rand = Util.rand(0, spawnIDs.length-1);
 			if (Util.chance(spawnIDs[rand].getFrequency())) {
 				lastSpawnLocation = spawnIDs[rand].getSpawnLocation();
-				return new Monster(definitions.get(spawnIDs[rand].getMonsterID()));
+				return new Monster(MONSTER_DEFS.get(spawnIDs[rand].getMonsterID()));
 			}
 		}
 	}
 
 	public static void printAppearances() {
-		Enumeration<String> x = definitions.keys();
-		while (x.hasMoreElements()) {
-			MonsterDefinition d = definitions.get(x.nextElement());
+		for (MonsterDef d: DEFS_ORDERED) {
 			Debug.say("Monstero "+ d.description+" app "+d.appearance);
 		}
+		/*
+		Set<String> mkeys = MONSTER_DEFS.keySet();
+		// sorted? or no? That's what the linear array/list should be for...?
+		for (String k: mkeys) {
+		//Enumeration<String> x = MONSTER_DEFS.keys();
+		//while (x.hasMoreElements()) {
+			MonsterDefinition d = MONSTER_DEFS.get(k);	//x.nextElement()
+			Debug.say("Monstero "+ d.description+" app "+d.appearance);
+		}
+		*/
 	}
 }

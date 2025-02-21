@@ -31,10 +31,10 @@ public class MonsterLoader {
 	static final String
 		DKEY = "65csvlk3489585f9rjh";
 	
-	public static MonsterDefinition[] getBaseMonsters(String monsterFile) throws CRLException {
+	public static MonsterDef[] getBaseMonsters(String monsterFile) throws CRLException {
 		BufferedReader br = null;
 		try {
-			Vector<MonsterDefinition> vecMonsters = new Vector<>(10);
+			Vector<MonsterDef> vecMonsters = new Vector<>(10);
 			DESEncrypter encrypter = new DESEncrypter(DKEY);
 			br = new BufferedReader(
 				new InputStreamReader(
@@ -43,7 +43,7 @@ public class MonsterLoader {
 			line = br.readLine();
 			while (line != null) {
 				String[] data = line.split(";");
-				MonsterDefinition def = new MonsterDefinition(data[0]);
+				MonsterDef def = new MonsterDef(data[0]);
 				def.appearance = Main.appearances.get(data[1]);
 				def.description = data[2];
 				def.longDescription = data[3];
@@ -66,7 +66,7 @@ public class MonsterLoader {
 				vecMonsters.add(def);
 				line = br.readLine();
 			}
-			return (MonsterDefinition[])vecMonsters.toArray(new MonsterDefinition[vecMonsters.size()]);
+			return (MonsterDef[])vecMonsters.toArray(new MonsterDef[vecMonsters.size()]);
 		} catch (IOException ioe){
 			throw new CRLException("Error while loading data from monster file");
 		} finally {
@@ -79,12 +79,12 @@ public class MonsterLoader {
 	}
 	
 	
-	public static MonsterDefinition[] getMonsterDefinitions(
+	public static MonsterDef[] getMonsterDefinitions(
 			String monsterDefFile, String monsterAI_XMLFile) throws CRLException {
 		try {
 			// from ecsv:
-			MonsterDefinition[] monsters = getBaseMonsters(monsterDefFile);
-			HashMap<String, MonsterDefinition> monsterTable = new HashMap<>();
+			MonsterDef[] monsters = getBaseMonsters(monsterDefFile);
+			HashMap<String, MonsterDef> monsterTable = new HashMap<>();
 			for (int i = 0; i < monsters.length; i++) {
 				monsterTable.put(monsters[i].ID, monsters[i]);
 			}
@@ -120,7 +120,7 @@ public class MonsterLoader {
 	}
 
 
-	private static void readMonsterAIFromXML(XMLTag xmlRoot, HashMap<String, MonsterDefinition> monsterDefs) {
+	private static void readMonsterAIFromXML(XMLTag xmlRoot, HashMap<String, MonsterDef> monsterDefs) {
 		// returns a list of monster defs in program's format. probably. xml.
 		// flesh out/augment a MonsterDefinition object with its AI patterns.
 		XMLTag monsters = xmlRoot.children[0];
@@ -133,7 +133,7 @@ public class MonsterLoader {
 			}
 			
 			String mid = monTag.getStrAttr("id");
-			MonsterDefinition md = (MonsterDefinition)monsterDefs.get(mid);
+			MonsterDef md = (MonsterDef)monsterDefs.get(mid);
 			
 			XMLTag selectorTag = monTag.children[0];
 			assert("selector".equals(selectorTag.name));

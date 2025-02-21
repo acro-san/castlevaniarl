@@ -3,7 +3,7 @@ package crl.monster;
 import crl.ui.*;
 import crl.ai.*;
 
-public class MonsterDefinition {
+public class MonsterDef {
 	
 	public String
 		ID,
@@ -41,7 +41,7 @@ public class MonsterDefinition {
 		isEthereal,	// Walks through solid
 		isUndead;
 
-	public MonsterDefinition(String pID) {
+	public MonsterDef(String pID) {
 		ID = pID;
 	}
 

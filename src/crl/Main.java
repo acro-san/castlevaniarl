@@ -14,6 +14,7 @@ import java.util.Properties;
 
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
+import javax.swing.SwingUtilities;
 
 import sz.csi.CharKey;
 import sz.csi.ConsoleSystemInterface;
@@ -42,6 +43,7 @@ import crl.data.Cells;
 import crl.data.Features;
 import crl.data.Items;
 import crl.data.MonsterLoader;
+import crl.debug.DebugBestiary;
 import crl.feature.CountDown;
 import crl.feature.FeatureFactory;
 import crl.feature.SmartFeature;
@@ -85,10 +87,14 @@ import crl.ui.graphicsUI.effects.GFXEffect;
 import crl.ui.graphicsUI.effects.GFXEffectFactory;
 
 public class Main {
+	
 	private final static int
 		JCURSES_CONSOLE = 0,
 		SWING_GFX = 1,
 		SWING_CONSOLE = 2;
+	
+	public static final boolean
+		DEBUG_MODE = true;
 	
 	private static int uiMode;	// default is SWING_GFX...
 	public static UserInterface ui;
@@ -96,6 +102,17 @@ public class Main {
 	
 	private static final boolean
 		CHECK_WEB_FOR_NEW_VERSION = false;
+	
+	// state/modes...
+	// 'PlayScene': render tilemap+mobs etc, playing game/taking action. But:
+	// there's 'PlayRun' - an actual roguelike run. 'PlayPrelude' - the intro.
+	// PlayTutorial -- the Soleil/Chris control tutorial scene. 'PlayArena' -
+	// the Sonja battle against waves of enemies in the courtyard. Also:
+	// could make that mode more frantic / VS like, perhaps? Just a thought.
+	// Then there's nonplay 'modes'. also subscreens within play mode / menus.
+	// Options screen - turn down the damn music volume to match every other 
+	// program on my system! Jesus, it's loud.
+	
 	
 	// Appearances by ID: could EASILY be a fixed len, indexed array, using short IDs.
 	public static HashMap<String, Appearance>
@@ -109,16 +126,16 @@ public class Main {
 		actions = new HashMap<>();
 	
 	public static EffectFactory efx;	//instead of EffectFactory.getSingleton()!
-	
-	public static ItemDataTable itemData;// = new ItemFactory();
+	public static ItemDataTable itemData;
 	
 	private static Game currentGame;
 	private static boolean createNew = true;
 	
 	private static Properties configuration;
-	private static Properties UIconfiguration;
+	private static Properties UIconfiguration;	// why's that separate??? WHY!?
 	private static String uiFile;
-	
+	// ...
+	// what *ARE* all the conf properties/fields? how're they set?
 	
 	
 	public static String getConfigurationVal(String key) {
@@ -609,11 +626,13 @@ public class Main {
 		}
 	}
 	
+	
 	private static void initializeCAppearances() {
 		for (Appearance a: CharAppearances.defs) {
 			appearances.put(a.getID(), a);
 		}
 	}
+	
 	
 	private static void initializeActions() {
 		// NB: these are all monster/boss actions.
@@ -642,6 +661,8 @@ public class Main {
 		return a;
 	}
 	
+	
+	// MAP TILE DEFINITIONS (terrain types...)
 	private static void initializeCells() {
 		MapCellFactory.getMapCellFactory().init(Cells.getCellDefinitions(appearances));
 	}
@@ -768,6 +789,14 @@ public class Main {
 		
 		init();
 		System.out.println("Launching game");
+		
+		if (DEBUG_MODE) {
+			SwingUtilities.invokeLater(() -> {
+				DebugBestiary db = new DebugBestiary();
+				db.setVisible(true);
+			});
+		}
+		
 		try {
 			title();
 		} catch (Exception e) {

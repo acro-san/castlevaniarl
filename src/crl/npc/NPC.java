@@ -20,8 +20,8 @@ public class NPC extends Monster {
 
 //	private final static MonsterDefinition NPC_MONSTER_DEFINITION = new MonsterDefinition("NPC", "NPC", "VOID", "NULL_SELECTOR", 0, 2, 0, 5, 0, false, false, true, false, 0, 0, 0, 0);
 	
-	public final static MonsterDefinition
-		NPC_MONSTER_DEFINITION = new MonsterDefinition("NPC");
+	public final static MonsterDef
+		NPC_MONSTER_DEFINITION = new MonsterDef("NPC");
 	static {
 		NPC_MONSTER_DEFINITION.description = "Innocent Being";
 		NPC_MONSTER_DEFINITION.appearance = Main.appearances.get("VOID");

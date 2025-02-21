@@ -575,7 +575,7 @@ public class GFXUserInterface extends UserInterface {
 								(PC_POS.x-xrange+x) * 32,
 								(PC_POS.y-yrange+y) * 32 - 17 - app.getSuperHeight(),
 								cellImage);
-						} catch (NullPointerException npe){
+						} catch (NullPointerException npe) {
 							Color c = si.getGraphics2D().getColor();
 							si.getGraphics2D().setColor(Color.RED);
 							si.getGraphics2D().fillRect((PC_POS.x-xrange+x)*STANDARD_WIDTH,(PC_POS.y-yrange+y)*STANDARD_WIDTH-17-app.getSuperHeight(), STANDARD_WIDTH,49);
@@ -669,11 +669,11 @@ public class GFXUserInterface extends UserInterface {
 
 					Vector<Item> items = level.getItemsAt(runner);
 					Item item = null;
-					if (items != null){
+					if (items != null) {
 						item = items.elementAt(0);
 					}
-					if (item != null){
-						if (item.isVisible()){
+					if (item != null) {
+						if (item.isVisible()) {
 							GFXAppearance itemApp = (GFXAppearance)item.getAppearance();
 							drawImageVP((PC_POS.x-xrange+x) * 32 - itemApp.getSuperWidth(),
 								(PC_POS.y-yrange+y) * 32 - 4 * cellHeight - itemApp.getSuperHeight(),
@@ -692,7 +692,7 @@ public class GFXUserInterface extends UserInterface {
 						} else {
 							GFXAppearance playerAppearance = (GFXAppearance)player.getAppearance();
 							BufferedImage playerImage = (BufferedImage)playerAppearance.getImage();
-							if (flipFacing){
+							if (flipFacing) {
 								playerImage = ImageUtils.vFlip(playerImage);
 								//flipFacing = false;
 							}
@@ -717,7 +717,7 @@ public class GFXUserInterface extends UserInterface {
 					}
 					// Draw Masks
 					Color mask = null;
-
+					
 					// Water
 					if (vcells[x][y].isWater()) {
 						if (level.canFloatUpward(runner)) {
