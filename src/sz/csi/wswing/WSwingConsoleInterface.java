@@ -4,11 +4,12 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 
+import crl.ui.Colors;
 import sz.csi.CharKey;
 import sz.csi.ConsoleSystemInterface;
 import sz.util.Position;
 import sz.util.FileUtil;
-
+import static crl.ui.Colors.*;
 
 public class WSwingConsoleInterface implements ConsoleSystemInterface, ComponentListener {
 	/** Provides Console IO.
@@ -21,11 +22,11 @@ public class WSwingConsoleInterface implements ConsoleSystemInterface, Component
 	private SwingConsolePanel targetPanel; //To output characters
 	private StrokeInformer aStrokeInformer; // Object to which strokes are informed
 
-    // Attributes
+	// Attributes
 	private int xpos, ypos; /** Current printing cursor position */
 	private boolean autorefresh;
 
-    // Static Attributes
+	// Static Attributes
 	//public static Font consoleFont = new Font ("Comic Sans MS", Font.BOLD, 16);
 	//public static Font consoleFont = new Font ("Terminal", Font.PLAIN, 16);
 	//public static Font consoleFont = new Font ("Fixedsys Excelsior 2.00", Font.PLAIN, 16);
@@ -33,7 +34,7 @@ public class WSwingConsoleInterface implements ConsoleSystemInterface, Component
 	public static int xdim = 80;
 	public static int ydim = 25;
 
-    private int[][] colors;
+	private int[][] colors;
 	private char[][] chars;
 
 	private int[][] colorsBuffer;
@@ -87,10 +88,7 @@ public class WSwingConsoleInterface implements ConsoleSystemInterface, Component
 		ypos = y;
     }
 
-/*	public void refresh(Thread t) {
-		refresh();
-		t.interrupt();
-	}*/
+
 	//int rcount;
     public void refresh() {
     	//System.out.println("Count "+ (rcount++) );
@@ -119,35 +117,36 @@ public class WSwingConsoleInterface implements ConsoleSystemInterface, Component
         }
 	}
 
-	public void print (int x, int y, char what, int color){
-		locate (x,y);
-        if (chars[x][y] == what && colors[x][y] == color)
-            return;
-        Color front = getColorFromCode(color);
-		targetPanel.plot(what, xpos, ypos, front);
-        colors[x][y] = color;
-        chars[x][y] = what;
-        
-		
+
+    public void print (int x, int y, char what, int color) {
+    	locate (x,y);
+    	if (chars[x][y] == what && colors[x][y] == color) {
+    		return;
+    	}
+    	Color front = getColorFromCode(color);
+    	targetPanel.plot(what, xpos, ypos, front);
+    	colors[x][y] = color;
+    	chars[x][y] = what;
+    }
+
+
+	public void print(int x, int y, String what) {
+		print(x,y,what, Colors.WHITE);
 	}
 
-	public void print (int x, int y, String what){
-		print(x,y,what,ConsoleSystemInterface.WHITE);
-	}
-
-	public void locateCaret(int x, int y){
+	public void locateCaret(int x, int y) {
 		caretPosition.x = x;
 		caretPosition.y = y;
 	}
 
-	public String input(){
+	public String input() {
 		return input(9999);
 	}
 
-	public String input(int l){
+	public String input(int l) {
 		String ret = "";
 		CharKey read = new CharKey(CharKey.NONE);
-		while (true){
+		while (true) {
 			while (read.code == CharKey.NONE)
 				read = inkey();
 			if (read.isMetaKey()){
@@ -181,109 +180,39 @@ public class WSwingConsoleInterface implements ConsoleSystemInterface, Component
 			}
 			refresh();
 			read.code = CharKey.NONE;
-
 		}
-		//return ret;
 	}
 
-	public synchronized void refresh(Thread toNotify){
-		refresh();
 
+	public synchronized void refresh(Thread toNotify) {
+		refresh();
 		toNotify.interrupt();
 	}
 
-    public synchronized CharKey inkey(){
-	    aStrokeInformer.informKey(Thread.currentThread());
-	    try {
+
+	public synchronized CharKey inkey(){
+		aStrokeInformer.informKey(Thread.currentThread());
+		try {
 			this.wait();
 		} catch (InterruptedException ie) {}
 		CharKey ret = new CharKey(aStrokeInformer.getInkeyBuffer());
 		return ret;
 	}
 
-	private final static Color
-		DARKRED_COLOR = new Color(128,0,0),
-		DARKBLUE_COLOR = new Color(0,0, 200),
-		DARKGREEN_COLOR = new Color(0,128,0),
-		DARKMAGENTA_COLOR = new Color(128,0,128),
-		TEAL_COLOR = new Color(0,128,128),
-		BROWN_COLOR = new Color(128,128,0);
-
-
-	public int getColor(String colorName){
-		if (colorName == null) return -1;
-		if (colorName.equals("BLACK")) return BLACK;
-		if (colorName.equals("DARK_BLUE")) return DARK_BLUE;
-		if (colorName.equals("GREEN")) return GREEN;
-		if (colorName.equals("TEAL")) return TEAL;
-		if (colorName.equals("DARK_RED")) return DARK_RED;
-		if (colorName.equals("PURPLE")) return PURPLE;
-		if (colorName.equals("BROWN")) return BROWN;
-		if (colorName.equals("LIGHT_GRAY")) return LIGHT_GRAY;
-		if (colorName.equals("GRAY")) return GRAY;
-		if (colorName.equals("BLUE")) return BLUE;
-		if (colorName.equals("LEMON")) return LEMON;
-		if (colorName.equals("CYAN")) return CYAN;
-		if (colorName.equals("RED")) return RED ;
-		if (colorName.equals("MAGENTA")) return MAGENTA; 
-		if (colorName.equals("YELLOW")) return YELLOW;
-		if (colorName.equals("WHITE")) return WHITE;
-		return -1;
-	}
 	
-	private Color getColorFromCode(int code){
-		switch (code){
-			case BLACK:
-				return Color.BLACK;
-			case DARK_BLUE:
-				return DARKBLUE_COLOR;
-			case GREEN:
-				return DARKGREEN_COLOR;
-			case TEAL:
-				return TEAL_COLOR;
-			case DARK_RED:
-				return DARKRED_COLOR;
-			case PURPLE:
-				return DARKMAGENTA_COLOR;
-			case BROWN:
-				return BROWN_COLOR;
-			case LIGHT_GRAY:
-				return Color.LIGHT_GRAY;
-			case GRAY:
-				return Color.GRAY;
-			case BLUE:
-				return Color.BLUE;
-			case LEMON:
-				return Color.GREEN;
-			case CYAN:
-				return Color.CYAN;
-			case RED:
-				return Color.RED;
-			case MAGENTA:
-				return Color.MAGENTA;
-			case YELLOW:
-				return Color.YELLOW;
-			case WHITE:
-				return Color.WHITE;
-			default:
-				return null;
-		}
-	}
-
-
-	public void setAutoRefresh(boolean value){
+	public void setAutoRefresh(boolean value) {
 		targetPanel.setAutoUpdate(value);
 	}
 
-	public char peekChar(int x, int y){
+	public char peekChar(int x, int y) {
 		return targetPanel.peekChar(x,y);
 	}
 
-	public int peekColor(int x, int y){
+	public int peekColor(int x, int y) {
 		return colors[x][y];
 	}
 
-	private String loadFont(){
+	private String loadFont() {
 		BufferedReader br = null;
 		try {
 			br = FileUtil.getReader("font.sz");
@@ -303,22 +232,23 @@ public class WSwingConsoleInterface implements ConsoleSystemInterface, Component
 
 		String x [] = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
 		boolean lucida = false, courier=false;
-    	for (int i = 0; i < x.length; i++)
-    		if (x[i].equals("Lucida Console"))
-    			lucida = true;
-    		else
-			if (x[i].equals("Courier New"))
-				courier = true;
-    	if (courier)
+		for (int i = 0; i < x.length; i++)
+			if (x[i].equals("Lucida Console"))
+				lucida = true;
+			else
+				if (x[i].equals("Courier New"))
+					courier = true;
+		if (courier)
 			return "Courier New";
-    	else
-    	if (lucida)
-			return "Lucida Console";
+		else
+			if (lucida)
+				return "Lucida Console";
 		return "Monospaced";
-    	
+		
 	}
 
-	private int defineFontSize(int scrHeight, int scrWidth){
+
+	private int defineFontSize(int scrHeight, int scrWidth) {
 		int byHeight = (int)(scrHeight / ydim);
 		int byWidth = (int)(scrWidth/ (xdim*0.8));
 
@@ -329,7 +259,7 @@ public class WSwingConsoleInterface implements ConsoleSystemInterface, Component
 	}
 
 
-	public boolean isInsideBounds(Position p){
+	public boolean isInsideBounds(Position p) {
 		return p.x>=0 && p.x <= xdim && p.y >=0 && p.y <=ydim;
 	}
 
@@ -337,7 +267,7 @@ public class WSwingConsoleInterface implements ConsoleSystemInterface, Component
 		return x>=0 && x <= xdim-1 && y >=0 && y <=ydim-1;
 	}
 
-	public void safeprint (int x, int y, char what, int color){
+	public void safeprint(int x, int y, char what, int color){
 		if (isInsideBounds(x,y))
 			print(x,y,what,color);
 	}

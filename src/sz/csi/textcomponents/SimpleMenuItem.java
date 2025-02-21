@@ -1,8 +1,8 @@
 package sz.csi.textcomponents;
 
-import sz.csi.ConsoleSystemInterface;
+import crl.ui.Colors;
 
-public class SimpleMenuItem implements MenuItem{
+public class SimpleMenuItem implements MenuItem {
 	private char number;
 	private String description;
 	private int value;
@@ -21,7 +21,7 @@ public class SimpleMenuItem implements MenuItem{
 	}
 
 	public int getMenuColor() {
-		return ConsoleSystemInterface.WHITE;
+		return Colors.WHITE;
 	}
 
 	public String getMenuDescription() {

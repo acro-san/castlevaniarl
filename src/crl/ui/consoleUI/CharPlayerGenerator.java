@@ -9,21 +9,25 @@ import crl.data.Text;
 import crl.game.PlayerGenerator;
 import crl.player.Player;
 import crl.ui.Display;
+import static crl.ui.Colors.WHITE;
+import static crl.ui.Colors.RED;
 
 public class CharPlayerGenerator extends PlayerGenerator {
+	
+	private ConsoleSystemInterface si;
+	
 	public CharPlayerGenerator(ConsoleSystemInterface si) {
 		this.si = si;
 	}
-	private ConsoleSystemInterface si;
 	
 	public Player generatePlayer() {
 		si.cls();
 		((CharDisplay)Display.thus).printBars();
-		si.print(2,3, "Hero name:", ConsoleSystemInterface.WHITE);
+		si.print(2,3, "Hero name:", WHITE);
 		si.refresh();
 		si.locateCaret(3 +"Hero name:".length(), 3);
 		String name = si.input(10);
-		si.print(2,4, "Sex: [m/f]", ConsoleSystemInterface.WHITE);
+		si.print(2,4, "Sex: [m/f]", WHITE);
 		si.refresh();
 		CharKey x = new CharKey(CharKey.NONE);
 		while ( x.code != CharKey.M &&
@@ -72,7 +76,7 @@ public class CharPlayerGenerator extends PlayerGenerator {
 			txtClassDescription.clear();
 			txtClassDescription.setText(TxtTpl.t(name,sex,Text.CLASS_DESCRIPTIONS[choice]));
 			txtClassDescription.draw();
-			si.print(2,6+choice,"*", ConsoleSystemInterface.RED);
+			si.print(2,6+choice,"*", RED);
 			si.print(35,7,apps[choice].getChar(), apps[choice].getColor());
 			for (int i = 0; i < 10; i++){
 				si.print(65,6+i,"              ");

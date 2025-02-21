@@ -1,6 +1,7 @@
 package crl.ui.consoleUI.effects;
 
 import sz.csi.ConsoleSystemInterface;
+import static crl.ui.Colors.WHITE;
 import sz.util.Position;
 import crl.ui.consoleUI.ConsoleUserInterface;
 
@@ -8,12 +9,12 @@ public class CharAnimatedMissileEffect extends CharDirectedEffect {
 	private String missile;
 	private int misColor;
 
-	public void drawEffect(ConsoleUserInterface ui, ConsoleSystemInterface si){
+	public void drawEffect(ConsoleUserInterface ui, ConsoleSystemInterface si) {
 		ui.getPlayer().see();
 		ui.refresh();
 		
 		Position oldPoint = effectLine.next();
-		int oldColor = ConsoleSystemInterface.WHITE;
+		int oldColor = WHITE;
 		char oldChar = ' ';
 		int too = 0;
 		// i'm a bit confused why it's looping over 'depth' and not all 

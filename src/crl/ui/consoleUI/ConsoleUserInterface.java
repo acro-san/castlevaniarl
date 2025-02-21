@@ -2,6 +2,7 @@ package crl.ui.consoleUI;
 
 import sz.csi.CharKey;
 import sz.csi.ConsoleSystemInterface;
+import static crl.ui.Colors.*;
 import sz.csi.textcomponents.BasicListItem;
 import sz.csi.textcomponents.ListBox;
 import sz.csi.textcomponents.MenuBox;
@@ -21,7 +22,6 @@ import crl.npc.*;
 import crl.monster.*;
 import crl.feature.*;
 import crl.game.GameFiles;
-import crl.game.STMusicManagerNew;
 import crl.actor.*;
 import crl.data.Text;
 import crl.ui.*;
@@ -68,14 +68,14 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 
 	public void doLook() {
 		Position offset = new Position (0,0);
-		messageBox.setForeColor(ConsoleSystemInterface.RED);
+		messageBox.setForeColor(RED);
 		si.saveBuffer();
 		Monster lookedMonster = null;
 		while (true){
 			Position browser = Position.add(player.pos, offset);
 			String looked = "";
 			si.restore();
-			if (FOVMask[PC_POS.x + offset.x][PC_POS.y + offset.y]){
+			if (FOVMask[PC_POS.x + offset.x][PC_POS.y + offset.y]) {
 				Cell choosen = level.getMapCell(browser);
 				Feature feat = level.getFeatureAt(browser);
 				Vector<Item> items = level.getItemsAt(browser);
@@ -106,17 +106,17 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 			}
 			messageBox.setText(looked);
 			messageBox.draw();
-			si.print(PC_POS.x + offset.x, PC_POS.y + offset.y, '_', ConsoleSystemInterface.RED);
+			si.print(PC_POS.x + offset.x, PC_POS.y + offset.y, '_', RED);
 			si.refresh();
 			CharKey x = new CharKey(CharKey.NONE);
 			while (x.code != CharKey.SPACE && x.code != CharKey.m && x.code != CharKey.ESC &&
 				   ! x.isArrow())
 				x = si.inkey();
-			if (x.code == CharKey.SPACE || x.code == CharKey.ESC){
+			if (x.code == CharKey.SPACE || x.code == CharKey.ESC) {
 				si.restore();
 				break;
 			}
-			if (x.code == CharKey.m){
+			if (x.code == CharKey.m) {
 				if (lookedMonster != null)
 					Display.thus.showMonsterScreen(lookedMonster, player);
 			} else {
@@ -155,7 +155,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		"Greetings %s... I am %s, the %s merchant. May I interest you in an item?",
 		player.getName(), who.getName(), who.getMerchandiseTypeDesc());
 		menuBox.setPrompt(merchantPrompt);
-		menuBox.setForeColor(ConsoleSystemInterface.RED);
+		menuBox.setForeColor(RED);
 		menuBox.setBorder(true);
 		while (true) {
 			menuBox.setTitle(who.getName()+" (Gold:"+player.getGold()+")");
@@ -202,8 +202,8 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		chatBox.setWidth(33);
 		chatBox.setPosition(28, 3);
 		chatBox.setBorder(true);
-		chatBox.setForeColor(ConsoleSystemInterface.WHITE);
-		chatBox.setBorderColor(ConsoleSystemInterface.WHITE);
+		chatBox.setForeColor(WHITE);
+		chatBox.setBorderColor(WHITE);
 		chatBox.setText(who.getTalkMessage());
 		chatBox.setTitle(who.getDescription());
 		chatBox.draw();
@@ -222,8 +222,8 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		chatBox.setWidth(33);
 		chatBox.setPosition(28, 3);
 		chatBox.setBorder(true);
-		chatBox.setForeColor(ConsoleSystemInterface.WHITE);
-		chatBox.setBorderColor(ConsoleSystemInterface.WHITE);
+		chatBox.setForeColor(WHITE);
+		chatBox.setBorderColor(WHITE);
 		chatBox.setText(who.getTalkMessage());
 		chatBox.draw();
 		si.refresh();
@@ -248,11 +248,11 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		//Debug.exitMethod();
 	}
 	
-	public boolean isOnFOVMask(int x, int y){
+	public boolean isOnFOVMask(int x, int y) {
 		return FOVMask[x][y];
 	}
 
-	private void drawLevel(){
+	private void drawLevel() {
 		Debug.enterMethod(this, "drawLevel");
 		//Cell[] [] cells = level.getCellsAround(player.pos.x,player.pos.y, player.pos.z, range);
 		Cell[] [] rcells = level.getMemoryCellsAround(player.pos.x,player.pos.y, player.pos.z, xrange,yrange);
@@ -260,25 +260,26 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		
 		Position runner = new Position(player.pos.x - xrange, player.pos.y-yrange, player.pos.z);
 		
-		for (int x = 0; x < rcells.length; x++){
-			for (int y=0; y<rcells[0].length; y++){
-				if (rcells[x][y] != null && !rcells[x][y].getAppearance().getID().equals("NOTHING")){
-					CharAppearance app = (CharAppearance)rcells[x][y].getAppearance(); 
+		for (int x = 0; x < rcells.length; x++) {
+			for (int y=0; y<rcells[0].length; y++) {
+				if (rcells[x][y] != null && !rcells[x][y].getAppearance().getID().equals("NOTHING")) {
+					CharAppearance app = (CharAppearance)rcells[x][y].getAppearance();
 					char cellChar = app.getChar();
-					if (level.getFrostAt(runner) != 0){
+					if (level.getFrostAt(runner) != 0) {
 						cellChar = '#';
 					}
 					//if (!level.isVisible(runner.x, runner.y))
-					if (vcells[x][y] == null)
-						si.print(PC_POS.x-xrange+x,PC_POS.y-yrange+y, cellChar, ConsoleSystemInterface.GRAY);
-				} else if (vcells[x][y] == null || vcells[x][y].getID().equals("AIR"))
-					si.print(PC_POS.x-xrange+x,PC_POS.y-yrange+y, CharAppearance.getVoidAppearance().getChar(), CharAppearance.BLACK);
+					if (vcells[x][y] == null) {
+						si.print(PC_POS.x-xrange+x,PC_POS.y-yrange+y, cellChar, GRAY);
+					}
+				} else if (vcells[x][y] == null || vcells[x][y].getID().equals("AIR")) {
+					si.print(PC_POS.x-xrange+x,PC_POS.y-yrange+y, CharAppearance.getVoidAppearance().getChar(), Colors.BLACK);
+				}
 				runner.y++;
 			}
 			runner.y = player.pos.y-yrange;
 			runner.x ++;
 		}
-		
 		
 		runner.x = player.pos.x - xrange;
 		runner.y = player.pos.y-yrange;
@@ -287,59 +288,59 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		featuresOnSight.removeAllElements();
 		itemsOnSight.removeAllElements();
 		
-		for (int x = 0; x < vcells.length; x++){
-			for (int y=0; y<vcells[0].length; y++){
+		for (int x = 0; x < vcells.length; x++) {
+			for (int y=0; y<vcells[0].length; y++) {
 				FOVMask[PC_POS.x-xrange+x][PC_POS.y-yrange+y] = false;
-				if (vcells[x][y] != null){
+				if (vcells[x][y] != null) {
 					FOVMask[PC_POS.x-xrange+x][PC_POS.y-yrange+y] = true;
 					String bloodLevel = level.getBloodAt(runner);
 					CharAppearance cellApp = (CharAppearance)vcells[x][y].getAppearance();
 					int cellColor = cellApp.getColor();
 					if (!level.isDay()){
-						cellColor = ConsoleSystemInterface.DARK_BLUE;
+						cellColor = DARK_BLUE;
 					}
 					if (bloodLevel != null){
 						switch (Integer.parseInt(bloodLevel)){
 							case 0:
 								if (!level.isDay()){
-									cellColor = ConsoleSystemInterface.DARK_RED;
+									cellColor = DARK_RED;
 								}else{
-									cellColor = ConsoleSystemInterface.RED;
+									cellColor = RED;
 								}
 								break;
 							case 1:
 								if (!level.isDay()){
-									cellColor = ConsoleSystemInterface.PURPLE;
+									cellColor = PURPLE;
 								}else{
-									cellColor = ConsoleSystemInterface.DARK_RED;
+									cellColor = DARK_RED;
 								}
 								break;
 							case 8:
-								cellColor = ConsoleSystemInterface.LEMON;
+								cellColor = LEMON;
 								break;
 						}
 					}
 					if (vcells[x][y].isWater()){
 						if (level.canFloatUpward(runner)){
-							cellColor = ConsoleSystemInterface.BLUE;
+							cellColor = BLUE;
 						} else {
-							cellColor = ConsoleSystemInterface.DARK_BLUE;
+							cellColor = DARK_BLUE;
 						}
 					}
 					
 					char cellChar = cellApp.getChar();
 					if (level.getFrostAt(runner) != 0){
 						cellChar = '#';
-						cellColor = ConsoleSystemInterface.CYAN;
+						cellColor = CYAN;
 					}
 					if (level.getDepthFromPlayer(player.pos.x - xrange + x, player.pos.y - yrange + y) != 0 ){
-						cellColor = ConsoleSystemInterface.TEAL;
+						cellColor = TEAL;
 					}
 
 					if (player.isInvisible() || x!=xrange || y != yrange)
 						si.print(PC_POS.x-xrange+x,PC_POS.y-yrange+y, cellChar, cellColor);
 					Feature feat = level.getFeatureAt(runner);
-					if (feat != null){
+					if (feat != null) {
 						if (feat.isVisible()) {
 							BasicListItem li = sightListItems.get(feat.getID());
 							if (li == null) {
@@ -374,7 +375,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 							CharAppearance itemApp = (CharAppearance)item.getAppearance();
 							si.print(PC_POS.x-xrange+x,PC_POS.y-yrange+y, itemApp.getChar(), itemApp.getColor());
 							BasicListItem li = (BasicListItem)sightListItems.get(item.getDefinition().getID());
-							if (li == null){
+							if (li == null) {
 								//Debug.say("Adding "+item.getDefinition().getID()+" to the hashtable");
 								sightListItems.put(item.getDefinition().getID(), new BasicListItem(((CharAppearance)item.getAppearance()).getChar(), ((CharAppearance)item.getAppearance()).getColor(), item.getDefinition().description));
 								li = (BasicListItem)sightListItems.get(item.getDefinition().getID());
@@ -412,7 +413,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 							si.print(PC_POS.x-xrange+x,PC_POS.y-yrange+y, '~', monsterApp.getColor());
 						else
 						if (monster.hasCounter(Consts.C_MONSTER_FREEZE))
-							si.print(PC_POS.x-xrange+x,PC_POS.y-yrange+y, monsterApp.getChar(), ConsoleSystemInterface.CYAN);
+							si.print(PC_POS.x-xrange+x,PC_POS.y-yrange+y, monsterApp.getChar(), CYAN);
 						else
 							si.print(PC_POS.x-xrange+x,PC_POS.y-yrange+y, monsterApp.getChar(), monsterApp.getColor());
 					}
@@ -464,7 +465,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		Debug.enterMethod(this, "addMessage", message);
 		if (eraseOnArrival) {
 			messageBox.clear();
-			messageBox.setForeColor(ConsoleSystemInterface.RED);
+			messageBox.setForeColor(RED);
 			eraseOnArrival = false;
 		}
 		if ((player != null &&
@@ -492,44 +493,44 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		int backColor;
 		switch (((player.getHP()-1) / 20) + 1) {
 		case 1:
-			foreColor = ConsoleSystemInterface.RED;
-			backColor = ConsoleSystemInterface.WHITE;
+			foreColor = RED;
+			backColor = WHITE;
 			break;
 		case 2:
-			foreColor = ConsoleSystemInterface.DARK_RED;
-			backColor = ConsoleSystemInterface.RED;
+			foreColor = DARK_RED;
+			backColor = RED;
 			break;
 		default:
-			foreColor = ConsoleSystemInterface.MAGENTA;
-			backColor = ConsoleSystemInterface.DARK_RED;
+			foreColor = MAGENTA;
+			backColor = DARK_RED;
 			break;
 		}
 		String timeTile = "";
-		int timeColor = ConsoleSystemInterface.YELLOW;
+		int timeColor = YELLOW;
 		switch (level.getDayTime()){
 		case Level.MORNING:
 			timeTile = "O__";
-			timeColor = ConsoleSystemInterface.BROWN;
+			timeColor = BROWN;
 			break;
 		case Level.NOON:
 			timeTile = "_O_";
-			timeColor = ConsoleSystemInterface.YELLOW;
+			timeColor = YELLOW;
 			break;
 		case Level.AFTERNOON:
 			timeTile = "__O";
-			timeColor = ConsoleSystemInterface.RED;
+			timeColor = RED;
 			break;
 		case Level.DUSK:
 			timeTile = "(__";
-			timeColor = ConsoleSystemInterface.BLUE;
+			timeColor = BLUE;
 			break;
 		case Level.NIGHT:
 			timeTile = "_O_";
-			timeColor = ConsoleSystemInterface.BLUE;
+			timeColor = BLUE;
 			break;
 		case Level.DAWN:
 			timeTile = "__)";
-			timeColor = ConsoleSystemInterface.BLUE;
+			timeColor = BLUE;
 			break;
 		}
 		
@@ -560,16 +561,16 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 			int backColorB = 0;
 			switch (((sixthiedBossHits-1) / 20) + 1) {
 			case 1:
-				foreColorB = ConsoleSystemInterface.YELLOW;
-				backColorB = ConsoleSystemInterface.WHITE;
+				foreColorB = YELLOW;
+				backColorB = WHITE;
 				break;
 			case 2:
-				foreColorB = ConsoleSystemInterface.BROWN;
-				backColorB = ConsoleSystemInterface.YELLOW;
+				foreColorB = BROWN;
+				backColorB = YELLOW;
 				break;
 			default:
-				foreColorB = ConsoleSystemInterface.PURPLE;
-				backColorB = ConsoleSystemInterface.BROWN;
+				foreColorB = PURPLE;
+				backColorB = BROWN;
 				break;
 			}
 			
@@ -583,7 +584,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 				}
 			}
 		} else {
-			si.print(9,2,"IIIIIIIIIIIIIIIIIIII", ConsoleSystemInterface.WHITE);
+			si.print(9,2,"IIIIIIIIIIIIIIIIIIII", WHITE);
 		}
 		
 		si.print(31,2,fill(player.getWeaponDescription()+" "+shot,40));
@@ -596,26 +597,26 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		
 		//si.print(43+"STAGE ".length(),0);
 
-		si.print(31,1,"v       ", ConsoleSystemInterface.RED);
+		si.print(31,1,"v       ", RED);
 		si.print(33,1,"- "+player.getHearts());
-		si.print(39,1,"k     ", ConsoleSystemInterface.YELLOW);
+		si.print(39,1,"k     ", YELLOW);
 		si.print(41,1,"- "+player.getKeys());
 		
-		si.print(47,1,"$            ", ConsoleSystemInterface.YELLOW);
+		si.print(47,1,"$            ", YELLOW);
 		si.print(49,1,"- "+player.getGold());
 		
 		si.print(60,1,"TIME - ");
 		si.print(67,1,timeTile,timeColor);
 		
-		si.print(71,1,"     ",ConsoleSystemInterface.WHITE);
+		si.print(71,1,"     ",WHITE);
 		if (player.getFlag(Consts.ENV_FOG))
-			si.print(71,1,"FOG",ConsoleSystemInterface.TEAL);
+			si.print(71,1,"FOG",TEAL);
 		if (player.getFlag(Consts.ENV_RAIN))
-			si.print (71,1,"RAIN",ConsoleSystemInterface.BLUE);
+			si.print (71,1,"RAIN",BLUE);
 		if (player.getFlag(Consts.ENV_SUNNY))
-			si.print (71,1,"SUNNY",ConsoleSystemInterface.YELLOW);
+			si.print (71,1,"SUNNY",YELLOW);
 		if (player.getFlag(Consts.ENV_THUNDERSTORM))
-			si.print (71,1,"STORM",ConsoleSystemInterface.WHITE);
+			si.print (71,1,"STORM",WHITE);
 		//si.print (71,2,"P  - 0");
 
 
@@ -659,14 +660,14 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		messageBox.setPosition(1,22);
 		messageBox.setWidth(78);
 		messageBox.setHeight(2);
-		messageBox.setForeColor(ConsoleSystemInterface.RED);
+		messageBox.setForeColor(RED);
 		
 		persistantMessageBox = new TextBox(psi);
 		persistantMessageBox.setBounds(40, 5, 38, 14);
 		persistantMessageBox.setBorder(true);
-		persistantMessageBox.setBorderColor(ConsoleSystemInterface.RED);
+		persistantMessageBox.setBorderColor(RED);
 		
-		persistantMessageBox.setForeColor(ConsoleSystemInterface.WHITE);
+		persistantMessageBox.setForeColor(WHITE);
 		persistantMessageBox.setTitle("Tutorial");
 
 		/*monstersList.setPosition(2, 4);
@@ -700,7 +701,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 
 	private Position pickPosition(String prompt, int fireKeyCode) throws ActionCancelException {
 		Debug.enterMethod(this, "pickPosition");
-		messageBox.setForeColor(ConsoleSystemInterface.BLUE);
+		messageBox.setForeColor(BLUE);
 		messageBox.setText(prompt);
 		messageBox.draw();
 		si.refresh();
@@ -766,9 +767,9 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 			}
 			messageBox.setText(prompt+" "+looked);
 			messageBox.draw();
-			//si.print(PC_POS.x + offset.x, PC_POS.y + offset.y, '_', ConsoleSystemInterface.BLUE);
-			drawLineTo(PC_POS.x + offset.x, PC_POS.y + offset.y, '*', ConsoleSystemInterface.DARK_BLUE);
-			si.print(PC_POS.x + offset.x, PC_POS.y + offset.y, 'X', ConsoleSystemInterface.BLUE);
+			//si.print(PC_POS.x + offset.x, PC_POS.y + offset.y, '_', BLUE);
+			drawLineTo(PC_POS.x + offset.x, PC_POS.y + offset.y, '*', DARK_BLUE);
+			si.print(PC_POS.x + offset.x, PC_POS.y + offset.y, 'X', BLUE);
 			si.refresh();
 			CharKey x = new CharKey(CharKey.NONE);
 			while (x.code != CharKey.SPACE && x.code != CharKey.ESC && x.code != fireKeyCode &&
@@ -832,7 +833,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		menuBox.setPromptSize(2);
 		menuBox.setMenuItems(equipped);
 		menuBox.setPrompt(prompt);
-		menuBox.setForeColor(ConsoleSystemInterface.RED);
+		menuBox.setForeColor(RED);
 		menuBox.setBorder(true);
 		si.saveBuffer();
 		menuBox.draw();
@@ -854,7 +855,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		menuBox.setPromptSize(2);
 		menuBox.setMenuItems(inventory);
 		menuBox.setPrompt(prompt);
-		menuBox.setForeColor(ConsoleSystemInterface.RED);
+		menuBox.setForeColor(RED);
 		menuBox.setBorder(true);
 		si.saveBuffer();
 		menuBox.draw();
@@ -880,7 +881,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
   		menuBox.setPromptSize(2);
   		menuBox.setMenuItems(items);
   		menuBox.setPrompt(prompt);
-  		menuBox.setForeColor(ConsoleSystemInterface.RED);
+  		menuBox.setForeColor(RED);
   		menuBox.setBorder(true);
   		si.saveBuffer();
   		menuBox.draw();
@@ -902,7 +903,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		menuBox.setPromptSize(2);
 		menuBox.setMenuItems(inventory);
 		menuBox.setPrompt(prompt);
-		menuBox.setForeColor(ConsoleSystemInterface.RED);
+		menuBox.setForeColor(RED);
 		menuBox.setBorder(true);
 		Vector<Item> ret = new Vector<>();
 		MenuBox selectedBox = new MenuBox(si);
@@ -910,7 +911,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		selectedBox.setPromptSize(2);
 		selectedBox.setPrompt("Selected Items");
 		selectedBox.setMenuItems(ret);
-		selectedBox.setForeColor(ConsoleSystemInterface.RED);
+		selectedBox.setForeColor(RED);
 		selectedBox.setBorder(true);
 		
 		si.saveBuffer();
@@ -946,7 +947,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		menuBox.setPromptSize(2);
 		menuBox.setMenuItems(inventory);
 		menuBox.setPrompt("Select the spirits to fusion");
-		menuBox.setForeColor(ConsoleSystemInterface.RED);
+		menuBox.setForeColor(RED);
 		menuBox.setBorder(true);
 
 		Vector<Item> ret = new Vector<>();
@@ -955,7 +956,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		selectedBox.setPromptSize(2);
 		selectedBox.setPrompt("Selected Spirits");
 		selectedBox.setMenuItems(ret);
-		selectedBox.setForeColor(ConsoleSystemInterface.RED);
+		selectedBox.setForeColor(RED);
 		selectedBox.setBorder(true);
 
 		si.saveBuffer();
@@ -975,7 +976,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 	}
 
 	public void processQuit(){
-		messageBox.setForeColor(ConsoleSystemInterface.RED);
+		messageBox.setForeColor(RED);
 		messageBox.setText(Util.pick(Text.QUIT_MESSAGES)+" (y/n)");
 		messageBox.draw();
 		si.refresh();
@@ -998,7 +999,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 			level.addMessage("You cannot save your game here!");
 			return;
 		}
-		messageBox.setForeColor(ConsoleSystemInterface.RED);
+		messageBox.setForeColor(RED);
 		messageBox.setText("Save your game? (y/n)");
 		messageBox.draw();
 		si.refresh();
@@ -1023,7 +1024,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 
 	@Override
 	public void showVersionDialog(String description, boolean stop) {
-		si.print(2,20, description, ConsoleSystemInterface.WHITE);
+		si.print(2,20, description, WHITE);
 		si.refresh();
 		if (stop) {
 			si.waitKey(CharKey.SPACE);
@@ -1032,7 +1033,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 	
 	@Override
 	public void showCriticalError(String description) {
-		si.print(2,20, description, ConsoleSystemInterface.WHITE);
+		si.print(2,20, description, WHITE);
 		si.refresh();
 		si.waitKey(CharKey.SPACE);
 	}
@@ -1054,7 +1055,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		
 		si.refresh();
 		messageBox.draw();
-	  	messageBox.setForeColor(ConsoleSystemInterface.DARK_RED);
+	  	messageBox.setForeColor(DARK_RED);
 	  	if (!player.getFlag("KEEPMESSAGES"))
 	  		eraseOnArrival = true;
 	  	
@@ -1127,14 +1128,14 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		itemDescription.setBounds(52,9,25,5);
 		si.saveBuffer();
 		si.cls();
-		si.print(xpos,ypos,  "------------------------------------------------------------------------", ConsoleSystemInterface.DARK_RED);
-		si.print(xpos,ypos+1,  "Inventory", ConsoleSystemInterface.RED);
-		si.print(xpos,ypos+2,  "------------------------------------------------------------------------", ConsoleSystemInterface.DARK_RED);
+		si.print(xpos,ypos,  "------------------------------------------------------------------------", DARK_RED);
+		si.print(xpos,ypos+1,  "Inventory", RED);
+		si.print(xpos,ypos+2,  "------------------------------------------------------------------------", DARK_RED);
 		si.print(xpos+2,ypos+3,  "1. Weapon:    "+player.getEquipedWeaponDescription());
 		si.print(xpos+2,ypos+4,  "2. Readied:   "+player.getSecondaryWeaponDescription());
 		si.print(xpos+2,ypos+5,  "3. Armor:     "+player.getArmorDescription());
 		si.print(xpos+2,ypos+6,  "4. Shield:    "+player.getAccDescription());
-		si.print(xpos,ypos+7,  "------------------------------------------------------------------------", ConsoleSystemInterface.DARK_RED);
+		si.print(xpos,ypos+7,  "------------------------------------------------------------------------", DARK_RED);
 		menuBox.draw();
 		si.print(xpos,24,  "[Space] to continue, Up and Down to browse");
 		si.refresh();
@@ -1198,7 +1199,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 			if (selected == null){
 				break;
 			}
-			si.print(52, 8, fill(selected.getDescription(), 25), ConsoleSystemInterface.RED);
+			si.print(52, 8, fill(selected.getDescription(), 25), RED);
 			itemDescription.clear();
 			itemDescription.setText(selected.getDefinition().menuDescription);
 
@@ -1275,7 +1276,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 	 * @param x the message to be shown
 	 */
 	public void showMessage(String x){
-		messageBox.setForeColor(ConsoleSystemInterface.RED);
+		messageBox.setForeColor(RED);
 		messageBox.addText(x);
 		messageBox.draw();
 		si.refresh();
@@ -1287,7 +1288,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 	}
 	
 	public void showSystemMessage(String x){
-		messageBox.setForeColor(ConsoleSystemInterface.RED);
+		messageBox.setForeColor(RED);
 		messageBox.setText(x);
 		messageBox.draw();
 		si.refresh();
@@ -1298,22 +1299,23 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 	public void showMessageHistory() {
 		si.saveBuffer();
 		si.cls();
-		si.print(1, 0, "Message Buffer", CharAppearance.DARK_RED);
-		for (int i = 0; i < 22; i++){
-			if (i >= messageHistory.size())
+		si.print(1, 0, "Message Buffer", Colors.DARK_RED);
+		for (int i = 0; i < 22; i++) {
+			if (i >= messageHistory.size()) {
 				break;
-			si.print(1,i+2, (String)messageHistory.elementAt(messageHistory.size()-1-i), CharAppearance.RED);
+			}
+			si.print(1,i+2, (String)messageHistory.elementAt(messageHistory.size()-1-i), Colors.RED);
 		}
-		
 		si.print(55, 24, "[ Space to Continue ]");
 		si.waitKey(CharKey.SPACE);
 		si.restore();
 	}
 
-	public void showPlayerStats (){
+
+	public void showPlayerStats () {
 		si.saveBuffer();
 		si.cls();
-		si.print(1,0, player.getName()+" the level "+ player.getPlayerLevel()+" "+player.getClassString() + " "+player.getStatusString(), ConsoleSystemInterface.RED);
+		si.print(1,0, player.getName()+" the level "+ player.getPlayerLevel()+" "+player.getClassString() + " "+player.getStatusString(), RED);
 		si.print(1,1, "Sex: "+ (player.sex == Player.MALE ? "M" : "F"));
 		si.print(1,2, "Hits: "+player.getHP()+ "/"+player.getHPMax()+" Hearts: " + player.getHearts() +"/"+player.getHeartsMax()+
 					  " Gold: "+player.getGold()+ " Keys: "+player.getKeys());
@@ -1327,7 +1329,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		
 		si.print(1,11,"Experience  "+player.getXp()+"/"+player.getNextXP());
 		
-		/*si.print(1,2, "Skills", ConsoleSystemInterface.RED);
+		/*si.print(1,2, "Skills", RED);
 		Vector skills = player.getAvailableSkills();
 		int cont = 0;
 		for (int i = 0; i < skills.size(); i++){
@@ -1336,11 +1338,11 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 			si.print((cont-1) * 25 + 1, 3 + i - ((cont-1) * 10), ((Skill)skills.elementAt(i)).getMenuDescription());
 		}*/
 		
-		si.print(1,13, "Weapon Proficiencies", ConsoleSystemInterface.RED);
-		si.print(1,14, "Hand to hand             Whips                    Projectiles", ConsoleSystemInterface.RED);
-		si.print(1,15, "Daggers                  Maces                    Bows/Xbows", ConsoleSystemInterface.RED);
-		si.print(1,16, "Swords                   Pole                     Machinery", ConsoleSystemInterface.RED);
-		si.print(1,17, "Spears                   Rings                    Shields", ConsoleSystemInterface.RED);
+		si.print(1,13, "Weapon Proficiencies", RED);
+		si.print(1,14, "Hand to hand             Whips                    Projectiles", RED);
+		si.print(1,15, "Daggers                  Maces                    Bows/Xbows", RED);
+		si.print(1,16, "Swords                   Pole                     Machinery", RED);
+		si.print(1,17, "Spears                   Rings                    Shields", RED);
 
 		String[] wskills = ItemDefinition.CATS;
 		int cont = 0;
@@ -1353,13 +1355,13 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 					Text.VERBOSE_SKILLS[player.weaponSkill(wskills[i])]);
 		}
 
-		si.print(1,19, "Attack Damage  ", ConsoleSystemInterface.RED);
-		si.print(1,20, "Actual Defense ", ConsoleSystemInterface.RED);
-		si.print(1,21, "Shield Rates   ", ConsoleSystemInterface.RED);
+		si.print(1,19, "Attack Damage  ", RED);
+		si.print(1,20, "Actual Defense ", RED);
+		si.print(1,21, "Shield Rates   ", RED);
 		
-		si.print(16,19, ""+player.getWeaponAttack(), ConsoleSystemInterface.WHITE);
-		si.print(16,20, player.getArmorDefense()+(player.getDefenseBonus()!=0?"+"+player.getDefenseBonus():""), ConsoleSystemInterface.WHITE);
-		si.print(16,21, "Block "+player.getShieldBlockChance()+"% Coverage "+player.getShieldCoverageChance()+"%", ConsoleSystemInterface.WHITE);
+		si.print(16,19, ""+player.getWeaponAttack(), WHITE);
+		si.print(16,20, player.getArmorDefense()+(player.getDefenseBonus()!=0?"+"+player.getDefenseBonus():""), WHITE);
+		si.print(16,21, "Block "+player.getShieldBlockChance()+"% Coverage "+player.getShieldCoverageChance()+"%", WHITE);
 		
 		si.print(1,23, "[ Press Space to continue ]");
 		si.refresh();
@@ -1375,7 +1377,7 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 		menuBox.setHeight(14);
 		menuBox.setWidth(33);
 		menuBox.setBorder(true);
-		menuBox.setForeColor(ConsoleSystemInterface.RED);
+		menuBox.setForeColor(RED);
 		menuBox.setPosition(24,4);
 		menuBox.setMenuItems(skills);
 		menuBox.setTitle("Skills");
@@ -1646,40 +1648,40 @@ public class ConsoleUserInterface extends UserInterface implements CommandListen
 				runner.x = 0;
 				for (int x = 0; x < level.getWidth(); x++, runner.x++){
 					if (!level.remembers(x,y))
-						cellColor = ConsoleSystemInterface.BLACK;
+						cellColor = BLACK;
 					else {
 						Cell current = level.getMapCell(x, y, player.pos.z);
 						Feature currentF = level.getFeatureAt(x,y,player.pos.z);
 						if (level.isVisible(x,y)){
 							if (current == null)
-								cellColor = ConsoleSystemInterface.BLACK;
+								cellColor = BLACK;
 							else if (level.getExitOn(runner) != null)
-								cellColor = ConsoleSystemInterface.RED;
+								cellColor = RED;
 							else
 							if (current.isSolid() || (currentF != null && currentF.isSolid()))
-								cellColor = ConsoleSystemInterface.BROWN;
+								cellColor = BROWN;
 							else 
-								cellColor = ConsoleSystemInterface.LIGHT_GRAY;
+								cellColor = LIGHT_GRAY;
 							
 						} else {
 							if (current == null)
-								cellColor = ConsoleSystemInterface.BLACK;
+								cellColor = BLACK;
 							else if (level.getExitOn(runner) != null)
-								cellColor = ConsoleSystemInterface.RED;
+								cellColor = RED;
 							else if (current.isSolid()|| (currentF != null && currentF.isSolid()))
-								cellColor = ConsoleSystemInterface.BROWN;
+								cellColor = BROWN;
 							else  
-								cellColor = ConsoleSystemInterface.GRAY;
+								cellColor = GRAY;
 						}
 						if (player.pos.x == x && player.pos.y == y)
-							cellColor = ConsoleSystemInterface.RED;
+							cellColor = RED;
 					}
 					si.safeprint(remnantx+x, ii, '.', cellColor);
 					
 				}
 				
 			}
-			si.print(5, 24, "Page "+i, ConsoleSystemInterface.RED);
+			si.print(5, 24, "Page "+i, RED);
 			si.refresh();
 			si.waitKey(CharKey.SPACE);
 		}

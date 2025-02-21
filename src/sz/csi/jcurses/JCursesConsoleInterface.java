@@ -1,5 +1,6 @@
 package sz.csi.jcurses;
 
+import crl.ui.Colors;
 import jcurses.system.*;
 
 import sz.csi.CharKey;
@@ -49,7 +50,7 @@ public class JCursesConsoleInterface implements ConsoleSystemInterface {
 				break;
 			}
 			chars[x+i][y] = what.charAt(i);
-			colors[x+i][y] = ConsoleSystemInterface.WHITE;
+			colors[x+i][y] = Colors.WHITE;
 		}
 		Toolkit.printString(what, x, y, WHITE);
 	}
@@ -137,7 +138,7 @@ public class JCursesConsoleInterface implements ConsoleSystemInterface {
 		for (int x = 0; x < chars.length; x++) {
 			for (int y = 0; y < chars[0].length; y++) {
 				chars[x][y] = '\u0000';
-				colors[x][y] = ConsoleSystemInterface.BLACK;
+				colors[x][y] = Colors.BLACK;
 			}
 		}
 	}
@@ -188,9 +189,10 @@ public class JCursesConsoleInterface implements ConsoleSystemInterface {
 		GRAY, BLUE, LEMON, CYAN, RED, MAGENTA, YELLOW, WHITE
 	};
 
+
 	private CharColor getJCurseColor(int crlColor) {
-		if (crlColor < ConsoleSystemInterface.BLACK ||
-			crlColor > ConsoleSystemInterface.WHITE) {
+		if (crlColor < Colors.BLACK ||
+			crlColor > Colors.WHITE) {
 			return null;
 		}
 		return CHAR_COLORS[crlColor];

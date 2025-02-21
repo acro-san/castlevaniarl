@@ -2,7 +2,7 @@ package sz.csi.textcomponents;
 
 import java.io.Serializable;
 
-import crl.ui.Appearance;
+import crl.ui.Colors;
 import sz.csi.ConsoleSystemInterface;
 import sz.util.Position;
 
@@ -14,9 +14,9 @@ public abstract class TextComponent implements Serializable{
 	
 	protected transient ConsoleSystemInterface si;
 	
-	protected int foreColor = ConsoleSystemInterface.WHITE;
+	protected int foreColor = Colors.WHITE;
 	private boolean border;
-	protected int borderColor = ConsoleSystemInterface.WHITE;
+	protected int borderColor = Colors.WHITE;
 	
 	protected Position inPosition;
 	protected int inWidth;
@@ -77,35 +77,36 @@ public abstract class TextComponent implements Serializable{
 		setHeight(height);
 	}
 	
-    public void clearBox(){
-    	for (int i = 0; i <= inHeight; i++)
-    		si.print(inPosition.x, inPosition.y+i, spaces);
-    }
+	public void clearBox() {
+		for (int i = 0; i <= inHeight; i++)
+			si.print(inPosition.x, inPosition.y+i, spaces);
+	}
 
-    public boolean hasBorder(){
-    	return border;
-    }
-    
-    public void drawBorder(){
-    	if (!hasBorder())
-    		return;
-    	for (int x = position.x; x <= position.x+width; x++){
-    		si.print(x,position.y, '-', borderColor);
-    		si.print(x,position.y+height, '-', borderColor);
-    	}
-    	for (int y = position.y; y <= position.y+height; y++){
-    		si.print(position.x,y, '|', borderColor);
-    		si.print(position.x+width,y, '|', borderColor);
-    	}
-    	
-    	si.print(position.x, position.y, '/', borderColor);
-    	si.print(position.x+width, position.y+height, '/', borderColor);
-    	si.print(position.x, position.y+height, '\\', borderColor);
-    	si.print(position.x+width, position.y, '\\', borderColor);
-    }
-    
-    private void recalcInnerBounds(){
-		if (hasBorder()){
+	public boolean hasBorder() {
+		return border;
+	}
+	
+	public void drawBorder() {
+		if (!hasBorder())
+			return;
+		for (int x = position.x; x <= position.x+width; x++) {
+			si.print(x,position.y, '-', borderColor);
+			si.print(x,position.y+height, '-', borderColor);
+		}
+		for (int y = position.y; y <= position.y+height; y++) {
+			si.print(position.x,y, '|', borderColor);
+			si.print(position.x+width,y, '|', borderColor);
+		}
+		
+		si.print(position.x, position.y, '/', borderColor);
+		si.print(position.x+width, position.y+height, '/', borderColor);
+		si.print(position.x, position.y+height, '\\', borderColor);
+		si.print(position.x+width, position.y, '\\', borderColor);
+	}
+	
+	
+	private void recalcInnerBounds() {
+		if (hasBorder()) {
 			inPosition = new Position(position.x +1, position.y+1);
 			inWidth = width - 2;
 			inHeight = height - 2;
@@ -116,7 +117,8 @@ public abstract class TextComponent implements Serializable{
 		}
 	}
 
-    public void setBorderColor(int borderColor){
-    	this.borderColor = borderColor;
-    }
+	public void setBorderColor(int borderColor) {
+		this.borderColor = borderColor;
+	}
+
 }

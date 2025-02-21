@@ -4,24 +4,6 @@ import sz.util.Position;
 
 public interface ConsoleSystemInterface {
 	
-	public static final int
-		BLACK = 0,
-		DARK_BLUE = 1,
-		GREEN = 2,
-		TEAL = 3,
-		DARK_RED = 4,
-		PURPLE = 5,
-		BROWN = 6,
-		LIGHT_GRAY = 7,
-		GRAY = 8,
-		BLUE = 9,
-		LEMON = 10,
-		CYAN = 11,
-		RED = 12,
-		MAGENTA = 13,
-		YELLOW = 14,
-		WHITE = 15;
-	
 	/**
 	 * Prints a character on the console
 	 * @param x
@@ -140,7 +122,7 @@ public interface ConsoleSystemInterface {
 	 * Waits for the user to press a key
 	 * @param keyCode
 	 */
-	public void waitKey (int keyCode);
+	public void waitKey(int keyCode);
 
 	/**
 	 * Saves the screen contents to a backup buffer
