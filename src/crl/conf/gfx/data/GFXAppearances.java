@@ -23,9 +23,7 @@ public class GFXAppearances {
 	}
 	
 	
-	
-	
-	protected void setAppearances() {
+	private void setAppearances() {
 		final int
 			tw = conf.tileWidth,
 			halfw = conf.tileWidth / 2;
@@ -205,7 +203,7 @@ public class GFXAppearances {
 		createTAppearance("MARBLE_STAIRSDOWN",5, 4),
 		
 		
-		/*Dungeon*/ 
+		/*Dungeon*/
 		createTAppearance("DUNGEON_FLOOR", 2, 10),
 		createTAppearance("DUNGEON_DOOR", 4, 11),
 		createTAppearance("DUNGEON_WALL", 1, 10),
@@ -232,7 +230,7 @@ public class GFXAppearances {
 		createTAppearance("CLOCK_GEAR_3", 4, 6),
 		createTAppearance("CLOCK_GEAR_4", 4, 6),
 		
-		/*Castle Keep*/ 
+		/*Castle Keep*/
 		createTAppearance("BARRED_WINDOW", 2, 8),
 		createTAppearance("DRACULA_THRONE1", 6, 8),
 		createTAppearance("DRACULA_THRONE2", 5, 8),
@@ -250,135 +248,137 @@ public class GFXAppearances {
 		createTAppearance("TELEPORT", 7, 3,0,8),
 		
 		// Sacred weapons	// TODO use IT enum indices..
-		createIAppearance("ART_CARD_SOL", false, 1, 1),
-		createIAppearance("ART_CARD_MOONS", false, 2, 1),
-		createIAppearance("ART_CARD_DEATH", false, 3, 1),
-		createIAppearance("ART_CARD_LOVE", false, 4, 1),
-		createIAppearance("RED_CARD", false, 5, 1),
-		createIAppearance("GOLDEN_MEDALLION", false, 6, 1),
-		createIAppearance("SILVER_MEDALLION", false, 7, 1),
-		createIAppearance("THORN_BRACELET", false, 8, 1),
-		createIAppearance("LIFE_POTION", false, 9, 1),
-		createIAppearance("FLAME_BOOK", false, 1, 2),
-		createIAppearance("ICE_BOOK", false, 2, 2),
-		createIAppearance("LIT_BOOK", false, 3, 2),
-		createIAppearance("HEART_CONTAINER", false, 4, 2),
-		createIAppearance("MIRACLE_POTION", false, 5, 2),
-		createIAppearance("TEPES_RING", false, 6, 2),
-		createIAppearance("CLUE_PAGE2", false, 8, 2),
-		createIAppearance("CLUE_PAGE3", false, 9, 2),
-		createIAppearance("JUKEBOX", false, 9, 2),
-		createIAppearance("CLUE_PAGE1", false, 7, 2),
-		createIAppearance("JUMPING_WING", false, 1, 3),
-		createIAppearance("FIRE_GEM", false, 2, 3),
-		createIAppearance("FLAME_ITEM", false, 3, 3),
-		createIAppearance("MAGIC_SHIELD", false, 8, 4),
-		createIAppearance("LIGHT_CRYSTAL", false, 4, 3),
-		createIAppearance("LANTERN", false, 5, 3),
-		createIAppearance("SOUL_RECALL", false, 6, 3),
-		createIAppearance("SUN_CARD", false, 7, 3),
-		createIAppearance("MOON_CARD", false, 8, 3),
-		createIAppearance("HEAL_POTION", false, 9, 3),
-		createIAppearance("HEAL_HERB", false, 1, 4),
-		createIAppearance("OXY_HERB", false, 1, 4),
-		createIAppearance("BIBUTI", false, 2, 4),
-		createIAppearance("GARLIC", false, 4, 4),
-		createIAppearance("TORCH", false, 5, 4),
-		createIAppearance("SILK_BAG", false, 6, 4),
-		createIAppearance("LAUREL", false, 7, 4),
-		createIAppearance("VARMOR", false, 1, 8),
-		createIAppearance("VEST", false, 2, 8),
-		createIAppearance("STUDDED_LEATHER", false, 3, 8),
-		createIAppearance("LEATHER_ARMOR", false, 4, 8),
-		createIAppearance("CLOTH_TUNIC", false, 5, 8),
-		createIAppearance("FINE_GARMENT", false, 5, 8),
-		createIAppearance("CUIRASS", false, 6, 8),
-		createIAppearance("SUIT", false, 7, 8),
-		createIAppearance("PLATE", false, 8, 8),
-		createIAppearance("DIAMOND_PLATE", false, 9, 8),
-		createIAppearance("BOW", false, 1, 11),
-		createIAppearance("HOLBEIN_DAGGER", false, 2, 11),
-		createIAppearance("WEREBANE", false, 3, 11),
-		createIAppearance("SHOTEL", false, 4, 11),
-		createIAppearance("COMBAT_KNIFE", false, 5, 11),
-		createIAppearance("STAKE", false, 6, 11),
-		createIAppearance("BASELARD", false, 7, 11),
-		createIAppearance("KAISER_KNUCKLE", false, 1, 12),
-		createIAppearance("MARTIAL_ARMBAND", false, 2, 12),
-		createIAppearance("TULKAS_FIST", false, 3, 12),
-		createIAppearance("SPIKY_KNUCKLES", false, 4, 12),
-		createIAppearance("COMBAT_GAUNTLET", false, 5, 12),
-		createIAppearance("KNUCKLES", false, 6, 12),
-		createIAppearance("GAUNTLET", false, 7, 12),
-		createIAppearance("HAMMER_JUSTICE", false, 1, 13),
-		createIAppearance("MORNING_STAR", false, 2, 13),
-		createIAppearance("FLAIL", false, 3, 13),
-		createIAppearance("MACE", false, 4, 13),
-		createIAppearance("SILVER_HANDGUN", false, 1, 14),
-		createIAppearance("REVOLVER", false, 2, 14),
-		createIAppearance("HANDGUN", false, 3, 14),
-		createIAppearance("AGUEN", false, 4, 14),
-		createIAppearance("CROSSBOW", false, 5, 14),
-		createIAppearance("ROD", false, 1, 15),
-		createIAppearance("STAFF", false, 2, 15),
-		createIAppearance("BLADE_RINGSET", false, 1, 16),
-		createIAppearance("COMBAT_RINGS", false, 2, 16),
-		createIAppearance("SPIKED_RINGS", false, 3, 16),
-		createIAppearance("RINGS", false, 4, 16),
-		createIAppearance("TOWER_SHIELD", false, 1, 17),
-		createIAppearance("BUCKLER", false, 2, 17),
-		createIAppearance("WOODEN_SHIELD", false, 3, 17),
-		createIAppearance("ROUND_SHIELD", false, 4, 17),
-		createIAppearance("SHIELD", false, 5, 17),
-		createIAppearance("DUALBLADE_SPEAR", false, 1, 18),
-		createIAppearance("HALBERD", false, 2, 18),
-		createIAppearance("ALCARDE_SPEAR", false, 3, 18),
-		createIAppearance("BATTLE_SPEAR", false, 4, 18),
-		createIAppearance("LONG_SPEAR", false, 5, 18),
-		createIAppearance("SHORT_SPEAR", false, 6, 18),
-		createIAppearance("MASAMUNE", false, 1, 19),
-		createIAppearance("CRISSAEGRIM", false, 2, 19),
-		createIAppearance("TERMINUS", false, 3, 19),
-		createIAppearance("MOURNEBLADE", false, 4, 19),
-		createIAppearance("OSAFUNE", false, 5, 19),
-		createIAppearance("MORMEGIL", false, 6, 19),
-		createIAppearance("GRAM", false, 7, 19),
-		createIAppearance("RAPIER", false, 8, 19),
-		createIAppearance("BASTARDSWORD", false, 9, 19),
-		createIAppearance("BROADSWORD", false, 1, 22),
-		createIAppearance("VORPAL_BLADE", false, 1, 20),
-		createIAppearance("FIREBRAND", false, 2, 20),
-		createIAppearance("ICEBRAND", false, 3, 20),
-		createIAppearance("GURTHANG", false, 4, 20),
-		createIAppearance("KATANA", false, 5, 20),
-		createIAppearance("FALCHION", false, 6, 20),
-		createIAppearance("HARPER", false, 7, 20),
-		createIAppearance("HADOR", false, 8, 20),
-		createIAppearance("GLADIUS", false, 9, 20),
-		createIAppearance("CUTLASS", false, 1, 21),
-		createIAppearance("CLAYMORE", false, 2, 21),
-		createIAppearance("ETHANOS_BLADE", false, 3, 21),
-		createIAppearance("FLAMBERGE", false, 4, 21),
-		createIAppearance("SABRE", false, 5, 21),
-		createIAppearance("MABLUNG", false, 6, 21),
-		createIAppearance("SCIMITAR", false, 7, 21),
-		createIAppearance("ESTOC", false, 8, 21),
-		createIAppearance("SHORT_SWORD", false, 9, 21),
-		createIAppearance("BWAKA_KNIFE", false, 1, 24),
-		createIAppearance("CHAKRAM", false, 2, 24),
-		createIAppearance("BUFFALO_STAR", false, 3, 24),
-		createIAppearance("SHURIKEN", false, 4, 24),
-		createIAppearance("THROWING_KNIFE", false, 5, 24),
-		createIAppearance("LIT_WHIP", false, 1, 25),
-		createIAppearance("FLAME_WHIP", false, 2, 25),
-		createIAppearance("VKILLERW", false, 3, 25),
-		createIAppearance("WHIP", false, 4, 25),
-		createIAppearance("CHAIN_WHIP", false, 5, 25),
-		createIAppearance("THORN_WHIP", false, 6, 25),
-		createIAppearance("LEATHER_WHIP", false, 7, 25),
+		createIAppearance("ART_CARD_SOL", 1, 1),
+		createIAppearance("ART_CARD_MOONS", 2, 1),
+		createIAppearance("ART_CARD_DEATH", 3, 1),
+		createIAppearance("ART_CARD_LOVE", 4, 1),
+		createIAppearance("RED_CARD", 5, 1),
+		createIAppearance("GOLDEN_MEDALLION", 6, 1),
+		createIAppearance("SILVER_MEDALLION", 7, 1),
+		createIAppearance("THORN_BRACELET", 8, 1),
+		createIAppearance("LIFE_POTION", 9, 1),
+		createIAppearance("FLAME_BOOK", 1, 2),
+		createIAppearance("ICE_BOOK", 2, 2),
+		createIAppearance("LIT_BOOK", 3, 2),
+		createIAppearance("HEART_CONTAINER", 4, 2),
+		createIAppearance("MIRACLE_POTION", 5, 2),
+		createIAppearance("TEPES_RING", 6, 2),
+		createIAppearance("CLUE_PAGE2", 8, 2),
+		createIAppearance("CLUE_PAGE3", 9, 2),
+		createIAppearance("JUKEBOX", 9, 2),
+		createIAppearance("CLUE_PAGE1", 7, 2),
+		createIAppearance("JUMPING_WING", 1, 3),
+		createIAppearance("FIRE_GEM", 2, 3),
+		createIAppearance("FLAME_ITEM", 3, 3),
+		createIAppearance("MAGIC_SHIELD", 8, 4),
+		createIAppearance("LIGHT_CRYSTAL", 4, 3),
+		createIAppearance("LANTERN", 5, 3),
+		createIAppearance("SOUL_RECALL", 6, 3),
+		createIAppearance("SUN_CARD", 7, 3),
+		createIAppearance("MOON_CARD", 8, 3),
+		createIAppearance("HEAL_POTION", 9, 3),
+		createIAppearance("HEAL_HERB", 1, 4),
+		createIAppearance("OXY_HERB", 1, 4),
+		createIAppearance("BIBUTI", 2, 4),
+		createIAppearance("GARLIC", 4, 4),
+		createIAppearance("TORCH", 5, 4),
+		createIAppearance("SILK_BAG", 6, 4),
+		createIAppearance("LAUREL", 7, 4),
+		createIAppearance("VARMOR", 1, 8),
+		createIAppearance("VEST", 2, 8),
+		createIAppearance("STUDDED_LEATHER", 3, 8),
+		createIAppearance("LEATHER_ARMOR", 4, 8),
+		createIAppearance("CLOTH_TUNIC", 5, 8),
+		createIAppearance("FINE_GARMENT", 5, 8),
+		createIAppearance("CUIRASS", 6, 8),
+		createIAppearance("SUIT", 7, 8),
+		createIAppearance("PLATE", 8, 8),
+		createIAppearance("DIAMOND_PLATE", 9, 8),
+		createIAppearance("BOW", 1, 11),
+		createIAppearance("HOLBEIN_DAGGER", 2, 11),
+		createIAppearance("WEREBANE", 3, 11),
+		createIAppearance("SHOTEL", 4, 11),
+		createIAppearance("COMBAT_KNIFE", 5, 11),
+		createIAppearance("STAKE", 6, 11),
+		createIAppearance("BASELARD", 7, 11),
+		createIAppearance("KAISER_KNUCKLE", 1, 12),
+		createIAppearance("MARTIAL_ARMBAND", 2, 12),
+		createIAppearance("TULKAS_FIST", 3, 12),
+		createIAppearance("SPIKY_KNUCKLES", 4, 12),
+		createIAppearance("COMBAT_GAUNTLET", 5, 12),
+		createIAppearance("KNUCKLES", 6, 12),
+		createIAppearance("GAUNTLET", 7, 12),
+		createIAppearance("HAMMER_JUSTICE", 1, 13),
+		createIAppearance("MORNING_STAR", 2, 13),
+		createIAppearance("FLAIL", 3, 13),
+		createIAppearance("MACE", 4, 13),
+		createIAppearance("SILVER_HANDGUN", 1, 14),
+		createIAppearance("REVOLVER", 2, 14),
+		createIAppearance("HANDGUN", 3, 14),
+		createIAppearance("AGUEN", 4, 14),
+		createIAppearance("CROSSBOW", 5, 14),
+		createIAppearance("ROD", 1, 15),
+		createIAppearance("STAFF", 2, 15),
+		createIAppearance("BLADE_RINGSET", 1, 16),
+		createIAppearance("COMBAT_RINGS", 2, 16),
+		createIAppearance("SPIKED_RINGS", 3, 16),
+		createIAppearance("RINGS", 4, 16),
+		createIAppearance("TOWER_SHIELD", 1, 17),
+		createIAppearance("BUCKLER", 2, 17),
+		createIAppearance("WOODEN_SHIELD", 3, 17),
+		createIAppearance("ROUND_SHIELD", 4, 17),
+		createIAppearance("SHIELD", 5, 17),
+		createIAppearance("DUALBLADE_SPEAR", 1, 18),
+		createIAppearance("HALBERD", 2, 18),
+		createIAppearance("ALCARDE_SPEAR", 3, 18),
+		createIAppearance("BATTLE_SPEAR", 4, 18),
+		createIAppearance("LONG_SPEAR", 5, 18),
+		createIAppearance("SHORT_SPEAR", 6, 18),
+		createIAppearance("MASAMUNE", 1, 19),
+		createIAppearance("CRISSAEGRIM", 2, 19),
+		createIAppearance("TERMINUS", 3, 19),
+		createIAppearance("MOURNEBLADE", 4, 19),
+		createIAppearance("OSAFUNE", 5, 19),
+		createIAppearance("MORMEGIL", 6, 19),
+		createIAppearance("GRAM", 7, 19),
+		createIAppearance("RAPIER", 8, 19),
+		createIAppearance("BASTARDSWORD", 9, 19),
+		createIAppearance("BROADSWORD", 1, 22),
+		createIAppearance("VORPAL_BLADE", 1, 20),
+		createIAppearance("FIREBRAND", 2, 20),
+		createIAppearance("ICEBRAND", 3, 20),
+		createIAppearance("GURTHANG", 4, 20),
+		createIAppearance("KATANA", 5, 20),
+		createIAppearance("FALCHION", 6, 20),
+		createIAppearance("HARPER", 7, 20),
+		createIAppearance("HADOR", 8, 20),
+		createIAppearance("GLADIUS", 9, 20),
+		createIAppearance("CUTLASS", 1, 21),
+		createIAppearance("CLAYMORE", 2, 21),
+		createIAppearance("ETHANOS_BLADE", 3, 21),
+		createIAppearance("FLAMBERGE", 4, 21),
+		createIAppearance("SABRE", 5, 21),
+		createIAppearance("MABLUNG", 6, 21),
+		createIAppearance("SCIMITAR", 7, 21),
+		createIAppearance("ESTOC", 8, 21),
+		createIAppearance("SHORT_SWORD", 9, 21),
+		createIAppearance("BWAKA_KNIFE", 1, 24),
+		createIAppearance("CHAKRAM", 2, 24),
+		createIAppearance("BUFFALO_STAR", 3, 24),
+		createIAppearance("SHURIKEN", 4, 24),
+		createIAppearance("THROWING_KNIFE", 5, 24),
+		createIAppearance("LIT_WHIP", 1, 25),
+		createIAppearance("FLAME_WHIP", 2, 25),
+		createIAppearance("VKILLERW", 3, 25),
+		createIAppearance("WHIP", 4, 25),
+		createIAppearance("CHAIN_WHIP", 5, 25),
+		createIAppearance("THORN_WHIP", 6, 25),
+		createIAppearance("LEATHER_WHIP", 7, 25),
 		
 		
-		// Monsters TODO use MT enumeration ids.
+		// Monsters TODO use MT enumeration ids?
+		// TODO Could pass another 'last minute decision-making' parameter of:
+		// 'std / lrg'. it could index into a small array of w,h params?
 		createAppearance("R_SKELETON", Textures.MonstersImage, 1, 1),
 		createAppearance("GZOMBIE", Textures.MonstersImage, 4, 2),
 		createAppearance("ZOMBIE", Textures.MonstersImage, 7, 8),
@@ -526,32 +526,33 @@ public class GFXAppearances {
 			0
 		),
 
-		createIAppearance("SMALLHEART", true, 2, 1),
-		createIAppearance("DAGGER", true, 3, 1),
-		createIAppearance("AXE", true, 4, 1),
-		createIAppearance("VIAL", true, 8, 1),
-		createIAppearance("CROSS", true, 5, 1),
-		createIAppearance("CLOCK", true, 6, 1),
-		createIAppearance("BIGHEART", true, 1, 2),
-		createIAppearance("KEY", true, 2, 2),
-		createIAppearance("UPGRADE", true, 3, 2),
-		createIAppearance("ROSARY", true, 5, 2),
-		createIAppearance("COIN", true, 6, 2),
-		createIAppearance("RED_MONEY_BAG", true, 7, 2),
-		createIAppearance("BLUE_MONEY_BAG", true, 8, 2),
-		createIAppearance("WHITE_MONEY_BAG", true, 9, 2),
-		createIAppearance("CROWN", true, 1, 3),
-		createIAppearance("CHEST", true, 2, 3),
-		createIAppearance("MOAUI_HEAD", true, 3, 3),
-		createIAppearance("RAINBOW_MONEY_BAG", true, 10, 2),
-		createIAppearance("POT_ROAST", true, 4, 3),
-		createIAppearance("INVISIBILITY_POTION", true, 5, 3),
-		createIAppearance("BIBLE", true, 7, 1),
-		createIAppearance("CRYSTAL", true, 9, 1),
-		createIAppearance("FIST", true, 10, 1),
-		createIAppearance("REBOUND_CRYSTAL", true, 9, 1),
-		createIAppearance("MUPGRADE", true, 4, 2),
-		createIAppearance("BLAST_CRYSTAL", true, 9, 1),
+		createFAppearance("SMALLHEART", 2, 1),
+		createFAppearance("DAGGER", 3, 1),
+		createFAppearance("AXE", 4, 1),
+		createFAppearance("VIAL", 8, 1),
+		createFAppearance("CROSS", 5, 1),
+		createFAppearance("CLOCK", 6, 1),
+		createFAppearance("BIGHEART", 1, 2),
+		createFAppearance("KEY", 2, 2),
+		createFAppearance("UPGRADE", 3, 2),
+		createFAppearance("ROSARY", 5, 2),
+		createFAppearance("COIN", 6, 2),
+		createFAppearance("RED_MONEY_BAG", 7, 2),
+		createFAppearance("BLUE_MONEY_BAG", 8, 2),
+		createFAppearance("WHITE_MONEY_BAG", 9, 2),
+		createFAppearance("CROWN", 1, 3),
+		createFAppearance("CHEST", 2, 3),
+		createFAppearance("MOAUI_HEAD", 3, 3),
+		createFAppearance("RAINBOW_MONEY_BAG", 10, 2),
+		createFAppearance("POT_ROAST", 4, 3),
+		createFAppearance("INVISIBILITY_POTION", 5, 3),
+		createFAppearance("BIBLE", 7, 1),
+		createFAppearance("CRYSTAL", 9, 1),
+		createFAppearance("FIST", 10, 1),
+		createFAppearance("REBOUND_CRYSTAL", 9, 1),
+		createFAppearance("MUPGRADE", 4, 2),
+		createFAppearance("BLAST_CRYSTAL", 9, 1),
+		
 
 		createAppearance("MOUND", Textures.EffectsImage, 11, 17),
 
@@ -614,6 +615,10 @@ public class GFXAppearances {
 		return defs;
 	}
 	
+	// Graphics Appearance Types
+	enum GAT {
+		
+	}
 	
 	public GFXAppearance createAppearance(String ID, BufferedImage bigImage, int xpos, int ypos) {
 		xpos--;
@@ -633,6 +638,7 @@ public class GFXAppearances {
 	}
 	
 	
+	// catch-all general...??
 	public GFXAppearance createAppearance(String ID, BufferedImage bigImage,
 			int xpos, int ypos, int width, int height,int superw, int superh) {
 		xpos--;
@@ -647,12 +653,14 @@ public class GFXAppearances {
 		return null;
 	}
 	
-	public GFXAppearance createXAppearance(String ID, BufferedImage bigImage, int xpos, int ypos, int width, int height){
+	// ??
+	public GFXAppearance createXAppearance(String ID, BufferedImage bigImage, int xpos, int ypos, int width, int height) {
 		return createXAppearance(ID, bigImage, xpos, ypos, width, height, 0);
 	}
 	
 	
-	public GFXAppearance createXAppearance(String ID, BufferedImage bigImage, int xpos, int ypos, int width, int height, int yoff){
+	// ??
+	public GFXAppearance createXAppearance(String ID, BufferedImage bigImage, int xpos, int ypos, int width, int height, int yoff) {
 		try {
 			BufferedImage img = ImageUtils.crearImagen(bigImage, xpos, ypos, width, height);
 			GFXAppearance ret = new GFXAppearance(ID, img,(width-48)/2,(height-64)/2+yoff);
@@ -691,7 +699,7 @@ public class GFXAppearances {
 		return null;
 	}
 	
-	
+	// Terrain/Tile appearance
 	public GFXAppearance createTAppearance(String ID, int xpos, int ypos, int xoff, int yoff) {
 		xpos--;
 		ypos--;
@@ -718,6 +726,7 @@ public class GFXAppearances {
 	}
 	
 	
+	/** Big Sprite Appearance (96x96 @2x, or 48x48 */
 	public GFXAppearance createBAppearance(String ID, BufferedImage bigImage, int xpos, int ypos) {
 		xpos--;
 		ypos--;
@@ -732,16 +741,12 @@ public class GFXAppearances {
 		return null;
 	}
 	
-	public GFXAppearance createIAppearance(String ID, boolean isFeature, int xpos, int ypos) {
-		BufferedImage bigImage, iconImage;
-		if (isFeature) {
-			bigImage  = Textures.FeaturesImage;
-			iconImage = Textures.FeatureIconsImage;
-		} else {
-			bigImage  = Textures.ItemsImage;
+	
+	// Item OR FEATURE Appearance. (could do with pinning down: what's a FEATURE?
+	public GFXAppearance createIAppearance(String ID, int xpos, int ypos) {
+		BufferedImage
+			bigImage = Textures.ItemsImage,
 			iconImage = Textures.ItemIconsImage;
-		}
-		
 		xpos--;
 		ypos--;
 		final int HW = conf.tileWidth / 2;	// halfw
@@ -752,6 +757,28 @@ public class GFXAppearances {
 			GFXAppearance ret = new GFXAppearance(ID, img, iconImg, -8, -8);
 			return ret;
 		} catch (Exception e){
+			Game.crash("Error loading image ", e);
+		}
+		return null;
+	}
+	
+	
+	// is feature.
+	public GFXAppearance createFAppearance(String ID, int xpos, int ypos) {
+		BufferedImage bigImage, iconImage;
+		bigImage  = Textures.FeaturesImage;
+		iconImage = Textures.FeatureIconsImage;
+		
+		xpos--;
+		ypos--;
+		final int HW = conf.tileWidth / 2;	// halfw
+		try {
+			BufferedImage img = ImageUtils.crearImagen(bigImage, xpos*HW, ypos*HW, HW, HW);
+			BufferedImage iconImg = ImageUtils.crearImagen(
+				iconImage, xpos * ICON_SIZE, ypos * ICON_SIZE, ICON_SIZE, ICON_SIZE);
+			GFXAppearance ret = new GFXAppearance(ID, img, iconImg, -8, -8);
+			return ret;
+		} catch (Exception e) {
 			Game.crash("Error loading image ", e);
 		}
 		return null;

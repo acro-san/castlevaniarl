@@ -1,11 +1,16 @@
 package crl.conf.console.data;
 
 import static crl.ui.Colors.*;
-import crl.ui.*;
+//import crl.ui.*;
 import crl.ui.consoleUI.CharAppearance;
 
 public class CharAppearances {
-	public static Appearance[] defs = {
+	public static CharAppearance[] defs = {
+		// FIXME Integer IDs which align exactly with all the GraphicsAppearance
+		// IDs. So can check for what's missing where, and simply ADD THE CHAR AND
+		// colour definitions from here, into the GraphicsAppearances. unify
+		// the data definitions.
+		
 		new CharAppearance("NOTHING", ' ', BLACK),
 		new CharAppearance("VOID", ' ', BLACK),
 		new CharAppearance("CHRISTOPHER_B", '@', WHITE),
@@ -224,7 +229,6 @@ public class CharAppearances {
 		new CharAppearance("COURTYARDDIRT", 'o', BROWN),
 		new CharAppearance("FOUNTAINPOOL", 'o', BROWN),
 		
-		
 		// Items
 		
 		// Monsters
@@ -358,7 +362,7 @@ public class CharAppearances {
 		new CharAppearance("FLAME_ITEM", 'i', YELLOW),
 		new CharAppearance("BLAST_CRYSTAL", 'O', CYAN),
 
-		//Characters
+		// Characters
 		new CharAppearance("RENEGADE", '@', GRAY),
 		new CharAppearance("VANQUISHER", '@', GREEN),
 		new CharAppearance("INVOKER", '@', RED),
@@ -397,7 +401,7 @@ public class CharAppearances {
 
 		new CharAppearance("MELDUCK", '@', TEAL),
 
-		//Items
+		// Items
 		new CharAppearance("ART_CARD_SOL", 'C', YELLOW),
 		new CharAppearance("ART_CARD_MOONS", 'C', BLUE),
 		new CharAppearance("ART_CARD_DEATH", 'C', GRAY),

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -72,6 +73,7 @@ import crl.ui.UISelector;
 import crl.ui.UserAction;
 import crl.ui.UserCommand;
 import crl.ui.UserInterface;
+import crl.ui.consoleUI.CharAppearance;
 import crl.ui.consoleUI.CharDisplay;
 import crl.ui.consoleUI.CharPlayerGenerator;
 import crl.ui.consoleUI.ConsoleUISelector;
@@ -637,9 +639,45 @@ public class Main {
 
 	private static void initializeGAppearances(GFXConfiguration gfx_configuration) {
 		Appearance[] definitions = new GFXAppearances(gfx_configuration).getAppearances();
+		ArrayList<String> allGfxIDs = new ArrayList<>(200);
 		for (Appearance a: definitions) {
-			appearances.put(a.getID(), a);
+			String appID = a.getID();
+			
+			// check data parity with console appearances.
+		//	CharAppearance ca = CharAppearances.defs[];	// indexOf ...??
+			
+			appearances.put(appID, a);
+			allGfxIDs.add(appID);
 		}
+		HashMap<String, CharAppearance> charaps = new HashMap<>();
+		for (CharAppearance ca: CharAppearances.defs) {
+			String caid = ca.getID();
+			charaps.put(caid, ca);
+			
+			// what about all the GfxAppearance IDs that are missing from charaps list?
+			// Must list/find both possibilities.
+			if (!appearances.containsKey(caid)) {
+				System.err.println("CharAppearance defined that doesn't appear in GfxAppearances: "+caid);
+			}
+		}
+		
+		for (String gid: allGfxIDs) {
+			if (!charaps.containsKey(gid)) {
+				System.err.println("GfxAppearance defined that doesn't appear in CharAppearances: "+gid);
+			}
+		}
+		
+		System.err.println("Missing ones notwithstanding there's a total of "+allGfxIDs.size()+ " gfxapprs.");
+		//472.
+		/*
+CharAppearance defined that doesn't appear in GfxAppearances: DARKTREE
+CharAppearance defined that doesn't appear in GfxAppearances: COURTYARDDIRT
+CharAppearance defined that doesn't appear in GfxAppearances: FOUNTAINPOOL
+GfxAppearance defined that doesn't appear in CharAppearances: BLOOD1
+GfxAppearance defined that doesn't appear in CharAppearances: BLOOD2
+GfxAppearance defined that doesn't appear in CharAppearances: BLOOD3
+Missing ones notwithstanding there's a total of 472 gfxApprearances.
+		 */
 	}
 	
 	
@@ -669,6 +707,7 @@ public class Main {
 			actions.put(a.getID(), a);
 		}
 	}
+	
 	
 	// lifted from old 'ActionFactory'
 	public static Action getAction(AT id) {
@@ -711,7 +750,8 @@ public class Main {
 
 
 	private static void initializeMonsters() throws CRLException {
-		MonsterData.init(MonsterLoader.getMonsterDefinitions("data/monsters.ecsv","data/monsters.exml"));
+		MonsterData.init(MonsterLoader.getMonsterDefinitions(
+			"data/monsters.ecsv","data/monsters.exml"));
 	}
 
 
@@ -766,6 +806,7 @@ public class Main {
 		ui.showCriticalError("Error: " + message);
 		System.exit(-1);
 	}
+
 
 	// FIXME pointless getter/setter/accessors, just make this table public!!!
 	private static Hashtable<String, MonsterRecord> monsterRecord;

@@ -1,8 +1,7 @@
 package crl.ui;
 
-import java.io.Serializable;
-
 public abstract class Appearance /*this must not be serializable for complete decoupling*/ {
+	
 	private String ID;
 
 	//public abstract static Appearance getVoidAppearance();
@@ -11,7 +10,7 @@ public abstract class Appearance /*this must not be serializable for complete de
 		this.ID = ID;
 	}
 
-	public String getID(){
+	public String getID() {
 		return ID;
 	}
 }

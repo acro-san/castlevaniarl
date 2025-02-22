@@ -1,7 +1,9 @@
 package crl.ui;
 
+// Instead of this, could set up a state machine..
 public interface CommandListener {
- 	public final static int
+	
+	public final static int
 		QUIT = 0,
 		SAVE = 1,
 		NONE = 2,
